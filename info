@@ -1,3 +1,21 @@
+Code 1 :
+This code was provided by Professor Kim-Chuan Toh to solve the convex program in the paper:
+"Latent Variable Graphical Model Selection via Convex Optimization" by Venkat Chandrasekaran, Pablo A. Parrilo, and Alan S. Willsky.
+
+Code 2 :
+This is the implementation for the following paper:
+Learning Sparse Gaussian Graphical Models with Overlapping Blocks‎
+Hosseini, M.J., Lee, Su-In.
+Neural Information Processing Systems (NIPS), 2016.
+
+
+Code 3 :
+Package: glasso
+Title: Graphical lasso- estimation of Gaussian graphical models
+Version: 1.8
+Author: Jerome Friedman, Trevor Hastie and Rob Tibshirani
+
+
 dataset 
 https://cran.r-project.org/web/packages/FBFsearch/FBFsearch.pdf
 

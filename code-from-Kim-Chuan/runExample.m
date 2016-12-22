@@ -7,10 +7,15 @@
 %%
 %%*************************************************************************
 
-   HOME = 'C:\Users\Venkat\desktop\code\code-from-Kim-Chuan\LogdetPPA-0'; 
+   HOME = '/Users/marina/Documents/learning-gm/code-from-Kim-Chuan/LogdetPPA-0'; 
    addpath(strcat(HOME,'/solver/'))
    addpath(strcat(HOME,'/solver/mexfun'))
    addpath(strcat(HOME,'/util/'))
+   
+   addpath LogdetPPA-0/;
+   addpath LogdetPPA-0/solver/;
+   addpath LogdetPPA-0/solver/mexfun/;
+   addpath LogdetPPA-0/util/;
    ttime  = clock;
 %%
 %% Data setting up

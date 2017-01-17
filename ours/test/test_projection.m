@@ -21,10 +21,16 @@ param.stPtPowerIter=100;
 param.powerIter=200;
 
 
-Z=proj_omega(A,0.01);
+Zproj=proj_omega(A,0.01);
+Zprox=prox_omega(A,0.01);
 
 figure(1);clc;
-subplot(1,2,1);
+subplot(1,3,1);
 imagesc(abs(A0));
-subplot(1,2,2);
-imagesc(abs(Z));
+title('X0')
+subplot(1,3,2);
+imagesc(abs(Zproj));
+title('proj')
+subplot(1,3,3);
+imagesc(abs(Zprox));
+title('prox')

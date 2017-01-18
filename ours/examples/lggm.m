@@ -11,12 +11,13 @@
 % %%%%%%%%%%%%
 
 %% add paths
-clc; clear all;
+clc; clear all; close all;
 addpath('../main');
 addpath('../active-set');
 addpath('../atom-selection');
 addpath('../utils');
 addpath('../other');
+addpath('../prox');
 addpath('../TPower_1.0');
 addpath('../TPower_1.0/algorithms/TPower/');
 addpath('../TPower_1.0/misc/');
@@ -25,7 +26,7 @@ addpath('../TPower_1.0/misc/');
 n=500;
 p=15;
 sigma=0;
-lambda=0.5;
+lambda=0.8;
 
 %% Covariance and design matrix
 rho1 = 0.7;
@@ -50,20 +51,49 @@ Y = mvnrnd(mu, C+sigma^2*eye(p), n)';
 S=cov(Y');
 
 %%
-figure(1);
-imagesc([abs(C) 1*ones(p,5) abs(inv(S))]); colormap gray;
-hTitle=title('   inverse covariance                        inverse empirical covariance');
-% set(gca,'XTick',0:20:135,'YTick',0:10:40);
-h1=xlabel('');
-h2=ylabel('');
-set(h1,'Visible','off');
-set(gca,'FontName','AvantGarde','FontWeight','normal','FontSize',12);
-set(hTitle,'FontName','AvantGarde','FontSize',14,'FontWeight','bold');
-set(h2,'FontName','AvantGarde','FontSize',14,'FontWeight','normal');
-set(gca,'xtick',[])
-caxis([0, 0.3]);
-colorbar;
-pbaspect([(2*p+5)/p 1 1]);
+% figure(1);
+% imagesc([abs(C) 1*ones(p,5) abs(inv(S))]); colormap gray;
+% hTitle=title('   inverse covariance                        inverse empirical covariance');
+% % set(gca,'XTick',0:20:135,'YTick',0:10:40);
+% h1=xlabel('');
+% h2=ylabel('');
+% set(h1,'Visible','off');
+% set(gca,'FontName','AvantGarde','FontWeight','normal','FontSize',12);
+% set(hTitle,'FontName','AvantGarde','FontSize',14,'FontWeight','bold');
+% set(h2,'FontName','AvantGarde','FontSize',14,'FontWeight','normal');
+% set(gca,'xtick',[])
+% caxis([0, 0.3]);
+% colorbar;
+% pbaspect([(2*p+5)/p 1 1]);
+
+%% sparse_omega_lgm;
+
+inputData.X1=S^.5;
+param.mu=0.01;
+param.lambda=0.1;
+param.rho=0.5;
+[Aso,Mso,Sso,Eso] = sparse_omega_lgm( inputData, param);
+
+
+figure(1);clf;
+subplot(2,2,1)
+imagesc(abs(C));
+title('inverse covariance')
+pbaspect([1 1 1]);
+subplot(2,2,2)
+imagesc(abs(inv(S)));
+title('inverse empirical covariance')
+pbaspect([1 1 1]);
+subplot(2,2,3)
+imagesc(abs(Sso-Mso));
+title('estimated S-M')
+pbaspect([1 1 1]);
+subplot(2,2,4)
+imagesc(abs(Aso));
+title('estimated A')
+pbaspect([1 1 1]);
+
+keyboard;
 
 %% param
 
@@ -98,6 +128,25 @@ tt_as=hist_as.time_sup;
 fprintf('lambda=%f\n',lambda);
 fprintf('......tt=%f dg=%f\n',hist_as.time(end),hist_as.dg(end));
 
+figure(2);
+subplot(2,2,1)
+imagesc(abs(C));
+title('inverse covariance')
+pbaspect([1 1 1]);
+subplot(2,2,2)
+imagesc(abs(inv(S)));
+title('inverse empirical covariance')
+pbaspect([1 1 1]);
+subplot(2,2,3)
+imagesc(abs(Z_as+diag(D_as)));
+title('estimated M')
+pbaspect([1 1 1]);
+
+keyboard;
+
+%% 
+
+
 
 %% Duality Gap Figure
 
@@ -106,7 +155,7 @@ yplot{1}=dg_as;
 colors = [1 0 0];
 legendStr={'cg'};
 
-figure(2);clf
+figure(3);clf
 for i=1
 loglog(xplot{i},yplot{i},'-','LineWidth',2,'Color',colors(i,:),'DisplayName',legendStr{i}); 
 hold on
@@ -123,7 +172,7 @@ yplot{1}=hist_as.dg;
 colors = [    1 0 0];
 legendStr={'cg'};
 
-figure(3);clf
+figure(4);clf
 for i=1
 loglog(xplot{i},yplot{i},'-','LineWidth',2,'Color',colors(i,:),'DisplayName',legendStr{i}); 
 hold on
@@ -133,29 +182,14 @@ legend('show','Location','southwest');
 grid on
 hold off
 
-figure(4);clf
+figure(5);clf
 loglog(tt_as,dg_as,'-','LineWidth',2,'Color',[0 0 0],'DisplayName','dg sup');hold on;
 loglog(hist_as.time,hist_as.dg,'-','LineWidth',2,'Color',[1 0 0],'DisplayName','dg sup');hold on;
 legend('show','Location','southwest');
 grid on
 hold off
 
-%%
-%%
-figure(5);
-imagesc([abs(C) 1*ones(p,5) abs(inv(S)) 1*ones(p,5) abs(inv(Z_as+diag(D_as)))]); colormap gray;
-hTitle=title('   inverse covariance                        inverse empirical covariance      estimated inverse');
-% set(gca,'XTick',0:20:135,'YTick',0:10:40);
-h1=xlabel('');
-h2=ylabel('');
-set(h1,'Visible','off');
-set(gca,'FontName','AvantGarde','FontWeight','normal','FontSize',12);
-set(hTitle,'FontName','AvantGarde','FontSize',14,'FontWeight','bold');
-set(h2,'FontName','AvantGarde','FontSize',14,'FontWeight','normal');
-set(gca,'xtick',[])
-caxis([0, 0.3]);
-colorbar;
-pbaspect([(3*p+10)/p 1 1]);
+
 
 %%
 figure(6);clf

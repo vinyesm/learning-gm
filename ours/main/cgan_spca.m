@@ -213,7 +213,7 @@ while c
     
     
     if takenI
-        fprintf('This support has already been added. Stopping\n\n');
+        fprintf('This support has already been added. Stopping\n');
         c=0;
     elseif varIJ > param.lambda*(1+param.epsStop / kBest)* param.cardfun(kBest)
         ActiveSet.I = [ActiveSet.I, currI];

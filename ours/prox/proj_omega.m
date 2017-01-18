@@ -1,4 +1,4 @@
-function Z = proj_omega(X0,lambda,options)
+function [Z Znorm] = proj_omega(X0,lambda,options)
 
 if nargin<3
 end
@@ -17,7 +17,7 @@ param.epsStop=1e-8;
 param.PSdualityEpsilon=1e-3;
 param.k=0;
 param.PSmu=0; %strong convexity
-param.verbose=1;
+param.verbose=0;
 param.debug=0;
 param.sloppy=0;
 param.max_nb_atoms=param.max_nb_main_loop*param.niterPS;
@@ -27,7 +27,14 @@ param.lambda=lambda;
 param.opt='asqp';
 param.diag=0;
 
-[Z ActiveSet hist param flag output] = cgan_spca(inputData,param);
+
+if trace(X0) < 0
+    Z=zeros(p);
+    Znorm=0;
+else
+    [Z ActiveSet hist param flag output] = cgan_spca(inputData,param);
+    Znorm=sum(ActiveSet.alpha);
+end
 
 
 end

@@ -20,7 +20,11 @@ A=A0+0*W;
 param.stPtPowerIter=100;
 param.powerIter=200;
 
+B=rand_sym_mat(30,5);
+A=B;
+eig(B)
 
+keyboard;
 Zproj=proj_omega(A,0.01);
 Zprox=prox_omega(A,0.01);
 
@@ -34,3 +38,7 @@ title('proj')
 subplot(1,3,3);
 imagesc(abs(Zprox));
 title('prox')
+
+%% test soft_threshold
+% A=rand(5)-.5;
+% B=soft_threshold(A,.2);

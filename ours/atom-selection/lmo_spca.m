@@ -21,4 +21,8 @@ for k=1:size(A,1)
     end
 end
 
+if lambdaBest<0
+    fprintf('in lmo_spca no descent direction\n');
+end
+
 end

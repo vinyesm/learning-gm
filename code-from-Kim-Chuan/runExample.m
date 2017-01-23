@@ -41,8 +41,6 @@
 %%
    dim = [200,500,1000,1500]; 
    for kk = [1:1]; 
-      n = dim(kk); 
-      vv = var(Gene1'); 
       [vvsort,idx] = sort(vv); 
       vvsort = vvsort(end:-1:1); idx = idx(end:-1:1); 
       %% select n variables with highest variances
@@ -89,7 +87,7 @@ beta = 5*rho;
          OPTIONS.plotyes    = 0; 
          OPTIONS.tol        = 1e-6;
          mu = [1; 0; 0];
-         [obj,X,y,Z,runhist] = logdetPPA(blk,At,C,b,mu,OPTIONS);
+         [obj,X,y,Z,info,runhist] = logdetPPA(blk,At,C,b,mu,OPTIONS);
          obj = sum(sum(Sigma.*X{1}))-sum(log(eig(X{1})))+rho*sum(sum(abs(X{1}))); 
          X1 = invD*X{1}*invD; X1 = 0.5*(X1+X1');   
          X2 = invD*X{2}*invD; X2 = 0.5*(X2+X2');   

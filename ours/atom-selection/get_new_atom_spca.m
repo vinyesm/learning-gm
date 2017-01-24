@@ -8,15 +8,16 @@ maxval=-inf;
 for i=1:length(ActiveSet.I)
     %eigenvector associated to largest real eigeinvalue
     S=ActiveSet.I{i};
+    cf=param.cardfun(length(S));
     Hs=H(S,S);
     Hs=0.5*(Hs+Hs');
     [v,d]=eigs(-Hs,1,'la');
     v=real(v);
     d=real(d);
-    if d>maxval
-        maxval=d;
+    if d/cf>maxval
+        maxval=d/cf;
         new_i=S;
-        new_val=v;
+        new_val=v/sqrt(cf);
 %         maxatom=zeros(p,1);
 %         maxatom(S)=v;
     end

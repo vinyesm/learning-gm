@@ -9,12 +9,13 @@ lambdaBest= -inf;
 kBest=0;
 for k=1:size(A,1)
     if (param.cardfun(k) ~= inf)
+        cf=param.cardfun(k);
         param.k=k;
         param.q=k;
         [u,lambda] = TPI(B,param);
-        lambda=(u'*A*u)/param.cardfun(param.k);
+        lambda=(u'*A*u)/cf;
         if lambdaBest < lambda
-            uBest = u;
+            uBest = u/sqrt(cf);
             lambdaBest = lambda;
             kBest=k;
         end

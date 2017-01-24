@@ -70,8 +70,11 @@ S=cov(Y');
 
 inputData.X1=S^.5;
 param.mu=0.01;
-param.lambda=0.1;
+param.lambda=0.5;
 param.rho=0.5;
+% param.cardfun=inf*ones(1,p);
+% param.cardfun(5)=1;
+param.cardfun=(1:(p)).^.2;
 [Aso,Mso,Sso,Eso] = sparse_omega_lgm( inputData, param);
 
 
@@ -100,7 +103,7 @@ keyboard;
 param.f=4;
 param.diag=0;
 param.PSD=true;
-param.max_nb_main_loop=100;
+param.max_nb_main_loop=50;
 param.powerIter=100;
 param.stPtPowerIter=1000;
 param.niterPS=10000;%5000
@@ -112,14 +115,15 @@ param.verbose=1;
 param.debug=0;
 param.sloppy=0;
 param.max_nb_atoms=param.max_nb_main_loop*param.niterPS;
-param.cardfun=inf*ones(1,p);
-param.cardfun(5)=1;
+% param.cardfun=inf*ones(1,p);
+% param.cardfun(5)=1;
+param.cardfun=(1:(p)).^.2;
 %%
 %S=C;
 inputData.X1=S^.5;
 inputData.X2=inputData.X1;
 inputData.Y=eye(p);
-param.lambda=lambda;
+param.lambda=0.01;
 %% as quadprog
 param.opt='asqp';
 [Z_as,D_as, ActiveSet_as, hist_as, param_as, flaga_as, it_as] = cgan_lgm(inputData,param);

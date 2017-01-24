@@ -17,12 +17,11 @@ param.epsStop=1e-8;
 param.PSdualityEpsilon=1e-3;
 param.k=0;
 param.PSmu=0; %strong convexity
-param.verbose=0;
+param.verbose=1;
 param.debug=0;
 param.sloppy=0;
 param.max_nb_atoms=param.max_nb_main_loop*param.niterPS;
-param.cardfun=inf*ones(1,p);
-param.cardfun(10)=1;
+param.cardfun=options.cardfun;
 param.lambda=lambda;
 param.opt='asqp';
 param.diag=0;
@@ -32,6 +31,7 @@ if trace(X0) < 0
     Z=zeros(p);
     Znorm=0;
 else
+    fprintf('cgan_spca\n');
     [Z ActiveSet hist param flag output] = cgan_spca(inputData,param);
     Znorm=sum(ActiveSet.alpha);
 end

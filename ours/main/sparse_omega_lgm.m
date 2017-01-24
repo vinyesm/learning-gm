@@ -5,6 +5,8 @@ function [ A,M,S,E] = sparse_omega_lgm( inputData, param)
 
 debug=1;
 
+options.cardfun=param.cardfun;
+
 C05=inputData.X1;
 C=C05*C05;
 p=size(C,1);
@@ -38,7 +40,7 @@ A=proj_psd(A);
 fprintf(['1) augmented lagrangian  ' num2str(aug_lag(A,M,Mnorm,S,E)) '\n']);
 S=soft_threshold(M+A+E/rho,mu/rho);
 fprintf(['2) augmented lagrangian  ' num2str(aug_lag(A,M,Mnorm,S,E)) '\n']);
-[M Mnorm]=proj_omega(S-A-E/rho,lambda/rho);
+[M Mnorm]=proj_omega(S-A-E/rho,lambda/rho,options);
 fprintf(['3) augmented lagrangian  ' num2str(aug_lag(A,M,Mnorm,S,E)) '\n']);
 E=E-rho*(S-M-A);
 fprintf(['4) augmented lagrangian  ' num2str(aug_lag(A,M,Mnorm,S,E)) '\n']);

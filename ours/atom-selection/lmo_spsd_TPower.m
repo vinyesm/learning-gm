@@ -12,19 +12,21 @@ allVal=zeros(size(A,1),1);
 
 for k=1:size(A,1)
     if (param.cardfun(k) ~= inf)
+        cf=param.cardfun(k);
         options.verbose=0;
         options.optTol=1e-8;
         options.maxIter=1000;
         options.cardinality_vec=k;
         [u,lambda] = TPower_SPCA(A, options);
-        lambda=lambda/param.cardfun(k);
+        lambda=lambda/cf;
         allVal(k)=lambda;
         if lambdaBest < lambda
-            uBest = u;
+            uBest = u/sqrt(cf);
             lambdaBest = lambda;
             kBest=k;
         end
     end
+    lambdaBest=lambdaBest*cf;
 end
 
 end

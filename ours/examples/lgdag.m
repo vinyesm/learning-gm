@@ -13,7 +13,7 @@ addpath('../TPower_1.0/misc/');
 load('cov-block.mat')
 S=cov;
 p=size(cov,1);
-lambda=1;
+lambda=.5;
 
 %% param
 
@@ -32,8 +32,9 @@ param.verbose=1;
 param.debug=0;
 param.sloppy=0;
 param.max_nb_atoms=param.max_nb_main_loop*param.niterPS;
-param.cardfun=inf*ones(1,p);
-param.cardfun(3)=1;
+% param.cardfun=inf*ones(1,p);
+% param.cardfun(3)=1;
+param.cardfun=(1:(p)).^.8;
 %%
 %S=C;
 inputData.X1=S^.5;
@@ -42,7 +43,7 @@ inputData.Y=eye(p);
 param.lambda=lambda;
 %% as quadprog
 param.opt='asqp';
-[Z_as,D_as, ActiveSet_as, hist_as, param_as, flaga_as, it_as] = cgan_lgm(inputData,param);
+[Z_as, ActiveSet_as, hist_as, param_as, flaga_as, it_as] = cgan_spca(inputData,param);
 dg_as=hist_as.dg_sup;
 tt_as=hist_as.time_sup;
 fprintf('lambda=%f\n',lambda);
@@ -107,5 +108,5 @@ iplot=iplot+1;
 end
 subplot(nrow,ncol,iplot);
 imagesc(abs(M));
-subplot(nrow,ncol,iplot);
-imagesc(abs(M+diag(D_as)));
+subplot(nrow,ncol,iplot+1);
+imagesc(abs(inv(cov)));

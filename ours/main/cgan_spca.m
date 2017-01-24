@@ -247,5 +247,11 @@ hist.obj_sup = obj_sup;
 hist.nb_pivot= nb_pivot;
 hist.active_var= active_var;
 
+%% from atoms to matrices
+ActiveSet.matrix_atoms={};
+for i=1:ActiveSet.atom_count
+    ActiveSet.matrix_atoms{i}=ActiveSet.atoms(:,i)*ActiveSet.atoms(:,i)';
+end
+
 end
 

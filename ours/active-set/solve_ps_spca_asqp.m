@@ -152,8 +152,17 @@ while cont
         new_atom_added=true;
         first_pass=false;
         
-        if maxval<0
-            error('\nNegative directional derivative d=%f\n',maxval);
+        if 0
+            c1=[ActiveSet.alpha;0];
+            g=H*c1+f;
+            if g(end)>0
+                keyboard;
+            end
+        end
+        
+        if maxval<param.lambda
+            fprintf('\n in solve_ps_spca_asqp Negative directional derivative d=%f\n',maxval);
+            break
         end
     end
     

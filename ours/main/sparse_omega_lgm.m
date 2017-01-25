@@ -1,4 +1,4 @@
-function [ A,M,S,E] = sparse_omega_lgm( inputData, param)
+function [ A,M,S,E, as] = sparse_omega_lgm( inputData, param)
 % min_(A,M,S) .5|C^.5*A*C^.5|^2 + mu|S|_1 + lambda Omega_psd,k(M)
 % s.t. A>=0 and M>=0
 % using ADMM
@@ -14,7 +14,7 @@ rho=param.rho;
 %1/norm(C^4,'fro');
 lambda=param.lambda;
 mu=param.mu;
-max_iter=500;
+max_iter=2000;
 %init A,M,S,E
 A=zeros(p);
 M=zeros(p);
@@ -40,7 +40,7 @@ A=proj_psd(A);
 fprintf(['1) augmented lagrangian  ' num2str(aug_lag(A,M,Mnorm,S,E)) '\n']);
 S=soft_threshold(M+A+E/rho,mu/rho);
 fprintf(['2) augmented lagrangian  ' num2str(aug_lag(A,M,Mnorm,S,E)) '\n']);
-[M Mnorm]=proj_omega(S-A-E/rho,lambda/rho,options);
+[M Mnorm as]=proj_omega(S-A-E/rho,lambda/rho,options);
 fprintf(['3) augmented lagrangian  ' num2str(aug_lag(A,M,Mnorm,S,E)) '\n']);
 E=E-rho*(S-M-A);
 fprintf(['4) augmented lagrangian  ' num2str(aug_lag(A,M,Mnorm,S,E)) '\n']);

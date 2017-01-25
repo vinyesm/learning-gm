@@ -1,4 +1,4 @@
-function [Z Znorm] = proj_omega(X0,lambda,options)
+function [Z Znorm ActiveSet] = proj_omega(X0,lambda,options)
 
 if nargin<3
 end
@@ -26,10 +26,13 @@ param.lambda=lambda;
 param.opt='asqp';
 param.diag=0;
 
-
-if trace(X0) < 0
+%keyboard;
+X0=(X0+X0')/2;
+leig=eigs(X0,1,'la');
+if leig < 0
     Z=zeros(p);
     Znorm=0;
+    ActiveSet={};
 else
     fprintf('cgan_spca\n');
     [Z ActiveSet hist param flag output] = cgan_spca(inputData,param);

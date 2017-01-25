@@ -181,9 +181,13 @@ while c
         fprintf('%d/%d   \n',i,max_nb_main_loop);
     end
     
-    [u, kBest] = lmo_spca(-H,param);
+    %[u, kBest] = lmo_spca(-H,param);
+    [u, kBest] = lmo_spsd_TPower(-H,param);
     param.k=kBest;
     currI = find(u);
+%     if param.verbose==1
+%         u
+%     end
     
     
     
@@ -217,7 +221,7 @@ while c
         c=0;
     elseif varIJ > param.lambda*(1+param.epsStop / kBest)* param.cardfun(kBest)
         ActiveSet.I = [ActiveSet.I, currI];
-        ActiveSet.U = [ActiveSet.U, u(currI)];
+        %ActiveSet.U = [ActiveSet.U, u(currI)];
         ActiveSet.Sigma = [ActiveSet.Sigma, varIJ];
         ActiveSet.Z = [ActiveSet.Z, zeros(param.k,param.k)];
         ActiveSet.tracenorm = [ ActiveSet.tracenorm , 0];
@@ -246,6 +250,7 @@ hist.time_sup= time_sup;
 hist.obj_sup = obj_sup;
 hist.nb_pivot= nb_pivot;
 hist.active_var= active_var;
+ActiveSet.atoms=ActiveSet.atoms(:,1:ActiveSet.atom_count);
 
 %% from atoms to matrices
 ActiveSet.matrix_atoms={};

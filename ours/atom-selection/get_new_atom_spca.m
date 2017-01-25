@@ -23,8 +23,9 @@ for i=1:length(ActiveSet.I)
     end
 end
 % fprintf('\n%f',maxval);
-if maxval==0
+if maxval<=0
     display('Largest eigenvalue is negative or zero\n');
+    keyboard
 end
 
 

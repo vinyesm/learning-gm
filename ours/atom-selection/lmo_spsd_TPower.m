@@ -23,10 +23,16 @@ for k=1:size(A,1)
         if lambdaBest < lambda
             uBest = u/sqrt(cf);
             lambdaBest = lambda;
+            cfBest=cf;
             kBest=k;
         end
     end
-    lambdaBest=lambdaBest*cf;
+end
+
+lambdaBest=lambdaBest*cfBest;
+if lambdaBest<0
+    fprintf('in lmo_spca no descent direction\n');
+    keyboard
 end
 
 end

@@ -69,32 +69,55 @@ S=cov(Y');
 %% sparse_omega_lgm;
 
 inputData.X1=S^.5;
-param.mu=0.01;
-param.lambda=0.5;
+param.mu=0.05;
+param.lambda=0.05;
 param.rho=0.5;
 % param.cardfun=inf*ones(1,p);
 % param.cardfun(5)=1;
 param.cardfun=(1:(p)).^.2;
-[Aso,Mso,Sso,Eso] = sparse_omega_lgm( inputData, param);
+[Aso,Mso,Sso,Eso,Mso_as] = sparse_omega_lgm( inputData, param);
+Uso=bsxfun(@times,sqrt(Mso_as.alpha)',Mso_as.atoms);
+nl=length(Mso_as.alpha);
+
+D_full=zeros(p+nl);
+D_full(1:nl,1:nl)=eye(nl);
+D_full((nl+1):(nl+p),(nl+1):(nl+p))=Sso;
+D_full(1:nl,(nl+1):(nl+p))=Uso';
+D_full((nl+1):(nl+p),1:nl)=Uso;
+
+
+
 
 
 figure(1);clf;
-subplot(2,2,1)
+subplot(3,2,1)
 imagesc(abs(C));
 title('inverse covariance')
 pbaspect([1 1 1]);
-subplot(2,2,2)
+subplot(3,2,2)
 imagesc(abs(inv(S)));
 title('inverse empirical covariance')
 pbaspect([1 1 1]);
-subplot(2,2,3)
+subplot(3,2,3)
+imagesc(abs(Sso));
+title('estimated S')
+pbaspect([1 1 1]);
+subplot(3,2,4)
+imagesc(abs(Mso));
+title('estimated M')
+pbaspect([1 1 1]);
+subplot(3,2,5)
 imagesc(abs(Sso-Mso));
 title('estimated S-M')
 pbaspect([1 1 1]);
-subplot(2,2,4)
+subplot(3,2,6)
 imagesc(abs(Aso));
 title('estimated A')
 pbaspect([1 1 1]);
+
+figure(2);clf;
+imagesc(abs(D_full));
+title('full design estimation')
 
 keyboard;
 
@@ -132,7 +155,7 @@ tt_as=hist_as.time_sup;
 fprintf('lambda=%f\n',lambda);
 fprintf('......tt=%f dg=%f\n',hist_as.time(end),hist_as.dg(end));
 
-figure(2);
+figure(3);
 subplot(2,2,1)
 imagesc(abs(C));
 title('inverse covariance')
@@ -159,7 +182,7 @@ yplot{1}=dg_as;
 colors = [1 0 0];
 legendStr={'cg'};
 
-figure(3);clf
+figure(4);clf
 for i=1
 loglog(xplot{i},yplot{i},'-','LineWidth',2,'Color',colors(i,:),'DisplayName',legendStr{i}); 
 hold on
@@ -176,7 +199,7 @@ yplot{1}=hist_as.dg;
 colors = [    1 0 0];
 legendStr={'cg'};
 
-figure(4);clf
+figure(5);clf
 for i=1
 loglog(xplot{i},yplot{i},'-','LineWidth',2,'Color',colors(i,:),'DisplayName',legendStr{i}); 
 hold on
@@ -186,7 +209,7 @@ legend('show','Location','southwest');
 grid on
 hold off
 
-figure(5);clf
+figure(6);clf
 loglog(tt_as,dg_as,'-','LineWidth',2,'Color',[0 0 0],'DisplayName','dg sup');hold on;
 loglog(hist_as.time,hist_as.dg,'-','LineWidth',2,'Color',[1 0 0],'DisplayName','dg sup');hold on;
 legend('show','Location','southwest');
@@ -196,7 +219,7 @@ hold off
 
 
 %%
-figure(6);clf
+figure(7);clf
 nplots=length(ActiveSet_as.matrix_atoms)+2;
 ncol=ceil(sqrt(nplots));
 nrow=ceil(nplots/ncol);

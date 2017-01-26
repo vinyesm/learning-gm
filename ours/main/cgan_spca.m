@@ -250,7 +250,9 @@ hist.time_sup= time_sup;
 hist.obj_sup = obj_sup;
 hist.nb_pivot= nb_pivot;
 hist.active_var= active_var;
+if ActiveSet.atom_count>0
 ActiveSet.atoms=ActiveSet.atoms(:,1:ActiveSet.atom_count);
+end
 
 %% from atoms to matrices
 ActiveSet.matrix_atoms={};

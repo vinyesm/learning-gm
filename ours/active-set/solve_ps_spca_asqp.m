@@ -116,6 +116,12 @@ while cont
     %% get new atom
     if cont
         [new_i, new_val, maxval]=get_new_atom_spca(Z,ActiveSet,param,inputData);
+        
+        if maxval<param.lambda
+            fprintf('\n in solve_ps_spca_asqp Negative directional derivative d=%f\n',maxval);
+            break
+        end
+        
         ActiveSet.atom_count = ActiveSet.atom_count +1;
         ActiveSet.max_atom_count_reached=max(ActiveSet.max_atom_count_reached,ActiveSet.atom_count);
         ActiveSet.atomsSupport=[ActiveSet.atomsSupport new_i];
@@ -160,10 +166,7 @@ while cont
             end
         end
         
-        if maxval<param.lambda
-            fprintf('\n in solve_ps_spca_asqp Negative directional derivative d=%f\n',maxval);
-            break
-        end
+        
     end
     
     count=count+1;

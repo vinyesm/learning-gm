@@ -25,7 +25,7 @@ end
 % fprintf('\n%f',maxval);
 if maxval<=0
     display('Largest eigenvalue is negative or zero\n');
-    keyboard
+    %keyboard
 end
 
 

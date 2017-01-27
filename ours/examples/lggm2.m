@@ -4,6 +4,18 @@
 % We build the complete model and sample from it
 % We assume latept variables ndependept
 
+%% add paths
+clc; clear all; close all;
+addpath('../main');
+addpath('../active-set');
+addpath('../atom-selection');
+addpath('../utils');
+addpath('../other');
+addpath('../prox');
+addpath('../TPower_1.0');
+addpath('../TPower_1.0/algorithms/TPower/');
+addpath('../TPower_1.0/misc/');
+
 %% settings
 clear all; clc; close all;
 n=5000; % number of samples
@@ -65,8 +77,8 @@ title('observed conc. mat.');
 %% sparse_omega_lgm;
 p=po;
 inputData.X1=S^.5;
-param.mu=.1;
-param.lambda=.00001;
+param.mu=1e-1;
+param.lambda=1e-3;
 param.rho=.5;
 param.cardfun=inf*ones(1,p);
 param.cardfun(5)=1;
@@ -85,7 +97,7 @@ else
     Dso=Sso;
 end
 
-figure(1);clf;
+figure(3);clf;
 subplot(2,2,1)
 imagesc(abs(Dfull));
 pbaspect([1 1 1]);
@@ -100,6 +112,24 @@ pbaspect([1 1 1]);
 title('true support');
 subplot(2,2,4)
 imagesc(abs(Dso)>1e-15);
+pbaspect([1 1 1]);
+title('estimated support');
+
+figure(4);clf;
+subplot(2,2,1);
+imagesc(abs(Dmargo));
+pbaspect([1 1 1]);
+title('true marginal conc. mat.');
+subplot(2,2,2);
+imagesc(abs(Sso-Mso));
+pbaspect([1 1 1]);
+title('observed conc. mat.');
+subplot(2,2,3)
+imagesc(abs(Dmargo)>1e-15);
+pbaspect([1 1 1]);
+title('true support');
+subplot(2,2,4)
+imagesc(abs(Sso-Mso)>1e-15);
 pbaspect([1 1 1]);
 title('estimated support');
 

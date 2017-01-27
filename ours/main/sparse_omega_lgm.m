@@ -46,12 +46,12 @@ for i=1:max_iter
     A=proj_psd(A);
     if debug
         count=count+1;
-        obj(count)=.5*norm(C05*A*C05-eye(p),'fro')^2+mu*sum(abs(S(:)))+lambda*Mnorm;
+        obj(count)=objective(A,M,Mnorm,S,E);
         auglag(count)=aug_lag(A,M,Mnorm,S,E);
         residual(count)=norm(A+M-S,'fro')^2;
     end
 %     fprintf(['1) augmented lagrangian  ' num2str(aug_lag(A,M,Mnorm,S,E)) '\n']);
-    [M Mnorm as]=proj_omega(S-A-E/rho,lambda/rho,options);
+    [M Mnorm as]=prox_omega(S-A-E/rho,lambda/rho,options);
     if debug
         count=count+1;
         obj(count)=.5*norm(C05*A*C05-eye(p),'fro')^2+mu*sum(abs(S(:)))+lambda*Mnorm;
@@ -62,7 +62,7 @@ for i=1:max_iter
     S=soft_threshold(M+A+E/rho,mu/rho);
     if debug
         count=count+1;
-        obj(count)=.5*norm(C05*A*C05-eye(p),'fro')^2+mu*sum(abs(S(:)))+lambda*Mnorm;
+        obj(count)=objective(A,M,Mnorm,S,E);
         auglag(count)=aug_lag(A,M,Mnorm,S,E);
         residual(count)=norm(A+M-S,'fro')^2;
     end
@@ -70,7 +70,7 @@ for i=1:max_iter
     E=E-rho*(S-M-A);
     if debug
         count=count+1;
-        obj(count)=.5*norm(C05*A*C05-eye(p),'fro')^2+mu*sum(abs(S(:)))+lambda*Mnorm;
+        obj(count)=objective(A,M,Mnorm,S,E);
         auglag(count)=aug_lag(A,M,Mnorm,S,E);
         residual(count)=norm(A+M-S,'fro')^2;
     end
@@ -84,7 +84,7 @@ for i=1:max_iter
 %         residual(i)=norm(A+M-S,'fro')^2;
 %     end
     if debug
-        obj2(i)=.5*norm(C05*A*C05-eye(p),'fro')^2+mu*sum(abs(S(:)))+lambda*Mnorm;
+        obj2(i)=objective(A,M,Mnorm,S,E);
         auglag2(i)=aug_lag(A,M,Mnorm,S,E);
         residual2(i)=norm(A+M-S,'fro')^2;
     end

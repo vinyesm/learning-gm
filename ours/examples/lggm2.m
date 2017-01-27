@@ -44,11 +44,13 @@ Dfull((pl+1):pt,1:pl)=Dol;
 Dfull=.5*(Dfull+Dfull');
 Dmargo=Doo-Dol*Dol';
 
+
+
 figure(1);clf;
 imagesc(abs(Dfull));
 pbaspect([1 1 1]);
 title('true complete conc. mat.');
-keyboard;
+
 
 if eigs(Dfull,1,'sa')<0
     error('The conceptration matrix of the complete model is not PSD \n')
@@ -59,7 +61,7 @@ mu=zeros(1,pt); % vector of means
 Xfull=mvnrnd(mu, inv(Dfull), n)';
 X=Xfull((pl+1):pt,:);
 S=cov(X');
-S=Dmargo;
+S=inv(Dmargo);
 
 %% plotting
 
@@ -78,12 +80,25 @@ title('observed conc. mat.');
 p=po;
 inputData.X1=S^.5;
 param.mu=1e-1;
-param.lambda=1e-3;
-param.rho=.5;
+param.lambda=1e-2;
+param.rho=1;
 param.cardfun=inf*ones(1,p);
 param.cardfun(5)=1;
 % param.cardfun=(1:(p)).^.2;
-[Aso,Mso,Sso,Eso,Mso_as] = sparse_omega_lgm( inputData, param);
+[Aso,Mso,Sso,Eso,Mso_as,out] = sparse_omega_lgm( inputData, param);
+
+obj1=out.obj;
+loss1=.5*norm(S^.5*(Sso-Mso)*S^.5-eye(po),'fro')^2;
+pens1=param.mu*sum(abs(Sso(:))>0);
+peno1=param.lambda*out.Mnorm;
+
+obj0=.5*norm(S^.5*Dmargo*S^.5-eye(po),'fro')^2+param.mu*sum(abs(Doo(:))>0)+param.lambda*pl*5*0.2;
+loss0=.5*norm(S^.5*Dmargo*S^.5-eye(po),'fro')^2;
+pens0=param.mu*sum(abs(Doo(:))>0);
+peno0=param.lambda*pl*5*0.2;
+
+fprintf('ground truth sol : obj=%f  loss=%f  pens=%f   peno=%f\n',obj0,loss0,pens0,peno0);
+fprintf('our  sol         : obj=%f  loss=%f  pens=%f   peno=%f\n',obj1,loss1,pens1,peno1);
 
 if norm(Mso,'fro')>1e-16
     Uso=bsxfun(@times,sqrt(Mso_as.alpha)',Mso_as.atoms);
@@ -132,4 +147,6 @@ subplot(2,2,4)
 imagesc(abs(Sso-Mso)>1e-15);
 pbaspect([1 1 1]);
 title('estimated support');
+
+
 

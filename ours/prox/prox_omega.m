@@ -29,7 +29,8 @@ param.diag=0;
 %keyboard;
 X0=(X0+X0')/2;
 leig=eigs(X0,1,'la');
-if leig < 0
+if leig < 1e-16
+    fprintf('M<0\n');
     Z=zeros(p);
     Znorm=0;
     ActiveSet={};

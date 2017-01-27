@@ -1,4 +1,4 @@
-function [ A,M,S,E, as] = sparse_omega_lgm( inputData, param)
+function [ A,M,S,E, as,out] = sparse_omega_lgm( inputData, param)
 % min_(A,M,S) .5|C^.5*A*C^.5|^2 + mu|S|_1 + lambda Omega_psd,k(M)
 % s.t. A>=0 and M>=0
 % using ADMM
@@ -6,6 +6,7 @@ function [ A,M,S,E, as] = sparse_omega_lgm( inputData, param)
 debug=1;
 
 options.cardfun=param.cardfun;
+lossopt='quad';%options.loss;
 
 C05=inputData.X1;
 C=C05*C05;
@@ -33,13 +34,18 @@ if debug
     residual2=zeros(1,max_iter);
 end
 
-aug_lag=@(A,M,Mnorm,S,E) .5*norm(C05*A*C05-eye(p),'fro')^2+mu*sum(abs(S(:)))+lambda*Mnorm-trace(E'*(S-M-A))+rho/2*norm(S-M-A,'fro')^2;
-objective=@(A,M,Mnorm,S,E) .5*norm(C05*A*C05-eye(p),'fro')^2+mu*sum(abs(S(:)))+lambda*Mnorm;
+if strcmp(lossopt,'quad')
+    loss=@(A) .5*norm(C05*A*C05-eye(p),'fro')^2;
+elseif strcmp(lossopt,'ml')
+    error('still not implemented')
+end
+aug_lag=@(A,M,Mnorm,S,E) loss(A)+mu*sum(abs(S(:)))+lambda*Mnorm-trace(E'*(S-M-A))+rho/2*norm(S-M-A,'fro')^2;
+objective=@(A,M,Mnorm,S,E) loss(A)+mu*sum(abs(S(:)))+lambda*Mnorm;
 
 
 for i=1:max_iter
+   
     % A with ls eta=norm(G,'fro')^2/(norm(C^.5*G*C^.5,'fro')^2 + rho*norm(G,'fro')^2)
-%     fprintf(['0) augmented lagrangian  ' num2str(aug_lag(A,M,Mnorm,S,E)) '\n']);
     G=C*A*C-C+E-rho*(S-M-A);
     eta=norm(G,'fro')^2/(norm(C^.5*G*C^.5,'fro')^2 + rho*norm(G,'fro')^2);
     A=A-eta*G;
@@ -50,15 +56,6 @@ for i=1:max_iter
         auglag(count)=aug_lag(A,M,Mnorm,S,E);
         residual(count)=norm(A+M-S,'fro')^2;
     end
-%     fprintf(['1) augmented lagrangian  ' num2str(aug_lag(A,M,Mnorm,S,E)) '\n']);
-    [M Mnorm as]=prox_omega(S-A-E/rho,lambda/rho,options);
-    if debug
-        count=count+1;
-        obj(count)=.5*norm(C05*A*C05-eye(p),'fro')^2+mu*sum(abs(S(:)))+lambda*Mnorm;
-        auglag(count)=aug_lag(A,M,Mnorm,S,E);
-        residual(count)=norm(A+M-S,'fro')^2;
-    end
-%     fprintf(['2) augmented lagrangian  ' num2str(aug_lag(A,M,Mnorm,S,E)) '\n']);
     S=soft_threshold(M+A+E/rho,mu/rho);
     if debug
         count=count+1;
@@ -66,7 +63,23 @@ for i=1:max_iter
         auglag(count)=aug_lag(A,M,Mnorm,S,E);
         residual(count)=norm(A+M-S,'fro')^2;
     end
-%     fprintf(['3) augmented lagrangian  ' num2str(aug_lag(A,M,Mnorm,S,E)) '\n']);
+    [M Mnorm as]=prox_omega(S-A-E/rho,lambda/rho,options);
+    if Mnorm<0
+        error('negative Mnorm\n');
+    end
+    if debug
+        count=count+1;
+        obj(count)=.5*norm(C05*A*C05-eye(p),'fro')^2+mu*sum(abs(S(:)))+lambda*Mnorm;
+        auglag(count)=aug_lag(A,M,Mnorm,S,E);
+        residual(count)=norm(A+M-S,'fro')^2;
+    end
+    S=soft_threshold(M+A+E/rho,mu/rho);
+    if debug
+        count=count+1;
+        obj(count)=objective(A,M,Mnorm,S,E);
+        auglag(count)=aug_lag(A,M,Mnorm,S,E);
+        residual(count)=norm(A+M-S,'fro')^2;
+    end
     E=E-rho*(S-M-A);
     if debug
         count=count+1;
@@ -74,7 +87,7 @@ for i=1:max_iter
         auglag(count)=aug_lag(A,M,Mnorm,S,E);
         residual(count)=norm(A+M-S,'fro')^2;
     end
-%     fprintf(['4) augmented lagrangian  ' num2str(aug_lag(A,M,Mnorm,S,E)) '\n']);
+    
     
 %     if debug
 %         fprintf(['------------------------------------------------------------\n']);
@@ -87,6 +100,8 @@ for i=1:max_iter
         obj2(i)=objective(A,M,Mnorm,S,E);
         auglag2(i)=aug_lag(A,M,Mnorm,S,E);
         residual2(i)=norm(A+M-S,'fro')^2;
+        out.obj=objective(S-M,M,Mnorm,S,E);
+        out.Mnorm=Mnorm;
     end
     
 end

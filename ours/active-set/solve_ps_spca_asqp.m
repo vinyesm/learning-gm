@@ -158,7 +158,7 @@ while cont
         new_atom_added=true;
         first_pass=false;
         
-        if 0
+        if 0,
             c1=[ActiveSet.alpha;0];
             g=H*c1+f;
             if g(end)>0

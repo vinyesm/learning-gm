@@ -15,7 +15,7 @@ rho=param.rho;
 %1/norm(C^4,'fro');
 lambda=param.lambda;
 mu=param.mu;
-max_iter=200;
+max_iter=5000;
 %init A,M,S,E
 A=zeros(p);
 M=zeros(p);
@@ -126,7 +126,7 @@ if debug
     subplot(2,3,6);
     semilogy(residual2,'r.');
     title('residual');
-    keyboard;
+    %keyboard;
 end
 
 end

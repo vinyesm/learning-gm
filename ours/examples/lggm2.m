@@ -18,7 +18,7 @@ addpath('../TPower_1.0/misc/');
 
 %% settings
 clear all; clc; close all;
-n=5000; % number of samples
+n=1000; % number of samples
 
 pl=3; % number of latept variables
 po=15;% number of observed variables
@@ -45,11 +45,27 @@ Dfull=.5*(Dfull+Dfull');
 Dmargo=Doo-Dol*Dol';
 
 
+descr = {'Plot of the function:';
+    'y = A{\ite}^{-\alpha{\itt}}';
+    ' ';
+    'With the values:';
+    'A = 0.25';
+    '\alpha = .005';
+    't = 0:1000'};
+
+descr = {'Plot of the groundtruth concentration matrix';
+    'of the complete model'};
 
 figure(1);clf;
+subplot(1,2,1)
+axis off;
+text(0.5,.5,descr)
+pbaspect([1 1 1]);
+subplot(1,2,2)
 imagesc(abs(Dfull));
 pbaspect([1 1 1]);
 title('true complete conc. mat.');
+
 
 
 if eigs(Dfull,1,'sa')<0
@@ -61,27 +77,50 @@ mu=zeros(1,pt); % vector of means
 Xfull=mvnrnd(mu, inv(Dfull), n)';
 X=Xfull((pl+1):pt,:);
 S=cov(X');
-S=inv(Dmargo);
+% S=inv(Dmargo);
 
 %% plotting
 
 figure(2);clf;
-subplot(1,2,1);
+subplot(2,2,1);
 imagesc(abs(Dmargo));
 pbaspect([1 1 1]);
 title('true marginal conc. mat.');
-subplot(1,2,2);
+subplot(2,2,2);
 imagesc(abs(inv(S)));
 pbaspect([1 1 1]);
 title('observed conc. mat.');
+subplot(2,2,3);
+imagesc(abs(inv(Dmargo)));
+pbaspect([1 1 1]);
+title('true cov');
+subplot(2,2,4);
+imagesc(abs(S));
+pbaspect([1 1 1]);
+title('observed cov');
+
+
+%% LVGGM Chandrasekaran S-L, (Sparse-Low Rank)
+
+
+% HOME = '/Users/marina/Documents/learning-gm/code-from-Kim-Chuan/LogdetPPA-0';
+% addpath(strcat(HOME,'/solver/'))
+% addpath(strcat(HOME,'/solver/mexfun'))
+% addpath(strcat(HOME,'/util/'))
+% 
+% addpath LogdetPPA-0/;
+% addpath LogdetPPA-0/solver/;
+% addpath LogdetPPA-0/solver/mexfun/;
+% addpath LogdetPPA-0/util/;
+% ttime  = clock;
 
 %% our norm psd with decomposition S-M
 %% sparse_omega_lgm;
 p=po;
 inputData.X1=S^.5;
-param.mu=1e-1;
-param.lambda=1e-2;
-param.rho=1;
+param.mu=n*1e-4;
+param.lambda=n*1e-5;
+param.rho=n*.1;
 param.cardfun=inf*ones(1,p);
 param.cardfun(5)=1;
 % param.cardfun=(1:(p)).^.2;
@@ -112,23 +151,45 @@ else
     Dso=Sso;
 end
 
+descr_gen = {'Formulation S-M where ';
+    'with sparse + Omega symmetric regularization';
+    'solved with augmented lagrangian';
+    'prox computed with algorithm cgan_spca';
+    'M projected to PSD before prox';
+    ['number of samples n=' num2str(n)];
+    };
+
+descr_par = {['\lambda = ' num2str(param.lambda) '  (omega reg)'];
+    ['\mu = ' num2str(param.mu) '  (l_1 reg)'];
+    ['\rho = ' num2str(param.mu) '  (aug lag par)'];};
+
+%%
 figure(3);clf;
-subplot(2,2,1)
+subplot(3,2,1)
+axis off;
+text(0,.5,descr_gen)
+pbaspect([1 1 1]);
+subplot(3,2,2)
+axis off;
+text(0,.5,descr_par)
+pbaspect([1 1 1]);
+subplot(3,2,3)
 imagesc(abs(Dfull));
 pbaspect([1 1 1]);
 title('true complete conc. mat.');
-subplot(2,2,2)
+subplot(3,2,4)
 imagesc(abs(Dso));
 pbaspect([1 1 1]);
 title('estimated complete conc. mat.');
-subplot(2,2,3)
+subplot(3,2,5)
 imagesc(abs(Dfull)>1e-15);
 pbaspect([1 1 1]);
 title('true support');
-subplot(2,2,4)
+subplot(3,2,6)
 imagesc(abs(Dso)>1e-15);
 pbaspect([1 1 1]);
 title('estimated support');
+%%
 
 figure(4);clf;
 subplot(2,2,1);
@@ -147,6 +208,14 @@ subplot(2,2,4)
 imagesc(abs(Sso-Mso)>1e-15);
 pbaspect([1 1 1]);
 title('estimated support');
+
+%% saving
+filename = ['lggm2_' datestr(datetime('now'),'yyyymmddTHHMMSS') '.ps'];
+%print ( '-dpsc2', filename, '-f1' )
+print ( '-dpsc2', filename, '-append', '-f2' )
+print ( '-dpsc2', filename, '-append', '-f3' )
+print ( '-dpsc2', filename, '-append', '-f4' )
+print ( '-dpsc2', filename, '-append', '-f20' )
 
 
 

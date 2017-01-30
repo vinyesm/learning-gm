@@ -1,6 +1,6 @@
 %
 % EXPERIMEpt ON non oriepted graph structure learning with latept variables
-% 
+%
 % We build the complete model and sample from it
 % We assume latept variables ndependept
 
@@ -10,15 +10,26 @@ addpath('../main');
 addpath('../active-set');
 addpath('../atom-selection');
 addpath('../utils');
-addpath('../other');
+% addpath('../other');
 addpath('../prox');
 addpath('../TPower_1.0');
 addpath('../TPower_1.0/algorithms/TPower/');
 addpath('../TPower_1.0/misc/');
 
+HOME = '/Users/marina/Documents/learning-gm/code-from-Kim-Chuan/LogdetPPA-0';
+addpath(strcat(HOME,'/solver/'))
+addpath(strcat(HOME,'/solver/mexfun'))
+addpath(strcat(HOME,'/util/'))
+
+% addpath LogdetPPA-0/;
+% addpath LogdetPPA-0/solver/;
+% addpath LogdetPPA-0/solver/mexfun/;
+% addpath LogdetPPA-0/util/;
+ttime  = clock;
+
 %% settings
-clear all; clc; close all;
-n=1000; % number of samples
+
+n0=1000; % number of samples
 
 pl=3; % number of latept variables
 po=15;% number of observed variables
@@ -74,10 +85,11 @@ end
 
 %% sampling data
 mu=zeros(1,pt); % vector of means
-Xfull=mvnrnd(mu, inv(Dfull), n)';
+Xfull=mvnrnd(mu, inv(Dfull), n0)';
 X=Xfull((pl+1):pt,:);
 S=cov(X');
-% S=inv(Dmargo);
+%S=inv(Dmargo);
+S=.5*(S+S');
 
 %% plotting
 
@@ -102,14 +114,126 @@ title('observed cov');
 
 %% LVGGM Chandrasekaran S-L, (Sparse-Low Rank)
 
+%%
+%% set up SDP data in SDPT3 format
+%%
+Sigma=S;
+n=po;
+rho=1e-2;
+invD = speye(n,n); 
 
-HOME = '/Users/marina/Documents/learning-gm/code-from-Kim-Chuan/LogdetPPA-0';
-addpath(strcat(HOME,'/solver/'))
-addpath(strcat(HOME,'/solver/mexfun'))
-addpath(strcat(HOME,'/util/'))
+%
+n2 = n*(n+1)/2;
+b = zeros(n2,1);
+C{1} = Sigma;
+blk{1,1} = 's'; blk{1,2} = n;
+[Iall,Jall] = find(triu(ones(n)));
+tmp = [Iall,Jall];
+m2 = size(tmp,1);
+Icomp = tmp(:,1); Jcomp = tmp(:,2);
+Itmp  = Icomp + Jcomp.*(Jcomp-1)/2;
+Atmp  = spconvert([Itmp,[1:m2]',ones(m2,1); n2,m2,0]);
+At{1} = Atmp;
+%%
+beta = 1e-2;
+blk{2,1} = 's'; blk{2,2} = n;
+At{2,1}  = Atmp;
+C{2,1}   = beta*speye(n,n);
+%%
+blk{3,1} = 'l'; blk{3,2} = 2*n2;
+Identity = speye(n2);
+At{3,1} = [-Identity,Identity]';
+idx = find(Icomp == Jcomp);
+ee  = sqrt(2)*ones(m2,1);
+if ~isempty(idx); ee(idx) = ones(length(idx),1); end
+C{3,1} = rho*[ee; ee];
+fprintf('\n Set up data time = %3.2f',etime(clock,ttime));
+runPPA = 1;
+if (runPPA)
+    OPTIONS.smoothing  = 1;
+    OPTIONS.scale_data = 0; %% or 2;
+    OPTIONS.plotyes    = 0;
+    OPTIONS.tol        = 1e-10;
+    mu = [1; 0; 0];
+    [obj,X,y,Z,info,runhist] = logdetPPA(blk,At,C,b,mu,OPTIONS);
+    obj = sum(sum(Sigma.*X{1}))-sum(log(eig(X{1})))+rho*sum(sum(abs(X{1})));
+    X1 = invD*X{1}*invD; X1 = 0.5*(X1+X1');
+    X2 = invD*X{2}*invD; X2 = 0.5*(X2+X2');
+end
 
-addpath LogdetPPA-0/;
-addpath LogdetPPA-0/solver/;
-addpath LogdetPPA-0/solver/mexfun/;
-addpath LogdetPPA-0/util/;
-ttime  = clock;
+%% solution
+Ssl=X1+X2;
+Lsl=X2;
+
+%Usl=chol(Lsl);
+[VV DD]=eig(Lsl);
+dd=diag(DD);
+VV=VV(:,dd>1e-15);
+dd=dd(dd>1e-15);
+Usl=VV*diag(sqrt(dd));
+
+p=n;
+nl=length(dd);
+
+Dsl=zeros(p+nl);
+Dsl(1:nl,1:nl)=eye(nl);
+Dsl((nl+1):(nl+p),(nl+1):(nl+p))=Ssl;
+Dsl(1:nl,(nl+1):(nl+p))=Usl';
+Dsl((nl+1):(nl+p),1:nl)=Usl;
+
+
+figure(3);clf;
+subplot(2,2,1);
+imagesc(abs(Dmargo));
+pbaspect([1 1 1]);
+title('true marginal conc. mat.');
+subplot(2,2,2);
+imagesc(abs(inv(S)));
+pbaspect([1 1 1]);
+title('observed conc. mat.');
+subplot(2,2,3);
+imagesc(abs(Ssl+Lsl));
+pbaspect([1 1 1]);
+title('extimated conc. mat.');
+subplot(2,2,4);
+axis off
+pbaspect([1 1 1]);
+
+descr_gen = {'Formulation S-L where ';
+    'with sparse + low rank regularization';
+    'solved SD programming';
+    ['number of samples n=' num2str(n0)];
+    };
+
+descr_par = {['\rho = ' num2str(rho) '  (rho)'];
+    ['\beta = ' num2str(beta) '  (beta)'];};
+
+%%
+figure(4);clf;
+subplot(3,2,1)
+axis off;
+text(0,.5,descr_gen)
+pbaspect([1 1 1]);
+subplot(3,2,2)
+axis off;
+text(0,.5,descr_par)
+pbaspect([1 1 1]);
+subplot(3,2,3)
+imagesc(abs(Dfull));
+pbaspect([1 1 1]);
+title('true complete conc. mat.');
+subplot(3,2,4)
+imagesc(abs(Dsl));
+pbaspect([1 1 1]);
+title('estimated complete conc. mat.');
+subplot(3,2,5)
+imagesc(abs(Dfull)>1e-10);
+pbaspect([1 1 1]);
+title('true support');
+subplot(3,2,6)
+imagesc(abs(Dsl)>1e-10);
+pbaspect([1 1 1]);
+title('estimated support');
+
+
+

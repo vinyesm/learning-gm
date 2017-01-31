@@ -45,7 +45,7 @@ Dol(6:10,2)=ones(5,1);
 Dol(11:15,3)=ones(5,1);
 Dol=.2*Dol;
 
-%% construction of the conceptration matrix
+%% construction of the concentration matrix
 Dfull=zeros(pt);
 Dfull(1:pl,1:pl)=eye(pl);
 Dfull((pl+1):pt,(pl+1):pt)=Doo;
@@ -119,7 +119,7 @@ title('observed cov');
 %%
 Sigma=S;
 n=po;
-rho=1e-2;
+rho=1e-1;
 invD = speye(n,n); 
 
 %
@@ -234,6 +234,12 @@ subplot(3,2,6)
 imagesc(abs(Dsl)>1e-10);
 pbaspect([1 1 1]);
 title('estimated support');
+
+filename = ['lggm_chandrasekaran' datestr(datetime('now'),'yyyymmddTHHMMSS') '.ps'];
+print ( '-dpsc2', filename, '-f1' )
+print ( '-dpsc2', filename, '-append', '-f2' )
+print ( '-dpsc2', filename, '-append', '-f3' )
+print ( '-dpsc2', filename, '-append', '-f4' )
 
 
 

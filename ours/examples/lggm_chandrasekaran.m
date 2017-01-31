@@ -16,7 +16,8 @@ addpath('../TPower_1.0');
 addpath('../TPower_1.0/algorithms/TPower/');
 addpath('../TPower_1.0/misc/');
 
-HOME = '/Users/marina/Documents/learning-gm/code-from-Kim-Chuan/LogdetPPA-0';
+HOME = '/Users/marina/Documents/learning-gm/code-from-Kim-Chuan/LogdetPPA-0'; %if my  mac
+HOME = '/home/marina/Marina/learning-gm/code-from-Kim-Chuan/LogdetPPA-0';%if lab pc
 addpath(strcat(HOME,'/solver/'))
 addpath(strcat(HOME,'/solver/mexfun'))
 addpath(strcat(HOME,'/util/'))

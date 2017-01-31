@@ -236,7 +236,8 @@ imagesc(abs(Dsl)>1e-10);
 pbaspect([1 1 1]);
 title('estimated support');
 
-filename = ['lggm_chandrasekaran' datestr(datetime('now'),'yyyymmddTHHMMSS') '.ps'];
+%filename = ['lggm_chandrasekaran' datestr(datetime('now'),'yyyymmddTHHMMSS') '.ps'];
+filename = ['lggm_chandrasekaran' datestr(clock) '.ps'];
 print ( '-dpsc2', filename, '-f1' )
 print ( '-dpsc2', filename, '-append', '-f2' )
 print ( '-dpsc2', filename, '-append', '-f3' )

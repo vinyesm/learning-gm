@@ -15,7 +15,7 @@ rho=param.rho;
 %1/norm(C^4,'fro');
 lambda=param.lambda;
 mu=param.mu;
-max_iter=5000;
+max_iter=1000;
 %init A,M,S,E
 A=zeros(p);
 M=zeros(p);

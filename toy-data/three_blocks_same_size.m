@@ -4,7 +4,7 @@
 clear all; clc; close all;
 %% settings
 
-n=50; % number of samples
+n=100; % number of samples
 
 pl=3; % number of latept variables
 po=15;% number of observed variables

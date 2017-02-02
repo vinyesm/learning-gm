@@ -39,6 +39,9 @@ p=size(Z,1);
 D=zeros(p,1);
 output.time=0;
 
+fprintf('Warning : change build_atoms_hessian_l1_sym when loss is not .5*|S^.5*X*S.^5-I|\n');
+[ Q,q,atoms_l1_sym ] = build_atoms_hessian_l1_sym(inputData.X1*inputData.X1);
+
 tic
 
 max_nb_atoms = param.max_nb_atoms;
@@ -57,23 +60,20 @@ while c
     
     %% solve problem P_S
     
-    if ~isempty(ActiveSet.I)
+    if 1 %~isempty(ActiveSet.I) % now we already have all the Eij+Eji atoms
         if param.verbose==1
             fprintf('    solving PS..\n ')
         end
-        if strcmp('asqp',param.opt)
-            [Z, ActiveSet, hist_ps] = solve_ps_l1_omega_asqp(Z, ActiveSet,param,inputData);
-            if ~isempty(ActiveSet.alpha) && param.debug==1
-                hist.nzalphas=[hist.nzalphas full(sum(ActiveSet.alpha>0))];
-                hist.normalpha=[hist.normalpha full(sum(ActiveSet.alpha))];
-                fprintf('   nz alphas=%d  |alpha|=%f  dual gap =%f\n',full(sum(ActiveSet.alpha>0)),full(sum(ActiveSet.alpha)), dg(end));
-            end
-            nb_pivot=[nb_pivot hist_ps.nb_pivot];
-            active_var=[active_var hist_ps.active_var];
+        
+        [Z, ActiveSet, hist_ps] = solve_ps_l1_omega_asqp(Z, ActiveSet,param,inputData,Q,q,atoms_l1_sym);
+        if ~isempty(ActiveSet.alpha) && param.debug==1
+            hist.nzalphas=[hist.nzalphas full(sum(ActiveSet.alpha>0))];
+            hist.normalpha=[hist.normalpha full(sum(ActiveSet.alpha))];
+            fprintf('   nz alphas=%d  |alpha|=%f  dual gap =%f\n',full(sum(ActiveSet.alpha>0)),full(sum(ActiveSet.alpha)), dg(end));
         end
-        if strcmp('proxbcd',param.opt)
-            [Z, D, ActiveSet, hist_ps] = solve_ps_spca_proxbcd(Z,D,ActiveSet,param,inputData);
-        end
+        nb_pivot=[nb_pivot hist_ps.nb_pivot];
+        active_var=[active_var hist_ps.active_var];
+        
         
         obj = [obj hist_ps.obj];
         loss = [loss hist_ps.loss];
@@ -86,9 +86,9 @@ while c
     end
     
     %% get a new descent direction using truncated power iteration
-
+    
     H = gradient(Z,inputData,param);
-
+    
     if param.verbose==1
         fprintf('%d/%d   \n',i,max_nb_main_loop);
     end
@@ -96,7 +96,7 @@ while c
     [u, kBest] = lmo_spsd_TPower(-H,param);
     param.k=kBest;
     currI = find(u);
-
+    
     %% verbose
     if param.verbose==1
         fprintf('   currI = ')

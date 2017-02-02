@@ -1,6 +1,7 @@
-function [ Z, ActiveSet, hist] = solve_ps_l1_omega_asqp( Z,ActiveSet,param,inputData)
+function [ Z, ActiveSet, hist] = solve_ps_l1_omega_asqp( Z,ActiveSet,param,inputData,Q,q,atoms_l1_sym)
 %Using Active Setet to solve (PS) problem
 
+nbetas=size(Q,1);
 
 param_as.max_iter=1e3;
 param_as.epsilon=1e-14;
@@ -46,10 +47,13 @@ if ActiveSet.atom_count>0
     f=diag(U'*inputData.Y*U);
     f=lambdas-f;
 else
+    ActiveSet.beta=zeros(size(Q,1),1);
     U=[];
     G=[];
     H=[];
     f=[];
+    Hall=Q;
+    fall=q+param.mu*ones(size(Q,1),1);
 end
 
 % %% Build the quadratic function [a_l1 a_om]Q[a_l1 a_om]+q'[a_l1 a_om]
@@ -83,27 +87,33 @@ while cont
         break;
     end
     
-    if ~first_pass
+    if ~first_pass || ActiveSet.atom_count==0
         
         if new_atom_added
-            alpha0=[ActiveSet.alpha;0];
+            alpha0=[ActiveSet.beta;ActiveSet.alpha;0];
         else
-            alpha0=ActiveSet.alpha;
+            alpha0=[ActiveSet.beta;ActiveSet.alpha];
         end
         
         % active-set
-        [alph,Jset,npiv]=asqp(Q+1e-14*eye(ActiveSet.atom_count),-q,alpha0,param_as,1);
+        keyboard;
+        [alph,Jset,npiv]=asqp(Hall+1e-14*eye(ActiveSet.atom_count+length(q)),-fall,alpha0,param_as,new_atom_added);
         
-        new_atom_count=sum(Jset);
-        ActiveSet.alpha=alph(Jset);
-        ActiveSet.atom_count=new_atom_count;
-        ActiveSet.atoms(:,1:new_atom_count)=ActiveSet.atoms(:,Jset);
-        U=U(:,Jset);
-        f=f(Jset);
-        cardVal=cardVal(Jset);
-        G=U'*U;
-        H=G.*G;
-        
+        ActiveSet.beta=alph(1:nbetas);
+        if length(alph)>nbetas
+            Jset=Jset((nbetas+1):end);
+            alph=alph((nbetas+1):end);
+            new_atom_count=sum(Jset);
+            ActiveSet.alpha=alph(Jset);
+            ActiveSet.atom_count=new_atom_count;
+            ActiveSet.atoms(:,1:new_atom_count)=ActiveSet.atoms(:,Jset);
+            U=U(:,Jset);
+            f=f(Jset);
+            cardVal=cardVal(Jset);
+            G=U'*U;
+            H=G.*G;
+        end
+
         %% Update ActiveSet and Z
         Z=zeros(p);
         nz=find(ActiveSet.alpha>1e-15);
@@ -111,6 +121,12 @@ while cont
             u=ActiveSet.atoms(:,j);
             Z=Z+ActiveSet.alpha(j)*(u*u');
         end
+        nz=find(ActiveSet.beta>1e-15);
+        for j=nz'
+            Z=Z+ActiveSet.beta(j)*reshape(atoms_l1_sym(:,j),p,p);
+        end
+        
+        keyboard;
         
         %% Compute objective, loss, penalty and duality gap
         if param.sloppy==0 || (param.sloppy~=0 && mod(count,10)==1)
@@ -120,6 +136,10 @@ while cont
             cont = (dg(i)>param.PSdualityEpsilon) && count< param.niterPS;
             i=i+1;
         end
+    end
+    
+    if ActiveSet.atom_count==0
+        cont=false;
     end
     
     %% get new atom

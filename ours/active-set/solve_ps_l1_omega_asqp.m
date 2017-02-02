@@ -1,5 +1,5 @@
-function [ Z, ActiveSet, hist] = solve_ps_l1_omega_asqp( Z,ActiveSet,param,inputData,atoms_l1_sym,U,Hall,fall)
-%Using Active Setet to solve (PS) problem
+function [ Z,Z1,Z2,U,Hall,fall,cardVal, ActiveSet, hist] = solve_ps_l1_omega_asqp( Z,Z1,Z2,ActiveSet,param,inputData,atoms_l1_sym,U,Hall,fall,cardVal)
+%Using Active Set to solve (PS) problem
 
 nbetas=size(atoms_l1_sym,2);
 
@@ -17,7 +17,6 @@ nb_pivot=zeros(1,param.niterPS);
 active_var=zeros(1,param.niterPS);
 
 p=size(Z,1);
-cardVal=[];
 
 if param.debug
     alphaSparsity=[];
@@ -49,9 +48,10 @@ while cont
         end
         
         % active-set
-        keyboard;
+        if length(alpha0)~=length(fall)
+            error('dimension mismatch');
+        end
         [alph,Jset,npiv]=asqp(Hall+1e-14*eye(length(fall)),-fall,alpha0,param_as,new_atom_added);
-        keayboard;
         
         ActiveSet.beta=alph(1:nbetas);
         if length(alph)>nbetas
@@ -65,8 +65,10 @@ while cont
             ActiveSet.atoms(:,1:new_atom_count)=ActiveSet.atoms(:,Jset);
             U=U(:,Jset);
             Hall=Hall(Jsetall,Jsetall);
-            fall=fall(Jset);
+            fall=fall(Jsetall);
             cardVal=cardVal(Jset);
+            alph
+%             keyboard;
         end
 
         %% Update ActiveSet and Z
@@ -85,8 +87,7 @@ while cont
         
         %% Compute objective, loss, penalty and duality gap
         if (param.sloppy==0 || (param.sloppy~=0 && mod(count,10)==1)) && ~isempty(ActiveSet.alpha)
-            keyboard;
-            [loss(i),pen(i),obj(i),dg(i),time(i)]=get_val_spca_asqp(ActiveSet,inputData,param,cardVal);
+            [loss(i),pen(i),obj(i),dg(i),time(i)]=get_val_l1_omega_asqp(Z,ActiveSet,inputData,param,cardVal);
             nb_pivot(i)=npiv;
             active_var(i)= sum(ActiveSet.alpha>0);
             cont = (dg(i)>param.PSdualityEpsilon) && count< param.niterPS;
@@ -110,18 +111,30 @@ while cont
             keyboard;
         end
         
-        ActiveSet.atom_count = ActiveSet.atom_count +1;
-        ActiveSet.max_atom_count_reached=max(ActiveSet.max_atom_count_reached,ActiveSet.atom_count);
-        ActiveSet.atomsSupport=[ActiveSet.atomsSupport new_i];
         anew=sparse(new_i,ones(length(new_i),1),new_val,p,1);
-        ActiveSet.atoms(:,ActiveSet.atom_count)=anew;
         
-        [Hall,fall,U] = add_omega_atoms_hessian_l1_sym(inputData,param,Hall,fall,atoms_l1_sym,U,anew);
+        [Hall_new,fall_new,U_new] = add_omega_atoms_hessian_l1_sym(inputData,param,Hall,fall,atoms_l1_sym,U,anew);
         
-        weight=1;
-        cardVal=[cardVal;weight];
+        g=Hall_new*[ActiveSet.beta;ActiveSet.alpha;0]+fall_new;
         
-        new_atom_added=true;
+        if g(end)>0
+            fprintf('\n in solve_ps_spca_asqp Negative directional derivative d=%f\n',g(end));
+            keyboard;
+            break;
+        else
+            ActiveSet.atom_count = ActiveSet.atom_count +1;
+            ActiveSet.max_atom_count_reached=max(ActiveSet.max_atom_count_reached,ActiveSet.atom_count);
+            ActiveSet.atomsSupport=[ActiveSet.atomsSupport new_i];
+            ActiveSet.atoms(:,ActiveSet.atom_count)=anew;
+            Hall=Hall_new;
+            fall=fall_new;
+            U=U_new;
+            weight=1;
+            cardVal=[cardVal;weight];
+            new_atom_added=true;
+        end
+        
+        
         first_pass=false;
 
     end
@@ -143,7 +156,7 @@ hist.nb_pivot=nb_pivot(1:i);
 hist.active_var=active_var(1:i);
 
 if count>param.niterPS
-    fprintf('maximum number of Ps iteration reached, duality gap=%f\n',dg(end));
+    fprintf('maximum number of Ps iteration reached, duality gap=%f\n',hist.dg(end));
 end
 
 

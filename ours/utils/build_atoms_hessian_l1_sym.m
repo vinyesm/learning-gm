@@ -43,6 +43,9 @@ for i=1:nb_atoms
         Ej=reshape(atoms_l1_sym(:,j),p,p);
         Q(i,j)=trace(S*Ei*S*Ej);
         Q(j,i)=Q(i,j);
+%         if(i==j)
+%             Q(i,i)=Q(i,i);
+%         end
     end
 end
 

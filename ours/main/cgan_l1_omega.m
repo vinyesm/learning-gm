@@ -1,9 +1,11 @@
-function [Z ActiveSet hist param flag output] = cgan_l1_omega(inputData,param,startingZ,ActiveSet)
+function [Z Z1 Z2 ActiveSet hist param flag output] = cgan_l1_omega(inputData,param,startingZ,ActiveSet)
 
 %% init
 if nargin < 3
     startingZ = set_default_Z(inputData,param);
     Z = startingZ;
+    Z1 =Z;
+    Z2=Z;
     ActiveSet = {};
     ActiveSet.I = {};
     ActiveSet.U = {};
@@ -41,10 +43,12 @@ output.time=0;
 
 fprintf('Warning : change build_atoms_hessian_l1_sym when loss is not .5*|S^.5*X*S.^5-I|\n');
 [ Q,q,atoms_l1_sym ] = build_atoms_hessian_l1_sym(inputData.X1*inputData.X1);
+q=q+param.mu*ones(length(q),1);
 ActiveSet.beta=zeros(size(Q,1),1);
 U=[];
 Hall=Q;
 fall=q+param.mu*ones(size(Q,1),1);
+cardVal=[];
 
 tic
 
@@ -69,11 +73,11 @@ while c
             fprintf('    solving PS..\n ')
         end
         
-        [Z, ActiveSet, hist_ps] = solve_ps_l1_omega_asqp(Z, ActiveSet,param,inputData,atoms_l1_sym,U,Hall,fall);
+        [Z, Z1, Z2,U,Hall,fall,cardVal, ActiveSet, hist_ps] = solve_ps_l1_omega_asqp(Z,Z1,Z2, ActiveSet,param,inputData,atoms_l1_sym,U,Hall,fall,cardVal);
         if ~isempty(ActiveSet.alpha) && param.debug==1
             hist.nzalphas=[hist.nzalphas full(sum(ActiveSet.alpha>0))];
             hist.normalpha=[hist.normalpha full(sum(ActiveSet.alpha))];
-            fprintf('   nz alphas=%d  |alpha|=%f  dual gap =%f\n',full(sum(ActiveSet.alpha>0)),full(sum(ActiveSet.alpha)), dg(end));
+            fprintf('   nz alphas=%d  |alpha|=%f  dual gap =%f\n',full(sum(ActiveSet.alpha>0)),full(sum(ActiveSet.alpha)), hist_ps.dg(end));
         end
         nb_pivot=[nb_pivot hist_ps.nb_pivot];
         active_var=[active_var hist_ps.active_var];

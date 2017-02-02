@@ -32,7 +32,7 @@ end
 if temp_om<0
     shrink=min(1,param.mu / temp_l1);
 else
-    shrink=min(1, param.lambda / temp_om, param.mu / temp_l1);
+    shrink=min(1, min(param.lambda / temp_om, param.mu / temp_l1));
 end
 
 %duality gap

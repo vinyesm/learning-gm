@@ -66,9 +66,9 @@ while cont
             fall=fall(Jsetall);
             cardVal=cardVal(Jset);
             alph
-%             keyboard;
+            %             keyboard;
         end
-
+        
         %% Update ActiveSet and Z
         Z1=zeros(p);
         nz=find(ActiveSet.beta>1e-15);
@@ -119,8 +119,16 @@ while cont
         
         if maxval_l1/param.mu>maxval_om/param.lambda
             %adding l1 atom
+            if maxval_l1<param.lambda
+                fprintf('\n not good atom l1 \n',maxval_l1);
+                keyboard;
+            end
         else
             %ading omega atom
+            if maxval_om<param.lambda
+                fprintf('\n not good atom omega d=%f\n',maxval_om);
+                keyboard;
+            end
         end
         
         %%
@@ -162,7 +170,7 @@ while cont
         
         
         first_pass=false;
-
+        
     end
     
     count=count+1;

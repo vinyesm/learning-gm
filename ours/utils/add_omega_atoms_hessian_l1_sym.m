@@ -1,23 +1,34 @@
-function [Qall,qall] = add_omega_atoms_hessian_l1_sym(S,Q,q,H,f,atoms_l1_sym,new_atom)
+function [Hall,fall,Uall] = add_omega_atoms_hessian_l1_sym(inputData,param,H,f,atoms_l1_sym,atoms_om,new_atom)
+
+S=inputData.X1*inputData.X1;
 p=size(S,1);
-nb_atoms_l1=size(Q,2);
-nb_atoms_om=size(H,2);
-nb_atoms=nb_atoms_l1+nb_atoms_om;
+nb_atoms=size(H,2);
+nb_atoms_l1=size(atoms_l1_sym,2);
 
 %% building the Hessian
+Hall=zeros(nb_atoms+1,nb_atoms+1);
 
-Q=zeros(nb_atoms);
-q=zeros(nb_atoms,1);
-for i=1:nb_atoms
+v=zeros(nb_atoms,1);
+for i=1:nb_atoms_l1
     Ei=reshape(atoms_l1_sym(:,i),p,p);
-    q(i)=-trace(S*Ei);
-    for j=1:i
-        Ej=reshape(atoms_l1_sym(:,j),p,p);
-        Q(i,j)=trace(S*Ei*S*Ej);
-        Q(j,i)=Q(i,j);
-    end
+    v(i)=new_atom'*(S*Ei*S)*new_atom;
 end
 
+unew=real(inputData.X1)*new_atom;
+if isempty(atoms_om)
+    vnew=[];
+else
+    vnew=U'*unew;
+    vnew=vnew.*vnew;
+end
+
+Uall=[atoms_om unew];
+Hall(1:nb_atoms,1:nb_atoms)=H;
+Hall(1:nb_atoms,end)=[v;vnew];
+Hall(end,1:nb_atoms)=[v;vnew]';
+Hall(end,end)=(unew'*unew)^2;
+weight=1;
+fall=[f;param.lambda*weight-unew'*inputData.Y*unew];
 
 end
 

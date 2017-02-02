@@ -1,7 +1,7 @@
-function [ Z, ActiveSet, hist] = solve_ps_l1_omega_asqp( Z,ActiveSet,param,inputData,Q,q,atoms_l1_sym)
+function [ Z, ActiveSet, hist] = solve_ps_l1_omega_asqp( Z,ActiveSet,param,inputData,atoms_l1_sym,U,Hall,fall)
 %Using Active Setet to solve (PS) problem
 
-nbetas=size(Q,1);
+nbetas=size(atoms_l1_sym,2);
 
 param_as.max_iter=1e3;
 param_as.epsilon=1e-14;
@@ -18,53 +18,6 @@ active_var=zeros(1,param.niterPS);
 
 p=size(Z,1);
 cardVal=[];
-lambdas=[];
-
-if ActiveSet.atom_count>0
-    if param.diag==1
-        lambdas=param.lambda*[zeros(p,1);ones(ActiveSet.atom_count-p,1)];
-        %precompute cardinality function values f(k)
-        cardVal=sparse(p,1);
-        for j=(p+1):ActiveSet.atom_count
-            atom=ActiveSet.atoms(:,j);
-            %     weight=param.cardfun(sum(atom~=0));
-            weight=1; % modify when different weights for atoms
-            cardVal=[cardVal;weight];
-        end
-    else
-        lambdas=param.lambda*ones(ActiveSet.atom_count,1);
-        for j=1:ActiveSet.atom_count
-            atom=ActiveSet.atoms(:,j);
-            %     weight=param.cardfun(sum(atom~=0));
-            weight=1; % modify when different weights for atoms
-            cardVal=[cardVal;weight];
-        end
-    end
-    U=real(inputData.X1)*ActiveSet.atoms(:,1:ActiveSet.atom_count);
-    G=U'*U;
-    H=G.*G;
-    % f= sum(U.*U)';
-    f=diag(U'*inputData.Y*U);
-    f=lambdas-f;
-else
-    ActiveSet.beta=zeros(size(Q,1),1);
-    U=[];
-    G=[];
-    H=[];
-    f=[];
-    Hall=Q;
-    fall=q+param.mu*ones(size(Q,1),1);
-end
-
-% %% Build the quadratic function [a_l1 a_om]Q[a_l1 a_om]+q'[a_l1 a_om]
-% %% all Eij+Eji/sqrt(2), -(Eij+Eji)/sqrt(2) 
-% %% and ui*ui'already selected
-% if ActiveSet.atom_count>0
-% else
-%     Q=[];
-%     q=[];
-% end
-%%
 
 if param.debug
     alphaSparsity=[];
@@ -97,10 +50,13 @@ while cont
         
         % active-set
         keyboard;
-        [alph,Jset,npiv]=asqp(Hall+1e-14*eye(ActiveSet.atom_count+length(q)),-fall,alpha0,param_as,new_atom_added);
+        [alph,Jset,npiv]=asqp(Hall+1e-14*eye(length(fall)),-fall,alpha0,param_as,new_atom_added);
+        keayboard;
         
         ActiveSet.beta=alph(1:nbetas);
         if length(alph)>nbetas
+            Jsetall=Jset;
+            Jsetall(1:nbetas)=1;
             Jset=Jset((nbetas+1):end);
             alph=alph((nbetas+1):end);
             new_atom_count=sum(Jset);
@@ -108,28 +64,28 @@ while cont
             ActiveSet.atom_count=new_atom_count;
             ActiveSet.atoms(:,1:new_atom_count)=ActiveSet.atoms(:,Jset);
             U=U(:,Jset);
-            f=f(Jset);
+            Hall=Hall(Jsetall,Jsetall);
+            fall=fall(Jset);
             cardVal=cardVal(Jset);
-            G=U'*U;
-            H=G.*G;
         end
 
         %% Update ActiveSet and Z
-        Z=zeros(p);
+        Z1=zeros(p);
+        nz=find(ActiveSet.beta>1e-15);
+        for j=nz'
+            Z1=Z1+ActiveSet.beta(j)*reshape(atoms_l1_sym(:,j),p,p);
+        end
+        Z2=zeros(p);
         nz=find(ActiveSet.alpha>1e-15);
         for j=nz'
             u=ActiveSet.atoms(:,j);
-            Z=Z+ActiveSet.alpha(j)*(u*u');
+            Z2=Z2+ActiveSet.alpha(j)*(u*u');
         end
-        nz=find(ActiveSet.beta>1e-15);
-        for j=nz'
-            Z=Z+ActiveSet.beta(j)*reshape(atoms_l1_sym(:,j),p,p);
-        end
-        
-        keyboard;
+        Z=Z1+Z2;
         
         %% Compute objective, loss, penalty and duality gap
-        if param.sloppy==0 || (param.sloppy~=0 && mod(count,10)==1)
+        if (param.sloppy==0 || (param.sloppy~=0 && mod(count,10)==1)) && ~isempty(ActiveSet.alpha)
+            keyboard;
             [loss(i),pen(i),obj(i),dg(i),time(i)]=get_val_spca_asqp(ActiveSet,inputData,param,cardVal);
             nb_pivot(i)=npiv;
             active_var(i)= sum(ActiveSet.alpha>0);
@@ -138,17 +94,20 @@ while cont
         end
     end
     
-    if ActiveSet.atom_count==0
+    if isempty(ActiveSet.I)
         cont=false;
     end
     
     %% get new atom
     if cont
-        [new_i, new_val, maxval]=get_new_atom_spca(Z,ActiveSet,param,inputData);
+        StartY=inputData.Y;
+        inputData.Y=StartY-inputData.X1*Z1*inputData.X2;
+        [new_i, new_val, maxval]=get_new_atom_spca(Z2,ActiveSet,param,inputData);
+        inputData.Y=StartY;
         
         if maxval<param.lambda
             fprintf('\n in solve_ps_spca_asqp Negative directional derivative d=%f\n',maxval);
-            break
+            keyboard;
         end
         
         ActiveSet.atom_count = ActiveSet.atom_count +1;
@@ -157,45 +116,14 @@ while cont
         anew=sparse(new_i,ones(length(new_i),1),new_val,p,1);
         ActiveSet.atoms(:,ActiveSet.atom_count)=anew;
         
-        unew=real(inputData.X1)*anew;
-        if isempty(U)
-            vnew=[];
-        else
-            vnew=U'*unew;
-            vnew=vnew.*vnew;
-        end
-        U=[U unew];
-%         G2=U'*U;        
-%         Gold=G;
-%         G=zeros(ActiveSet.atom_count);
-%         G(1:ActiveSet.atom_count-1,1:ActiveSet.atom_count-1)=Gold;
-%         G(1:ActiveSet.atom_count-1,end)=vnew;
-%         G(end,1:ActiveSet.atom_count-1)=vnew';
-%         G(end,end)=unew'*unew;
-        Hold=H;
-        H=zeros(ActiveSet.atom_count);
-        H(1:ActiveSet.atom_count-1,1:ActiveSet.atom_count-1)=Hold;
-        H(1:ActiveSet.atom_count-1,end)=vnew;
-        H(end,1:ActiveSet.atom_count-1)=vnew';
-        H(end,end)=(unew'*unew)^2;
-%         H2=G2.*G2;
+        [Hall,fall,U] = add_omega_atoms_hessian_l1_sym(inputData,param,Hall,fall,atoms_l1_sym,U,anew);
+        
         weight=1;
-        %     f= [f; param.lambda*weight-norm(unew)^2];
-        f= [f; param.lambda*weight-unew'*inputData.Y*unew];
         cardVal=[cardVal;weight];
         
         new_atom_added=true;
         first_pass=false;
-        
-        if 0,
-            c1=[ActiveSet.alpha;0];
-            g=H*c1+f;
-            if g(end)>0
-                keyboard;
-            end
-        end
-        
-        
+
     end
     
     count=count+1;
@@ -221,18 +149,12 @@ end
 
 if param.debug
     figure(10);clf;
-    subplot(1,4,1);
-    plot(obj);
+    subplot(1,2,1);
+    plot(hist.obj);
     title('objective');
-    subplot(1,4,2);
-    semilogy(dg);
+    subplot(1,2,2);
+    semilogy(hist.dg);
     title('duality gap');
-    subplot(1,4,3)
-    plot(alphaSparsity);
-    title('alpha nz');
-    subplot(1,4,4)
-    plot(diffalphas);
-    title('diff alphas');
     keyboard;
 end
 

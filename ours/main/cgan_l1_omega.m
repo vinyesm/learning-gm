@@ -41,6 +41,10 @@ output.time=0;
 
 fprintf('Warning : change build_atoms_hessian_l1_sym when loss is not .5*|S^.5*X*S.^5-I|\n');
 [ Q,q,atoms_l1_sym ] = build_atoms_hessian_l1_sym(inputData.X1*inputData.X1);
+ActiveSet.beta=zeros(size(Q,1),1);
+U=[];
+Hall=Q;
+fall=q+param.mu*ones(size(Q,1),1);
 
 tic
 
@@ -65,7 +69,7 @@ while c
             fprintf('    solving PS..\n ')
         end
         
-        [Z, ActiveSet, hist_ps] = solve_ps_l1_omega_asqp(Z, ActiveSet,param,inputData,Q,q,atoms_l1_sym);
+        [Z, ActiveSet, hist_ps] = solve_ps_l1_omega_asqp(Z, ActiveSet,param,inputData,atoms_l1_sym,U,Hall,fall);
         if ~isempty(ActiveSet.alpha) && param.debug==1
             hist.nzalphas=[hist.nzalphas full(sum(ActiveSet.alpha>0))];
             hist.normalpha=[hist.normalpha full(sum(ActiveSet.alpha))];

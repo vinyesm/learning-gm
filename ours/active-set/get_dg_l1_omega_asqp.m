@@ -40,7 +40,7 @@ end
 kappa = shrink * (inputData.X1*Z*inputData.X2-inputData.Y);
 dualityGap = obj + sum(sum( inputData.Y .* kappa )) + 1 / 2 * sum(sum( kappa .* kappa ));
 gapLoss = loss + sum(sum( inputData.Y .* kappa )) + 1 / 2 * sum(sum( kappa .* kappa )) -sum(sum((inputData.X1*Z*inputData.X2).*kappa));
-gapPen = param.lambda*pen + sum(sum((inputData.X1*Z*inputData.X2).*kappa));
+gapPen = pen + sum(sum((inputData.X1*Z*inputData.X2).*kappa));
 
 
 if dualityGap<0 && abs(dualityGap)>1e-10

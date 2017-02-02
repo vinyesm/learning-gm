@@ -42,8 +42,7 @@ D=zeros(p,1);
 output.time=0;
 
 fprintf('Warning : change build_atoms_hessian_l1_sym when loss is not .5*|S^.5*X*S.^5-I|\n');
-[ Q,q,atoms_l1_sym ] = build_atoms_hessian_l1_sym(inputData.X1*inputData.X1);
-q=q+param.mu*ones(length(q),1);
+[ Q,q,atoms_l1_sym ] = build_atoms_hessian_l1_sym(inputData.X1*inputData.X1,param.mu);
 ActiveSet.beta=zeros(size(Q,1),1);
 U=[];
 Hall=Q;

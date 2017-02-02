@@ -24,7 +24,7 @@ for i=1:length(ActiveSet.I)
 end
 % fprintf('\n%f',maxval);
 if maxval<=0
-    display('in get_new_atom_spca : Largest eigenvalue is negative or zero\n');
+    error('in get_new_atom_spca : Largest eigenvalue is negative or zero\n');
     %keyboard
 end
 

@@ -1,4 +1,4 @@
-function [ Q,q,atoms_l1_sym ] = build_atoms_hessian_l1_sym(S)
+function [ Q,q,atoms_l1_sym ] = build_atoms_hessian_l1_sym(S,mu)
 p=size(S,1);
 
 E=speye(p*p);
@@ -38,7 +38,11 @@ Q=zeros(nb_atoms);
 q=zeros(nb_atoms,1);
 for i=1:nb_atoms
     Ei=reshape(atoms_l1_sym(:,i),p,p);
-    q(i)=-trace(S*Ei);
+    if sum(atoms_l1_sym(:,i)==2),
+        q(i)=-trace(S*Ei)+mu*2;
+    else
+        q(i)=-trace(S*Ei)+mu;
+    end
     for j=1:i
         Ej=reshape(atoms_l1_sym(:,j),p,p);
         Q(i,j)=trace(S*Ei*S*Ej);
@@ -49,6 +53,6 @@ for i=1:nb_atoms
     end
 end
 
-
+keyboard
 end
 

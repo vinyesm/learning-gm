@@ -48,10 +48,8 @@ while cont
         end
         
         % active-set
-        if length(alpha0)~=length(fall)
-            error('dimension mismatch');
-        end
-        [alph,Jset,npiv]=asqp(Hall+1e-14*eye(length(fall)),-fall,alpha0,param_as,new_atom_added);
+        rcond(Hall+1e-10*eye(length(fall)))
+        [alph,Jset,npiv]=asqp(Hall+1e-10*eye(length(fall)),-fall,alpha0,param_as,new_atom_added);
         
         ActiveSet.beta=alph(1:nbetas);
         if length(alph)>nbetas
@@ -113,7 +111,15 @@ while cont
         
         anew=sparse(new_i,ones(length(new_i),1),new_val,p,1);
         
+        keyboard;
         [Hall_new,fall_new,U_new] = add_omega_atoms_hessian_l1_sym(inputData,param,Hall,fall,atoms_l1_sym,U,anew);
+        
+        figure(11);clf;
+        subplot(1,2,1);
+        imagesc(abs(Hall));
+        subplot(1,2,2);
+        imagesc(abs(Hall_new));
+        keyboard;
         
         g=Hall_new*[ActiveSet.beta;ActiveSet.alpha;0]+fall_new;
         

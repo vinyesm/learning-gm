@@ -35,7 +35,7 @@ function [c,A,nbpivot]=asqp(Q,b,c0,param,new_atom_added)
 max_iter=param.max_iter;
 epsilon=param.epsilon;
 debug_mode=param.debug_mode;
-debug_mode=0;
+debug_mode=1;
 
 tol=1e-14;
 t=size(c0,1);
@@ -107,7 +107,7 @@ while(iter<=max_iter)
         nb_full_steps=nb_full_steps+1;
         %fprintf('+')
         if param.ws && nb_full_steps>100,
-            fprintf('nb_full_steps>10\n');
+            fprintf('nb_full_steps>20\n');
             break;
         end
         if(any(g<-tol & ~A))
@@ -118,7 +118,7 @@ while(iter<=max_iter)
     if debug_mode,
         hist.obj(iter)=0.5*c'*Q*c-c'*b;
         if hist.obj(iter)>obj_old+tol,
-            error('obj increases in asqp');
+            display('obj increases in asqp');
         end
     end
     %% Test to increase active set
@@ -145,13 +145,13 @@ if debug_mode,
     hist.obj=hist.obj(1:min(iter,max_iter)-1);
     hist.norm_g=hist.norm_g(1:min(iter,max_iter));
     if any(diff(hist.obj)>tol),
-        error('objective increases in asqp');
+        display('objective increases in asqp');
     end
-    %if iter>max_iter,
+    if iter>max_iter || nb_full_steps>100,
         figure(15);
         plot(hist.obj);
         keyboard;
-    %end
+    end
 end
 
 

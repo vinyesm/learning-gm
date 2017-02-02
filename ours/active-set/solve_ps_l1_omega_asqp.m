@@ -19,47 +19,47 @@ p=size(Z,1);
 cardVal=[];
 lambdas=[];
 
-% if ActiveSet.atom_count>0
-%     if param.diag==1
-%         lambdas=param.lambda*[zeros(p,1);ones(ActiveSet.atom_count-p,1)];
-%         %precompute cardinality function values f(k)
-%         cardVal=sparse(p,1);
-%         for j=(p+1):ActiveSet.atom_count
-%             atom=ActiveSet.atoms(:,j);
-%             %     weight=param.cardfun(sum(atom~=0));
-%             weight=1; % modify when different weights for atoms
-%             cardVal=[cardVal;weight];
-%         end
-%     else
-%         lambdas=param.lambda*ones(ActiveSet.atom_count,1);
-%         for j=1:ActiveSet.atom_count
-%             atom=ActiveSet.atoms(:,j);
-%             %     weight=param.cardfun(sum(atom~=0));
-%             weight=1; % modify when different weights for atoms
-%             cardVal=[cardVal;weight];
-%         end
-%     end
-%     U=real(inputData.X1)*ActiveSet.atoms(:,1:ActiveSet.atom_count);
-%     G=U'*U;
-%     H=G.*G;
-%     % f= sum(U.*U)';
-%     f=diag(U'*inputData.Y*U);
-%     f=lambdas-f;
-% else
-%     U=[];
-%     G=[];
-%     H=[];
-%     f=[];
-% end
-
-%% Build the quadratic function [a_l1 a_om]Q[a_l1 a_om]+q'[a_l1 a_om]
-%% all Eij+Eji/sqrt(2), -(Eij+Eji)/sqrt(2) 
-%% and ui*ui'already selected
 if ActiveSet.atom_count>0
+    if param.diag==1
+        lambdas=param.lambda*[zeros(p,1);ones(ActiveSet.atom_count-p,1)];
+        %precompute cardinality function values f(k)
+        cardVal=sparse(p,1);
+        for j=(p+1):ActiveSet.atom_count
+            atom=ActiveSet.atoms(:,j);
+            %     weight=param.cardfun(sum(atom~=0));
+            weight=1; % modify when different weights for atoms
+            cardVal=[cardVal;weight];
+        end
+    else
+        lambdas=param.lambda*ones(ActiveSet.atom_count,1);
+        for j=1:ActiveSet.atom_count
+            atom=ActiveSet.atoms(:,j);
+            %     weight=param.cardfun(sum(atom~=0));
+            weight=1; % modify when different weights for atoms
+            cardVal=[cardVal;weight];
+        end
+    end
+    U=real(inputData.X1)*ActiveSet.atoms(:,1:ActiveSet.atom_count);
+    G=U'*U;
+    H=G.*G;
+    % f= sum(U.*U)';
+    f=diag(U'*inputData.Y*U);
+    f=lambdas-f;
 else
-    Q=[];
-    q=[];
+    U=[];
+    G=[];
+    H=[];
+    f=[];
 end
+
+% %% Build the quadratic function [a_l1 a_om]Q[a_l1 a_om]+q'[a_l1 a_om]
+% %% all Eij+Eji/sqrt(2), -(Eij+Eji)/sqrt(2) 
+% %% and ui*ui'already selected
+% if ActiveSet.atom_count>0
+% else
+%     Q=[];
+%     q=[];
+% end
 %%
 
 if param.debug

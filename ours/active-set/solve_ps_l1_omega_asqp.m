@@ -99,11 +99,31 @@ while cont
     
     %% get new atom
     if cont
+        %% omega atom
         StartY=inputData.Y;
         inputData.Y=StartY-inputData.X1*Z1*inputData.X2;
-        [new_i, new_val, maxval]=get_new_atom_spca(Z2,ActiveSet,param,inputData);
+        [new_i, new_val, maxval_om]=get_new_atom_spca(Z2,ActiveSet,param,inputData);
         inputData.Y=StartY;
+        %% l1 sym atom
+        StartY=inputData.Y;
+        inputData.Y=StartY-inputData.X1*Z2*inputData.X2;
+        H = gradient(Z,inputData,param);
+        [maxval_l1]=max(abs(H(:)));
+        inputData.Y=StartY;
+        [new_row new_col] = find(abs(H) == maxval_l1);
+        sa=sign(maxval_l1*H(new_row,new_col));
+        i1=(new_row-1)*p+new_col;
+        i2=(new_col-1)*p+new_row;
+        idx_l1 = atoms_l1_sym(i1, :) == sa & atoms_l1_sym(i2, :) == sa;
+        keyboard;
         
+        if maxval_l1/param.mu>maxval_om/param.lambda
+            %adding l1 atom
+        else
+            %ading omega atom
+        end
+        
+        %%
         if maxval<param.lambda
             fprintf('\n in solve_ps_spca_asqp Negative directional derivative d=%f\n',maxval);
             keyboard;

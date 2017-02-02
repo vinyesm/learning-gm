@@ -53,6 +53,5 @@ for i=1:nb_atoms
     end
 end
 
-keyboard
 end
 

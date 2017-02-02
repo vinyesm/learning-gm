@@ -17,6 +17,7 @@ if nargin < 3
     ActiveSet.atomsSupport = {};
     ActiveSet.alpha= [];
     ActiveSet.atom_count = 0;
+    ActiveSet.atoms=[];
     ActiveSet.max_atom_count_reached=0;
 else
     Z = startingZ;
@@ -44,6 +45,7 @@ output.time=0;
 fprintf('Warning : change build_atoms_hessian_l1_sym when loss is not .5*|S^.5*X*S.^5-I|\n');
 [ Q,q,atoms_l1_sym ] = build_atoms_hessian_l1_sym(inputData.X1*inputData.X1,param.mu);
 ActiveSet.beta=zeros(size(Q,1),1);
+ActiveSet.I_l1=1:size(Q,1);
 U=[];
 Hall=Q;
 fall=q+param.mu*ones(size(Q,1),1);

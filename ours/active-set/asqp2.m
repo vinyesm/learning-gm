@@ -35,7 +35,7 @@ function [c,A,nbpivot]=asqp2(Q,b,c0,param,new_atom_added,idx_atom)
 max_iter=param.max_iter;
 epsilon=param.epsilon;
 debug_mode=param.debug_mode;
-debug_mode=1;
+debug_mode=0;
 
 tol=1e-14;
 t=size(c0,1);
@@ -58,7 +58,7 @@ else
     end
 end
 
-hist.norm_g=zeros(t,max_iter);
+hist.norm_g=zeros(1,max_iter);
 nb_drop_steps=0;
 nb_full_steps=0;
 
@@ -106,7 +106,7 @@ while(iter<=max_iter)
         g=Q*c-b;
         nb_full_steps=nb_full_steps+1;
         %fprintf('+')
-        if param.ws && nb_full_steps>100,
+        if param.ws && nb_full_steps>20,
             fprintf('nb_full_steps>20\n');
             break;
         end
@@ -147,7 +147,7 @@ if debug_mode,
     if any(diff(hist.obj)>tol),
         display('objective increases in asqp');
     end
-    if iter>max_iter || nb_full_steps>100,
+    if iter>max_iter || nb_full_steps>20,
         figure(15);
         plot(hist.obj);
         keyboard;

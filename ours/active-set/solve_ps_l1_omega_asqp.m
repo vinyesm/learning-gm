@@ -182,7 +182,12 @@ while cont
             end
 %             fprintf('\n adding l1 atom\n');
             ActiveSet.I_l1=[ActiveSet.I_l1 idx_l1];
-            [Hall_new,fall_new] = build_Hessian_l1_sym(inputData,param,atoms_l1_sym(:,ActiveSet.I_l1),ActiveSet.atoms(:,ActiveSet.atom_count));
+            if ActiveSet.atom_count>0
+                aom=ActiveSet.atoms(:,1:ActiveSet.atom_count);
+            else
+                aom=[];
+            end
+            [Hall_new,fall_new] = build_Hessian_l1_sym(inputData,param,atoms_l1_sym(:,ActiveSet.I_l1),aom);
             
             g=Hall_new*[ActiveSet.beta;0;ActiveSet.alpha]+fall_new;
             idx=length(ActiveSet.beta)+1;
@@ -225,7 +230,7 @@ end
 
 
 if param.debug
-    figure(10);clf;
+    figure(30);clf;
     subplot(1,2,1);
     plot(hist.obj);
     title('objective');

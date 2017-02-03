@@ -30,7 +30,7 @@ param.powerIter=100;
 param.stPtPowerIter=1000;
 param.niterPS=1000;%5000
 param.epsStop=1e-8;
-param.PSdualityEpsilon=1e-3;
+param.PSdualityEpsilon=1e-4;
 param.k=0;
 param.PSmu=0; %strong convexity
 param.verbose=1;
@@ -40,8 +40,8 @@ param.max_nb_atoms=param.max_nb_main_loop*param.niterPS;
 inputData.X1=S^.5;
 inputData.X2=S^.5;
 inputData.Y=eye(po);
-param.mu=0.5;
-param.lambda=0.5;
+param.mu=.1;
+param.lambda=10;
 param.cardfun=inf*ones(1,p);
 param.cardfun(5)=1;
 % param.cardfun=(1:(p)).^.2;
@@ -60,7 +60,7 @@ if ~isempty(ActiveSet.alpha)
     Dfin(1:nl,(nl+1):(nl+p))=Uso';
     Dfin((nl+1):(nl+p),1:nl)=Uso;
 else
-    Dfin=Sso;
+    Dfin=Z1;
 end
 
 %%

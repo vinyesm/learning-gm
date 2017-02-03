@@ -44,12 +44,16 @@ output.time=0;
 
 fprintf('Warning : change build_atoms_hessian_l1_sym when loss is not .5*|S^.5*X*S.^5-I|\n');
 [ Q,q,atoms_l1_sym ] = build_atoms_hessian_l1_sym(inputData.X1*inputData.X1,param.mu);
-ActiveSet.beta=zeros(size(Q,1),1);
-ActiveSet.I_l1=1:size(Q,1);
-U=[];
-Hall=Q;
-fall=q+param.mu*ones(size(Q,1),1);
+% ActiveSet.beta=zeros(size(Q,1),1);
+% ActiveSet.I_l1=1:size(Q,1);
+% Hall=Q;
+% fall=q+param.mu*ones(size(Q,1),1);
+ActiveSet.beta=[];
+ActiveSet.I_l1=[];
+Hall=[];
+fall=[];
 cardVal=[];
+U=[];
 
 tic
 
@@ -120,6 +124,7 @@ while c
     end
     %%
     
+    maxIJ=max(abs(H(:)));
     varIJ = norm(H(currI,currI));
     takenI= isInCell(currI,ActiveSet.I,cell2mat(ActiveSet.k)) ;
     hist.varIJ=[hist.varIJ varIJ];
@@ -127,6 +132,7 @@ while c
     flag.var=varIJ;
     
     if param.verbose==1
+        fprintf('   maxIJ = %2.4e, thresh = %2.4e\n',maxIJ, param.mu*(1+param.epsStop));
         fprintf('   variance = %2.4e, thresh = %2.4e, length(currI)=%d\n',varIJ, param.lambda*(1+param.epsStop / kBest)* param.cardfun(kBest), length(currI))
     end
     

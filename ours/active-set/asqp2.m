@@ -37,7 +37,7 @@ epsilon=param.epsilon;
 debug_mode=param.debug_mode;
 debug_mode=0;
 
-tol=1e-14;
+tol=1e-12;
 t=size(c0,1);
 c=full(c0);
 g=Q*c-b;
@@ -106,8 +106,8 @@ while(iter<=max_iter)
         g=Q*c-b;
         nb_full_steps=nb_full_steps+1;
         %fprintf('+')
-        if param.ws && nb_full_steps>20,
-            fprintf('nb_full_steps>20\n');
+        if param.ws && nb_full_steps>100,
+            fprintf('  nb_full_steps>100\n');
             break;
         end
         if(any(g<-tol & ~A))
@@ -141,13 +141,13 @@ end
 nbpivot=nb_full_steps+nb_drop_steps;
 %fprintf('\n');
 
-if debug_mode,
+if 0 && debug_mode,
     hist.obj=hist.obj(1:min(iter,max_iter)-1);
     hist.norm_g=hist.norm_g(1:min(iter,max_iter));
     if any(diff(hist.obj)>tol),
         display('objective increases in asqp');
     end
-    if iter>max_iter || nb_full_steps>20,
+    if iter>max_iter || nb_full_steps>100,
         figure(15);
         plot(hist.obj);
         keyboard;

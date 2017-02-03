@@ -39,9 +39,11 @@ q=zeros(nb_atoms,1);
 for i=1:nb_atoms
     Ei=reshape(atoms_l1_sym(:,i),p,p);
     if sum(atoms_l1_sym(:,i)==2),
-        q(i)=-trace(S*Ei)+mu*2;
+%         q(i)=-trace(S*Ei)+mu*2; %(*)because loss .5*|S^.5(Z1+Z2)S^.5+I|^2
+        q(i)=+trace(S*Ei)+mu*2;
     else
-        q(i)=-trace(S*Ei)+mu;
+%         q(i)=-trace(S*Ei)+mu; %(*)
+        q(i)=+trace(S*Ei)+mu;
     end
     for j=1:i
         Ej=reshape(atoms_l1_sym(:,j),p,p);

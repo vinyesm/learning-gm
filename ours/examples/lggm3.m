@@ -40,10 +40,13 @@ param.max_nb_atoms=param.max_nb_main_loop*param.niterPS;
 inputData.X1=S^.5;
 inputData.X2=S^.5;
 inputData.Y=-eye(po);
-param.mu=0.1;
-param.lambda=0.01;
 param.cardfun=inf*ones(1,p);
 param.cardfun(5)=1;
+
+%choice s.t. mu*k^=lambda
+param.mu=0.25;
+param.lambda=0.01;
+
 % param.cardfun=(1:(p)).^.2;
 %[Aso,Mso,Sso,Eso,Mso_as,out] = sparse_omega_lgm( inputData, param);
 [Z Z1 Z2 ActiveSet hist param flag output] = cgan_l1_omega(inputData,param);

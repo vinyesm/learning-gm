@@ -1,7 +1,7 @@
 function [ Z,Z1,Z2,U,Hall,fall,cardVal, ActiveSet, hist] = solve_ps_l1_omega_asqp( Z,Z1,Z2,ActiveSet,param,inputData,atoms_l1_sym,U,Hall,fall,cardVal)
 %Using Active Set to solve (PS) problem
 
-debug=1;
+debug=0;
 
 nbetas=length(ActiveSet.I_l1);
 
@@ -64,11 +64,11 @@ while cont
         end
         %rcond(Hall+1e-10*eye(length(fall)))
         if debug
-            obj0=alpha0'*Hall*alpha0+fall'*alpha0;
+            obj0=.5*alpha0'*Hall*alpha0+fall'*alpha0;
         end
         [alph,Jset,npiv]=asqp2(Hall+0*1e-12*eye(length(fall)),-fall,alpha0,param_as,new_atom_added,idx_added);
         if debug
-            obj1=alph'*Hall*alph+fall'*alph;
+            obj1=.5*alph'*Hall*alph+fall'*alph;
             if obj1>obj0
                 fprintf('objective increasing in asqp\n');
                 keyboard;
@@ -87,6 +87,7 @@ while cont
             Jalpha=Jset((nbetas+1):end);
             new_atom_count=sum(Jalpha);
             ActiveSet.atom_count=new_atom_count;
+            ActiveSet.atoms=ActiveSet.atoms(:,Jalpha);%not necessary (for debbuggging here)
             ActiveSet.alpha=alph((nbetas+1):end);
             ActiveSet.alpha=ActiveSet.alpha(Jalpha);
             %             U=U(:,Jalpha);
@@ -96,6 +97,15 @@ while cont
         nbetas=length(ActiveSet.beta);
         Hall=Hall(Jset,Jset);
         fall=fall(Jset);
+        if debug
+            ab=[ActiveSet.beta;ActiveSet.alpha];
+            obj2=.5*ab'*Hall*ab+fall'*ab;
+            if obj2-obj1>1e-10
+                fprintf('objective increasing after rm zeros \n');
+                keyboard;
+            end
+        end
+        
         
         %% Update ActiveSet and Z
         Z1=zeros(p);
@@ -111,6 +121,14 @@ while cont
         end
         Z=Z1+Z2;
         
+        if debug
+            obj3=.5*norm(inputData.Y - inputData.X1*Z*inputData.X2, 'fro')^2+param.lambda*sum(ActiveSet.alpha)+param.mu*sum(ActiveSet.beta)-.5*p;
+            if obj3-obj2>1e-10
+                fprintf('objective increasing after constructing Z \n');
+                keyboard;
+            end
+        end
+        
         
         %% Compute objective, loss, penalty and duality gap
         if (param.sloppy==0 || (param.sloppy~=0 && mod(count,10)==1)) %&& ~isempty(ActiveSet.alpha)
@@ -118,7 +136,15 @@ while cont
             nb_pivot(i)=npiv;
             active_var(i)= sum(ActiveSet.alpha>0);
             cont = (dg(i)>param.PSdualityEpsilon) && count< param.niterPS;
-            fprintf(' PS info obj=%f  loss=%f  pen=%f dg=%f  \n', obj(i),loss(i), pen(i),dg(i));
+            
+            if debug && i>1
+                fprintf(' PS info obj=%f  loss=%f  pen=%f penl1=%f pen_om=%f dg=%f  \n', obj(i),loss(i), pen(i), param.lambda*sum(ActiveSet.alpha),param.mu*sum(ActiveSet.beta), dg(i));
+                if obj(i)>obj(i-1)
+                    fprintf('objective increasing\n');
+                    keyboard;
+                end
+            end
+            
             i=i+1;
         end
     end
@@ -141,8 +167,9 @@ while cont
         inputData.Y=StartY;
         
         %% l1 sym atom
-        
-        fprintf('\n--------------------------------------------\n');
+        if debug
+            fprintf('\n--------------------------------------------\n');
+        end
         
         StartY=inputData.Y;
         inputData.Y=StartY-inputData.X1*Z2*inputData.X2;
@@ -167,7 +194,9 @@ while cont
                 fprintf('\n not good atom omega d=%f\n',maxval_om);
                 keyboard;
             end
-            fprintf('\n adding omega atom\n');
+            if debug
+                fprintf('\n adding omega atom\n');
+            end
             anew=sparse(new_i,ones(length(new_i),1),new_val,p,1);
             %[Hall_new,fall_new,U_new] = add_omega_atoms_hessian_l1_sym(inputData,param,Hall,fall,atoms_l1_sym,U,anew);
             if ActiveSet.atom_count>0
@@ -180,7 +209,7 @@ while cont
             g=Hall_new*[ActiveSet.beta;ActiveSet.alpha;0]+fall_new;
             if g(end)>0
                 fprintf('\n Not a descent direction d=%f\n',g(end));
-                keyboard;
+%                 keyboard;
                 break;
             else
                 ActiveSet.atom_count = ActiveSet.atom_count +1;
@@ -199,13 +228,15 @@ while cont
             %adding l1 atom
             if maxval_l1<param.mu
                 fprintf('\n not good atom l1 \n',maxval_l1);
-                keyboard;
+%                 keyboard;
             end
-            fprintf('\n adding l1 atom row=%d col=%d\n', new_row, new_col);
+            if debug
+                fprintf('\n adding l1 atom row=%d col=%d\n', new_row, new_col);
+            end
             if sum(ActiveSet.I_l1==idx_l1)
                 new_atom_added=false;
                 fprintf('\n this atom is already in the collection\n');
-                keyboard;
+%                 keyboard;
             else
                 ActiveSet.I_l1=[ActiveSet.I_l1 idx_l1]; %to avoid adding same atom
                 if ActiveSet.atom_count>0
@@ -220,7 +251,7 @@ while cont
                 if g(idx)>0
                     fprintf('\n Not a descent direction d=%f\n',g(idx));
                     ActiveSet.I_l1(end)=[];
-                    keyboard;
+%                     keyboard;
                     break;
                 else
                     new_atom_added=true;

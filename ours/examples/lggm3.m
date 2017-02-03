@@ -25,23 +25,23 @@ p=po;
 param.f=4;
 param.diag=0;
 param.PSD=true;
-param.max_nb_main_loop=10;
+param.max_nb_main_loop=200;
 param.powerIter=100;
 param.stPtPowerIter=1000;
-param.niterPS=200;%5000
+param.niterPS=5000;%5000
 param.epsStop=1e-8;
-param.PSdualityEpsilon=1e-3;
+param.PSdualityEpsilon=1e-5;
 param.k=0;
 param.PSmu=0; %strong convexity
 param.verbose=1;
-param.debug=1;
+param.debug=0;
 param.sloppy=0;
 param.max_nb_atoms=param.max_nb_main_loop*param.niterPS;
 inputData.X1=S^.5;
 inputData.X2=S^.5;
 inputData.Y=-eye(po);
-param.mu=0.004;
-param.lambda=0.001;
+param.mu=0.1;
+param.lambda=0.01;
 param.cardfun=inf*ones(1,p);
 param.cardfun(5)=1;
 % param.cardfun=(1:(p)).^.2;
@@ -120,3 +120,22 @@ subplot(2,2,4)
 imagesc(abs(Z1+Z2)>1e-15);
 pbaspect([1 1 1]);
 title('estimated support');
+
+figure(5);clf
+loglog(hist.time,hist.dg,'-','LineWidth',2,'Color',[1 0 0],'DisplayName','dg');hold on;
+loglog(hist.time_sup,hist.dg_sup,'-','LineWidth',2,'Color',[0 0 0],'DisplayName','dg sup');hold on;
+legend('show','Location','southwest');
+grid on
+hold off
+
+%% saving
+%filename = ['lggm2_' datestr(datetime('now'),'yyyymmddTHHMMSS') '.ps'];
+filename = ['lggm3_' datestr(clock) '.ps'];
+%print ( '-dpsc2', filename, '-f1' )
+print ( '-dpsc2', filename, '-append', '-f1' )
+print ( '-dpsc2', filename, '-append', '-f2' )
+print ( '-dpsc2', filename, '-append', '-f3' )
+print ( '-dpsc2', filename, '-append', '-f4' )
+print ( '-dpsc2', filename, '-append', '-f5' )
+
+keyboard

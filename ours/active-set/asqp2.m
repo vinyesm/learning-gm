@@ -87,6 +87,7 @@ while(iter<=max_iter)
     d(A)=Q(A,A)\b(A);
     %% Progress until active set reduces
     if (~all(d(A)>=0)), % Drop step
+%         keyboard;
         K=A & (c-d>0);
         [tau,i_remove]=min(c(K)./(c(K)-d(K)));
         if (tau>1),
@@ -100,14 +101,14 @@ while(iter<=max_iter)
         g=Q*c-b;
         A=A & (c>0);
         nb_drop_steps=nb_drop_steps+1;
-        %fprintf('.');
+        fprintf('.');     
     else % Full step
         c=d;
         g=Q*c-b;
         nb_full_steps=nb_full_steps+1;
-        %fprintf('+')
-        if param.ws && nb_full_steps>100,
-            fprintf('  nb_full_steps>100\n');
+        fprintf('+')
+        if param.ws && nb_full_steps>10,
+            fprintf('  nb_full_steps>10\n');
             break;
         end
         if(any(g<-tol & ~A))
@@ -118,7 +119,8 @@ while(iter<=max_iter)
     if debug_mode,
         hist.obj(iter)=0.5*c'*Q*c-c'*b;
         if hist.obj(iter)>obj_old+tol,
-            display('obj increases in asqp');
+            display('obj increases in asqp2');
+%             keyboard;
         end
     end
     %% Test to increase active set
@@ -147,7 +149,7 @@ if 0 && debug_mode,
     if any(diff(hist.obj)>tol),
         display('objective increases in asqp');
     end
-    if iter>max_iter || nb_full_steps>100,
+    if iter>max_iter || nb_full_steps>10,
         figure(15);
         plot(hist.obj);
         keyboard;

@@ -71,7 +71,7 @@ while cont
             obj1=.5*alph'*Hall*alph+fall'*alph;
             if obj1>obj0
                 fprintf('objective increasing in asqp\n');
-                keyboard;
+%                 keyboard;
             end
         end
         

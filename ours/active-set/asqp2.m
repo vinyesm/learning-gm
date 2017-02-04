@@ -101,14 +101,16 @@ while(iter<=max_iter)
         g=Q*c-b;
         A=A & (c>0);
         nb_drop_steps=nb_drop_steps+1;
-        fprintf('.');     
+%         fprintf('.');     
     else % Full step
         c=d;
         g=Q*c-b;
         nb_full_steps=nb_full_steps+1;
-        fprintf('+')
+%         fprintf('+')
         if param.ws && nb_full_steps>10,
+            if debug_mode
             fprintf('  nb_full_steps>10\n');
+            end
             break;
         end
         if(any(g<-tol & ~A))

@@ -1,7 +1,9 @@
 function [ Q,q,atoms_l1_sym ] = build_atoms_hessian_l1_sym(S,mu)
+% keyboard;
+
 p=size(S,1);
 
-E=speye(p*p);
+% E=speye(p*p);
 pairs=fullfact([p p]);
 ii=pairs(:,1)>=pairs(:,2);
 pairs=[pairs(ii,1) pairs(ii,2)];
@@ -27,31 +29,33 @@ for j=1:length(pairs);
         count=count+2;
     end
 end
-
 atoms=sparse(I,J,val);
 atoms_l1_sym=[atoms -atoms];
 nb_atoms=size(atoms_l1_sym,2);
 
 %% building the Hessian
-
-Q=zeros(nb_atoms);
-q=zeros(nb_atoms,1);
-for i=1:nb_atoms
-    Ei=reshape(atoms_l1_sym(:,i),p,p);
-    if sum(atoms_l1_sym(:,i)==2),
-%         q(i)=-trace(S*Ei)+mu*2; %(*)because loss .5*|S^.5(Z1+Z2)S^.5+I|^2
-        q(i)=+trace(S*Ei)+mu*2;
-    else
-%         q(i)=-trace(S*Ei)+mu; %(*)
-        q(i)=+trace(S*Ei)+mu;
-    end
-    for j=1:i
-        Ej=reshape(atoms_l1_sym(:,j),p,p);
-        Q(i,j)=trace(S*Ei*S*Ej);
-        Q(j,i)=Q(i,j);
-%         if(i==j)
-%             Q(i,i)=Q(i,i);
-%         end
+Q=[];
+q=[];
+if 0
+    Q=zeros(nb_atoms);
+    q=zeros(nb_atoms,1);
+    for i=1:nb_atoms
+        Ei=reshape(atoms_l1_sym(:,i),p,p);
+        if sum(atoms_l1_sym(:,i)==2),
+            %         q(i)=-trace(S*Ei)+mu*2; %(*)because loss .5*|S^.5(Z1+Z2)S^.5+I|^2
+            q(i)=+trace(S*Ei)+mu*2;
+        else
+            %         q(i)=-trace(S*Ei)+mu; %(*)
+            q(i)=+trace(S*Ei)+mu;
+        end
+        for j=1:i
+            Ej=reshape(atoms_l1_sym(:,j),p,p);
+            Q(i,j)=trace(S*Ei*S*Ej);
+            Q(j,i)=Q(i,j);
+            %         if(i==j)
+            %             Q(i,i)=Q(i,i);
+            %         end
+        end
     end
 end
 

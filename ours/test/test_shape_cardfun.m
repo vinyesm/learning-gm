@@ -4,11 +4,11 @@ addpath('../TPower_1.0/algorithms/TPower/');
 addpath('../TPower_1.0/misc/');
 
 %%
-k0=5;
+k0=0;
 p=20;
 n=100;
 N=100;
-sigma2=.1;
+sigma2=1;
 u0=[ones(k0,1);zeros(p-k0,1)];
 u0=u0/norm(u0);
 
@@ -53,8 +53,7 @@ if k0>0
     figure(1);clf;
 %     errorbar(1:p,Ef,Stdf,Stdf)
     semilogy(1:p,Ef,'r','LineWidth',lw); hold on;
-    semilogy(1:p,Ef+Stdf,'k','LineWidth',lw); hold on;
-    semilogy(1:p,Ef-Stdf,'k','LineWidth',lw); hold on;
+    jbfill(1:p,Ef+Stdf,Ef-Stdf,ones(p,1),'r','r',1,.1);hold on;
     stem(k0,Ef(k0),'LineStyle','-.','Color',[1,0,0],'LineWidth',lw);hold on;
     
 %     figure(2);clf;
@@ -63,11 +62,14 @@ if k0>0
 else
     %%
     upperEf=@(q)8*sqrt(q.*log(p./q)+2*q);
+    figure(1);clf;
+    semilogy(1:p,Ef,'r','LineWidth',2); hold on;
+    jbfill(1:p,Ef+Stdf,Ef-Stdf,ones(p,1),'r','r',1,.1);hold on;
+    
     figure(2);clf;
-    plot(1:p,Ef,'LineWidth',2); hold on;
-    plot(1:p,Ef+Stdf,'k','LineWidth',2); hold on;
-    plot(1:p,Ef-Stdf,'k','LineWidth',2); hold on;
-    %plot(1:p,upperEf(1:p),'r'); hold on;
+    semilogy(1:p,Ef,'r','LineWidth',2); hold on;
+    jbfill(1:p,Ef+Stdf,Ef-Stdf,ones(p,1),'r','r',1,.1);hold on;
+    semilogy(1:p,upperEf(1:p),'r'); hold on;
     
 end
 

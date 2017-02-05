@@ -10,7 +10,7 @@ n=50;
 N=10;
 sigma2=1;
 u0=[ones(k0,1);zeros(p-k0,1)];
-u0=10*u0/norm(u0);
+u0=5*u0/norm(u0);
 
 if k0>0
     M=u0*u0'+sigma2*eye(p);% covariance with noise
@@ -21,6 +21,7 @@ end
 %% upper bounds
 upperEf=@(q)8*sqrt(q.*log(p./q)+2*q);
 upperEf2=@(q)32*(q.*log(p./q)+2*q);
+upperEf4=@(q)4*sqrt(q.*log(p./q)+2*q);
 upper3=@(q,t)sqrt(log(nchoosek(p,q))/t+16*k+8/(1-8*t));
 upperEf3=zeros(p,3);
 for q=1:p
@@ -70,12 +71,14 @@ if k0>0
     semilogy(1:p,Ef,'r','LineWidth',lw); hold on;
     jbfill(1:p,Ef+Stdf,Ef-Stdf,ones(p,1),'r','r',1,.1);hold on;
     stem(k0,Ef(k0),'LineStyle','-.','Color',[1,0,0],'LineWidth',lw);hold on;
-    semilogy(1:p,upperEf3(:,1),'Color',[0,0,1],'LineWidth',lw); hold on;
-    semilogy(1:p,upperEf3(:,2),'Color',[0,.6,1],'LineWidth',lw); hold on;
-    semilogy(1:p,upperEf3(:,3),'Color',[0,1,1],'LineWidth',lw); hold on;
-    semilogy(1:p,Ef-upperEf3(:,1)','LineStyle','-.','Color',[0,0,1],'LineWidth',lw); hold on;
-    semilogy(1:p,Ef-upperEf3(:,2)','LineStyle','-.','Color',[0,.6,1],'LineWidth',lw); hold on;
-    semilogy(1:p,Ef-upperEf3(:,3)','LineStyle','-.','Color',[0,1,1],'LineWidth',lw); hold on;
+    semilogy(1:p,upperEf3(:,1),'Color',[0,1,1],'LineWidth',lw); hold on;
+    %semilogy(1:p,upperEf3(:,2),'Color',[0,.6,1],'LineWidth',lw); hold on;
+    %semilogy(1:p,upperEf3(:,3),'Color',[0,0,1],'LineWidth',lw); hold on;
+    semilogy(1:p,upperEf4(1:p),'Color','k','LineWidth',lw); hold on;
+    semilogy(1:p,Ef-upperEf3(:,1)','LineStyle','-.','Color',[0,1,1],'LineWidth',lw); hold on;
+    %semilogy(1:p,Ef-upperEf3(:,2)','LineStyle','-.','Color',[0,.6,1],'LineWidth',lw); hold on;
+    %semilogy(1:p,Ef-upperEf3(:,3)','LineStyle','-.','Color',[0,0,1],'LineWidth',lw); hold on;
+    semilogy(1:p,Ef-upperEf4(1:p),'LineStyle','-.','Color','k','LineWidth',lw); hold on;
 
     
 else

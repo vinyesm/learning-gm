@@ -4,10 +4,10 @@ addpath('../TPower_1.0/algorithms/TPower/');
 addpath('../TPower_1.0/misc/');
 
 %%
-k0=0;
-p=20;
-n=100;
-N=100;
+k0=0; % 0 for only noise
+p=10;
+n=50;
+N=10;
 sigma2=1;
 u0=[ones(k0,1);zeros(p-k0,1)];
 u0=u0/norm(u0);
@@ -28,6 +28,7 @@ Ef=zeros(1,p);
 Ef2=zeros(1,p);
 
 for i=1:N
+    fprintf('N=%d/%d\n',i,N);
     X=mvnrnd(zeros(p,1), M, n)';
     S0=sigma2*eye(p);
     S=X*X'/n;
@@ -62,6 +63,16 @@ if k0>0
 else
     %%
     upperEf=@(q)8*sqrt(q.*log(p./q)+2*q);
+    upperEf2=@(q)32*(q.*log(p./q)+2*q);
+    upper3=@(q,t)sqrt(log(nchoosek(p,q))/t+16*k+8/(1-8*t));
+    
+    upperEf3=zeros(p,3);
+    for q=1:p
+        upperEf3(q,1)=upper3(q,.12);
+        upperEf3(q,2)=upper3(q,.1);
+        upperEf3(q,3)=upper3(q,10);
+    end;
+    
     figure(1);clf;
     semilogy(1:p,Ef,'r','LineWidth',2); hold on;
     jbfill(1:p,Ef+Stdf,Ef-Stdf,ones(p,1),'r','r',1,.1);hold on;
@@ -69,7 +80,11 @@ else
     figure(2);clf;
     semilogy(1:p,Ef,'r','LineWidth',2); hold on;
     jbfill(1:p,Ef+Stdf,Ef-Stdf,ones(p,1),'r','r',1,.1);hold on;
-    semilogy(1:p,upperEf(1:p),'r'); hold on;
+    %semilogy(1:p,upperEf(1:p),'k'); hold on;
+    %semilogy(1:p,upperEf2(1:p),'b'); hold on;
+    semilogy(1:p,upperEf3(:,1),'Color',[0,0,1],'LineWidth',2); hold on;
+    semilogy(1:p,upperEf3(:,2),'Color',[0,.6,1],'LineWidth',2); hold on;
+    semilogy(1:p,upperEf3(:,3),'Color',[0,1,1],'LineWidth',2); hold on;
     
 end
 

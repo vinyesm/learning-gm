@@ -3,6 +3,8 @@ function [new_i,new_val,maxval]=get_new_atom_spca(Z,ActiveSet,param,inputData )
 %
 H = gradient(Z,inputData,param);
 maxval=-inf;
+new_i=[];
+new_val=[];
 
 for i=1:length(ActiveSet.I)
     %eigenvector associated to largest real eigeinvalue
@@ -11,6 +13,11 @@ for i=1:length(ActiveSet.I)
     Hs=H(S,S);
     Hs=0.5*(Hs+Hs');
     [v,d]=eigs(-Hs,1,'la');
+    if isnan(d)
+        fprintf('in get_new_atom_spca : nan\n');
+        d=-v'*Hs*v;
+%         keyboard;
+    end
     v=real(v);
     d=real(d);
     if d/cf>maxval
@@ -25,6 +32,11 @@ end
 if maxval<=0
     fprintf('in get_new_atom_spca : Largest eigenvalue is negative or zero\n');
     %keyboard
+end
+
+if isempty(new_i)
+    fprintf('in get_new_atom_spca : new_i is empty\n');
+    keyboard
 end
 
 

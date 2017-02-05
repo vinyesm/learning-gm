@@ -137,7 +137,9 @@ while c
     end
     
     
-    if takenI
+    if varIJ < param.lambda*(1+param.epsStop / kBest)* param.cardfun(kBest)
+        c=0;
+    elseif takenI
         fprintf('This support has already been added. Stopping\n');
 %         c=0;
     elseif varIJ > param.lambda*(1+param.epsStop / kBest)* param.cardfun(kBest)

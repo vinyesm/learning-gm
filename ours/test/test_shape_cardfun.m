@@ -9,9 +9,9 @@ RAND_U0=true;
 
 %%
 k0=5; % 0 for only noise
-p=20;
-n=50;
-N=10;
+p=100;
+n=1000;
+N=40;
 sigma2=1;
 
 if RAND_U0
@@ -46,7 +46,7 @@ candidate=@(x)norm(u0)^2*(2*x/p+1);
 %% upper bounds
 upperEf=@(q)8*sqrt(q.*log(p./q)+2*q);
 upperEf2=@(q)32*(q.*log(p./q)+2*q);
-upperEf4=@(q)4*sqrt(q.*log(p./q)+2*q);
+upperEf4=@(q)4*sqrt(q.*log(p./q)+2*q); %tighter for symmetric matrices
 upper3=@(q,t)sqrt(log(nchoosek(p,q))/t+16*q+8/(1-8*t));
 upperEf3=zeros(p,3);
 for q=1:p
@@ -97,12 +97,8 @@ if k0>0
     jbfill(1:p,Ef+Stdf,Ef-Stdf,ones(p,1),'r','r',1,.1);hold on;
     stem(k0,Ef(k0),'LineStyle','-.','Color',[1,0,0],'LineWidth',lw);hold on;
     plot(1:p,upperEf3(:,1),'Color',[0,1,1],'LineWidth',lw); hold on;
-    %semilogy(1:p,upperEf3(:,2),'Color',[0,.6,1],'LineWidth',lw); hold on;
-    %semilogy(1:p,upperEf3(:,3),'Color',[0,0,1],'LineWidth',lw); hold on;
     plot(1:p,upperEf4(1:p),'Color','k','LineWidth',lw); hold on;
     plot(1:p,Ef-upperEf3(:,1)','LineStyle','-.','Color',[0,1,1],'LineWidth',lw); hold on;
-    %semilogy(1:p,Ef-upperEf3(:,2)','LineStyle','-.','Color',[0,.6,1],'LineWidth',lw); hold on;
-    %semilogy(1:p,Ef-upperEf3(:,3)','LineStyle','-.','Color',[0,0,1],'LineWidth',lw); hold on;
     plot(1:p,Ef-upperEf4(1:p),'LineStyle','-.','Color','k','LineWidth',lw); hold on;
     
     figure(3);clf;
@@ -121,10 +117,12 @@ if k0>0
     stem(i2,v2,'LineStyle','-.','Color',[0,1,0],'LineWidth',lw);hold on;
     pbaspect([1 1 1]);
     
-    
-    
+    if RAND_U0
+        save(['dualnorm-u0rand-k0-' num2str(k0)],'k0','p','n','N','sigma2','u0','M','Ef','Ef2','Varf','Stdf');
+    else
+        save(['dualnorm-u0ones-k0-' num2str(k0)],'k0','p','n','N','sigma2','u0','M','Ef','Ef2','Varf','Stdf');
+    end
 else
-    %%
     
     figure(1);clf;
     plot(1:p,Ef,'r','LineWidth',lw); hold on;
@@ -133,10 +131,12 @@ else
     figure(2);clf;
     plot(1:p,Ef,'r','LineWidth',lw); hold on;
     jbfill(1:p,Ef+Stdf,Ef-Stdf,ones(p,1),'r','r',1,.1);hold on;
-    plot(1:p,upperEf3(:,1),'Color',[0,0,1],'LineWidth',lw); hold on;
-    plot(1:p,upperEf3(:,2),'Color',[0,.6,1],'LineWidth',lw); hold on;
-    plot(1:p,upperEf3(:,3),'Color',[0,1,1],'LineWidth',lw); hold on;
+    %     plot(1:p,upperEf3(:,1),'Color',[0,0,1],'LineWidth',lw); hold on;
+    %     plot(1:p,upperEf3(:,2),'Color',[0,.6,1],'LineWidth',lw); hold on;
+    %     plot(1:p,upperEf3(:,3),'Color',[0,1,1],'LineWidth',lw); hold on;
+    plot(1:p,upperEf4(1:p),'Color','k','LineWidth',lw); hold on;
     
+%     save('dualnorm-noise-ub','k0','p','n','N','sigma2','u0','M','Ef','Ef2','Varf','Stdf')
     
 end
 

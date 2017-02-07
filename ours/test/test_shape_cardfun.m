@@ -5,7 +5,7 @@ addpath('../TPower_1.0/algorithms/TPower/');
 addpath('../TPower_1.0/misc/');
 
 %%
-RAND_U0=true;
+RAND_U0=false;
 
 %%
 k0=5; % 0 for only noise
@@ -37,8 +37,14 @@ a0=(norm2u0-max2u0)/(k0^aaa-1);
 b0=max2u0-a0;
 ap=(norm2u0-max2u0)/((p/2)^aaa-1);
 bp=max2u0-a0;
-crand=a0;
-drand=max(0,a0*a0/(b0+norm2u0));
+% crand=a0;
+% drand=max(0,a0*a0/(b0+norm2u0));
+% crand=1/norm2u0;
+% drand=crand*b0/a0+norm2u0*crand;
+% crand=ap;
+% drand=max(0,ap*ap/(bp+norm2u0));
+crand=1/norm2u0;
+drand=crand*bp/ap+norm2u0*crand;
 candidate2=@(x)crand*x.^aaa+drand;
 % param for candidate fun
 candidate=@(x)norm(u0)^2*(2*x/p+1);

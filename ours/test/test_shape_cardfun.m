@@ -5,10 +5,10 @@ addpath('../TPower_1.0/algorithms/TPower/');
 addpath('../TPower_1.0/misc/');
 
 %%
-RAND_U0=false;
+RAND_U0=true;
 
 %%
-k0=5; % 0 for only noise
+k0=80; % 0 for only noise
 p=100;
 n=1000;
 N=40;

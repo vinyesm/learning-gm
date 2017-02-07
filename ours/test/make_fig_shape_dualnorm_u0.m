@@ -1,8 +1,8 @@
 clear all; clc;
 
-k0=5;
-% savename=['dualnorm-u0rand-k0-' num2str(k0)];
-savename=['dualnorm-u0ones-k0-' num2str(k0)];
+k0=80;
+savename=['dualnorm-u0rand-k0-' num2str(k0)];
+% savename=['dualnorm-u0ones-k0-' num2str(k0)];
 load([savename '.mat']);
 
 %% upper bounds

@@ -18,13 +18,18 @@ x2=(k0+1):p;
 h=[aff(a1,b1,x1) aff(a2,b2,x2)];
 
 %% candidat ex+d
-%e=1;
-% d=e/2*(b1/a1+b2/a2);
-e=.5*(a1+a2);
+%
+% comment : maybe only condition is a2/b2 < e/d < a1/b1
+%
+% th choice (knowing k0)
+
+e=1;
+d=e/2*(b1/a1+b2/a2);
+
+%
+e=.5*(a2/b2+a1/b1);
 d=1;
-% b1c=1;
-% b2c=1;
-% d=e/2*(b1c/a1+b2c/a2);
+
 f=aff(e,d,1:p);
 
 %%

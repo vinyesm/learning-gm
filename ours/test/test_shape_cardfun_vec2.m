@@ -7,7 +7,7 @@ aff=@(a,b,x)a*x+b;
 
 %% parameters
 p=100; % vector dimention
-k0=10;
+k0=20;
 u0type=1; % 1:ones, 2:randn
 N=10; % nb samples for estimating expectation
 sigma=.001; % noise variance

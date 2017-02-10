@@ -6,20 +6,20 @@ close all; clear all; clc;
 aff=@(a,b,x)a*x+b;
 
 %% parameters
-p=50; % vector dimention
+p=100; % vector dimention
 k0=10;
 u0type=1; % 1:ones, 2:randn
 N=10; % nb samples for estimating expectation
-sigma=1; % noise variance
+sigma=.001; % noise variance
 sigma2=sigma*sigma;
 q=1; % BH parameter
 
 %%
 u0=[(k0:-1:1) zeros(1,p-k0)]';
-u0=50*u0/norm(u0);
+u0=10*u0/norm(u0);
 
 %% Benjamini Hosberg coefficients;
-kmax=p-ceil(p/2);
+kmax=p-ceil(p/3);
 pkmax=p-kmax;
 y=1-((1:pkmax)*q/(2*pkmax));
 lBH=icdf('Normal',y,0,sigma);
@@ -33,12 +33,13 @@ boundsmallk=2*sigma2*(1:p).*log(p./(1:p));
 
 % x^pow
 ebar=l2BH(1);
-slopelin=ebar;
-cmax=1;
-pow=lambertw(2*ebar*kmax*log(kmax/cmax))/log(kmax/cmax);
+cc=4;
+slopelin=4*ebar;
+cmax=1e-16;
+pow=lambertw(cc*ebar*kmax*log(kmax/cmax))/log(kmax/cmax);
 while pow>1
     cmax=cmax/2;
-    pow=lambertw(2*ebar*kmax*log(kmax/cmax))/log(kmax/cmax);
+    pow=lambertw(cc*ebar*kmax*log(kmax/cmax))/log(kmax/cmax);
 end
 
 
@@ -46,9 +47,9 @@ end
 % pow=.2;
 % cmax=(pow/(ebar))^pow*kmax^(1-1/pow);
 
-
 f=zeros(p,1);
-f(1:kmax)=(((1:kmax)-1)./cmax).^pow;
+f(1:kmax)=((1:kmax)./cmax).^pow;
+% f(1:kmax)=log(1+(1:kmax));
 dkmax=f(kmax)-slopelin*kmax;
 f((kmax+1):p)=aff(slopelin,dkmax,(kmax+1):p);
 
@@ -85,9 +86,12 @@ subplot(1,3,1);
     plot(Edn./f, 'r-');hold on;
     stem(k0,Edn(k0),'b--');
     stem(idx,val,'r--');
+    pbaspect([1 1 1])
 subplot(1,3,2);
     plot(f, 'k-');hold on;
+    pbaspect([1 1 1])
 subplot(1,3,3);
     plot(Edn./f, 'r-');hold on;
 %     stem(k0,Edn(k0)./f(k0),'b--');
     stem(idx,val,'r--');
+    pbaspect([1 1 1])

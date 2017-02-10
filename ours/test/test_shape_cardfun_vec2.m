@@ -10,13 +10,13 @@ p=100; % vector dimention
 k0=20;
 u0type=1; % 1:ones, 2:randn
 N=10; % nb samples for estimating expectation
-sigma=.001; % noise variance
+sigma=.1; % noise variance
 sigma2=sigma*sigma;
 q=1; % BH parameter
 
 %%
 u0=[(k0:-1:1) zeros(1,p-k0)]';
-u0=10*u0/norm(u0);
+u0=5*u0/norm(u0);
 
 %% Benjamini Hosberg coefficients;
 kmax=p-ceil(p/3);
@@ -57,10 +57,12 @@ f((kmax+1):p)=aff(slopelin,dkmax,(kmax+1):p);
 %%
 Edn=zeros(p,1); %Expectation of dual norm
 Edn2=zeros(p,1); %Expectation of dual norm square
+xall=zeros(p,1);
 
 %% 
 for n=1:N
     x=u0+sigma*randn(p,1);
+    xall=xall+x;
     x=sort(abs(x),'descend');
     for i=1:p
         Edn(i)=Edn(i)+sum(x(1:i).^2);
@@ -68,6 +70,7 @@ for n=1:N
     end
 end
 
+xall=xall/N;
 Edn=Edn/N;
 Edn2=Edn2/N;
 Vardn=(Edn2-Edn.^2);
@@ -76,6 +79,9 @@ Stddn=1.96*sqrt(Vardn)/sqrt(N);
 [val,idx]=max(Edn./f);
 
 figure(1);
+bar(abs(xall));
+
+figure(2);
 subplot(1,3,1);
     plot(Edn, 'b');hold on;
     plot(Edn+Stddn, 'b--');hold on;

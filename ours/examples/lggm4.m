@@ -25,12 +25,12 @@ p=po;
 param.f=4;
 param.diag=0;
 param.PSD=true;
-param.max_nb_main_loop=20;%2;%1000
+param.max_nb_main_loop=100;%2;%1000
 param.powerIter=500;
 param.stPtPowerIter=1000;
 param.niterPS=5000;%10000;%5000
 param.epsStop=1e-8;
-param.PSdualityEpsilon=1e-6;
+param.PSdualityEpsilon=1e-8;
 param.k=0;
 param.PSmu=0; %strong convexity
 param.verbose=1;
@@ -45,9 +45,9 @@ param.cardfun(k)=1;
 % param.cardfun(p)=1;
 
 %choice s.t. mu*k^=lambda
-aa=0.1;
+aa=0.2;
 param.lambda=aa;
-param.mu=0.2;
+param.mu=0.3;
 
 % param.cardfun=(1:(p)).^.2;
 %[Aso,Mso,Sso,Eso,Mso_as,out] = sparse_omega_lgm( inputData, param);

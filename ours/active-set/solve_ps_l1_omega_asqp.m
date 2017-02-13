@@ -77,12 +77,17 @@ while cont
             end
         end
         
+        if(min(abs(alph(Jset))))<1e-5
+            fprintf('small alph\n');
+%             keyboard;
+        end
         
         if nbetas>0
             Jbeta=Jset(1:nbetas);
             ActiveSet.beta=alph(1:nbetas);
             ActiveSet.beta=ActiveSet.beta(Jbeta);
             ActiveSet.I_l1=ActiveSet.I_l1(Jbeta);
+            
         end
         
         if length(alph)>nbetas
@@ -102,10 +107,6 @@ while cont
         if debug
             ab=[ActiveSet.beta;ActiveSet.alpha];
             obj2=.5*ab'*Hall*ab+fall'*ab;
-            if obj2-obj1>1e-10
-                fprintf('objective increasing after rm zeros \n');
-                keyboard;
-            end
         end
         
         

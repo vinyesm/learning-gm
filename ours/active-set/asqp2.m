@@ -82,7 +82,7 @@ while(iter<=max_iter)
     d=zeros(t,1);
     if debug_mode && (rcond(Q(A,A))<1e-12),
         display('asqp : Warning, Hessian badly conditioned\n');
-        %keyboard;
+        keyboard;
     end
     d(A)=Q(A,A)\b(A);
     %% Progress until active set reduces

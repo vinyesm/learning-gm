@@ -45,13 +45,19 @@ param.cardfun(k)=1;
 % param.cardfun(p)=1;
 
 %choice s.t. mu*k^=lambda
-aa=0.2;
-param.lambda=aa;
-param.mu=0.3;
+aa=0.05;
+param.lambda=aa; %lamda ~ 2/k*mu
+param.mu=0.2;
 
-% param.cardfun=(1:(p)).^.2;
-%[Aso,Mso,Sso,Eso,Mso_as,out] = sparse_omega_lgm( inputData, param);
+%% blocks
 [Z Z1 Z2 ActiveSet hist param flag output] = cgan_l1_omega(inputData,param);
+
+%% tr+l1
+% param.max_nb_main_loop=2;
+% param.niterPS=5000;
+% param.cardfun=inf*ones(1,p);
+% param.cardfun(p)=1;
+% [Z Z1 Z2 ActiveSet hist param flag output] = cgan_l1_omega(inputData,param);
 
 
 display('FINISHED\n');

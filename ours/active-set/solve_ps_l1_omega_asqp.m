@@ -133,7 +133,7 @@ while cont
         
         
         %% Compute objective, loss, penalty and duality gap
-        if (param.sloppy==0 || (param.sloppy~=0 && mod(count,10)==1)) %&& ~isempty(ActiveSet.alpha)
+        if (param.sloppy==0 || (param.sloppy~=0 && mod(count,100)==1)) %&& ~isempty(ActiveSet.alpha)
             [loss(i),pen(i),obj(i),dg(i),time(i)]=get_val_l1_omega_asqp(Z,ActiveSet,inputData,param,cardVal);
             nb_pivot(i)=npiv;
             active_var(i)= sum(ActiveSet.alpha>0);
@@ -177,7 +177,7 @@ while cont
         inputData.Y=StartY-inputData.X1*Z2*inputData.X2;
         H = gradient(Z1,inputData,param);
         [maxval_l1]=max(abs(H(:)));
-        %         [maxval_l1]=max((-H(:)));
+%         [maxval_l1]=max((-H(:)));
         inputData.Y=StartY;
         
         [new_row, new_col] = find(abs(H) == maxval_l1);

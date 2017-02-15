@@ -138,7 +138,7 @@ while cont
             [loss(i),pen(i),obj(i),dg(i),time(i)]=get_val_l1_omega_asqp(Z,ActiveSet,inputData,param,cardVal);
             nb_pivot(i)=npiv;
             active_var(i)= sum(ActiveSet.alpha>0);
-            cont = (dg(i)>param.PSdualityEpsilon) && count< param.niterPS;
+            %cont = (dg(i)>param.PSdualityEpsilon) && count< param.niterPS;
             
             if debug && i>1
                 fprintf(' PS info obj=%f  loss=%f  pen=%f penl1=%f pen_om=%f dg=%f  \n', obj(i),loss(i), pen(i), param.lambda*sum(ActiveSet.alpha),param.mu*sum(ActiveSet.beta), dg(i));
@@ -147,8 +147,12 @@ while cont
                     keyboard;
                 end
             end
-            
             i=i+1;
+            %% Verify sttopping criterion
+            [maxvar]=max_var(Z,ActiveSet,param,inputData );
+            if maxvar < param.lambda*(1+param.epsStop / kBest)* param.cardfun(kBest)
+                cont=false;
+            end
         end
     end
     

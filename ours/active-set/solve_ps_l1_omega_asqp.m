@@ -152,6 +152,7 @@ while cont
             end
             i=i+1;
             %% Verify sttopping criterion
+            H = gradient(Z,inputData,param);
             maxII=max(abs(H(:)));
             if ~isempty(ActiveSet.I)
                 [maxvar, kmaxvar]=max_var(Z,ActiveSet,param,inputData );
@@ -159,10 +160,12 @@ while cont
                 if maxvar < param.lambda*(1+param.epsStop / size_supp)* param.cardfun(size_supp) && maxII<param.mu*(1+param.epsStop)
                     cont=false;
                 end
+                fprintf('maxII=%f < %f     varmax=%f < %f\n',maxII,param.mu,maxvar,param.lambda)
             else
                 if  maxII<param.mu*(1+param.epsStop)
                     cont=false;
                 end
+                fprintf('maxII=%f < %f \n',maxII,param.mu)
             end
             cont=cont || count< param.niterPS;
         end

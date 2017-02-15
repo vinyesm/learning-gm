@@ -9,7 +9,7 @@ aff=@(a,b,x)a*x+b;
 p=200; % vector dimention
 k0=20;
 kmax=p-ceil(p/1.5);
-u0type=3; % 1:ones, 2:decreasing, 3:randn
+u0type=2; % 1:ones, 2:decreasing, 3:randn
 N=10; % nb samples for estimating expectation
 sigma=.3; % noise variance
 sigma2=sigma*sigma;
@@ -37,34 +37,35 @@ boundsmallk=2*sigma2*(1:p).*log(p./(1:p));
 
 %% f candidate
 
-% % x^pow
-% f=zeros(p,1);
-% ebar=l2BH(1);
-% cc=4;
-% slopelin=4*ebar;
-% cmax=1e-16;
-% pow=lambertw(cc*ebar*kmax*log(kmax/cmax))/log(kmax/cmax);
+% x^pow
+pow=.5;
+f=zeros(p,1);
+ebar=l2BH(1);
+cc=4;
+slopelin=4*ebar;
+cmax=1;
+pow=lambertw(cc*ebar*kmax*log(kmax/cmax))/log(kmax/cmax);
 % while pow>1
 %     cmax=cmax/2;
 %     pow=lambertw(cc*ebar*kmax*log(kmax/cmax))/log(kmax/cmax);
 % end
-% f(1:kmax)=((1:kmax)./cmax).^pow;
-% dkmax=f(kmax)-slopelin*kmax;
-% f((kmax+1):p)=aff(slopelin,dkmax,(kmax+1):p);
-
-% ((x-x0)/s0)^pow st f'(kmax)=ebar, f'(1)=df1
-f=zeros(p,1);
-ebar=l2BH(1);
-%cc=4;
-pow=.5;
-slopelin=4*ebar;
-dfkmax=4*ebar;
-df1=dfkmax*2;
-s0= pow^(1/pow) / ((kmax-1)^((1-pow)/pow)) * ( 1/dfkmax^(1/(1-pow)) - 1/df1^(1/(1-pow)) )^((1-pow)/pow);
-x0=kmax - (pow/(dfkmax*s0^pow))^(1/(1-pow));
-f(1:kmax)=(((1:kmax)-x0)./s0).^pow;
+f(1:kmax)=((1:kmax)./cmax).^pow;
 dkmax=f(kmax)-slopelin*kmax;
 f((kmax+1):p)=aff(slopelin,dkmax,(kmax+1):p);
+
+% % ((x-x0)/s0)^pow st f'(kmax)=ebar, f'(1)=df1
+% f=zeros(p,1);
+% ebar=l2BH(1);
+% %cc=4;
+% pow=.5;
+% slopelin=4*ebar;
+% dfkmax=4*ebar;
+% df1=dfkmax*2;
+% s0= pow^(1/pow) / ((kmax-1)^((1-pow)/pow)) * ( 1/dfkmax^(1/(1-pow)) - 1/df1^(1/(1-pow)) )^((1-pow)/pow);
+% x0=kmax - (pow/(dfkmax*s0^pow))^(1/(1-pow));
+% f(1:kmax)=(((1:kmax)-x0)./s0).^pow;
+% dkmax=f(kmax)-slopelin*kmax;
+% f((kmax+1):p)=aff(slopelin,dkmax,(kmax+1):p);
 
 % % (x/c)^pow
 % f=zeros(p,1);
@@ -137,41 +138,41 @@ pbaspect([1 1 1])
 Ek0=zeros(p,p); %Expectation of dual norm
 E2k0=zeros(p,p); %Expectation of dual norm square
 
-%%
-for k0=1:p
-    if u0type==1
-        u0=[ones(1,k0) zeros(1,p-k0)]';
-    elseif u0type==2
-        u0=[(k0:-1:1) zeros(1,p-k0)]';
-    elseif u0type==3
-        u0=[1+rand(1,k0) zeros(1,p-k0)]';
-    end
-    u0=5*u0/norm(u0);
-    for n=1:N
-        x=u0+sigma*randn(p,1);
-        x=sort(abs(x),'descend');
-        for i=1:p
-            Ek0(i,k0)=Ek0(i,k0)+sum(x(1:i).^2);
-            E2k0(i,k0)=E2k0(i,k0)+sum(x(1:i).^2)^2;
-        end
-    end
-end
-
-xall=xall/N;
-Ek0=Ek0/N;
-E2k0=E2k0/N;
-Vark0=(E2k0-Ek0.^2);
-Stdk0=1.96*sqrt(Vark0)/sqrt(N);
-
-[vals,idxs]=max(bsxfun(@rdivide,Ek0,f));
-
-figure(3);
-plot(1:p,idxs,'.');hold on;
-plot(1:p,1:p,'r');hold on;
-stem(kmax,p,'k--');
-pbaspect([1 1 1]);
-
-% figure(4);
-% scatter(1:p,idxs);hold on;
-% plot(1:p,1:p,'r');
-% axis equal
+% %%
+% for k0=1:p
+%     if u0type==1
+%         u0=[ones(1,k0) zeros(1,p-k0)]';
+%     elseif u0type==2
+%         u0=[(k0:-1:1) zeros(1,p-k0)]';
+%     elseif u0type==3
+%         u0=[2+randn(1,k0) zeros(1,p-k0)]';
+%     end
+%     u0=5*u0/norm(u0);
+%     for n=1:N
+%         x=u0+sigma*randn(p,1);
+%         x=sort(abs(x),'descend');
+%         for i=1:p
+%             Ek0(i,k0)=Ek0(i,k0)+sum(x(1:i).^2);
+%             E2k0(i,k0)=E2k0(i,k0)+sum(x(1:i).^2)^2;
+%         end
+%     end
+% end
+% 
+% xall=xall/N;
+% Ek0=Ek0/N;
+% E2k0=E2k0/N;
+% Vark0=(E2k0-Ek0.^2);
+% Stdk0=1.96*sqrt(Vark0)/sqrt(N);
+% 
+% [vals,idxs]=max(bsxfun(@rdivide,Ek0,f));
+% 
+% figure(3);
+% plot(1:p,idxs,'.');hold on;
+% plot(1:p,1:p,'r');hold on;
+% stem(kmax,p,'k--');
+% pbaspect([1 1 1]);
+% 
+% % figure(4);
+% % scatter(1:p,idxs);hold on;
+% % plot(1:p,1:p,'r');
+% % axis equal

@@ -18,7 +18,6 @@ addpath('../TPower_1.0/misc/');
 
 %% data
 run('../../toy-data/three_blocks_same_size.m');
-keyboard;
 
 %% our norm psd with decomposition S-M sparse_omega_lgm
 p=po;
@@ -141,4 +140,4 @@ print ( '-dpsc2', filename, '-append', '-f3' )
 print ( '-dpsc2', filename, '-append', '-f4' )
 print ( '-dpsc2', filename, '-append', '-f5' )
 
-keyboard
+

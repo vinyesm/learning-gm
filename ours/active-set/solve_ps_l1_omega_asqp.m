@@ -77,8 +77,11 @@ while cont
             end
         end
         
-        if(min(abs(alph(Jset))))<1e-5
+        eps_alph=1e-10;
+        if(min(abs(alph(Jset))))<eps_alph
             fprintf('small alph\n');
+            alph(abs(alph)<eps_alph)=0;
+            Jset(abs(alph)<eps_alph)=0;
 %             keyboard;
         end
         
@@ -149,16 +152,25 @@ while cont
             end
             i=i+1;
             %% Verify sttopping criterion
-            [maxvar]=max_var(Z,ActiveSet,param,inputData );
-            if maxvar < param.lambda*(1+param.epsStop / kBest)* param.cardfun(kBest)
-                cont=false;
+            maxII=max(abs(H(:)));
+            if ~isempty(ActiveSet.I)
+                [maxvar, kmaxvar]=max_var(Z,ActiveSet,param,inputData );
+                size_supp=length(ActiveSet.I{kmaxvar});
+                if maxvar < param.lambda*(1+param.epsStop / size_supp)* param.cardfun(size_supp) && maxII<param.mu*(1+param.epsStop)
+                    cont=false;
+                end
+            else
+                if  maxII<param.mu*(1+param.epsStop)
+                    cont=false;
+                end
             end
+            cont=cont || count< param.niterPS;
         end
     end
     
-    if isempty(ActiveSet.I)
-        cont=false;
-    end
+%     if isempty(ActiveSet.I)
+%         cont=false;
+%     end
     
     %% get new atom
     if cont
@@ -168,10 +180,14 @@ while cont
         
         %% omega atom
         
-        StartY=inputData.Y;
-        inputData.Y=StartY-inputData.X1*Z1*inputData.X2;
-        [new_i, new_val, maxval_om]=get_new_atom_spca(Z2,ActiveSet,param,inputData);
-        inputData.Y=StartY;
+        if ~isempty(ActiveSet.I)
+            StartY=inputData.Y;
+            inputData.Y=StartY-inputData.X1*Z1*inputData.X2;
+            [new_i, new_val, maxval_om]=get_new_atom_spca(Z2,ActiveSet,param,inputData);
+            inputData.Y=StartY;
+        else
+            maxval_om=-inf;
+        end
         
         %% l1 sym atom
         if debug

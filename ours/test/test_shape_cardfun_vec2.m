@@ -6,21 +6,26 @@ close all; clear all; clc;
 aff=@(a,b,x)a*x+b;
 
 %% parameters
-p=500; % vector dimention
+p=200; % vector dimention
 k0=20;
-u0type=1; % 1:ones, 2:randn
+kmax=p-ceil(p/1.5);
+u0type=3; % 1:ones, 2:decreasing, 3:randn
 N=10; % nb samples for estimating expectation
-sigma=.1; % noise variance
+sigma=.3; % noise variance
 sigma2=sigma*sigma;
 q=1; % BH parameter
 
 %%
-u0=[(k0:-1:1) zeros(1,p-k0)]';
-% u0=[ones(1,k0) zeros(1,p-k0)]';
+if u0type==1
+    u0=[ones(1,k0) zeros(1,p-k0)]';
+elseif u0type==2
+    u0=[(k0:-1:1) zeros(1,p-k0)]';
+elseif u0type==3
+    u0=[.5+rand(1,k0) zeros(1,p-k0)]';
+end
 u0=5*u0/norm(u0);
 
 %% Benjamini Hosberg coefficients;
-kmax=p-ceil(p/2);
 pkmax=p-kmax;
 y=1-((1:pkmax)*q/(2*pkmax));
 lBH=icdf('Normal',y,0,sigma);
@@ -134,8 +139,13 @@ E2k0=zeros(p,p); %Expectation of dual norm square
 
 %%
 for k0=1:p
-%     u0=[(k0:-1:1) zeros(1,p-k0)]';
-    u0=[ones(1,k0) zeros(1,p-k0)]';
+    if u0type==1
+        u0=[ones(1,k0) zeros(1,p-k0)]';
+    elseif u0type==2
+        u0=[(k0:-1:1) zeros(1,p-k0)]';
+    elseif u0type==3
+        u0=[1+rand(1,k0) zeros(1,p-k0)]';
+    end
     u0=5*u0/norm(u0);
     for n=1:N
         x=u0+sigma*randn(p,1);

@@ -14,7 +14,7 @@ addpath('../TPower_1.0/algorithms/TPower/');
 addpath('../TPower_1.0/misc/');
 
 %% data
-run('../../toy-data/three_large_blocks_same_size.m');
+run('../../toy-data/three_blocks_same_size.m');
 
 %% our norm psd with decomposition S-M sparse_omega_lgm
 
@@ -44,38 +44,27 @@ partitions = cvpartition(n,'KFold',10);
 %c=cvpartition(n,'LeaveOut');
 % c.test(1) c.training(1)
 
-parfor j=1:length(partitions)
-    %%
-    p=po;
-    param.f=4;
-    param.diag=0;
-    param.PSD=true;
-    param.max_nb_main_loop=2;%100;%2;%1000
-    param.powerIter=500;
-    param.stPtPowerIter=1000;
-    param.niterPS=5;%5000;%10000;%5000
-    param.epsStop=1e-8;
-    param.PSdualityEpsilon=1e-8;
-    param.k=0;
-    param.PSmu=0; %strong convexity
-    param.verbose=1;
-    param.debug=0;
-    param.sloppy=0;
-    param.max_nb_atoms=param.max_nb_main_loop*param.niterPS;
-    inputData.Y=-eye(po);
-    param.cardfun=inf*ones(1,p);
-    param.cardfun(k)=1;
-    %%
-    Xtrain=X(:,part.training(j));
-    Xtest=X(:,part.test(j));
+parfor j=1:partitions.NumTestSets
+    Xtrain=X(:,partitions.training(j));
+    Xtest=X(:,partitions.test(j));
     Strain=cov(Xtrain');
     Stest=cov(Xtrain');
-    inputData.X1=Strain^.5;
-    inputData.X2=Strain^.5;
-    for jj=1:length(pairs)
-        param.lambda=pairs(jj).lambda;
-        param.mu=pairs(jj).mu;
+    for jj=1:length(pair)
         %% blocks
-        [Z Z1 Z2 ActiveSet hist param flag output] = cgan_l1_omega(inputData,param);
+        [Dfin1{j}{jj}] = f1(Strain,pair(jj).lambda,pair(jj).mu,5);
+        [Dfin2{j}{jj}] = f2(Strain,pair(jj).lambda,pair(jj).mu);
     end
 end
+
+figure(1);clf;
+cc=1;
+for j=1:partitions.NumTestSets
+    for jj=1:length(pair)
+        subplot(partitions.NumTestSets,length(pair),cc);
+        imagesc(abs(Dfin1{j}{jj}));
+        cc=cc+1;
+        pbaspect([1 1 1]);
+    end
+end
+
+

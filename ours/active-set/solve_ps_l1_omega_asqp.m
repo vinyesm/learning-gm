@@ -3,6 +3,7 @@ function [ Z,Z1,Z2,U,Hall,fall,cardVal, ActiveSet, hist] = solve_ps_l1_omega_asq
 
 debug_update=0;
 debug=0;
+compute_dg=0;
 display('in solve_ps change S when changing loss fun\n');
 S=inputData.X1*inputData.X1;
 nbetas=length(ActiveSet.I_l1);
@@ -142,6 +143,7 @@ while cont
         
         %% Compute objective, loss, penalty and duality gap
         if (param.sloppy==0 || (param.sloppy~=0 && mod(count,100)==1)) %&& ~isempty(ActiveSet.alpha)
+            if compute_dg
             [loss(i),pen(i),obj(i),dg(i),time(i)]=get_val_l1_omega_asqp(Z,ActiveSet,inputData,param,cardVal);
             nb_pivot(i)=npiv;
             active_var(i)= sum(ActiveSet.alpha>0);
@@ -153,6 +155,7 @@ while cont
                     fprintf('objective increasing\n');
                     keyboard;
                 end
+            end
             end
             i=i+1;
             %% Verify sttopping criterion
@@ -236,8 +239,8 @@ while cont
         end
         
         %%
-        fprintf('  maxII=%f < %f     maxval_om=%f < %f\n',maxII,param.mu,maxval_om,param.lambda);
         if debug
+            fprintf('  maxII=%f < %f     maxval_om=%f < %f\n',maxII,param.mu,maxval_om,param.lambda);
             fprintf('maxval_l1/mu = %f maxval_om/lambda = %f\n',maxval_l1/param.mu,maxval_om/param.lambda);
 %             if maxval_om/param.lambda~=-inf && maxval_om/param.lambda<0
 %                 keyboard

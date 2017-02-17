@@ -106,9 +106,14 @@ while c
         fprintf('%d/%d   \n',i,max_nb_main_loop);
     end
     
-    [u, kBest] = lmo_spsd_TPower(-H,param);
-    param.k=kBest;
-    currI = find(u);
+    [u, kBest,val] = lmo_spsd_TPower(-H,param);
+    if val<0
+        currI=[];
+%         keyboard;
+    else
+        param.k=kBest;
+        currI = find(u);
+    end
     
     %% verbose
     if param.verbose==1
@@ -123,11 +128,18 @@ while c
         end
     end
     %%
-    
     maxIJ=max(abs(H(:)));
-    varIJ = norm(H(currI,currI));
-    takenI= isInCell(currI,ActiveSet.I,cell2mat(ActiveSet.k)) ;
+    if(isempty(currI))
+        varIJ=-1;
+        takenI=true;
+    else
+        varIJ = norm(H(currI,currI));
+        takenI= isInCell(currI,ActiveSet.I,cell2mat(ActiveSet.k)) ;
+    end
     hist.varIJ=[hist.varIJ varIJ];
+    
+    fprintf ('TO CHECK: changing stopping criterion to operator norm on currI instead of Frobenius\n')
+    varIJ=val;
     
     flag.var=varIJ;
     

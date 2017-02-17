@@ -31,7 +31,7 @@ end
 % fprintf('\n%f',maxval);
 if maxval<=0
     fprintf('in get_new_atom_spca : Largest eigenvalue is negative or zero\n');
-    %keyboard
+    keyboard
 end
 
 if isempty(new_i)

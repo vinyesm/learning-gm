@@ -44,7 +44,7 @@ param.cardfun(5)=1;
 
 %choice s.t. mu*k^=lambda
 param.mu=0.1;
-param.lambda=0.005;
+param.lambda=0.01;
 
 % param.cardfun=(1:(p)).^.2;
 %[Aso,Mso,Sso,Eso,Mso_as,out] = sparse_omega_lgm( inputData, param);
@@ -131,13 +131,13 @@ grid on
 hold off
 
 %% saving
-%filename = ['lggm2_' datestr(datetime('now'),'yyyymmddTHHMMSS') '.ps'];
-filename = ['lggm3_' datestr(clock) '.ps'];
-%print ( '-dpsc2', filename, '-f1' )
-print ( '-dpsc2', filename, '-append', '-f1' )
-print ( '-dpsc2', filename, '-append', '-f2' )
-print ( '-dpsc2', filename, '-append', '-f3' )
-print ( '-dpsc2', filename, '-append', '-f4' )
-print ( '-dpsc2', filename, '-append', '-f5' )
+% %filename = ['lggm2_' datestr(datetime('now'),'yyyymmddTHHMMSS') '.ps'];
+% filename = ['lggm3_' datestr(clock) '.ps'];
+% %print ( '-dpsc2', filename, '-f1' )
+% print ( '-dpsc2', filename, '-append', '-f1' )
+% print ( '-dpsc2', filename, '-append', '-f2' )
+% print ( '-dpsc2', filename, '-append', '-f3' )
+% print ( '-dpsc2', filename, '-append', '-f4' )
+% print ( '-dpsc2', filename, '-append', '-f5' )
 
 

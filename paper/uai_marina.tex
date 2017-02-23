@@ -1,0 +1,130 @@
+
+\documentclass[twoside]{article} 
+\usepackage[accepted]{aistats2017}
+
+% If your paper is accepted, change the options for the package
+% aistats2017 as follows:
+%
+%\usepackage[accepted]{aistats2017}
+%
+% This option will print headings for the title of your paper and
+% headings for the authors names, plus a copyright note at the nd of
+% the first column of the first page.e
+
+\usepackage[utf8]{inputenc} % allow utf-8 input
+\usepackage[T1]{fontenc}    % use 8-bit T1 fonts
+\usepackage{hyperref}       % hyperlinks
+\usepackage{url}            % simple URL typesetting
+\usepackage{booktabs}       % professional-quality tables
+\usepackage{amsfonts,amsthm}       % blackboard math symbols
+\usepackage{nicefrac}       % compact symbols for 1/2, etc.
+\usepackage{microtype}      % microtypography
+\usepackage{MnSymbol}
+\usepackage{color}
+\usepackage{graphicx} % more modern
+\usepackage{subfigure} 
+\usepackage{natbib}
+\usepackage{algorithm}
+\usepackage{algpseudocode}
+\usepackage{lineno}
+\usepackage{thmtools,thm-restate}
+\usepackage{xr}
+
+%\linenumbers
+
+
+
+\def\A{\mathcal{A}}
+\def\ga{\gamma_\mathcal{A}}
+\def\Co{C^{\circ}}
+\def\Coa{C^{\circ}_{\!\!\mathcal{A}}}
+\def\Ca{C_{\!\mathcal{A}}}
+\def\go{\gamma^{\circ}}
+\def\goa{\gamma^{\circ}_{\A}}
+\newcommand{\dt}[2]{\langle#1,#2\rangle}
+\def\Olasso{\Omega_{\rm Lasso}} % Lasso norm
+\def\Ogl{\Omega_{\rm GL}} % group Lasso norm
+\def\Olgl{\Omega_{\rm LGL}} % latent group Lasso norm
+\def\tr{\rm tr}
+\newcommand\itgset[1]{[\!\![#1]\!\!]}
+\def\RR{\mathbb{R}}
+\newcommand{\tblue}[1]{\textcolor{blue}{#1}}
+\newcommand{\tred}[1]{\textcolor{red}{#1}}
+\newcommand\TODO[1]{\tblue{TODO: \texttt{#1}}}
+%\newcommand\TODO[1]{}
+\newcommand\OLD[1]{\tblue{#1}}
+\newcommand\NEW[1]{\tred{#1}}
+\def\st{\text{s.t.}}
+
+\newtheorem{thm}{Theorem}
+\newtheorem{prop}{Proposition}
+\newtheorem{fact}{Fact}
+\newtheorem{lemm}{Lemma}
+\newtheorem{coro}{Corollary}
+
+\begin{document}
+
+% If your paper is accepted and the title of your paper is very long,
+% the style will print as headings an error message. Use the following
+% command to supply a shorter title of your paper so that it can be
+% used as headings.
+%
+%\runningtitle{I use this title instead because the last one was very long}
+
+% If your paper is accepted and the number of authors is large, the
+% style will print as headings an error message. Use the following
+% command to supply a shorter version of the authors names so that
+% they can be used as headings (for example, use only the surnames)
+%
+%\runningauthor{Surname 1, Surname 2, Surname 3, ...., Surname n}
+
+\twocolumn[
+
+\aistatstitle{Fast column generation for atomic norm regularization}
+
+\aistatsauthor{ Marina Vinyes \And Guillaume Obozinski }
+
+\aistatsaddress{ University Paris-Est\\
+  LIGM (UMR8049)\\
+  Ecole des Ponts
+  Marne-la-Vallée, France \\
+  \texttt{marina.vinyes@imagine.enpc.fr} \\ 
+  \And
+  %% Coauthor \\
+  Guillaume Obozinski
+  %% Affiliation \\
+  University Paris-Est\\
+  LIGM (UMR8049)\\
+  Ecole des Ponts
+  Marne-la-Vallée, France \\
+  \texttt{guillaume.obozinski@enpc.fr}} ]
+%  
+%\aistatsauthor{ Anonymous Author 1 \And Anonymous Author 2 \And Anonymous Author 3 }
+%
+%\aistatsaddress{ Unknown Institution 1 \And Unknown Institution 2 \And Unknown Institution 3 } ]
+
+\begin{abstract}
+
+
+\end{abstract}
+
+\section{INTRODUCTION}
+
+
+\input{experiments_uai}
+
+\vspace{-0.2cm}
+\section{CONCLUSION}
+
+
+\newpage
+\newpage
+\bibliographystyle{apalike}
+\bibliography{colgen}
+
+
+
+
+\end{document}
+ 
+

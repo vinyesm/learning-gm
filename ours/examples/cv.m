@@ -16,6 +16,8 @@ addpath('../TPower_1.0/misc/');
 %% data
 run('../../toy-data/three_blocks_same_size.m');
 
+objective= @(S05,Z) .5*norm(S05*Z*S05+eye(size(Z,1)),'fro')^2;
+
 %% our norm psd with decomposition S-M sparse_omega_lgm
 
 % param.cardfun(p)=1;
@@ -27,7 +29,7 @@ run('../../toy-data/three_blocks_same_size.m');
 
 %%
 % lambda < k*mus
-las=10.^linspace(0,-4,4);
+las=10.^linspace(0,-4,4);%0,-4,4
 pair=[];
 count=1;
 for i=1:length(las)
@@ -39,32 +41,63 @@ for i=1:length(las)
 end
 
 %%
-nbfold=10;
+nbfold=5;
 partitions = cvpartition(n,'KFold',10);
 %c=cvpartition(n,'LeaveOut');
 % c.test(1) c.training(1)
+
 
 parfor j=1:partitions.NumTestSets
     Xtrain=X(:,partitions.training(j));
     Xtest=X(:,partitions.test(j));
     Strain=cov(Xtrain');
-    Stest=cov(Xtrain');
+    Stest=cov(Xtest');
     for jj=1:length(pair)
         %% blocks
-        [Dfin1{j}{jj}] = f1(Strain,pair(jj).lambda,pair(jj).mu,5);
-        [Dfin2{j}{jj}] = f2(Strain,pair(jj).lambda,pair(jj).mu);
+        [Dfin1{j}{jj},Z1] = f1(Strain,pair(jj).lambda,pair(jj).mu,5);
+        [Dfin2{j}{jj},Z2] = f2(Strain,pair(jj).lambda,pair(jj).mu);
+        cv1cell{j}{jj} = objective(Stest^.5,Z1);
+        cv2cell{j}{jj} = objective(Stest^.5,Z2);
     end
 end
 
-figure(1);clf;
-cc=1;
+cv1=zeros(partitions.NumTestSets,length(pair));
+cv2=zeros(partitions.NumTestSets,length(pair));
 for j=1:partitions.NumTestSets
     for jj=1:length(pair)
-        subplot(partitions.NumTestSets,length(pair),cc);
-        imagesc(abs(Dfin1{j}{jj}));
-        cc=cc+1;
-        pbaspect([1 1 1]);
+        cv1(j,jj)=cv1cell{j}{jj};
+        cv2(j,jj)=cv2cell{j}{jj};
+    end
+end
+
+mcv1=mean(cv1);
+mcv2=mean(cv2);
+cv1grid=zeros(length(las));
+cv2grid=zeros(length(las));
+count=1;
+for i=1:length(las)
+    for j=1:i
+        cv1grid(i,j)=mcv1(count);
+        cv2grid(i,j)=mcv2(count);
+        count=count+1;
     end
 end
 
 
+% figure(1);clf;
+% cc=1;
+% for j=1:partitions.NumTestSets
+%     for jj=1:length(pair)
+%         subplot(partitions.NumTestSets,length(pair),cc);
+%         imagesc(abs(Dfin1{j}{jj}));
+%         cc=cc+1;
+%         pbaspect([1 1 1]);
+%     end
+% end
+
+jj=1;
+figure(1);clf;
+for j=1:partitions.NumTestSets
+    subplot(1,partitions.NumTestSets,j);
+    imagesc(abs(Dfin1{j}{jj}));
+end

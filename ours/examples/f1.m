@@ -1,4 +1,4 @@
-function [Dfin] =f1(S,lambda,mu,k)
+function [Dfin,Z] =f1(S,lambda,mu,k)
     p=size(S,1);
     param.f=4;
     param.diag=0;
@@ -6,7 +6,7 @@ function [Dfin] =f1(S,lambda,mu,k)
     param.max_nb_main_loop=100;%2;%1000
     param.powerIter=500;
     param.stPtPowerIter=1000;
-    param.niterPS=5000;%10000;%5000
+    param.niterPS=10000;%5000
     param.epsStop=1e-8;
     param.PSdualityEpsilon=1e-8;
     param.k=0;

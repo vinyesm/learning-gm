@@ -55,9 +55,9 @@ parfor j=1:partitions.NumTestSets
     for jj=1:length(pair)
         %% blocks
         [Dfin1{j}{jj},Z1] = f1(Strain,pair(jj).lambda,pair(jj).mu,5);
+        cv1cell{j}{jj} = objective(Stest^.5,Z1); 
         [Dfin2{j}{jj},Z2] = f2(Strain,pair(jj).lambda,pair(jj).mu);
-        cv1cell{j}{jj} = objective(Stest^.5,Z1);
-        cv2cell{j}{jj} = objective(Stest^.5,Z2);
+        cv2cell{j}{jj} = objective(Stest^.5,Z2);        
     end
 end
 

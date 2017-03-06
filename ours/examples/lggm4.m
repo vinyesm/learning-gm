@@ -45,9 +45,9 @@ param.cardfun(k)=1;
 % param.cardfun(p)=1;
 
 %choice s.t. mu*k^=lambda
-aa=0.01;
+aa=0.1;
 param.lambda=aa; %lamda ~ 2/k*mu
-param.mu=0.05;
+param.mu=0.3;
 
 %% blocks
 [Z Z1 Z2 ActiveSet hist param flag output] = cgan_l1_omega(inputData,param);
@@ -75,7 +75,7 @@ if ~isempty(ActiveSet_tr.alpha)
     Uso_tr=bsxfun(@times,sqrt(ActiveSet_tr.alpha)',ActiveSet_tr.atoms);
     nl_tr=size(ActiveSet_tr.atoms,2);
     Dfin_tr=zeros(p+nl_tr);
-    Dfin_tr(1:nl,1:nl)=eye(nl);
+    Dfin_tr(1:nl_tr,1:nl_tr)=eye(nl_tr);
     Dfin_tr((nl_tr+1):(nl_tr+p),(nl_tr+1):(nl_tr+p))=-Z1_tr;
     Dfin_tr(1:nl_tr,(nl_tr+1):(nl_tr+p))=Uso_tr';
     Dfin_tr((nl_tr+1):(nl_tr+p),1:nl_tr)=Uso_tr;

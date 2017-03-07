@@ -41,7 +41,7 @@ for i=1:length(las)
 end
 
 %%
-nbfold=5;
+nbfold=10;
 partitions = cvpartition(n,'KFold',10);
 %c=cvpartition(n,'LeaveOut');
 % c.test(1) c.training(1)
@@ -117,6 +117,61 @@ for j=1:partitions.NumTestSets
     imagesc(abs(Dfin2{j}{p2}));
     pbaspect([1 1 1]);
 end
+
+
+%% chosen pair,
+
+% p1=24
+% lambda: 3.7276e-04
+% mu: 0.0720
+
+%p1=24;
+k=5;
+lambda=pair(p1).lambda;
+mu=pair(p1).mu;
+
+S=cov(X');
+p=size(S,1);
+param.f=4;
+param.diag=0;
+param.PSD=true;
+param.max_nb_main_loop=100;%2;%1000
+param.powerIter=500;
+param.stPtPowerIter=1000;
+param.niterPS=10000;%5000
+param.epsStop=1e-8;
+param.PSdualityEpsilon=1e-8;
+param.k=0;
+param.PSmu=0; %strong convexity
+param.verbose=1;
+param.debug=0;
+param.sloppy=0;
+param.max_nb_atoms=param.max_nb_main_loop*param.niterPS;
+inputData.Y=-eye(p);
+inputData.X1=S^.5;
+inputData.X2=S^.5;
+param.cardfun=inf*ones(1,p);
+param.cardfun(k)=1;
+param.lambda=lambda;
+param.mu=mu;
+[Zf Z1f Z2f ActiveSet hist param flag output] = cgan_l1_omega(inputData,param);
+if ~isempty(ActiveSet.alpha)
+    Uso=bsxfun(@times,sqrt(ActiveSet.alpha)',ActiveSet.atoms);
+    nl=size(ActiveSet.atoms,2);
+    Dfin=zeros(p+nl);
+    Dfin(1:nl,1:nl)=eye(nl);
+    Dfin((nl+1):(nl+p),(nl+1):(nl+p))=-Z1f;
+    Dfin(1:nl,(nl+1):(nl+p))=Uso';
+    Dfin((nl+1):(nl+p),1:nl)=Uso;
+else
+    Dfin=Z1f;
+end
+
+figure(2);clf;
+imagesc(abs(Dfin));
+pbaspect([1 1 1]);
+
+
 
 
 

@@ -40,7 +40,6 @@ lambdaBest=lambdaBest*cfBest;
 
 if lambdaBest<0
     fprintf('in lmo_spca no descent direction\n');
-%     keyboard
 end
 
 end

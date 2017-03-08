@@ -41,8 +41,8 @@ for i=1:length(las)
 end
 
 %%
-nbfold=10;
-partitions = cvpartition(n,'KFold',10);
+nbfold=5;
+partitions = cvpartition(n,'KFold',nbfold);
 %c=cvpartition(n,'LeaveOut');
 % c.test(1) c.training(1)
 

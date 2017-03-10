@@ -37,7 +37,7 @@ function [c,A,nbpivot]=asqp3(Q,b,c0,param,new_atom_added,idx_atom)
 max_iter=param.max_iter;
 epsilon=param.epsilon;
 debug_mode=param.debug_mode;
-debug_mode=0;
+debug_mode=1;
 
 tol=1e-12;
 t=size(c0,1);
@@ -82,13 +82,14 @@ while(iter<=max_iter)
     end
     p=zeros(t,1); 
     F=(c>tol); % free variables
-    if (rcond(Q(A & F,A & F))<1e-12) %&& debug_mode,
+    if (rcond(Q(A & F,A & F))<1e-12) && debug_mode,
         display('asqp : Warning, Hessian badly conditioned\n');
         keyboard;
     end
     p(A & F)=-Q(A & F,A & F)\g(A & F);
     p(A & ~F)=-g(A & ~F);
     %% Progress until active set reduces
+%     keyboard;
     if (~all(p(A)+c(A)>=0)), % Drop step
 %         keyboard;
         K=A & (p<0);
@@ -139,7 +140,7 @@ while(iter<=max_iter)
         if(all(p(A)+c(A)>=0)),
             hist.r(iter)=0;
         else
-            hist.r(iter)=I_K(i_remove);
+           % hist.r(iter)=I_K(i_remove);
         end
     end
     iter=iter+1;
@@ -148,17 +149,17 @@ end
 nbpivot=nb_full_steps+nb_drop_steps;
 %fprintf('\n');
 
-if 0 && debug_mode,
+if  debug_mode,
     hist.obj=hist.obj(1:min(iter,max_iter)-1);
     hist.norm_g=hist.norm_g(1:min(iter,max_iter));
     if any(diff(hist.obj)>tol),
         display('objective increases in asqp');
     end
-    if iter>max_iter || nb_full_steps>10,
+%     if iter>max_iter || nb_full_steps>10,
         figure(15);
         plot(hist.obj);
         keyboard;
-    end
+%     end
 end
 
 

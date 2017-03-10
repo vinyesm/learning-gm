@@ -74,6 +74,7 @@ while cont
             obj0=.5*alpha0'*Hall*alpha0+fall'*alpha0;
         end
         [alph,Jset,npiv]=asqp2(Hall+0*1e-12*eye(length(fall)),-fall,alpha0,param_as,new_atom_added,idx_added);
+%         [alph,Jset,npiv]=asqp3(Hall+0*1e-12*eye(length(fall)),-fall,alpha0,param_as,new_atom_added,idx_added);
         if debug
             obj1=.5*alph'*Hall*alph+fall'*alph;
             if obj1>obj0
@@ -261,9 +262,27 @@ while cont
                 fprintf('\n adding omega atom\n');
             end
             anew=sparse(new_i,ones(length(new_i),1),new_val,p,1);
-            %[Hall_new,fall_new,U_new] = add_omega_atoms_hessian_l1_sym(inputData,param,Hall,fall,atoms_l1_sym,U,anew);
+            %check if too correlated with previous atom
+            K=true(1,ActiveSet.atom_count);
             if ActiveSet.atom_count>0
-                aom=[ActiveSet.atoms(:,1:ActiveSet.atom_count) anew];
+                %fprintf('\n atom count  %d\n',ActiveSet.atom_count);
+                correl = 1-abs(sum(bsxfun(@times,ActiveSet.atoms(:,1:ActiveSet.atom_count),anew),1));
+                K=correl>1e-10;
+                new_atom_count=sum(K);
+                ActiveSet.atom_count=new_atom_count;
+                ActiveSet.atoms=ActiveSet.atoms(:,K);
+                ActiveSet.alpha=ActiveSet.alpha(K);
+                cardVal=cardVal(K);
+                Jset= [K,true(1,length(ActiveSet.I_l1))];
+                %Hold=Hall;%for debug here
+                %fold=fall;%for debug here
+                Hall=Hall(Jset,Jset);
+                fall=fall(Jset);
+                %fprintf('norm(Hold-Hall)=%f\n', norm(Hold-Hall,'fro'));
+                %keyboard;
+            end
+            if sum(K)>0
+                aom=[ActiveSet.atoms(:,K) anew];
             else
                 aom=anew;
             end
@@ -318,7 +337,7 @@ while cont
             if sum(ActiveSet.I_l1==idx_l1)
                 new_atom_added=false;
                 fprintf('\n this atom is already in the collection\n');
-                %                 keyboard;
+                                keyboard;
             else
                 ActiveSet.I_l1=[ActiveSet.I_l1 idx_l1]; %to avoid adding same atom
                 if ActiveSet.atom_count>0

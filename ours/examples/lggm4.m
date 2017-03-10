@@ -49,6 +49,11 @@ aa=0.1;
 param.lambda=aa; %lamda ~ 2/k*mu
 param.mu=0.3;
 
+% aa=0.01;
+% param.lambda=aa; %lamda ~ 2/k*mu
+% param.mu=0.03;
+
+
 %% blocks
 [Z Z1 Z2 ActiveSet hist param flag output] = cgan_l1_omega(inputData,param);
 

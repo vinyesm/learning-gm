@@ -48,6 +48,7 @@ partitions = cvpartition(n,'KFold',nbfold);
 
 
 parfor j=1:partitions.NumTestSets
+% for j=1:partitions.NumTestSets
     Xtrain=X(:,partitions.training(j));
     Xtest=X(:,partitions.test(j));
     Strain=cov(Xtrain');

@@ -282,7 +282,8 @@ while cont
                 %keyboard;
             end
             if sum(K)>0
-                aom=[ActiveSet.atoms(:,K) anew];
+                %aom=[ActiveSet.atoms(:,K) anew];
+                aom=[ActiveSet.atoms(:,1:ActiveSet.atom_count) anew];
             else
                 aom=anew;
             end
@@ -337,7 +338,7 @@ while cont
             if sum(ActiveSet.I_l1==idx_l1)
                 new_atom_added=false;
                 fprintf('\n this atom is already in the collection\n');
-                                keyboard;
+%                                 keyboard;
             else
                 ActiveSet.I_l1=[ActiveSet.I_l1 idx_l1]; %to avoid adding same atom
                 if ActiveSet.atom_count>0

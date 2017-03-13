@@ -71,7 +71,18 @@ The dual of this gauge, defined in \ref{eq:gauge}, writes
 \end{align}
 
 \section{Discussion on cardinality function $f_k$}
-First we will focus on the vectorial case. Let $u_0$ be the signal, $k_0$ its number of nonzeros and $u=u_0+\epsilon$ the observed signal, where $\epsilon$ is the noise. $s_k=\EE\big[\sum_{i=1}^{k}|u_0|_{(i)}\big]$, where $|u_0|_{(i)}$ is the $i$-th order statistic.\\
+First we will focus on the vectorial case. The norm writes
+\begin{align}
+\label{eq:gaugevec}
+\ga(x)=\inf_{c_a\geq 0} \sum_{k}\sum_{a\in\A_{k}}f_k c_a \quad s.t.\quad x=\sum_{k\in\itgset{p}}\sum_{a\in\A_{k}}c_a a,
+\end{align}
+and the dual norm
+\begin{align}
+\label{eq:dualgauge}
+\goa(v)=\max_{k\in\itgset{p}}\max_{a\in\A_{k}} \frac{a^{\top}v}{f_k}.
+\end{align}
+
+Let $u_0$ be the signal, $k_0$ its number of nonzeros and $u=u_0+\epsilon$ the observed signal, where $\epsilon$ is the noise. $s_k=\EE\big[\sum_{i=1}^{k}|u_0|_{(i)}\big]$, where $|u_0|_{(i)}$ is the $i$-th order statistic.\\
 
 For all $k_0$ we want 
 \begin{align}
@@ -113,7 +124,7 @@ A_{k_0} &\leq \frac{\bar{\epsilon}}{\theta_{k_0}\big(\frac{1}{k_0}-\frac{1}{2k_0
 \end{align}
 Thus, to distinguish signla from noise we need
 \begin{align}
-\alpha\leq 2\frac{\bar{\epsilon}k_0}{\theta_{k_0}}
+\alpha\geq 2\frac{\bar{\epsilon}k_0}{\theta_{k_0}}
 \end{align}
 
 To be able to capture all the signal we need for all $k_0$, for all $j=1..k_0-1$

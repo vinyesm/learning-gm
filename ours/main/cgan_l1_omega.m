@@ -117,6 +117,7 @@ while c
     
     %% verbose
     if param.verbose==1
+        fprintf('lambda=%f  mu=%f\n', param.lambda, param.mu)
         fprintf('   currI = ')
         for j=1:length(currI)
             fprintf('%d ',currI(j));

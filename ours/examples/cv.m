@@ -29,8 +29,8 @@ objective= @(S05,Z) .5*norm(S05*Z*S05+eye(size(Z,1)),'fro')^2;
 
 %%
 % lambda < k*mus
-jcut=3;
-las=10.^linspace(0,-4,8);%0,-4,4
+jcut=inf;
+las=10.^linspace(0,-3,8);%0,-4,4
 pair=[];
 count=1;
 for i=1:length(las)

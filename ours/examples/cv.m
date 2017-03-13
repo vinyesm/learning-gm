@@ -173,7 +173,33 @@ figure(2);clf;
 imagesc(abs(Dfin));
 pbaspect([1 1 1]);
 
+%%
+param.max_nb_main_loop=2;%2;%1000
+lambda=pair(p2).lambda;
+mu=pair(p2).mu;
+param.lambda=lambda;
+param.mu=mu;
+param.cardfun=inf*ones(1,p);
+param.cardfun(p)=1;
+[Zff Z1ff Z2ff ActiveSet hist param flag output] = cgan_l1_omega(inputData,param);
+if ~isempty(ActiveSet.alpha)
+    Uso=bsxfun(@times,sqrt(ActiveSet.alpha)',ActiveSet.atoms);
+    nl=size(ActiveSet.atoms,2);
+    Dfin2=zeros(p+nl);
+    Dfin2(1:nl,1:nl)=eye(nl);
+    Dfin2((nl+1):(nl+p),(nl+1):(nl+p))=-Z1ff;
+    Dfin2(1:nl,(nl+1):(nl+p))=Uso';
+    Dfin2((nl+1):(nl+p),1:nl)=Uso;
+else
+    Dfin2=Z1f;
+end
+
+
+figure(3);clf;
+imagesc(abs(Dfin2));
+pbaspect([1 1 1]);
 
 
 
+save('cv01', 'pair', 'p1', 'p2', 'Dfin1', 'Dfin2', 'cv1','cv2', 'cv1grid','cv2grid', 'Dfin1', 'Dfin2');
 

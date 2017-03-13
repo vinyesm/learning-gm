@@ -40,6 +40,7 @@
 \def\tr{\rm tr}
 \newcommand\itgset[1]{[\!\![#1]\!\!]}
 \def\RR{\mathbb{R}}
+\def\EE{\mathbb{E}}
 \newcommand{\tblue}[1]{\textcolor{blue}{#1}}
 \newcommand{\tred}[1]{\textcolor{red}{#1}}
 \newcommand\TODO[1]{\tblue{TODO: \texttt{#1}}}
@@ -55,5 +56,72 @@
 \newtheorem{coro}{Corollary}
 
 \begin{document}
-ff
+\section{Gauge}
+We introduce a penalty where the sparsity of the factors is not known and fixed. We consider a penalty (here for psd matrices) of the form
+\begin{align}
+\label{eq:gauge}
+\ga(X)=\inf_{c_a\geq 0} \sum_{k}\sum_{a\in\A_{k}}f_k c_a \quad s.t.\quad X=\sum_{k\in\itgset{p}}\sum_{a\in\A_{k}}c_a aa^{\top},
+\end{align}
+where $f_k$ is a function on sparsity. We would like to penalize bigger $k$. In the vector case, the choice $f_k=k$ gives the $\ell_1$-norm.
+
+The dual of this gauge, defined in \ref{eq:gauge}, writes
+\begin{align}
+\label{eq:dualgauge}
+\goa(Y)=\max_{k\in\itgset{p}}\max_{a\in\A_{k}} \frac{a^{\top}Ya}{f_k}
+\end{align}
+
+\section{Discussion on cardinality function $f_k$}
+First we will focus on the vectorial case. Let $u_0$ be the signal, $k_0$ its number of nonzeros and $u=u_0+\epsilon$ the observed signal, where $\epsilon$ is the noise. $s_k=\EE\big[\sum_{i=1}^{k}|u_0|_{(i)}\big]$, where $|u_0|_{(i)}$ is the $i$-th order statistic.\\
+
+For all $k_0$ we want 
+\begin{align}
+\label{eq:cond1}
+\frac{s_{k_0}}{f_{k_0}}\geq \frac{s_{k_0} + \bar{\epsilon}}{f_{k_0+1}}
+\end{align}
+or equivalently,
+\begin{align}
+\label{eq:cond1bis}
+s_{k_0}\frac{f_{k_0+1}-f_{k_0}}{f_{k_0}}\geq  \bar{\epsilon}
+\end{align}
+
+Hypothesis on the signal :\\
+($H_1$) : $\forall k_0\geq 0 \quad s_{k0}\geq \theta$\\
+($H_2$) : $\forall k_0\geq 0 \quad s_{k0}\geq \theta_{k_0}$\\
+
+Hypothesis on the shape of $f$ :\\
+($H_f$) : $f_k=k^{\alpha}$, with $\alpha\in [0,1]$\\
+
+If $H_1$ and $H_f$, from equation \ref{eq:cond1bis} we get
+\begin{align}
+&\big(1+\frac{1}{k}\big)^{\alpha}-1 \geq \frac{\bar{\epsilon}}{\theta} \\
+&\big(1+\frac{1}{k}\big)^{\alpha} \geq 1+\frac{\bar{\epsilon}}{\theta} \\
+&\alpha\log\big(1+\frac{1}{k}\big) \geq \log\big(1+\frac{\bar{\epsilon}}{\theta}\big) \\
+&\alpha \geq \frac{\log\big(1+\frac{\bar{\epsilon}}{\theta}\big)}{\log\big(1+\frac{1}{k}\big)} \\
+&\alpha \geq \frac{\log\big(1+\frac{\bar{\epsilon}}{\theta}\big)}{\log\big(1+\frac{1}{k}\big)} \\
+&\alpha \geq \max_{k} \frac{\log\big(1+\frac{\bar{\epsilon}}{\theta}\big)}{\log\big(1+\frac{1}{k}\big)} 
+\end{align}
+
+If $H_1$ and $H_f$, from equation \ref{eq:cond1bis} we get
+\begin{align}
+&\alpha \geq \max_{k_0} \frac{\log\big(1+\frac{\bar{\epsilon}}{\theta_{k_0}}\big)}{\log\big(1+\frac{1}{k_0}\big)}=A_{k_0} 
+\end{align}
+
+\begin{align}
+A_{k_0} &\leq \frac{\bar{\epsilon}}{\theta_{k_0}\big(\frac{1}{k_0}-\frac{1}{2k_0^2}\big)}\\
+  &\leq \frac{\bar{\epsilon}k_0}{\theta_{k_0}\big(1-\frac{1}{2k_0}\big)}\\
+    &\leq 2\frac{\bar{\epsilon}k_0}{\theta_{k_0}}
+\end{align}
+Thus, to distinguish signla from noise we need
+\begin{align}
+\alpha\leq 2\frac{\bar{\epsilon}k_0}{\theta_{k_0}}
+\end{align}
+
+To be able to capture all the signal we need for all $k_0$, for all $j=1..k_0-1$
+\begin{align}
+&\frac{s_j}{f_j}\leq\frac{s_{j+1}}{f_{j+1}}\\
+&\frac{f_{j+1}}{f_j}\leq\frac{s_{j+1}}{s_j}\\
+&\big(1+\frac{1}{j}\big)^{\alpha}\leq\frac{s_{j+1}}{s_j}\\
+&\prod_{i=1}^{j-1}\big(1+\frac{1}{j}\big)^{\alpha}\leq\frac{s_{j}}{s_1}\\
+\end{align}
+
 \end{document}

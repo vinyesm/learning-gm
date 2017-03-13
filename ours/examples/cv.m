@@ -29,11 +29,12 @@ objective= @(S05,Z) .5*norm(S05*Z*S05+eye(size(Z,1)),'fro')^2;
 
 %%
 % lambda < k*mus
+jcut=3;
 las=10.^linspace(0,-4,8);%0,-4,4
 pair=[];
 count=1;
 for i=1:length(las)
-    for j=1:i
+    for j=max(1,i-jcut):i
         pair(count).lambda=las(i);
         pair(count).mu=las(j);
         count=count+1;
@@ -81,7 +82,7 @@ mincv2=inf;
 p1=0;
 p2=0;
 for i=1:length(las)
-    for j=1:i
+    for j=max(1,i-jcut):i
         cv1grid(i,j)=mcv1(count);
         if mcv1(count)<mincv1
             mincv1=mcv1(count);

@@ -83,11 +83,11 @@ while cont
             end
         end
         
-        eps_alph=1e-10;
+        eps_alph=1e-12;
         if(min(abs(alph(Jset))))<eps_alph
             fprintf('small alph\n');
-            alph(abs(alph)<eps_alph || alph<0)=0;
-            Jset(abs(alph)<eps_alph || alph<0)=0;
+            alph(abs(alph)<eps_alph | alph<0)=0;
+            Jset(abs(alph)<eps_alph | alph<0)=0;
             %             keyboard;
         end
         
@@ -120,6 +120,11 @@ while cont
         
         
         %% Update ActiveSet and Z
+        if 1 %debug
+            Z1_old=Z1;
+            Z2_old=Z2;
+        end
+        
         Z1=zeros(p);
         nz=find(ActiveSet.beta>1e-15);
         for j=nz'
@@ -141,6 +146,12 @@ while cont
             end
         end
         
+%         if debug
+%             fprintf('   progress in asqp Z1 %4.2f  Z2 %4.2f\n',norm(Z1_old-Z1,'fro'),norm(Z2_old-Z2,'fro') );
+%             if norm(Z1_old-Z1,'fro')^2+norm(Z2_old-Z2,'fro')^2<1e-12
+% %                 keyboard;
+%             end
+%         end
         
         %% Compute objective, loss, penalty and duality gap
         if (param.sloppy==0 || (param.sloppy~=0 && mod(count,100)==1)) %&& ~isempty(ActiveSet.alpha)
@@ -160,22 +171,24 @@ while cont
             end
             i=i+1;
             %% Verify sttopping criterion
-            H = gradient(Z,inputData,param);
+            %H = gradient(Z,inputData,param);
             maxII=max(abs(H(:)));
             if ~isempty(ActiveSet.I)
                 maxvarold=maxvar;
                 [maxvar, kmaxvar]=max_var(Z,ActiveSet,param,inputData );
-                if debug && norm(maxvar-maxvarold)<1e-10
+                if norm(maxvar-maxvarold)<1e-10 %&& debug
                     fprintf('maxvar not changing\n');
-                    keyboard;
+%                     keyboard;
                 end
                 size_supp=length(ActiveSet.I{kmaxvar});
                 if maxvar < param.lambda*(1+param.epsStop / size_supp)* param.cardfun(size_supp) && maxII<param.mu*(1+param.epsStop)
                     cont=false;
+%                     keyboard;
                 end
-                if debug 
-                    fprintf('  maxII=%f < %f     varmax=%f < %f\n',maxII,param.mu,maxvar,param.lambda);
-                end
+%                 if debug 
+                    fprintf('  maxII=%4.2f < %4.2f     varmax=%4.2f < %4.2f var-varold=%4.2f continue=%d  count=%d\n',maxII,param.mu,maxvar,param.lambda,norm(maxvar-maxvarold),cont && count< param.niterPS,count);
+%                     keyboard;
+%                 end
             else
                 if  maxII<param.mu*(1+param.epsStop)
                     cont=false;
@@ -209,10 +222,13 @@ while cont
         if ~isempty(ActiveSet.I)
             StartY=inputData.Y;
             inputData.Y=StartY-inputData.X1*Z1*inputData.X2;
-            [new_i, new_val, maxval_om]=get_new_atom_spca(Z2,ActiveSet,param,inputData);
+            H = gradient(Z2,inputData,param);
+            [new_i, new_val, maxval_om0]=get_new_atom_spca(H,ActiveSet,param,inputData);
             inputData.Y=StartY;
-            if maxval_om<param.lambda*(1+param.epsStop)
+            if maxval_om0<param.lambda*(1+param.epsStop)
                 maxval_om=-inf;
+            else
+                maxval_om=maxval_om0;
             end
         else
             maxval_om=-inf;
@@ -249,6 +265,8 @@ while cont
         end
         if maxval_l1==-inf && maxval_om==-inf
 %             keyboard;
+            fprintf('\n maxval_l1 maxval_om are -inf\n');
+            keyboard;
             break
         end
         
@@ -262,27 +280,26 @@ while cont
                 fprintf('\n adding omega atom\n');
             end
             anew=sparse(new_i,ones(length(new_i),1),new_val,p,1);
-            %check if too correlated with previous atom
+%             %check if too correlated with previous atom
             K=true(1,ActiveSet.atom_count);
-            if ActiveSet.atom_count>0
-                %fprintf('\n atom count  %d\n',ActiveSet.atom_count);
-                correl = 1-abs(sum(bsxfun(@times,ActiveSet.atoms(:,1:ActiveSet.atom_count),anew),1));
-                K=correl>1e-10;
-                new_atom_count=sum(K);
-                ActiveSet.atom_count=new_atom_count;
-                ActiveSet.atoms=ActiveSet.atoms(:,K);
-                ActiveSet.alpha=ActiveSet.alpha(K);
-                cardVal=cardVal(K);
-                Jset= [K,true(1,length(ActiveSet.I_l1))];
-                %Hold=Hall;%for debug here
-                %fold=fall;%for debug here
-                Hall=Hall(Jset,Jset);
-                fall=fall(Jset);
-                %fprintf('norm(Hold-Hall)=%f\n', norm(Hold-Hall,'fro'));
-                %keyboard;
-            end
+%             if ActiveSet.atom_count>0
+%                 %fprintf('\n atom count  %d\n',ActiveSet.atom_count);
+%                 correl = 1-abs(sum(bsxfun(@times,ActiveSet.atoms(:,1:ActiveSet.atom_count),anew),1));
+%                 K=correl>1e-10;
+%                 new_atom_count=sum(K);
+%                 ActiveSet.atom_count=new_atom_count;
+%                 ActiveSet.atoms=ActiveSet.atoms(:,K);
+%                 ActiveSet.alpha=ActiveSet.alpha(K);
+%                 cardVal=cardVal(K);
+%                 Jset= [K,true(1,length(ActiveSet.I_l1))];
+%                 %Hold=Hall;%for debug here
+%                 %fold=fall;%for debug here
+%                 Hall=Hall(Jset,Jset);
+%                 fall=fall(Jset);
+%                 %fprintf('norm(Hold-Hall)=%f\n', norm(Hold-Hall,'fro'));
+%                 %keyboard;
+%             end
             if sum(K)>0
-                %aom=[ActiveSet.atoms(:,K) anew];
                 aom=[ActiveSet.atoms(:,1:ActiveSet.atom_count) anew];
             else
                 aom=anew;
@@ -310,8 +327,8 @@ while cont
             
             g=Hall_new*[ActiveSet.beta;ActiveSet.alpha;0]+fall_new;
             if g(end)>0
-                fprintf('\n Not a descent direction d=%f\n',g(end));
-                %                 keyboard;
+                fprintf('\n Not a descent direction when adding om atom d=%f\n',g(end));
+%                 keyboard;
                 break;
             else
                 ActiveSet.atom_count = ActiveSet.atom_count +1;
@@ -329,7 +346,7 @@ while cont
         else
             %adding l1 atom
             if maxval_l1<param.mu
-                fprintf('\n not good atom l1 \n',maxval_l1);
+                fprintf('\n not good atom l1 \n');
                 %                 keyboard;
             end
             if debug
@@ -338,7 +355,7 @@ while cont
             if sum(ActiveSet.I_l1==idx_l1)
                 new_atom_added=false;
                 fprintf('\n this atom is already in the collection\n');
-%                                 keyboard;
+%                 keyboard;
             else
                 ActiveSet.I_l1=[ActiveSet.I_l1 idx_l1]; %to avoid adding same atom
                 if ActiveSet.atom_count>0
@@ -370,7 +387,7 @@ while cont
                 g=Hall_new*[ActiveSet.beta;0;ActiveSet.alpha]+fall_new;
                 idx=length(ActiveSet.beta)+1;
                 if g(idx)>0
-                    fprintf('\n Not a descent direction d=%f\n',g(idx));
+                    fprintf('\n Not a descent direction when adding l1 atom d=%f\n',g(idx));
                     ActiveSet.I_l1(end)=[];
                     %                     keyboard;
                     break;

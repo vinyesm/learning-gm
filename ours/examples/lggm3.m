@@ -43,7 +43,9 @@ param.cardfun=inf*ones(1,p);
 param.cardfun(5)=1;
 
 %choice s.t. mu*k^=lambda
-param.mu=0.1;
+% param.mu=0.1;
+% param.lambda=0.01;
+param.mu=.1;
 param.lambda=0.01;
 
 % param.cardfun=(1:(p)).^.2;

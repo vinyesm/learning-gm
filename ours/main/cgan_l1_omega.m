@@ -114,6 +114,7 @@ while c
         param.k=kBest;
         currI = find(u);
     end
+%     keyboard;
     
     %% verbose
     if param.verbose==1
@@ -134,14 +135,14 @@ while c
         varIJ=-1;
         takenI=true;
     else
-        varIJ = norm(H(currI,currI));
+%         varIJ = norm(H(currI,currI));
+%         varIJ = abs(eigs(H(currI,currI),1,'lm'));
+        fprintf ('TO CHECK: changing stopping criterion to operator norm on currI instead of Frobenius\n')
+        varIJ=val;
         takenI= isInCell(currI,ActiveSet.I,cell2mat(ActiveSet.k)) ;
     end
+    
     hist.varIJ=[hist.varIJ varIJ];
-    
-    fprintf ('TO CHECK: changing stopping criterion to operator norm on currI instead of Frobenius\n')
-    varIJ=val;
-    
     flag.var=varIJ;
     
     if param.verbose==1

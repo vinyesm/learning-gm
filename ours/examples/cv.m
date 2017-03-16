@@ -14,8 +14,8 @@ addpath('../TPower_1.0/algorithms/TPower/');
 addpath('../TPower_1.0/misc/');
 
 %% data
-%run('../../toy-data/three_blocks_same_size.m');
-run('../../toy-data/three_large_blocks_same_size.m');
+run('../../toy-data/three_blocks_same_size.m');
+% run('../../toy-data/three_large_blocks_same_size.m');
 
 objective= @(S05,Z) .5*norm(S05*Z*S05+eye(size(Z,1)),'fro')^2;
 
@@ -141,7 +141,7 @@ param.PSD=true;
 param.max_nb_main_loop=100;%2;%1000
 param.powerIter=500;
 param.stPtPowerIter=1000;
-param.niterPS=10000;%5000
+param.niterPS=500;%5000
 param.epsStop=1e-8;
 param.PSdualityEpsilon=1e-8;
 param.k=0;
@@ -202,5 +202,5 @@ pbaspect([1 1 1]);
 
 
 
-%save('cv01', 'pair', 'p1', 'p2', 'Dfin1', 'Dfin2', 'cv1','cv2', 'cv1grid','cv2grid', 'Dfin1', 'Dfin2');
-save('cv_large_blocks_01', 'pair', 'p1', 'p2', 'Dfin1', 'Dfin2', 'cv1','cv2', 'cv1grid','cv2grid', 'Dfin1', 'Dfin2');
+%save('cv01', 'p', 'k', 'inputData','X', 'pair', 'p1', 'p2', 'Dfin1', 'Dfin2', 'cv1','cv2', 'cv1grid','cv2grid', 'Dfin1', 'Dfin2');
+% save('cv_large_blocks_01', 'pair', 'p1', 'p2', 'Dfin1', 'Dfin2', 'cv1','cv2', 'cv1grid','cv2grid', 'Dfin1', 'Dfin2');

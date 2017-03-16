@@ -45,13 +45,13 @@ param.cardfun(k)=1;
 % param.cardfun(p)=1;
 
 %choice s.t. mu*k^=lambda
-aa=0.1;
-param.lambda=aa; %lamda ~ 2/k*mu
-param.mu=0.3;
-
-% aa=0.01;
+% aa=0.1;
 % param.lambda=aa; %lamda ~ 2/k*mu
-% param.mu=0.03;
+% param.mu=0.3;
+
+aa=0.0005;
+param.lambda=aa; %lamda ~ 2/k*mu
+param.mu=0.2;
 
 
 %% blocks

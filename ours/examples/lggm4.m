@@ -57,6 +57,16 @@ param.mu=0.2;
 %% blocks
 [Z Z1 Z2 ActiveSet hist param flag output] = cgan_l1_omega(inputData,param);
 
+%% tr+l1
+param.max_nb_main_loop=2;
+param.niterPS=5000;
+param.cardfun=inf*ones(1,p);
+param.cardfun(p)=1;
+[Z_tr Z1_tr Z2_tr ActiveSet_tr hist_tr param_tr flag_tr output_tr] = cgan_l1_omega(inputData,param);
+
+%% LOAD HERE lggm.mat
+
+%% reconstruction l1+om
 if ~isempty(ActiveSet.alpha)
     Uso=bsxfun(@times,sqrt(ActiveSet.alpha)',ActiveSet.atoms);
     nl=size(ActiveSet.atoms,2);
@@ -69,13 +79,7 @@ else
     Dfin=Z1;
 end
 
-
-%% tr+l1
-param.max_nb_main_loop=2;
-param.niterPS=5000;
-param.cardfun=inf*ones(1,p);
-param.cardfun(p)=1;
-[Z_tr Z1_tr Z2_tr ActiveSet_tr hist_tr param_tr flag_tr output_tr] = cgan_l1_omega(inputData,param);
+%% reconstruction tr+l1
 if ~isempty(ActiveSet_tr.alpha)
     Uso_tr=bsxfun(@times,sqrt(ActiveSet_tr.alpha)',ActiveSet_tr.atoms);
     nl_tr=size(ActiveSet_tr.atoms,2);
@@ -87,9 +91,6 @@ if ~isempty(ActiveSet_tr.alpha)
 else
     Dfin_tr=Z1_tr;
 end
-
-%%
-display('FINISHED\n');
 
 %%
 descr_gen = {'Formulation Z1+Z2 where ';
@@ -117,18 +118,22 @@ subplot(3,2,3)
 imagesc(abs(Dfull));
 pbaspect([1 1 1]);
 title('true complete conc. mat.');
+colorbar
 subplot(3,2,4)
 imagesc(abs(Dfin));
 pbaspect([1 1 1]);
 title('estimated complete conc. mat.');
+colorbar
 subplot(3,2,5)
 imagesc(abs(Dfull)>1e-15);
 pbaspect([1 1 1]);
 title('true support');
+colorbar
 subplot(3,2,6)
 imagesc(abs(Dfin)>1e-15);
 pbaspect([1 1 1]);
 title('estimated support');
+colorbar
 %%
 
 figure(4);clf;
@@ -136,18 +141,22 @@ subplot(2,2,1);
 imagesc(abs(Dmargo));
 pbaspect([1 1 1]);
 title('true marginal conc. mat.');
+colorbar
 subplot(2,2,2);
 imagesc(abs(Z1+Z2));
 pbaspect([1 1 1]);
 title('observed conc. mat.');
+colorbar
 subplot(2,2,3)
 imagesc(abs(Dmargo)>1e-15);
 pbaspect([1 1 1]);
 title('true support');
+colorbar
 subplot(2,2,4)
 imagesc(abs(Z1+Z2)>1e-15);
 pbaspect([1 1 1]);
 title('estimated support');
+colorbar
 
 figure(5);clf
 loglog(hist.time,hist.dg,'-','LineWidth',2,'Color',[1 0 0],'DisplayName','dg');hold on;
@@ -161,26 +170,32 @@ subplot(3,2,1)
 imagesc(abs(Dfull));
 pbaspect([1 1 1]);
 title('true complete conc. mat.');
+colorbar
 subplot(3,2,2)
 imagesc(abs(Dfull)>1e-15);
 pbaspect([1 1 1]);
 title('true support');
+colorbar
 subplot(3,2,3)
 imagesc(abs(Dfin));
 pbaspect([1 1 1]);
 title('estimated complete conc. mat.');
+colorbar
 subplot(3,2,4)
 imagesc(abs(Dfin)>1e-15);
 pbaspect([1 1 1]);
 title('estimated support');
+colorbar
 subplot(3,2,5)
 imagesc(abs(Dfin_tr));
 pbaspect([1 1 1]);
 title('estimated complete conc. mat.');
+colorbar
 subplot(3,2,6)
 imagesc(abs(Dfin_tr)>1e-15);
 pbaspect([1 1 1]);
 title('estimated support');
+colorbar
 
 
 %% saving
@@ -194,3 +209,6 @@ print ( '-dpsc2', filename, '-append', '-f4' )
 print ( '-dpsc2', filename, '-append', '-f5' )
 
 % keyboard
+save('lggm4_03_16','k','p','n','inputData','Dfull','Dmargo', ...
+'Z', 'Z1', 'Z2', 'ActiveSet', 'hist' ,'param', 'flag' ,'output',...
+'Z_tr', 'Z1_tr', 'Z2_tr', 'ActiveSet_tr', 'hist_tr', 'param_tr', 'flag_tr', 'output_tr');

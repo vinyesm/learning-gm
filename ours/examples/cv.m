@@ -14,8 +14,8 @@ addpath('../TPower_1.0/algorithms/TPower/');
 addpath('../TPower_1.0/misc/');
 
 %% data
-run('../../toy-data/three_blocks_same_size.m');
-% run('../../toy-data/three_large_blocks_same_size.m');
+% run('../../toy-data/three_blocks_same_size.m');
+run('../../toy-data/three_large_blocks_same_size.m');
 
 objective= @(S05,Z) .5*norm(S05*Z*S05+eye(size(Z,1)),'fro')^2;
 
@@ -31,7 +31,8 @@ objective= @(S05,Z) .5*norm(S05*Z*S05+eye(size(Z,1)),'fro')^2;
 %%
 % lambda < k*mus
 jcut=inf;
-las=10.^linspace(0,-3,8);%0,-4,4
+%las=10.^linspace(0,-3,8);%0,-4,4
+las=10.^linspace(0,-3,4);%0,-4,4
 pair=[];
 count=1;
 for i=1:length(las)
@@ -57,12 +58,26 @@ parfor j=1:partitions.NumTestSets
     Stest=cov(Xtest');
     for jj=1:length(pair)
         %% blocks
-        [Dfin1{j}{jj},Z1] = f1(Strain,pair(jj).lambda,pair(jj).mu,5);
-        cv1cell{j}{jj} = objective(Stest^.5,Z1); 
+        [Dfin1{j}{jj},Z1] = f1(Strain,pair(jj).lambda,pair(jj).mu,k);
+        cv1cell{j}{jj} = objective(Stest^.5,Z1);        
+    end
+end
+
+save('cv01midf1', 'k','X', 'pair', 'partitions', 'cv1cell' ,'Dfin1');
+%%
+parfor j=1:partitions.NumTestSets
+% for j=1:partitions.NumTestSets
+    Xtrain=X(:,partitions.training(j));
+    Xtest=X(:,partitions.test(j));
+    Strain=cov(Xtrain');
+    Stest=cov(Xtest');
+    for jj=1:length(pair)
         [Dfin2{j}{jj},Z2] = f2(Strain,pair(jj).lambda,pair(jj).mu);
         cv2cell{j}{jj} = objective(Stest^.5,Z2);        
     end
 end
+
+save('cv01midf2', 'p', 'k', 'inputData','X', 'pair', 'partitions','Dfin1', 'Dfin2', 'cv1cell' ,'cv2cell');
 
 cv1=zeros(partitions.NumTestSets,length(pair));
 cv2=zeros(partitions.NumTestSets,length(pair));
@@ -129,7 +144,7 @@ end
 % mu: 0.0720
 
 %p1=24;
-k=5;
+%k=5;
 lambda=pair(p1).lambda;
 mu=pair(p1).mu;
 
@@ -202,5 +217,5 @@ pbaspect([1 1 1]);
 
 
 
-%save('cv01', 'p', 'k', 'inputData','X', 'pair', 'p1', 'p2', 'Dfin1', 'Dfin2', 'cv1','cv2', 'cv1grid','cv2grid', 'Dfin1', 'Dfin2');
+% save('cv01', 'p', 'k', 'inputData','X', 'pair', 'p1', 'p2', 'Dfin1', 'Dfin2', 'cv1','cv2', 'cv1grid','cv2grid', 'Dfin1', 'Dfin2');
 % save('cv_large_blocks_01', 'pair', 'p1', 'p2', 'Dfin1', 'Dfin2', 'cv1','cv2', 'cv1grid','cv2grid', 'Dfin1', 'Dfin2');

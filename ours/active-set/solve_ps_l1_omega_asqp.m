@@ -36,7 +36,7 @@ count=1;
 cont=true;
 
 H = gradient(Z,inputData,param);
-maxII=max(abs(H(:)));
+maxIJ=max(abs(H(:)));
 maxvar=inf;
 
 while cont
@@ -171,8 +171,14 @@ while cont
             end
             i=i+1;
             %% Verify sttopping criterion
-            %H = gradient(Z,inputData,param);
-            maxII=max(abs(H(:)));
+            H = gradient(Z,inputData,param);
+            maxIJ=max(abs(H(:)));
+            [new_row, new_col] = find(abs(H) == maxIJ);
+            new_row=new_row(1);
+            new_col=new_col(1);
+            if new_row ~= new_col
+                maxIJ=.5*maxIJ;
+            end
             if ~isempty(ActiveSet.I)
                 maxvarold=maxvar;
                 [maxvar, kmaxvar]=max_var(Z,ActiveSet,param,inputData );
@@ -180,21 +186,22 @@ while cont
                     fprintf('maxvar not changing\n');
 %                     keyboard;
                 end
-                size_supp=length(ActiveSet.I{kmaxvar});
-                if maxvar < param.lambda*(1+param.epsStop / size_supp)* param.cardfun(size_supp) && maxII<param.mu*(1+param.epsStop)
+                %size_supp=length(ActiveSet.I{kmaxvar});
+                %if maxvar < param.lambda*(1+param.epsStop / size_supp)* param.cardfun(size_supp) && maxIJ<param.mu*(1+param.epsStop)
+                if maxvar < param.lambda*(1+param.epsStop) && maxIJ<param.mu*(1+param.epsStop)
                     cont=false;
 %                     keyboard;
                 end
 %                 if debug 
-                    fprintf('  maxII=%4.2f < %4.2f     varmax=%4.2f < %4.2f var-varold=%4.2f continue=%d  count=%d\n',maxII,param.mu,maxvar,param.lambda,norm(maxvar-maxvarold),cont && count< param.niterPS,count);
+                    fprintf('  maxIJ/mu=%4.2f < 1     varmax/lambda=%4.2f < 1 var-varold=%4.2f continue=%d  count=%d\n',maxIJ/param.mu,maxvar/param.lambda,norm(maxvar-maxvarold),cont && count< param.niterPS,count);
 %                     keyboard;
 %                 end
             else
-                if  maxII<param.mu*(1+param.epsStop)
+                if  maxIJ<param.mu*(1+param.epsStop)
                     cont=false;
                 end
                 if debug 
-                    fprintf('maxII=%f < %f \n',maxII,param.mu);
+                    fprintf('maxIJ/mu=%f < 1 \n',maxIJ/param.mu);
                 end
             end
             %             if count> param.niterPS;
@@ -216,15 +223,16 @@ while cont
         
         new_atom_l1=false;
         new_atom_om=false;
+        H = gradient(Z,inputData,param);
         
         %% omega atom
         
         if ~isempty(ActiveSet.I)
-            StartY=inputData.Y;
-            inputData.Y=StartY-inputData.X1*Z1*inputData.X2;
-            H = gradient(Z2,inputData,param);
+%             StartY=inputData.Y;
+%             inputData.Y=StartY-inputData.X1*Z1*inputData.X2;
+%             H = gradient(Z2,inputData,param);
             [new_i, new_val, maxval_om0]=get_new_atom_spca(H,ActiveSet,param,inputData);
-            inputData.Y=StartY;
+%             inputData.Y=StartY;
             if maxval_om0<param.lambda*(1+param.epsStop)
                 maxval_om=-inf;
             else
@@ -236,17 +244,25 @@ while cont
         
         %% l1 sym atom
         
-        if maxII>param.mu*(1+param.epsStop)
-            StartY=inputData.Y;
-            inputData.Y=StartY-inputData.X1*Z2*inputData.X2;
-            H = gradient(Z1,inputData,param);
-            [maxval_l1]=max(abs(H(:)));
-            %         [maxval_l1]=max((-H(:)));
-            inputData.Y=StartY;
-            
-            [new_row, new_col] = find(abs(H) == maxval_l1);
-            new_row=new_row(1);
-            new_col=new_col(1);
+        
+        maxval_l1=max(abs(H(:)));
+        [new_row, new_col] = find(abs(H) == maxval_l1);
+        new_row=new_row(1);
+        new_col=new_col(1);
+        if new_row ~= new_col
+            maxval_l1=.5*maxval_l1;
+        end
+        
+        if maxval_l1>param.mu*(1+param.epsStop)
+%             StartY=inputData.Y;
+%             inputData.Y=StartY-inputData.X1*Z2*inputData.X2;
+%             H = gradient(Z1,inputData,param);
+%             [maxval_l1]=max(abs(H(:)));
+%             %         [maxval_l1]=max((-H(:)));
+%             inputData.Y=StartY;
+%             [new_row, new_col] = find(abs(H) == maxval_l1);
+%             new_row=new_row(1);
+%             new_col=new_col(1);
             sa=-sign(maxval_l1*H(new_row,new_col));
             i1=(new_row-1)*p+new_col;
             i2=(new_col-1)*p+new_row;
@@ -257,7 +273,7 @@ while cont
         
         %%
         if debug
-            fprintf('  maxII=%f < %f     maxval_om=%f < %f\n',maxII,param.mu,maxval_om,param.lambda);
+            fprintf('  maxval_l1=%f < %f     maxval_om=%f < %f\n',maxval_l1,param.mu,maxval_om,param.lambda);
             fprintf('maxval_l1/mu = %f maxval_om/lambda = %f\n',maxval_l1/param.mu,maxval_om/param.lambda);
 %             if maxval_om/param.lambda~=-inf && maxval_om/param.lambda<0
 %                 keyboard
@@ -328,7 +344,7 @@ while cont
             g=Hall_new*[ActiveSet.beta;ActiveSet.alpha;0]+fall_new;
             if g(end)>0
                 fprintf('\n Not a descent direction when adding om atom d=%f\n',g(end));
-%                 keyboard;
+                keyboard;
                 break;
             else
                 ActiveSet.atom_count = ActiveSet.atom_count +1;

@@ -14,10 +14,12 @@ addpath('../TPower_1.0/algorithms/TPower/');
 addpath('../TPower_1.0/misc/');
 
 %% data
-% run('../../toy-data/three_blocks_same_size.m');k=5;
-run('../../toy-data/three_large_blocks_same_size.m');k=10;
+run('../../toy-data/three_blocks_same_size.m');k=5;rank=3;
+% run('../../toy-data/three_large_blocks_same_size.m');k=10; rank=5;
 
-objective= @(S05,Z) .5*norm(S05*Z*S05+eye(size(Z,1)),'fro')^2;
+objective = @(S05,Z) .5*norm(S05*Z*S05+eye(size(Z,1)),'fro')^2;
+rankdiff = @(ActiveSet) (rank-size(ActiveSet.atoms,2));
+sparsesign = @(Z,Z0) (sum(sign(Z(:))==sign(Z0(:))));
 
 %% our norm psd with decomposition S-M sparse_omega_lgm
 
@@ -31,7 +33,7 @@ objective= @(S05,Z) .5*norm(S05*Z*S05+eye(size(Z,1)),'fro')^2;
 %%
 % lambda < k*mus
 jcut=inf;
-las=10.^linspace(0,-3,4);%0,-4,4
+las=10.^linspace(0,-3,8);%0,-4,4
 % las=10.^linspace(0,-3,4);%0,-4,4
 pair=[];
 count=1;
@@ -73,7 +75,8 @@ parfor j=1:partitions.NumTestSets
     Stest=cov(Xtest');
     for jj=1:length(pair)
         [Dfin2{j}{jj},Z2] = f2(Strain,pair(jj).lambda,pair(jj).mu);
-        cv2cell{j}{jj} = objective(Stest^.5,Z2);        
+        cv2cell{j}{jj} = objective(Stest^.5,Z2);
+        cv2cell_support{j}{jj} = objective(Stest^.5,Z2);
     end
 end
 

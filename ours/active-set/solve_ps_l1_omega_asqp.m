@@ -182,7 +182,7 @@ while cont
             if ~isempty(ActiveSet.I)
                 maxvarold=maxvar;
                 [maxvar, kmaxvar]=max_var(Z,ActiveSet,param,inputData );
-                if norm(maxvar-maxvarold)<1e-10 %&& debug
+                if debug && norm(maxvar-maxvarold)<1e-10
                     fprintf('maxvar not changing\n');
 %                     keyboard;
                 end
@@ -192,10 +192,10 @@ while cont
                     cont=false;
 %                     keyboard;
                 end
-%                 if debug 
+                if debug 
                     fprintf('  maxIJ/mu=%4.2f < 1     varmax/lambda=%4.2f < 1 var-varold=%4.2f continue=%d  count=%d\n',maxIJ/param.mu,maxvar/param.lambda,norm(maxvar-maxvarold),cont && count< param.niterPS,count);
 %                     keyboard;
-%                 end
+                end
             else
                 if  maxIJ<param.mu*(1+param.epsStop)
                     cont=false;

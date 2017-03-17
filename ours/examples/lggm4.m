@@ -49,7 +49,7 @@ param.cardfun(k)=1;
 % param.lambda=aa; %lamda ~ 2/k*mu
 % param.mu=0.3;
 
-aa=0.0005;
+aa=0.3;
 param.lambda=aa; %lamda ~ 2/k*mu
 param.mu=0.2;
 

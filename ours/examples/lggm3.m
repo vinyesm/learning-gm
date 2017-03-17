@@ -46,7 +46,7 @@ param.cardfun(5)=1;
 % param.mu=0.1;
 % param.lambda=0.01;
 param.mu=.1;
-param.lambda=0.01;
+param.lambda=0.05;
 
 % param.cardfun=(1:(p)).^.2;
 %[Aso,Mso,Sso,Eso,Mso_as,out] = sparse_omega_lgm( inputData, param);

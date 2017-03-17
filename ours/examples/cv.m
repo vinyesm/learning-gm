@@ -14,8 +14,8 @@ addpath('../TPower_1.0/algorithms/TPower/');
 addpath('../TPower_1.0/misc/');
 
 %% data
-% run('../../toy-data/three_blocks_same_size.m');
-run('../../toy-data/three_large_blocks_same_size.m');
+% run('../../toy-data/three_blocks_same_size.m');k=5;
+run('../../toy-data/three_large_blocks_same_size.m');k=10;
 
 objective= @(S05,Z) .5*norm(S05*Z*S05+eye(size(Z,1)),'fro')^2;
 
@@ -31,8 +31,8 @@ objective= @(S05,Z) .5*norm(S05*Z*S05+eye(size(Z,1)),'fro')^2;
 %%
 % lambda < k*mus
 jcut=inf;
-%las=10.^linspace(0,-3,8);%0,-4,4
 las=10.^linspace(0,-3,4);%0,-4,4
+% las=10.^linspace(0,-3,4);%0,-4,4
 pair=[];
 count=1;
 for i=1:length(las)
@@ -77,7 +77,7 @@ parfor j=1:partitions.NumTestSets
     end
 end
 
-save('cv01midf2', 'p', 'k', 'inputData','X', 'pair', 'partitions','Dfin1', 'Dfin2', 'cv1cell' ,'cv2cell');
+save('cv01midf2', 'k','X',  'pair', 'partitions','Dfin1', 'Dfin2', 'cv1cell' ,'cv2cell');
 
 cv1=zeros(partitions.NumTestSets,length(pair));
 cv2=zeros(partitions.NumTestSets,length(pair));
@@ -216,6 +216,6 @@ imagesc(abs(Dfin2));
 pbaspect([1 1 1]);
 
 
-
-% save('cv01', 'p', 'k', 'inputData','X', 'pair', 'p1', 'p2', 'Dfin1', 'Dfin2', 'cv1','cv2', 'cv1grid','cv2grid', 'Dfin1', 'Dfin2');
+%%
+%save('cv01', 'p', 'k', 'inputData','X', 'pair', 'p1', 'p2', 'Dfin1', 'Dfin2', 'cv1','cv2', 'cv1grid','cv2grid', 'Dfin1', 'Dfin2');
 % save('cv_large_blocks_01', 'pair', 'p1', 'p2', 'Dfin1', 'Dfin2', 'cv1','cv2', 'cv1grid','cv2grid', 'Dfin1', 'Dfin2');

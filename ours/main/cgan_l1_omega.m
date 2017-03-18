@@ -75,7 +75,7 @@ while c
     
     if 1 %~isempty(ActiveSet.I) % now we already have all the Eij+Eji atoms
         if param.verbose==1
-            fprintf('    solving PS..\n ')
+            fprintf('   solving PS..\n ')
         end
         
         [Z, Z1, Z2,U,Hall,fall,cardVal, ActiveSet, hist_ps] = solve_ps_l1_omega_asqp(Z,Z1,Z2, ActiveSet,param,inputData,atoms_l1_sym,U,Hall,fall,cardVal);
@@ -118,7 +118,7 @@ while c
     
     %% verbose
     if param.verbose==1
-        fprintf('lambda=%f  mu=%f\n', param.lambda, param.mu)
+        fprintf('   lambda=%f  mu=%f\n', param.lambda, param.mu)
         fprintf('   currI = ')
         for j=1:length(currI)
             fprintf('%d ',currI(j));
@@ -126,18 +126,19 @@ while c
         fprintf('\n');
         
         if(isempty(currI))
-            fprintf('currI is empty\n');
+            fprintf('   currI is empty\n');
         end
     end
     %%
-    maxIJ=max(abs(H(:)));
+    %maxIJ=max(abs(H(:)));
+    maxIJ = dual_l1_spca(H);
     if(isempty(currI))
         varIJ=-1;
         takenI=true;
     else
 %         varIJ = norm(H(currI,currI));
 %         varIJ = abs(eigs(H(currI,currI),1,'lm'));
-        fprintf ('TO CHECK: changing stopping criterion to operator norm on currI instead of Frobenius\n')
+        %fprintf ('TO CHECK: changing stopping criterion to operator norm on currI instead of Frobenius\n')
         varIJ=val;
         takenI= isInCell(currI,ActiveSet.I,cell2mat(ActiveSet.k)) ;
     end
@@ -147,16 +148,16 @@ while c
     
     if param.verbose==1
         fprintf('   maxIJ = %2.4e, thresh = %2.4e\n',maxIJ, param.mu*(1+param.epsStop));
-        fprintf('   variance = %2.4e, thresh = %2.4e, length(currI)=%d\n',varIJ, param.lambda*(1+param.epsStop / kBest)* param.cardfun(kBest), length(currI))
+        fprintf('   varIJ = %2.4e, thresh = %2.4e, length(currI)=%d\n',varIJ, param.lambda*(1+param.epsStop / kBest)* param.cardfun(kBest), length(currI))
     end
     
     
-    if varIJ < param.lambda*(1+param.epsStop / kBest)* param.cardfun(kBest)
+    if varIJ < param.lambda*(1+param.epsStop) && maxIJ < param.mu*(1+param.epsStop)
         c=0;
     elseif takenI
         fprintf('This support has already been added. Stopping\n');
-        c=0;
-    elseif varIJ > param.lambda*(1+param.epsStop / kBest)* param.cardfun(kBest)
+        %c=0;
+    elseif varIJ > param.lambda*(1+param.epsStop)
         ActiveSet.I = [ActiveSet.I, currI];
         %ActiveSet.U = [ActiveSet.U, u(currI)];
         ActiveSet.Sigma = [ActiveSet.Sigma, varIJ];

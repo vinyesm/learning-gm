@@ -1,4 +1,4 @@
-function [Dfin,Z] =f2(S,lambda,mu)
+function [Dfin,Z,Z1,ActiveSet] =f2(S,lambda,mu)
     p=size(S,1);
     param.f=4;
     param.diag=0;

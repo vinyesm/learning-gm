@@ -172,16 +172,11 @@ while cont
             i=i+1;
             %% Verify sttopping criterion
             H = gradient(Z,inputData,param);
-            maxIJ=max(abs(H(:)));
-            [new_row, new_col] = find(abs(H) == maxIJ);
-            new_row=new_row(1);
-            new_col=new_col(1);
-            if new_row ~= new_col
-                maxIJ=.5*maxIJ;
-            end
+            [maxIJ,new_row, new_col] = dual_l1_spca(H);
             if ~isempty(ActiveSet.I)
                 maxvarold=maxvar;
-                [maxvar, kmaxvar]=max_var(Z,ActiveSet,param,inputData );
+                [maxvar]=dual_om_k_spca(H,ActiveSet);
+%                 [new_i,new_val,maxvar]=get_new_atom_spca(H,ActiveSet,param);
                 if debug && norm(maxvar-maxvarold)<1e-10
                     fprintf('maxvar not changing\n');
 %                     keyboard;
@@ -231,7 +226,7 @@ while cont
 %             StartY=inputData.Y;
 %             inputData.Y=StartY-inputData.X1*Z1*inputData.X2;
 %             H = gradient(Z2,inputData,param);
-            [new_i, new_val, maxval_om0]=get_new_atom_spca(H,ActiveSet,param,inputData);
+            [new_i, new_val, maxval_om0]=get_new_atom_spca(H,ActiveSet,param);
 %             inputData.Y=StartY;
             if maxval_om0<param.lambda*(1+param.epsStop)
                 maxval_om=-inf;
@@ -244,25 +239,9 @@ while cont
         
         %% l1 sym atom
         
-        
-        maxval_l1=max(abs(H(:)));
-        [new_row, new_col] = find(abs(H) == maxval_l1);
-        new_row=new_row(1);
-        new_col=new_col(1);
-        if new_row ~= new_col
-            maxval_l1=.5*maxval_l1;
-        end
+        [maxval_l1,new_row, new_col] = dual_l1_spca(H);
         
         if maxval_l1>param.mu*(1+param.epsStop)
-%             StartY=inputData.Y;
-%             inputData.Y=StartY-inputData.X1*Z2*inputData.X2;
-%             H = gradient(Z1,inputData,param);
-%             [maxval_l1]=max(abs(H(:)));
-%             %         [maxval_l1]=max((-H(:)));
-%             inputData.Y=StartY;
-%             [new_row, new_col] = find(abs(H) == maxval_l1);
-%             new_row=new_row(1);
-%             new_col=new_col(1);
             sa=-sign(maxval_l1*H(new_row,new_col));
             i1=(new_row-1)*p+new_col;
             i2=(new_col-1)*p+new_row;
@@ -272,15 +251,13 @@ while cont
         end
         
         %%
+
         if debug
             fprintf('  maxval_l1=%f < %f     maxval_om=%f < %f\n',maxval_l1,param.mu,maxval_om,param.lambda);
             fprintf('maxval_l1/mu = %f maxval_om/lambda = %f\n',maxval_l1/param.mu,maxval_om/param.lambda);
-%             if maxval_om/param.lambda~=-inf && maxval_om/param.lambda<0
-%                 keyboard
-%             end
         end
+
         if maxval_l1==-inf && maxval_om==-inf
-%             keyboard;
             fprintf('\n maxval_l1 maxval_om are -inf\n');
             keyboard;
             break
@@ -335,8 +312,7 @@ while cont
                     imagesc(Hall_new);
                     pbaspect([1 1 1]);
                     error('the update is not correct\n');
-                end
-                
+                end    
             else
                 [Hall_new,fall_new] = update_Hessian_l1_sym(S,param,Hall, fall,atoms_l1_sym(:,ActiveSet.I_l1),aom,2);
             end
@@ -353,7 +329,6 @@ while cont
                 ActiveSet.atoms(:,ActiveSet.atom_count)=anew;
                 Hall=Hall_new;
                 fall=fall_new;
-                %U=U_new;
                 weight=1;
                 cardVal=[cardVal;weight];
                 new_atom_added=true;
@@ -363,7 +338,6 @@ while cont
             %adding l1 atom
             if maxval_l1<param.mu
                 fprintf('\n not good atom l1 \n');
-                %                 keyboard;
             end
             if debug
                 fprintf('\n adding l1 atom row=%d col=%d\n', new_row, new_col);
@@ -371,7 +345,6 @@ while cont
             if sum(ActiveSet.I_l1==idx_l1)
                 new_atom_added=false;
                 fprintf('\n this atom is already in the collection\n');
-%                 keyboard;
             else
                 ActiveSet.I_l1=[ActiveSet.I_l1 idx_l1]; %to avoid adding same atom
                 if ActiveSet.atom_count>0
@@ -405,7 +378,6 @@ while cont
                 if g(idx)>0
                     fprintf('\n Not a descent direction when adding l1 atom d=%f\n',g(idx));
                     ActiveSet.I_l1(end)=[];
-                    %                     keyboard;
                     break;
                 else
                     new_atom_added=true;

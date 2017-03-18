@@ -14,12 +14,12 @@ addpath('../TPower_1.0/algorithms/TPower/');
 addpath('../TPower_1.0/misc/');
 
 %% data
-run('../../toy-data/three_blocks_same_size.m');k=5;rank=3;
+run('../../toy-data/three_blocks_same_size.m');k=5;rank=3;p=size(X,1);Z0=eye(p);
 % run('../../toy-data/three_large_blocks_same_size.m');k=10; rank=5;
 
 objective = @(S05,Z) .5*norm(S05*Z*S05+eye(size(Z,1)),'fro')^2;
 rankdiff = @(ActiveSet) (rank-size(ActiveSet.atoms,2));
-sparsesign = @(Z,Z0) (sum(sign(Z(:))==sign(Z0(:))));
+suppdiff = @(Z,Z0) (sum(sign(Z(:))==sign(Z0(:))));
 
 %% our norm psd with decomposition S-M sparse_omega_lgm
 
@@ -60,8 +60,10 @@ parfor j=1:partitions.NumTestSets
     Stest=cov(Xtest');
     for jj=1:length(pair)
         %% blocks
-        [Dfin1{j}{jj},Z1] = f1(Strain,pair(jj).lambda,pair(jj).mu,k);
-        cv1cell{j}{jj} = objective(Stest^.5,Z1);        
+        [Dfin1{j}{jj},Z1,Z11,ActiveSet] = f1(Strain,pair(jj).lambda,pair(jj).mu,k);
+        cv1cell{j}{jj} = objective(Stest^.5,Z1); 
+        cv1cell_supp{j}{jj} = suppdiff(-Z11,Z0);
+        cv1cell_rank{j}{jj} = rankdiff(ActiveSet);
     end
 end
 
@@ -74,9 +76,10 @@ parfor j=1:partitions.NumTestSets
     Strain=cov(Xtrain');
     Stest=cov(Xtest');
     for jj=1:length(pair)
-        [Dfin2{j}{jj},Z2] = f2(Strain,pair(jj).lambda,pair(jj).mu);
+        [Dfin2{j}{jj},Z2,Z21,ActiveSet] = f2(Strain,pair(jj).lambda,pair(jj).mu);
         cv2cell{j}{jj} = objective(Stest^.5,Z2);
-        cv2cell_support{j}{jj} = objective(Stest^.5,Z2);
+        cv2cell_supp{j}{jj} = suppdiff(-Z21,Z0);
+        cv2cell_rank{j}{jj} = rankdiff(ActiveSet);
     end
 end
 
@@ -84,10 +87,18 @@ save('cv01midf2', 'k','X',  'pair', 'partitions','Dfin1', 'Dfin2', 'cv1cell' ,'c
 
 cv1=zeros(partitions.NumTestSets,length(pair));
 cv2=zeros(partitions.NumTestSets,length(pair));
+cv1_supp=zeros(partitions.NumTestSets,length(pair));
+cv2_supp=zeros(partitions.NumTestSets,length(pair));
+cv1_rank=zeros(partitions.NumTestSets,length(pair));
+cv2_rank=zeros(partitions.NumTestSets,length(pair));
 for j=1:partitions.NumTestSets
     for jj=1:length(pair)
         cv1(j,jj)=cv1cell{j}{jj};
         cv2(j,jj)=cv2cell{j}{jj};
+        cv1_supp(j,jj)=cv1cell_supp{j}{jj};
+        cv2_supp(j,jj)=cv2cell_supp{j}{jj};
+        cv1_rank(j,jj)=cv1cell_rank{j}{jj};
+        cv2_rank(j,jj)=cv2cell_rank{j}{jj};
     end
 end
 %%
@@ -146,7 +157,7 @@ end
 % lambda: 3.7276e-04
 % mu: 0.0720
 
-%p1=24;
+p1=21;
 %k=5;
 lambda=pair(p1).lambda;
 mu=pair(p1).mu;

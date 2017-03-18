@@ -1,4 +1,4 @@
-function [new_i,new_val,maxval]=get_new_atom_spca(H,ActiveSet,param,inputData )
+function [new_i,new_val,maxval]=get_new_atom_spca(H,ActiveSet,param )
 
 %
 % H = gradient(Z,inputData,param);

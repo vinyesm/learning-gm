@@ -18,7 +18,7 @@ run('../../toy-data/three_blocks_same_size.m');k=5;rank=3;p=size(X,1);Z0=eye(p);
 % run('../../toy-data/three_large_blocks_same_size.m');k=10; rank=5;
 
 objective = @(S05,Z) .5*norm(S05*Z*S05+eye(size(Z,1)),'fro')^2;
-rankdiff = @(ActiveSet) (rank-size(ActiveSet.atoms,2));
+rankdiff = @(ActiveSet) abs((rank-size(ActiveSet.atoms,2)));
 suppdiff = @(Z,Z0) (sum(sign(Z(:))==sign(Z0(:))));
 
 %% our norm psd with decomposition S-M sparse_omega_lgm
@@ -85,47 +85,52 @@ end
 
 save('cv01midf2', 'k','X',  'pair', 'partitions','Dfin1', 'Dfin2', 'cv1cell' ,'cv2cell');
 
-cv1=zeros(partitions.NumTestSets,length(pair));
-cv2=zeros(partitions.NumTestSets,length(pair));
-cv1_supp=zeros(partitions.NumTestSets,length(pair));
-cv2_supp=zeros(partitions.NumTestSets,length(pair));
-cv1_rank=zeros(partitions.NumTestSets,length(pair));
-cv2_rank=zeros(partitions.NumTestSets,length(pair));
-for j=1:partitions.NumTestSets
-    for jj=1:length(pair)
-        cv1(j,jj)=cv1cell{j}{jj};
-        cv2(j,jj)=cv2cell{j}{jj};
-        cv1_supp(j,jj)=cv1cell_supp{j}{jj};
-        cv2_supp(j,jj)=cv2cell_supp{j}{jj};
-        cv1_rank(j,jj)=cv1cell_rank{j}{jj};
-        cv2_rank(j,jj)=cv2cell_rank{j}{jj};
-    end
-end
-%%
-mcv1=mean(cv1);
-mcv2=mean(cv2);
-cv1grid=inf*ones(length(las));
-cv2grid=inf*ones(length(las));
-count=1;
-mincv1=inf;
-mincv2=inf;
-p1=0;
-p2=0;
-for i=1:length(las)
-    for j=max(1,i-jcut):i
-        cv1grid(i,j)=mcv1(count);
-        if mcv1(count)<mincv1
-            mincv1=mcv1(count);
-            p1=count;
-        end
-        cv2grid(i,j)=mcv2(count);
-        if mcv2(count)<mincv2
-            mincv2=mcv2(count);
-            p2=count;
-        end
-        count=count+1;
-    end
-end
+[cv1_obj, p1_obj, mincv1_obj]= cv_out(cv1cell,partitions.NumTestSets,pair,las,jcut);
+[cv2_obj, p2_obj, mincv2_obj]= cv_out(cv2cell,partitions.NumTestSets,pair,las,jcut);
+[cv1_supp, p1_supp, mincv1_supp]= cv_out(cv1cell_supp,partitions.NumTestSets,pair,las,jcut);
+[cv2_supp, p2_supp, mincv2_supp]= cv_out(cv2cell_supp,partitions.NumTestSets,pair,las,jcut);
+[cv1_rank, p1_rank, mincv1_rank]= cv_out(cv1cell_rank,partitions.NumTestSets,pair,las,jcut);
+[cv2_rank, p2_rank, mincv2_rank]= cv_out(cv2cell,partitions.NumTestSets,pair,las,jcut);
+% cv2=zeros(partitions.NumTestSets,length(pair));
+% cv1_supp=zeros(partitions.NumTestSets,length(pair));
+% cv2_supp=zeros(partitions.NumTestSets,length(pair));
+% cv1_rank=zeros(partitions.NumTestSets,length(pair));
+% cv2_rank=zeros(partitions.NumTestSets,length(pair));
+% for j=1:partitions.NumTestSets
+%     for jj=1:length(pair)
+%         cv1(j,jj)=cv1cell{j}{jj};
+%         cv2(j,jj)=cv2cell{j}{jj};
+%         cv1_supp(j,jj)=cv1cell_supp{j}{jj};
+%         cv2_supp(j,jj)=cv2cell_supp{j}{jj};
+%         cv1_rank(j,jj)=cv1cell_rank{j}{jj};
+%         cv2_rank(j,jj)=cv2cell_rank{j}{jj};
+%     end
+% end
+% %%
+% mcv1=mean(cv1);
+% mcv2=mean(cv2);
+% cv1grid=inf*ones(length(las));
+% cv2grid=inf*ones(length(las));
+% count=1;
+% mincv1=inf;
+% mincv2=inf;
+% p1=0;
+% p2=0;
+% for i=1:length(las)
+%     for j=max(1,i-jcut):i
+%         cv1grid(i,j)=mcv1(count);
+%         if mcv1(count)<mincv1
+%             mincv1=mcv1(count);
+%             p1=count;
+%         end
+%         cv2grid(i,j)=mcv2(count);
+%         if mcv2(count)<mincv2
+%             mincv2=mcv2(count);
+%             p2=count;
+%         end
+%         count=count+1;
+%     end
+% end
 
 
 % figure(1);clf;
@@ -139,6 +144,8 @@ end
 %     end
 % end
 %%
+p1=p1_rank;
+p2=p2_rank;
 
 figure(1);clf;
 for j=1:partitions.NumTestSets

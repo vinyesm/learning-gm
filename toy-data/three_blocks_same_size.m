@@ -5,12 +5,14 @@ clear all; clc; close all;
 %% settings
 
 n=1000; % number of samples
+k=5;
 
 pl=3; % number of latept variables
 po=15;% number of observed variables
 pt=po+pl;
 sigma2l=.8;
 sigma2lo=.5;
+scale=1/sqrt(5);
 
 % slo=.2; % level of sparsity on latent-observed block of conceptration mat
 % soo=.2; % level of sparsity on latent-observed block of conceptration mat
@@ -19,8 +21,8 @@ Dol=zeros(po,pl);
 Dol(1:5,1)=ones(5,1);
 Dol(6:10,2)=ones(5,1);
 Dol(11:15,3)=ones(5,1);
-Dol=-Dol/sigma2lo;
-Dll=eye(pl)*(1/sigma2l+5/sigma2lo);
+Dol=-Dol*scale/sigma2lo;
+Dll=eye(pl)*(1/sigma2l+5*scale^2/sigma2lo);
 
 %% construction of the conceptration matrix
 Dfull=zeros(pt);

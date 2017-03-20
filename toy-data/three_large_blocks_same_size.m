@@ -15,6 +15,7 @@ po=k*B;% number of observed variables
 pt=po+pl;
 sigma2l=.8;
 sigma2lo=.5;
+scale=1/sqrt(k);
 
 % slo=.2; % level of sparsity on latent-observed block of conceptration mat
 % soo=.2; % level of sparsity on latent-observed block of conceptration mat
@@ -25,8 +26,8 @@ for i=1:B
     i2=i1+k-1;
     Dol(i1:i2,i)=ones(k,1);
 end
-Dol=-Dol/sigma2lo;
-Dll=eye(pl)*(1/sigma2l+k/sigma2lo);
+Dol=-Dol*scale/sigma2lo;
+Dll=eye(pl)*(1/sigma2l+k*scale^2/sigma2lo);
 
 %% construction of the conceptration matrix
 Dfull=zeros(pt);

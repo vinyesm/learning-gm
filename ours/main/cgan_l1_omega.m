@@ -166,7 +166,7 @@ while c
         ActiveSet.k = [ActiveSet.k , kBest];
         ActiveSet.fronorm = [ ActiveSet.fronorm , 0];
     else
-        c = 0;
+        %c = 0;
     end
     c = i<max_nb_main_loop & c;
 end

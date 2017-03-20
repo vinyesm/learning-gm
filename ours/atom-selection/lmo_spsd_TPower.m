@@ -32,11 +32,11 @@ for k=1:size(B,1)
         end
     end
 end
-
+% keyboard;
 if emin<0
-    lambdaBest=lambdaBest+2*emin;   
+    lambdaBest=lambdaBest*cfBest+2*emin;   
 end
-lambdaBest=lambdaBest*cfBest;
+lambdaBest=lambdaBest/cfBest;
 
 if lambdaBest<0
     fprintf('in lmo_spca no descent direction\n');

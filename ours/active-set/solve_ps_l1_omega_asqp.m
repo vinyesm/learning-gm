@@ -175,7 +175,7 @@ while cont
             [maxIJ,new_row, new_col] = dual_l1_spca(H);
             if ~isempty(ActiveSet.I)
                 maxvarold=maxvar;
-                [maxvar]=dual_om_k_spca(H,ActiveSet);
+                [maxvar]=dual_om_k_spca(H,ActiveSet,param);
 %                 [new_i,new_val,maxvar]=get_new_atom_spca(H,ActiveSet,param);
                 if debug && norm(maxvar-maxvarold)<1e-10
                     fprintf('maxvar not changing\n');

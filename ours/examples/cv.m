@@ -15,7 +15,7 @@ addpath('../TPower_1.0/misc/');
 
 %% data
 run('../../toy-data/three_blocks_same_size.m');k=5;rank=3;p=size(X,1);Z0=eye(p);
-% run('../../toy-data/three_large_blocks_same_size.m');k=10; rank=5;
+% run('../../toy-data/three_large_blocks_same_size.m');k=10; rank=5;p=size(X,1);Z0=eye(p);
 
 objective = @(S05,Z) .5*norm(S05*Z*S05+eye(size(Z,1)),'fro')^2;
 rankdiff = @(ActiveSet) abs((rank-size(ActiveSet.atoms,2)));

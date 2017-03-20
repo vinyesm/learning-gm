@@ -1,32 +1,41 @@
 % Toy example
-% with three blocks of size 5
+% with three blocks of size resp 20,10,5
 
 clear all; clc; close all;
 %% settings
 
-n=500; % number of samples
+n=5000; % number of samples
 
-k=10;  %size of the block
-B=5;   %nb of blocks
+ks(1)=20;  %size of the block 1
+ks(2)=10;  %size of the block 1
+ks(3)=5;  %size of the block 1
 
-pl=B; % number of latept variables
-po=k*B;% number of observed variables
+
+pl=3; % number of latent variables
+po=sum(ks);% number of observed variables
 
 pt=po+pl;
 sigma2l=.8;
-sigma2lo=.5;
+sigma2lo=.4;
+scale=1./sqrt(ks);
 
 % slo=.2; % level of sparsity on latent-observed block of conceptration mat
 % soo=.2; % level of sparsity on latent-observed block of conceptration mat
 Doo=eye(po)/sigma2lo;
 Dol=zeros(po,pl);
-for i=1:B
-    i1=k*(i-1)+1;
-    i2=i1+k-1;
-    Dol(i1:i2,i)=ones(k,1);
+for i=1:pl
+    if i>1
+        i1=sum(ks(1:(i-1)))+1;
+    else
+        i1=1;
+    end
+    i2=i1+ks(i)-1;
+    Dol(i1:i2,i)=-ones(ks(i),1)*scale(i)/sigma2lo;
 end
-Dol=-Dol/sigma2lo;
-Dll=eye(pl)*(1/sigma2l+k/sigma2lo);
+Dll=zeros(pl);
+for i=1:pl
+Dll(i,i)=1/sigma2l+ks(i)*scale(i)^2/sigma2lo;
+end
 
 %% construction of the conceptration matrix
 Dfull=zeros(pt);

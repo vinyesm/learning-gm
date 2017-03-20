@@ -43,13 +43,13 @@ inputData.Y=-eye(po);
 % param.cardfun=inf*ones(1,p);
 % param.cardfun(k)=1;
 % param.cardfun(p)=1;
-beta=0.3;
+beta=0.2;
 param.cardfun=((1:p).^beta)./(p^beta);
 param.cardfun(1)=inf;
 
-aa=0.3;
+aa=0.01;
 param.lambda=aa; %lamda ~ 2/k*mu
-param.mu=0.3;
+param.mu=0.1;
 
 
 %% blocks

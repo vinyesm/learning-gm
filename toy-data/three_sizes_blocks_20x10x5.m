@@ -4,7 +4,7 @@
 clear all; clc; close all;
 %% settings
 
-n=5000; % number of samples
+n=500; % number of samples
 
 ks(1)=20;  %size of the block 1
 ks(2)=10;  %size of the block 1

@@ -47,8 +47,8 @@ beta=0.2;
 param.cardfun=((1:p).^beta)./(p^beta);
 param.cardfun(1)=inf;
 
-aa=0.01;
-param.lambda=aa; %lamda ~ 2/k*mu
+
+param.lambda=0.15; %lamda ~ 2/k*mu
 param.mu=0.1;
 
 

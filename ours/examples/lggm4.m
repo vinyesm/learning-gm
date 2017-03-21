@@ -45,7 +45,7 @@ inputData.Y=-eye(po);
 % param.cardfun(p)=1;
 beta=0.3;
 param.cardfun=((1:p).^beta)./(p^beta);
-param.cardfun(1)=inf;
+% param.cardfun(1)=inf;
 
 %choice s.t. mu*k^=lambda
 % aa=0.1;

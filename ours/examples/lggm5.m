@@ -43,7 +43,7 @@ inputData.Y=-eye(po);
 % param.cardfun=inf*ones(1,p);
 % param.cardfun(k)=1;
 % param.cardfun(p)=1;
-beta=0.2;
+beta=0.3;
 param.cardfun=((1:p).^beta)./(p^beta);
 param.cardfun(1)=inf;
 

@@ -1,6 +1,6 @@
 function [ Z,Z1,Z2,U,Hall,fall,cardVal, ActiveSet, hist] = solve_ps_l1_omega_asqp( Z,Z1,Z2,ActiveSet,param,inputData,atoms_l1_sym,U,Hall,fall,cardVal)
 %Using Active Set to solve (PS) problem
-
+MAX_NB_ATOMS=100;
 debug_update=0;
 debug=0;
 compute_dg=0;
@@ -72,6 +72,12 @@ while cont
         %rcond(Hall+1e-10*eye(length(fall)))
         if debug
             obj0=.5*alpha0'*Hall*alpha0+fall'*alpha0;
+        end
+        fprintf('    nb l1 atoms=%d    nb om atoms=%d\n',length(ActiveSet.I_l1),ActiveSet.atom_count);
+        if ActiveSet.atom_count>MAX_NB_ATOMS
+            fprintf('    nb l1 atoms=%d    nb om atoms=%d\n',length(ActiveSet.I_l1),ActiveSet.atom_count);
+            fprintf('    max nb om atoms %d reached \n',MAX_NB_ATOMS);
+            break;
         end
         [alph,Jset,npiv]=asqp2(Hall+0*1e-12*eye(length(fall)),-fall,alpha0,param_as,new_atom_added,idx_added);
 %         [alph,Jset,npiv]=asqp3(Hall+0*1e-12*eye(length(fall)),-fall,alpha0,param_as,new_atom_added,idx_added);
@@ -175,8 +181,8 @@ while cont
             [maxIJ,new_row, new_col] = dual_l1_spca(H);
             if ~isempty(ActiveSet.I)
                 maxvarold=maxvar;
-                [maxvar]=dual_om_k_spca(H,ActiveSet,param);
-%                 [new_i,new_val,maxvar]=get_new_atom_spca(H,ActiveSet,param);
+%                 [maxvar]=dual_om_k_spca(H,ActiveSet,param);
+                [new_i,new_val,maxvar]=get_new_atom_spca(H,ActiveSet,param);
                 if debug && norm(maxvar-maxvarold)<1e-10
                     fprintf('maxvar not changing\n');
 %                     keyboard;

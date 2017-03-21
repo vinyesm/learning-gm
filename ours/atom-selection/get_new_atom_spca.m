@@ -12,11 +12,12 @@ for i=1:length(ActiveSet.I)
     cf=param.cardfun(length(S));
     Hs=H(S,S);
     Hs=0.5*(Hs+Hs');
-    [v,d]=eigs(-Hs,1,'la');
-    if isnan(d)
-        fprintf('in get_new_atom_spca : nan\n');
-        d=-v'*Hs*v;
+    [v,d,flag]=eigs(-Hs,1,'la');
+    if flag
+        fprintf('in get_new_atom_spca eigs has not converged.\n');
+%         d=-v'*Hs*v;
 %         keyboard;
+        d=-1;  
     end
     v=real(v);
     d=real(d);
@@ -31,7 +32,7 @@ end
 % fprintf('\n%f',maxval);
 if maxval<=0
     fprintf('in get_new_atom_spca : Largest eigenvalue is negative or zero\n');
-    keyboard
+%     keyboard
 end
 
 if isempty(new_i)

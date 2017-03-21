@@ -37,7 +37,7 @@ end
 
 if isempty(new_i)
     fprintf('in get_new_atom_spca : new_i is empty\n');
-    keyboard
+%     keyboard
 end
 
 

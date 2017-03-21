@@ -265,7 +265,7 @@ while cont
 
         if maxval_l1==-inf && maxval_om==-inf
             fprintf('\n maxval_l1 maxval_om are -inf\n');
-            keyboard;
+%             keyboard;
             break
         end
         

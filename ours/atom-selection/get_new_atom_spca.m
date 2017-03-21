@@ -16,7 +16,7 @@ for i=1:length(ActiveSet.I)
     if flag
         fprintf('in get_new_atom_spca eigs has not converged.\n');
 %         d=-v'*Hs*v;
-        keyboard;
+%         keyboard;
         d=-1;  
     end
     v=real(v);

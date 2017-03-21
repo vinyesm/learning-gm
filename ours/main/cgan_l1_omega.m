@@ -101,6 +101,7 @@ while c
     %% get a new descent direction using truncated power iteration
     
     H = gradient(Z,inputData,param);
+%     keyboard;
     
     if param.verbose==1
         fprintf('%d/%d   \n',i,max_nb_main_loop);
@@ -109,6 +110,7 @@ while c
     [u, kBest,val] = lmo_spsd_TPower(-H,param);
     if val<0
         currI=[];
+        fprintf('   all eigs are negative\n')
 %         keyboard;
     else
         param.k=kBest;

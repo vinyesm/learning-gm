@@ -28,7 +28,7 @@ param.PSD=true;
 param.max_nb_main_loop=100;%2;%1000
 param.powerIter=500;
 param.stPtPowerIter=1000;
-param.niterPS=5000;%10000;%5000
+param.niterPS=10000;%10000;%5000
 param.epsStop=1e-8;
 param.PSdualityEpsilon=1e-8;
 param.k=0;
@@ -48,7 +48,7 @@ param.cardfun=((1:p).^beta)./(p^beta);
 param.cardfun(1)=inf;
 
 
-param.lambda=0.15; %lamda ~ 2/k*mu
+param.lambda=0.5; %lamda ~ 2/k*mu
 param.mu=0.1;
 
 
@@ -56,8 +56,10 @@ param.mu=0.1;
 [Z Z1 Z2 ActiveSet hist param flag output] = cgan_l1_omega(inputData,param);
 
 %% tr+l1
+param.lambda=0.15; %lamda ~ 2/k*mu
+param.mu=0.1;
 param.max_nb_main_loop=2;
-param.niterPS=1;%5000;
+param.niterPS=5000;
 param.cardfun=inf*ones(1,p);
 param.cardfun(p)=1;
 [Z_tr Z1_tr Z2_tr ActiveSet_tr hist_tr param_tr flag_tr output_tr] = cgan_l1_omega(inputData,param);

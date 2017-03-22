@@ -52,9 +52,9 @@ param.cardfun(k)=1;
 % param.lambda=aa; %lamda ~ 2/k*mu
 % param.mu=0.3;
 
-
-param.lambda=.001; %lamda ~ 2/k*mu
-param.mu=.01;
+c=.1;
+param.lambda=.6*c; %lamda ~ 2/k*mu
+param.mu=.2*c;
 
 
 %% blocks

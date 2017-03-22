@@ -4,7 +4,7 @@
 clear all; clc; close all;
 %% settings
 
-n=5000; % number of samples
+n=10000; % number of samples
 
 ks=[10 10];
 

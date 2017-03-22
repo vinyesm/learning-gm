@@ -18,7 +18,7 @@ addpath('../TPower_1.0/algorithms/TPower/');
 addpath('../TPower_1.0/misc/');
 
 %% data
-run('../../toy-data/toy01.m');
+run('../../toy-data/toy02.m');k=10;
 
 %% our norm psd with decomposition S-M sparse_omega_lgm
 p=po;
@@ -40,11 +40,11 @@ param.max_nb_atoms=param.max_nb_main_loop*param.niterPS;
 inputData.X1=S^.5;
 inputData.X2=S^.5;
 inputData.Y=-eye(po);
-% param.cardfun=inf*ones(1,p);
-% param.cardfun(k)=1;
+param.cardfun=inf*ones(1,p);
+param.cardfun(k)=1;
 % param.cardfun(p)=1;
-beta=0.3;
-param.cardfun=((1:p).^beta)./(p^beta);
+% beta=0.3;
+% param.cardfun=((1:p).^beta)./(p^beta);
 % param.cardfun(1)=inf;
 
 %choice s.t. mu*k^=lambda
@@ -53,7 +53,7 @@ param.cardfun=((1:p).^beta)./(p^beta);
 % param.mu=0.3;
 
 
-param.lambda=.05; %lamda ~ 2/k*mu
+param.lambda=.001; %lamda ~ 2/k*mu
 param.mu=.01;
 
 
@@ -61,8 +61,8 @@ param.mu=.01;
 [Z Z1 Z2 ActiveSet hist param flag output] = cgan_l1_omega(inputData,param);
 
 %% tr+l1
-param.lambda=0.0001; %lamda ~ 2/k*mu
-param.mu=0.1;
+param.lambda=10; %lamda ~ 2/k*mu
+param.mu=0.01;
 param.max_nb_main_loop=2;
 param.niterPS=1;%10000;
 param.cardfun=inf*ones(1,p);

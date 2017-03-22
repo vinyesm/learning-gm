@@ -4,7 +4,7 @@
 clear all; clc; close all;
 %% settings
 
-n=1000; % number of samples
+n=5000; % number of samples
 
 ks=[10 10];
 
@@ -13,21 +13,16 @@ pl=length(ks); % number of latent variables
 po=sum(ks);% number of observed variables
 
 pt=po+pl;
-sigma2l=1;
-sigma2lo=1;
-scale=ones(pl,1);
-% scale=1./sqrt(ks);
+sigma2l=.8;
+sigma2lo=.4;
+scale=1./sqrt(ks);
 
-%%
-% ks=[3 3];
-% po=6;
-% pl=2;
-Uall=zeros(po+pl);
-e=[1 .5];
-Uo=conv2(eye(po),e,'same');
-%Uo(1,[1 po])=e;
-Uall(1:pl,1:pl)=eye(pl);
-Uall(pl+1:end,:)=[zeros(size(Uo,1),pl) Uo];
+% slo=.2; % level of sparsity on latent-observed block of conceptration mat
+% soo=.2; % level of sparsity on latent-observed block of conceptration mat
+%Doo=eye(po)/sigma2lo;
+dd=diag(ones(1,po-1),1);
+Doo=eye(po)/sigma2lo+.5*(dd+dd');
+Dol=zeros(po,pl);
 for i=1:pl
     if i>1
         i1=sum(ks(1:(i-1)))+1;
@@ -35,17 +30,21 @@ for i=1:pl
         i1=1;
     end
     i2=i1+ks(i)-1;
-    Uall((pl+i1):(pl+i2),i)=-.5*ones(ks(i),1);
+    Dol(i1:i2,i)=-ones(ks(i),1)*scale(i)/sigma2lo;
+end
+Dll=zeros(pl);
+for i=1:pl
+Dll(i,i)=1/sigma2l+ks(i)*scale(i)^2/sigma2lo;
 end
 
-Dfull=zeros(po+pl);
-for i=1:size(Uall,1)
-    Dfull=Dfull+Uall(i,:)'*Uall(i,:);
-end
-%%
-Doo=Dfull(pl+1:pt,pl+1:pt);
-Dol=Dfull(pl+1:pt,1:pl);
+%% construction of the conceptration matrix
+Dfull=zeros(pt);
+Dfull(1:pl,1:pl)=Dll;
+Dfull((pl+1):pt,(pl+1):pt)=Doo;
+Dfull(1:pl,(pl+1):pt)=Dol';
+Dfull((pl+1):pt,1:pl)=Dol;
 
+Dfull=.5*(Dfull+Dfull');
 Dmargo=Doo-Dol*Dol';
 
 

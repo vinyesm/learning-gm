@@ -4,7 +4,7 @@
 clear all; clc; close all;
 %% settings
 
-n=10000; % number of samples
+n=5000; % number of samples
 
 ks=[15 15];
 
@@ -21,8 +21,8 @@ scale=1./sqrt(ks);
 % slo=.2; % level of sparsity on latent-observed block of conceptration mat
 % soo=.2; % level of sparsity on latent-observed block of conceptration mat
 %Doo=eye(po)/sigma2lo;
-dd=diag(ones(1,po-1),1);
-Doo=eye(po)/sigma2lo-.3*(dd+dd');
+dd=-.3*diag(ones(1,po-1),1)-.1*diag(ones(1,po-2),2);
+Doo=eye(po)/sigma2lo-(dd+dd');
 Dol=zeros(po,pl);
 for i=1:pl
     if i>1

@@ -28,8 +28,8 @@ suppdiff = @(Z,Z0) (sum(sign(Z(:))==sign(Z0(:))));
 %%
 % lambda < k*mus
 c=sqrt(p/n);
-mus= linspace(.01,1,10);
-las=linspace(.01,1,10);
+mus= 10^linspace(-3,1,10);
+las= 10^linspace(-3,1,10);
 pair=[];
 count=1;
 for i=1:length(las)

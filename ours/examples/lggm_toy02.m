@@ -52,13 +52,20 @@ param.cardfun(k)=1;
 % param.lambda=aa; %lamda ~ 2/k*mu
 % param.mu=0.3;
 
+<<<<<<< HEAD
 c=.1;
 param.lambda=.6*c; %lamda ~ 2/k*mu
 param.mu=.2*c;
+=======
+c=sqrt(k/n);
+param.lambda=c; %lamda ~ 2/k*mu
+param.mu=c;
+>>>>>>> 7d12d9a09264db88fcecf80af0796c7d9a857e4c
 
 
 %% blocks
 [Z Z1 Z2 ActiveSet hist param flag output] = cgan_l1_omega(inputData,param);
+obj_l1_om=hist.obj(end);
 
 %% tr+l1
 param.lambda=10; %lamda ~ 2/k*mu
@@ -139,81 +146,83 @@ imagesc(abs(Dfin)>1e-15);
 pbaspect([1 1 1]);
 title('estimated support');
 colorbar
-%%
+% %%
+% 
+% figure(4);clf;
+% subplot(2,2,1);
+% imagesc(abs(Dmargo));
+% pbaspect([1 1 1]);
+% title('true marginal conc. mat.');
+% colorbar
+% subplot(2,2,2);
+% imagesc(abs(Z1+Z2));
+% pbaspect([1 1 1]);
+% title('observed conc. mat.');
+% colorbar
+% subplot(2,2,3)
+% imagesc(abs(Dmargo)>1e-15);
+% pbaspect([1 1 1]);
+% title('true support');
+% colorbar
+% subplot(2,2,4)
+% imagesc(abs(Z1+Z2)>1e-15);
+% pbaspect([1 1 1]);
+% title('estimated support');
+% colorbar
+% 
+% figure(5);clf
+% loglog(hist.time,hist.dg,'-','LineWidth',2,'Color',[1 0 0],'DisplayName','dg');hold on;
+% loglog(hist.time_sup,hist.dg_sup,'-','LineWidth',2,'Color',[0 0 0],'DisplayName','dg sup');hold on;
+% legend('show','Location','southwest');
+% grid on
+% hold off
+% 
+% figure(6);clf;
+% subplot(3,2,1)
+% imagesc(abs(Dfull));
+% pbaspect([1 1 1]);
+% title('true complete conc. mat.');
+% colorbar
+% subplot(3,2,2)
+% imagesc(abs(Dfull)>1e-15);
+% pbaspect([1 1 1]);
+% title('true support');
+% colorbar
+% subplot(3,2,3)
+% imagesc(abs(Dfin));
+% pbaspect([1 1 1]);
+% title('estimated complete conc. mat.');
+% colorbar
+% subplot(3,2,4)
+% imagesc(abs(Dfin)>1e-15);
+% pbaspect([1 1 1]);
+% title('estimated support');
+% colorbar
+% subplot(3,2,5)
+% imagesc(abs(Dfin_tr));
+% pbaspect([1 1 1]);
+% title('estimated complete conc. mat.');
+% colorbar
+% subplot(3,2,6)
+% imagesc(abs(Dfin_tr)>1e-15);
+% pbaspect([1 1 1]);
+% title('estimated support');
+% colorbar
+% 
+% 
+% %% saving
+% % %filename = ['lggm2_' datestr(datetime('now'),'yyyymmddTHHMMSS') '.ps'];
+% % filename = ['lggm4_' datestr(clock) '.ps'];
+% % %print ( '-dpsc2', filename, '-f1' )
+% % print ( '-dpsc2', filename, '-append', '-f1' )
+% % print ( '-dpsc2', filename, '-append', '-f2' )
+% % print ( '-dpsc2', filename, '-append', '-f3' )
+% % print ( '-dpsc2', filename, '-append', '-f4' )
+% % print ( '-dpsc2', filename, '-append', '-f5' )
+% 
+% % % keyboard
+% % save('lggm4_03_16','k','p','n','inputData','Dfull','Dmargo', ...
+% % 'Z', 'Z1', 'Z2', 'ActiveSet', 'hist' ,'param', 'flag' ,'output',...
+% % 'Z_tr', 'Z1_tr', 'Z2_tr', 'ActiveSet_tr', 'hist_tr', 'param_tr', 'flag_tr', 'output_tr');
 
-figure(4);clf;
-subplot(2,2,1);
-imagesc(abs(Dmargo));
-pbaspect([1 1 1]);
-title('true marginal conc. mat.');
-colorbar
-subplot(2,2,2);
-imagesc(abs(Z1+Z2));
-pbaspect([1 1 1]);
-title('observed conc. mat.');
-colorbar
-subplot(2,2,3)
-imagesc(abs(Dmargo)>1e-15);
-pbaspect([1 1 1]);
-title('true support');
-colorbar
-subplot(2,2,4)
-imagesc(abs(Z1+Z2)>1e-15);
-pbaspect([1 1 1]);
-title('estimated support');
-colorbar
-
-figure(5);clf
-loglog(hist.time,hist.dg,'-','LineWidth',2,'Color',[1 0 0],'DisplayName','dg');hold on;
-loglog(hist.time_sup,hist.dg_sup,'-','LineWidth',2,'Color',[0 0 0],'DisplayName','dg sup');hold on;
-legend('show','Location','southwest');
-grid on
-hold off
-
-figure(6);clf;
-subplot(3,2,1)
-imagesc(abs(Dfull));
-pbaspect([1 1 1]);
-title('true complete conc. mat.');
-colorbar
-subplot(3,2,2)
-imagesc(abs(Dfull)>1e-15);
-pbaspect([1 1 1]);
-title('true support');
-colorbar
-subplot(3,2,3)
-imagesc(abs(Dfin));
-pbaspect([1 1 1]);
-title('estimated complete conc. mat.');
-colorbar
-subplot(3,2,4)
-imagesc(abs(Dfin)>1e-15);
-pbaspect([1 1 1]);
-title('estimated support');
-colorbar
-subplot(3,2,5)
-imagesc(abs(Dfin_tr));
-pbaspect([1 1 1]);
-title('estimated complete conc. mat.');
-colorbar
-subplot(3,2,6)
-imagesc(abs(Dfin_tr)>1e-15);
-pbaspect([1 1 1]);
-title('estimated support');
-colorbar
-
-
-%% saving
-%filename = ['lggm2_' datestr(datetime('now'),'yyyymmddTHHMMSS') '.ps'];
-filename = ['lggm4_' datestr(clock) '.ps'];
-%print ( '-dpsc2', filename, '-f1' )
-print ( '-dpsc2', filename, '-append', '-f1' )
-print ( '-dpsc2', filename, '-append', '-f2' )
-print ( '-dpsc2', filename, '-append', '-f3' )
-print ( '-dpsc2', filename, '-append', '-f4' )
-print ( '-dpsc2', filename, '-append', '-f5' )
-
-% keyboard
-save('lggm4_03_16','k','p','n','inputData','Dfull','Dmargo', ...
-'Z', 'Z1', 'Z2', 'ActiveSet', 'hist' ,'param', 'flag' ,'output',...
-'Z_tr', 'Z1_tr', 'Z2_tr', 'ActiveSet_tr', 'hist_tr', 'param_tr', 'flag_tr', 'output_tr');
+obj_l1_om

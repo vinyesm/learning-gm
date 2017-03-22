@@ -6,22 +6,23 @@ clear all; clc; close all;
 
 n=5000; % number of samples
 
-ks=[10 10];
+ks=[15 15];
 
 
 pl=length(ks); % number of latent variables
 po=sum(ks);% number of observed variables
 
 pt=po+pl;
-sigma2l=.8;
-sigma2lo=.4;
+sigma2l=.5;
+sigma2lo=.8;
 scale=1./sqrt(ks);
+% scale=ones(1,pl);
 
 % slo=.2; % level of sparsity on latent-observed block of conceptration mat
 % soo=.2; % level of sparsity on latent-observed block of conceptration mat
 %Doo=eye(po)/sigma2lo;
 dd=diag(ones(1,po-1),1);
-Doo=eye(po)/sigma2lo+.5*(dd+dd');
+Doo=eye(po)/sigma2lo-.3*(dd+dd');
 Dol=zeros(po,pl);
 for i=1:pl
     if i>1

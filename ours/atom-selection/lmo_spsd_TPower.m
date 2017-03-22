@@ -21,6 +21,7 @@ for k=1:size(B,1)
         options.optTol=1e-8;
         options.maxIter=1000;
         options.cardinality_vec=k;
+        options.initType=1; %default 2
         [u,lambda] = TPower_SPCA(B, options);
         lambda=lambda/cf;
         allVal(k)=lambda;

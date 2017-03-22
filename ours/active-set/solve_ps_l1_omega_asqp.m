@@ -4,7 +4,7 @@ function [ Z,Z1,Z2,U,Hall,fall,cardVal, ActiveSet, hist] = solve_ps_l1_omega_asq
 
 debug_update=0;
 debug=0;
-compute_dg=0;
+compute_dg=1;
 display('in solve_ps change S when changing loss fun\n');
 S=inputData.X1*inputData.X1;
 nbetas=length(ActiveSet.I_l1);
@@ -170,6 +170,7 @@ while cont
             [loss(i),pen(i),obj(i),dg(i),time(i)]=get_val_l1_omega_asqp(Z,ActiveSet,inputData,param,cardVal);
             nb_pivot(i)=npiv;
             active_var(i)= sum(ActiveSet.alpha>0);
+            dualgap=dg(i);
             %cont = (dg(i)>param.PSdualityEpsilon) && count< param.niterPS;
             
             if debug && i>1
@@ -198,6 +199,7 @@ while cont
                     cont=false;
 %                     keyboard;
                 end
+                fprintf('  maxIJ/mu=%4.2f < 1     varmax/lambda=%4.2f < 1 dg=%f\n',maxIJ/param.mu,maxvar/param.lambda,dualgap);
                 if debug 
                     fprintf('  maxIJ/mu=%4.2f < 1     varmax/lambda=%4.2f < 1 var-varold=%4.2f continue=%d  count=%d\n',maxIJ/param.mu,maxvar/param.lambda,norm(maxvar-maxvarold),cont && count< param.niterPS,count);
 %                     keyboard;
@@ -239,6 +241,7 @@ while cont
 %             inputData.Y=StartY-inputData.X1*Z1*inputData.X2;
 %             H = gradient(Z2,inputData,param);
             [new_i, new_val, maxval_om0]=get_new_atom_spca(H,ActiveSet,param);
+%             keyboard;
 %             inputData.Y=StartY;
             if maxval_om0<param.lambda*(1+param.epsStop)
                 maxval_om=-inf;

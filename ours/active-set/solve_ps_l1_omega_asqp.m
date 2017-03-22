@@ -1,6 +1,8 @@
 function [ Z,Z1,Z2,U,Hall,fall,cardVal, ActiveSet, hist] = solve_ps_l1_omega_asqp( Z,Z1,Z2,ActiveSet,param,inputData,atoms_l1_sym,U,Hall,fall,cardVal)
 %Using Active Set to solve (PS) problem
-MAX_NB_ATOMS=100;
+MAX_NB_ATOMS=50;
+param.max_nb_atoms=MAX_NB_ATOMS;
+
 debug_update=0;
 debug=0;
 compute_dg=0;
@@ -45,6 +47,7 @@ while cont
     % current point is Z
     
     if ActiveSet.atom_count>param.max_nb_atoms
+        ActiveSet.atom_count=ActiveSet.atom_count-1;
         display('maximum number of atoms added');
         break;
     end
@@ -77,6 +80,7 @@ while cont
         if ActiveSet.atom_count>MAX_NB_ATOMS
             fprintf('    nb l1 atoms=%d    nb om atoms=%d\n',length(ActiveSet.I_l1),ActiveSet.atom_count);
             fprintf('    max nb om atoms %d reached \n',MAX_NB_ATOMS);
+            cont=false;
             break;
         end
         [alph,Jset,npiv]=asqp2(Hall+0*1e-12*eye(length(fall)),-fall,alpha0,param_as,new_atom_added,idx_added);

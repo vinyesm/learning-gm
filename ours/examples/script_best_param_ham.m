@@ -2,8 +2,7 @@
 %%
 clear all; close all; clc;
 
-delete(gcp)
-parpool(4);
+
 
 %%
 addpath('../main');

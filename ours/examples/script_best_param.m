@@ -20,13 +20,11 @@ addpath('../TPower_1.0/misc/');
 % run('../../toy-data/three_blocks_same_size.m');k=5;rank=3;p=size(X,1);Z0=eye(p);S=cov(X');
 run('../../toy-data/three_large_blocks_same_size.m');k=10; rank=5;p=size(X,1);Z0=eye(p);S=cov(X');
 
+
+%%
 objective = @(S05,Z) .5*norm(S05*Z*S05+eye(size(Z,1)),'fro')^2;
 rankdiff = @(ActiveSet) abs((rank-size(ActiveSet.atoms,2)));
 suppdiff = @(Z,Z0) (sum(sign(Z(:))==sign(Z0(:))));
-
-%% our norm psd with decomposition S-M sparse_omega_lgm
-
-% param.cardfun(p)=1;
 
 %%
 % lambda < k*mus

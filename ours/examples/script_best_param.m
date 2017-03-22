@@ -29,8 +29,8 @@ suppdiff = @(Z,Z0) (sum(sign(Z(:))==sign(Z0(:))));
 %%
 % lambda < k*mus
 c=sqrt(p/n);
-mus= linspace(.01,1,10);
-las=linspace(.01,1,10);
+mus= linspace(.001,1,10);
+las=linspace(.001,1,10);
 pair=[];
 count=1;
 for i=1:length(las)
@@ -113,6 +113,7 @@ imagesc(abs(Z2{pr2})>eps);
 pbaspect([1 1 1])
 title(['obs l1+tr best rank  lam=' num2str(pair(pr2).lambda) ' mu=' num2str(pair(pr2).mu)] )
 
+%%
 
 figure(2);clf
 subplot(3,2,1);
@@ -140,6 +141,7 @@ imagesc(abs(Dfin2{pr2})>eps);
 pbaspect([1 1 1])
 title(['lat+obs l1+tr best rank  lam=' num2str(pair(pr2).lambda) ' mu=' num2str(pair(pr2).mu)] )
 
+%% 
 figure(3);clf
 subplot(3,2,1);
 imagesc(abs(Z1{po1}));
@@ -166,6 +168,7 @@ imagesc(abs(Z2{pr2}));
 pbaspect([1 1 1])
 title(['obs l1+tr best rank  lam=' num2str(pair(pr2).lambda) ' mu=' num2str(pair(pr2).mu)] )
 
+%%
 
 figure(4);clf
 subplot(3,2,1);

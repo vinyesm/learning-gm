@@ -1,5 +1,8 @@
 function [Z Z1 Z2 ActiveSet hist param flag output] = cgan_l1_omega(inputData,param,startingZ,ActiveSet)
 
+MAX_NB_ATOMS=50;
+param.max_nb_atoms=MAX_NB_ATOMS;
+
 %% init
 if nargin < 3
     startingZ = set_default_Z(inputData,param);
@@ -155,6 +158,9 @@ while c
     
     
     if varIJ < param.lambda*(1+param.epsStop) && maxIJ < param.mu*(1+param.epsStop)
+        c=0;
+    elseif ActiveSet.atom_count>=param.max_nb_atoms
+%         keyboard;
         c=0;
     elseif takenI
         fprintf('This support has already been added. Stopping\n');

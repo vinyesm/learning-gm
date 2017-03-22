@@ -54,7 +54,7 @@ cv2_rank=zeros(length(pair),1);
 cv2_lat=inf*ones(length(pair),1);
 
 
-for jj=1:length(pair)
+parfor jj=1:length(pair)
     [Dfin1{jj},Z1{jj},Z11,ActiveSet1,Uso1] = f1(S,pair(jj).lambda,pair(jj).mu,k);
     cv1_obj(jj)  = objective(S^.5,Z1{jj}); 
     cv1_supp(jj) = suppdiff(-Z11,Z0)/p^2;
@@ -63,7 +63,7 @@ for jj=1:length(pair)
         cv1_lat(jj) =  suppdiff(Uso1,Dol);
     end
 end
-for jj=1:length(pair)
+parfor jj=1:length(pair)
     [Dfin2{jj},Z2{jj},Z21,ActiveSet2,Uso2] = f2(S,pair(jj).lambda,pair(jj).mu);
     cv2_obj(jj)  = objective(S^.5,Z2{jj}); 
     cv2_supp(jj) = suppdiff(-Z21,Z0)/p^2;

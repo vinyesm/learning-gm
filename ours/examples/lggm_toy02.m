@@ -52,9 +52,21 @@ param.cardfun(k)=1;
 % param.lambda=aa; %lamda ~ 2/k*mu
 % param.mu=0.3;
 
+<<<<<<< HEAD
 c=2*sqrt(k/n);
 param.lambda=4*c; %lamda ~ 2/k*mu
 param.mu=1*c;
+=======
+<<<<<<< HEAD
+c=.1;
+param.lambda=.6*c; %lamda ~ 2/k*mu
+param.mu=.2*c;
+=======
+c=sqrt(k/n);
+param.lambda=c; %lamda ~ 2/k*mu
+param.mu=c;
+>>>>>>> 7d12d9a09264db88fcecf80af0796c7d9a857e4c
+>>>>>>> 7db1050b7efdacbc82aa193121464de829c58c08
 
 
 %% blocks

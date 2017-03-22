@@ -73,7 +73,7 @@ while cont
         if debug
             obj0=.5*alpha0'*Hall*alpha0+fall'*alpha0;
         end
-        fprintf('    nb l1 atoms=%d    nb om atoms=%d\n',length(ActiveSet.I_l1),ActiveSet.atom_count);
+%         fprintf('    nb l1 atoms=%d    nb om atoms=%d\n',length(ActiveSet.I_l1),ActiveSet.atom_count);
         if ActiveSet.atom_count>MAX_NB_ATOMS
             fprintf('    nb l1 atoms=%d    nb om atoms=%d\n',length(ActiveSet.I_l1),ActiveSet.atom_count);
             fprintf('    max nb om atoms %d reached \n',MAX_NB_ATOMS);

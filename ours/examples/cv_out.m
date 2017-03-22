@@ -14,13 +14,13 @@ mincv=inf;
 pair_best=0;
 for i=1:length(las)
     for j=1:length(mus)
-        if mus(j)>=las(i),
+%         if mus(j)>=las(i),
         cvgrid(i,j)=mcv(count);
         if mcv(count)<mincv
             mincv=mcv(count);
             pair_best=count;
         end
         count=count+1;
-        end
+%         end
     end
 end

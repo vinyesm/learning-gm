@@ -52,9 +52,9 @@ param.cardfun=((1:p).^beta)./(p^beta);
 % param.lambda=aa; %lamda ~ 2/k*mu
 % param.mu=0.3;
 
-aa=0.2;
-param.lambda=aa; %lamda ~ 2/k*mu
-param.mu=0.1;
+c=sqrt(p/n);
+param.lambda=c; %lamda ~ 2/k*mu
+param.mu=c*.5;
 
 
 %% blocks
@@ -64,7 +64,7 @@ param.mu=0.1;
 param.lambda=0.0001; %lamda ~ 2/k*mu
 param.mu=0.1;
 param.max_nb_main_loop=2;
-param.niterPS=10000;
+param.niterPS=1;%10000;
 param.cardfun=inf*ones(1,p);
 param.cardfun(p)=1;
 [Z_tr Z1_tr Z2_tr ActiveSet_tr hist_tr param_tr flag_tr output_tr] = cgan_l1_omega(inputData,param);

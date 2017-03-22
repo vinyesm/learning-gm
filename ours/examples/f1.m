@@ -1,9 +1,9 @@
-function [Dfin,Z,Z1,ActiveSet] =f1(S,lambda,mu,k)
+function [Dfin,Z,Z1,ActiveSet,Uso] =f1(S,lambda,mu,k)
     p=size(S,1);
     param.f=4;
     param.diag=0;
     param.PSD=true;
-    param.max_nb_main_loop=10;%2;%1000
+    param.max_nb_main_loop=100;%2;%1000
     param.powerIter=500;
     param.stPtPowerIter=1000;
     param.niterPS=5000;%5000
@@ -23,6 +23,7 @@ function [Dfin,Z,Z1,ActiveSet] =f1(S,lambda,mu,k)
     param.lambda=lambda;
     param.mu=mu;
     [Z Z1 Z2 ActiveSet hist param flag output] = cgan_l1_omega(inputData,param);
+    Uso=[];
     if ~isempty(ActiveSet.alpha)
         Uso=bsxfun(@times,sqrt(ActiveSet.alpha)',ActiveSet.atoms);
         nl=size(ActiveSet.atoms,2);

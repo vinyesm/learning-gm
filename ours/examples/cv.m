@@ -1,6 +1,7 @@
 clear all; close all; clc;
 
-%parpool(4);
+delete(gcp)
+parpool(4);
 
 %%
 addpath('../main');
@@ -14,8 +15,8 @@ addpath('../TPower_1.0/algorithms/TPower/');
 addpath('../TPower_1.0/misc/');
 
 %% data
-% run('../../toy-data/three_blocks_same_size.m');k=5;rank=3;p=size(X,1);Z0=eye(p);
-run('../../toy-data/three_large_blocks_same_size.m');k=10; rank=5;p=size(X,1);Z0=eye(p);
+run('../../toy-data/three_blocks_same_size.m');k=5;rank=3;p=size(X,1);Z0=eye(p);
+% run('../../toy-data/three_large_blocks_same_size.m');k=10; rank=5;p=size(X,1);Z0=eye(p);
 
 objective = @(S05,Z) .5*norm(S05*Z*S05+eye(size(Z,1)),'fro')^2;
 rankdiff = @(ActiveSet) abs((rank-size(ActiveSet.atoms,2)));
@@ -28,23 +29,25 @@ suppdiff = @(Z,Z0) (sum(sign(Z(:))==sign(Z0(:))));
 %%
 % lambda < k*mus
 % jcut=inf;
-mus=[0.1];
-las=[0.1 0.5 0.01 0.005 0.001];
+c=sqrt(p/n);
+mus=c*[1e-1 .5 .1 1 2];
+las=c*[1e-1 .5 .1 1 2];
+%las=[0.1 0.5 0.01 0.005 0.001];
 %las=10.^linspace(0,-4,8);%0,-4,4
 pair=[];
 count=1;
 for i=1:length(las)
     for j=1:length(mus)
-        if mus(j)>=las(i),
+%         if mus(j)>=las(i),
             pair(count).lambda=las(i);
             pair(count).mu=mus(j);
             count=count+1;
-        end
+%         end
     end
 end
 
 %%
-nbfold=5;
+nbfold=3;
 partitions = cvpartition(n,'KFold',nbfold);
 %c=cvpartition(n,'LeaveOut');
 % c.test(1) c.training(1)
@@ -64,7 +67,6 @@ parfor j=1:partitions.NumTestSets
         cv1cell_rank{j}{jj} = rankdiff(ActiveSet);
     end
 end
-
 save('cv01midf1', 'k','X', 'pair', 'partitions', 'cv1cell' ,'Dfin1');
 %%
 parfor j=1:partitions.NumTestSets
@@ -114,6 +116,8 @@ p2=p2_rank;
 % p1=p1_supp;
 % p2=p2_supp;
 
+% p1=3;
+% p2=p1;
 figure(1);clf;
 for j=1:partitions.NumTestSets
     subplot(2,partitions.NumTestSets,j);

@@ -185,7 +185,39 @@ if param.debug==1
     end
 end
 
-% ActiveSet = postProcessFactors(ActiveSet,Z);
+% % ActiveSet = postProcessFactors(ActiveSet,Z);
+% 
+% al1=atoms_l1_sym(:,ActiveSet.I_l1);
+% aom=ActiveSet.atoms;
+% [Hp,fp] = build_Hessian_postprocess(inputData,param,al1,aom);
+% lb=zeros(1,length(fp));
+% ub=ones(1,length(fp));
+% param_as.max_iter=1e3;
+% param_as.epsilon=1e-14;
+% param_as.debug_mode=false;
+% param_as.ws=true;
+% 
+% %options.OptimalityTolerance=1e-10;
+% [alph]=quadprog(Hp,fp,[],[],[],[],lb,ub);
+% keyboard;
+% Jset= alph>1e-2;
+% 
+% nbetas=length(ActiveSet.beta);
+% if length(alph)>nbetas
+%     Jalpha=Jset((nbetas+1):end);
+%     new_atom_count=sum(Jalpha);
+%     ActiveSet.atom_count=new_atom_count;
+%     ActiveSet.atoms=ActiveSet.atoms(:,Jalpha);%not necessary (for debbuggging here)
+%     ActiveSet.alpha=alph((nbetas+1):end);
+%     ActiveSet.alpha=ActiveSet.alpha(Jalpha);
+%     %             U=U(:,Jalpha);
+%     cardVal=cardVal(Jalpha);
+% end
+% %ActiveSet.alpha
+        
+
+
+%%
 hist.obj = obj;
 hist.loss = loss;
 hist.pen = pen;

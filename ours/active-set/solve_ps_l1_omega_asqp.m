@@ -95,6 +95,7 @@ while cont
         end
         
         eps_alph=1e-12;
+%         eps_alph=0;
         if(min(abs(alph(Jset))))<eps_alph
             fprintf('small alph\n');
             alph(abs(alph)<eps_alph | alph<0)=0;
@@ -195,11 +196,11 @@ while cont
                 end
                 %size_supp=length(ActiveSet.I{kmaxvar});
                 %if maxvar < param.lambda*(1+param.epsStop / size_supp)* param.cardfun(size_supp) && maxIJ<param.mu*(1+param.epsStop)
-                if maxvar < param.lambda*(1+param.epsStop) && maxIJ<param.mu*(1+param.epsStop)
+                if maxvar < param.lambda*(1+param.epsStop) && maxIJ<param.mu*(1+param.epsStop) %&& dualgap/param.PSdualityEpsilon<1
                     cont=false;
 %                     keyboard;
                 end
-                fprintf('  maxIJ/mu=%4.2f < 1     varmax/lambda=%4.2f < 1 dg=%f\n',maxIJ/param.mu,maxvar/param.lambda,dualgap);
+                fprintf('  maxIJ/mu=%4.2f < 1     varmax/lambda=%4.2f < 1 dg/eps=%f<1\n',maxIJ/param.mu,maxvar/param.lambda,dualgap/param.PSdualityEpsilon);
                 if debug 
                     fprintf('  maxIJ/mu=%4.2f < 1     varmax/lambda=%4.2f < 1 var-varold=%4.2f continue=%d  count=%d\n',maxIJ/param.mu,maxvar/param.lambda,norm(maxvar-maxvarold),cont && count< param.niterPS,count);
 %                     keyboard;
@@ -278,7 +279,7 @@ while cont
             break
         end
         
-        if maxval_l1/param.mu<=maxval_om/param.lambda
+        if (new_row==new_col && maxval_l1/param.mu<=maxval_om/param.lambda) || (new_row~=new_col && 2*maxval_l1/param.mu<=maxval_om/param.lambda)
             %ading omega atom
             if maxval_om<param.lambda
                 fprintf('\n not good atom omega d=%f\n',maxval_om);
@@ -291,7 +292,7 @@ while cont
 %             %check if too correlated with previous atom
             K=true(1,ActiveSet.atom_count);
 %             if ActiveSet.atom_count>0
-%                 %fprintf('\n atom count  %d\n',ActiveSet.atom_count);
+%                 fprintf('\n atom count  %d\n',ActiveSet.atom_count);
 %                 correl = 1-abs(sum(bsxfun(@times,ActiveSet.atoms(:,1:ActiveSet.atom_count),anew),1));
 %                 K=correl>1e-10;
 %                 new_atom_count=sum(K);

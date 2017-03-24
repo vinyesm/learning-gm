@@ -6,7 +6,11 @@ debug_update=0;
 debug=0;
 compute_dg=1;
 display('in solve_ps change S when changing loss fun\n');
-S=inputData.X1*inputData.X1;
+if param.f==4
+    S=inputData.X1*inputData.X1;
+elseif param.f==5
+    S=inputData.X;
+end
 nbetas=length(ActiveSet.I_l1);
 
 param_as.max_iter=1e3;
@@ -150,20 +154,6 @@ while cont
         end
         Z=Z1+Z2;
         
-        if debug
-            obj3=.5*norm(inputData.Y - inputData.X1*Z*inputData.X2, 'fro')^2+param.lambda*sum(ActiveSet.alpha)+param.mu*sum(ActiveSet.beta)-.5*p;
-            if obj3-obj2>1e-10
-                fprintf('objective increasing after constructing Z \n');
-                keyboard;
-            end
-        end
-        
-%         if debug
-%             fprintf('   progress in asqp Z1 %4.2f  Z2 %4.2f\n',norm(Z1_old-Z1,'fro'),norm(Z2_old-Z2,'fro') );
-%             if norm(Z1_old-Z1,'fro')^2+norm(Z2_old-Z2,'fro')^2<1e-12
-% %                 keyboard;
-%             end
-%         end
         
         %% Compute objective, loss, penalty and duality gap
         if (param.sloppy==0 || (param.sloppy~=0 && mod(count,100)==1)) %&& ~isempty(ActiveSet.alpha)
@@ -238,12 +228,7 @@ while cont
         %% omega atom
         
         if ~isempty(ActiveSet.I)
-%             StartY=inputData.Y;
-%             inputData.Y=StartY-inputData.X1*Z1*inputData.X2;
-%             H = gradient(Z2,inputData,param);
             [new_i, new_val, maxval_om0]=get_new_atom_spca(H,ActiveSet,param);
-%             keyboard;
-%             inputData.Y=StartY;
             if maxval_om0<param.lambda*(1+param.epsStop)
                 maxval_om=-inf;
             else
@@ -291,31 +276,19 @@ while cont
             anew=sparse(new_i,ones(length(new_i),1),new_val,p,1);
 %             %check if too correlated with previous atom
             K=true(1,ActiveSet.atom_count);
-%             if ActiveSet.atom_count>0
-%                 fprintf('\n atom count  %d\n',ActiveSet.atom_count);
-%                 correl = 1-abs(sum(bsxfun(@times,ActiveSet.atoms(:,1:ActiveSet.atom_count),anew),1));
-%                 K=correl>1e-10;
-%                 new_atom_count=sum(K);
-%                 ActiveSet.atom_count=new_atom_count;
-%                 ActiveSet.atoms=ActiveSet.atoms(:,K);
-%                 ActiveSet.alpha=ActiveSet.alpha(K);
-%                 cardVal=cardVal(K);
-%                 Jset= [K,true(1,length(ActiveSet.I_l1))];
-%                 %Hold=Hall;%for debug here
-%                 %fold=fall;%for debug here
-%                 Hall=Hall(Jset,Jset);
-%                 fall=fall(Jset);
-%                 %fprintf('norm(Hold-Hall)=%f\n', norm(Hold-Hall,'fro'));
-%                 %keyboard;
-%             end
             if sum(K)>0
                 aom=[ActiveSet.atoms(:,1:ActiveSet.atom_count) anew];
             else
                 aom=anew;
             end
             if debug_update
-                [Hall_new0,fall_new0] = build_Hessian_l1_sym(inputData,param,atoms_l1_sym(:,ActiveSet.I_l1),aom);
-                [Hall_new,fall_new] = update_Hessian_l1_sym(S,param,Hall, fall,atoms_l1_sym(:,ActiveSet.I_l1),aom,2);
+                if param.f==4
+                    [Hall_new0,fall_new0] = build_Hessian_l1_sym(inputData,param,atoms_l1_sym(:,ActiveSet.I_l1),aom);
+                    [Hall_new,fall_new] = update_Hessian_l1_sym(S,param,Hall, fall,atoms_l1_sym(:,ActiveSet.I_l1),aom,2);
+                elseif param.f==5
+                    [Hall_new0,fall_new0] = build_Hessian_l1_SM(inputData,param,atoms_l1_sym(:,ActiveSet.I_l1),aom);
+                    [Hall_new,fall_new] = update_Hessian_l1_SM(S,param,Hall, fall,atoms_l1_sym(:,ActiveSet.I_l1),aom,2);
+                end
                 if norm(Hall_new-Hall_new0,'fro')^2 >1e-10 || norm(fall_new-fall_new0,'fro')^2 >1e-10
                     figure(10);clf;
                     subplot(1,3,1);
@@ -330,7 +303,11 @@ while cont
                     error('the update is not correct\n');
                 end    
             else
-                [Hall_new,fall_new] = update_Hessian_l1_sym(S,param,Hall, fall,atoms_l1_sym(:,ActiveSet.I_l1),aom,2);
+                if param.f==4
+                    [Hall_new,fall_new] = update_Hessian_l1_sym(S,param,Hall, fall,atoms_l1_sym(:,ActiveSet.I_l1),aom,2);
+                elseif param.f==5
+                    [Hall_new,fall_new] = update_Hessian_l1_SM(S,param,Hall, fall,atoms_l1_sym(:,ActiveSet.I_l1),aom,2);
+                end
             end
             
             g=Hall_new*[ActiveSet.beta;ActiveSet.alpha;0]+fall_new;
@@ -370,8 +347,14 @@ while cont
                 end
                 
                 if debug_update
-                    [Hall_new0,fall_new0] = build_Hessian_l1_sym(inputData,param,atoms_l1_sym(:,ActiveSet.I_l1),aom);
-                    [Hall_new,fall_new] = update_Hessian_l1_sym(S,param,Hall, fall,atoms_l1_sym(:,ActiveSet.I_l1),aom,1);
+                    if param.f==4
+                        [Hall_new0,fall_new0] = build_Hessian_l1_sym(inputData,param,atoms_l1_sym(:,ActiveSet.I_l1),aom);
+                        [Hall_new,fall_new] = update_Hessian_l1_sym(S,param,Hall, fall,atoms_l1_sym(:,ActiveSet.I_l1),aom,1);
+                    elseif param.f==5
+                        [Hall_new0,fall_new0] = build_Hessian_l1_SM(inputData,param,atoms_l1_sym(:,ActiveSet.I_l1),aom);
+                        [Hall_new,fall_new] = update_Hessian_l1_SM(S,param,Hall, fall,atoms_l1_sym(:,ActiveSet.I_l1),aom,1);
+                    end
+                    
                     if norm(Hall_new-Hall_new0,'fro')^2 >1e-10 || norm(fall_new-fall_new0,'fro')^2 >1e-10
                         figure(10);clf;
                         subplot(1,3,1);
@@ -386,8 +369,13 @@ while cont
                         error('the update is not correct\n');
                     end
                 else
-                    [Hall_new,fall_new] = update_Hessian_l1_sym(S,param,Hall, fall,atoms_l1_sym(:,ActiveSet.I_l1),aom,1);
+                    if param.f==4
+                        [Hall_new,fall_new] = update_Hessian_l1_sym(S,param,Hall, fall,atoms_l1_sym(:,ActiveSet.I_l1),aom,1);
+                    elseif param.f==5
+                        [Hall_new,fall_new] = update_Hessian_l1_SM(S,param,Hall, fall,atoms_l1_sym(:,ActiveSet.I_l1),aom,1);
+                    end   
                 end
+%                 keyboard;
                 
                 g=Hall_new*[ActiveSet.beta;0;ActiveSet.alpha]+fall_new;
                 idx=length(ActiveSet.beta)+1;

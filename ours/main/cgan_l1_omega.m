@@ -3,6 +3,8 @@ function [Z Z1 Z2 ActiveSet hist param flag output] = cgan_l1_omega(inputData,pa
 MAX_NB_ATOMS=50;
 param.max_nb_atoms=MAX_NB_ATOMS;
 
+
+
 %% init
 if nargin < 3
     startingZ = set_default_Z(inputData,param);
@@ -45,12 +47,14 @@ p=size(Z,1);
 D=zeros(p,1);
 output.time=0;
 
-fprintf('Warning : change build_atoms_hessian_l1_sym when loss is not .5*|S^.5*X*S.^5-I|\n');
-[ Q,q,atoms_l1_sym ] = build_atoms_hessian_l1_sym(inputData.X1*inputData.X1,param.mu);
-% ActiveSet.beta=zeros(size(Q,1),1);
-% ActiveSet.I_l1=1:size(Q,1);
-% Hall=Q;
-% fall=q+param.mu*ones(size(Q,1),1);
+
+if param.f==4
+    fprintf('Warning : change build_atoms_hessian_l1_sym when loss is not .5*|S^.5*X*S.^5-I|\n');
+    [ Q,q,atoms_l1_sym ] = build_atoms_hessian_l1_sym(inputData.X1*inputData.X1,param.mu);
+elseif param.f==5
+    [ Q,q,atoms_l1_sym ] = build_atoms_hessian_l1_sym(inputData.X,param.mu); %score matching
+end
+
 ActiveSet.beta=[];
 ActiveSet.I_l1=[];
 Hall=[];
@@ -104,7 +108,6 @@ while c
     %% get a new descent direction using truncated power iteration
     
     H = gradient(Z,inputData,param);
-%     keyboard;
     
     if param.verbose==1
         fprintf('%d/%d   \n',i,max_nb_main_loop);

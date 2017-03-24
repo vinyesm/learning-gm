@@ -6,7 +6,7 @@ clear all; clc;
 d=6;
 pl=1;
 po=d^2;
-n=200*po;
+n=500*po;
 
 
 pt=pl+po;
@@ -14,7 +14,8 @@ density=.5;
 pb= round(po*density);
 grid=eye(d); %grid of correlations
 corr=eye(po);
-c=.15;
+c=.2;
+clo=1.2/sqrt(pb);
 
 for i=1:d
     for j=1:d
@@ -45,8 +46,8 @@ end
 corr_all= zeros(1+po,1+po);
 corr_all(1,1)=1;
 corr_all(2:end,2:end)=corr;
-corr_all(2:pb+1,1)=ones(pb,1)/sqrt(pb);
-corr_all(1,2:pb+1)=ones(pb,1)'/sqrt(pb);
+corr_all(2:pb+1,1)=ones(pb,1)*clo;
+corr_all(1,2:pb+1)=ones(pb,1)'*clo;
 figure(1); clf;
 imagesc(corr_all);
 pbaspect([1 1 1]);

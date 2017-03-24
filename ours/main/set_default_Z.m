@@ -7,5 +7,7 @@ elseif param.f == 3
     startingZ = zeros(size(inputData.X,2));
 elseif param.f == 4
     startingZ = zeros(size(inputData.X1,2), size(inputData.X2,1));
+elseif param.f == 5 %score matching loss
+    startingZ = zeros(size(inputData.X,1));
 end
 end

@@ -18,18 +18,29 @@
 % addpath('../TPower_1.0/misc/');
 % % 
 % % %% data
-% run('../../toy-data/toy04.m');k=pb;
+run('../../toy-data/toy04.m');k=pb;
 
 %% our norm psd with decomposition S-M sparse_omega_lgm
 p=po;
+% % symmetric loss
 param.f=4;
-param.diag=0;
+inputData.X1=S^.5;
+inputData.X2=S^.5;
+inputData.Y=-eye(po);
+param.max_nb_main_loop=100;
+%score matching
+% param.f=5;
+% inputData.X=S;
+% inputData.Y=eye(po);
+% param.max_nb_main_loop=100;%2;%1000
+
+% param.diag=0;
 param.PSD=true;
-param.max_nb_main_loop=100;%2;%1000
+% param.max_nb_main_loop=100;%2;%1000
 param.powerIter=500;
 param.stPtPowerIter=1000;
 param.niterPS=5000;%10000;%5000
-param.epsStop=1e-8;
+param.epsStop=1e-6;1e-8;
 param.PSdualityEpsilon=1e-8;
 param.k=0;
 param.PSmu=0; %strong convexity
@@ -37,9 +48,7 @@ param.verbose=1;
 param.debug=0;
 param.sloppy=0;
 param.max_nb_atoms=param.max_nb_main_loop*param.niterPS;
-inputData.X1=S^.5;
-inputData.X2=S^.5;
-inputData.Y=-eye(po);
+
 param.cardfun=inf*ones(1,p);
 param.cardfun(k)=1;
 % param.cardfun(p)=1;
@@ -47,28 +56,20 @@ param.cardfun(k)=1;
 % param.cardfun=((1:p).^beta)./(p^beta);
 % param.cardfun(1)=inf;
 
-%choice s.t. mu*k^=lambda
-% aa=0.1;
-% param.lambda=aa; %lamda ~ 2/k*mu
-% param.mu=0.3;
-
-%%% n=10000
-% c=2*sqrt(k/n);
-% param.lambda=10*c; %lamda ~ 2/k*mu
-% param.mu=2*c;
-
-%%% n=5000
-% c=2*sqrt(p/n);
-% % c=sqrt(k/n);
-% gamma=.5;
-% param.lambda=c*2.1; %lamda ~ 2/k*mu
-% param.mu=c*gamma;
-
+% %param;f==4
 c=sqrt(k/n);
-gamma=0.3;
+c=1;
+gamma=0.2;
 param.lambda=c; %lamda ~ 2/k*mu
 param.mu=c*gamma;
 
+%param;f==4
+
+% param.lambda=0.4; %lamda ~ 2/k*mu
+% param.mu=0.1;
+% c=1.5;
+% param.lambda=0.3*c; %lamda ~ 2/k*mu
+% param.mu=0.1*c;
 
 %% blocks
 [Z Z1 Z2 ActiveSet, hist param flag output] = cgan_l1_omega(inputData,param);
@@ -77,11 +78,12 @@ obj_l1_om
 % %% tr+l1
 % param.lambda=10; %lamda ~ 2/k*mu
 % param.mu=0.01;
-% param.max_nb_main_loop=2;
-% param.niterPS=1;%10000;
-% param.cardfun=inf*ones(1,p);
-% param.cardfun(p)=1;
-% [Z_tr Z1_tr Z2_tr ActiveSet_tr hist_tr param_tr flag_tr output_tr] = cgan_l1_omega(inputData,param);
+
+param.max_nb_main_loop=2;
+param.niterPS=10000;
+param.cardfun=inf*ones(1,p);
+param.cardfun(p)=1;
+[Z_tr Z1_tr Z2_tr ActiveSet_tr hist_tr param_tr flag_tr output_tr] = cgan_l1_omega(inputData,param);
 
 %% LOAD HERE lggm.mat
 
@@ -98,18 +100,18 @@ else
     Dfin=Z1;
 end
 
-% %% reconstruction tr+l1
-% if ~isempty(ActiveSet_tr.alpha)
-%     Uso_tr=bsxfun(@times,sqrt(ActiveSet_tr.alpha)',ActiveSet_tr.atoms);
-%     nl_tr=size(ActiveSet_tr.atoms,2);
-%     Dfin_tr=zeros(p+nl_tr);
-%     Dfin_tr(1:nl_tr,1:nl_tr)=eye(nl_tr);
-%     Dfin_tr((nl_tr+1):(nl_tr+p),(nl_tr+1):(nl_tr+p))=-Z1_tr;
-%     Dfin_tr(1:nl_tr,(nl_tr+1):(nl_tr+p))=Uso_tr';
-%     Dfin_tr((nl_tr+1):(nl_tr+p),1:nl_tr)=Uso_tr;
-% else
-%     Dfin_tr=Z1_tr;
-% end
+%% reconstruction tr+l1
+if ~isempty(ActiveSet_tr.alpha)
+    Uso_tr=bsxfun(@times,sqrt(ActiveSet_tr.alpha)',ActiveSet_tr.atoms);
+    nl_tr=size(ActiveSet_tr.atoms,2);
+    Dfin_tr=zeros(p+nl_tr);
+    Dfin_tr(1:nl_tr,1:nl_tr)=eye(nl_tr);
+    Dfin_tr((nl_tr+1):(nl_tr+p),(nl_tr+1):(nl_tr+p))=-Z1_tr;
+    Dfin_tr(1:nl_tr,(nl_tr+1):(nl_tr+p))=Uso_tr';
+    Dfin_tr((nl_tr+1):(nl_tr+p),1:nl_tr)=Uso_tr;
+else
+    Dfin_tr=Z1_tr;
+end
 
 %%
 descr_gen = {'Formulation Z1+Z2 where ';
@@ -153,83 +155,82 @@ imagesc(abs(Dfin)>1e-15);
 pbaspect([1 1 1]);
 title('estimated support');
 colorbar
-% %%
-% 
-% figure(4);clf;
-% subplot(2,2,1);
-% imagesc(abs(Dmargo));
-% pbaspect([1 1 1]);
-% title('true marginal conc. mat.');
-% colorbar
-% subplot(2,2,2);
-% imagesc(abs(Z1+Z2));
-% pbaspect([1 1 1]);
-% title('observed conc. mat.');
-% colorbar
-% subplot(2,2,3)
-% imagesc(abs(Dmargo)>1e-15);
-% pbaspect([1 1 1]);
-% title('true support');
-% colorbar
-% subplot(2,2,4)
-% imagesc(abs(Z1+Z2)>1e-15);
-% pbaspect([1 1 1]);
-% title('estimated support');
-% colorbar
-% 
-% figure(5);clf
-% loglog(hist.time,hist.dg,'-','LineWidth',2,'Color',[1 0 0],'DisplayName','dg');hold on;
-% loglog(hist.time_sup,hist.dg_sup,'-','LineWidth',2,'Color',[0 0 0],'DisplayName','dg sup');hold on;
-% legend('show','Location','southwest');
-% grid on
-% hold off
-% 
-% figure(6);clf;
-% subplot(3,2,1)
-% imagesc(abs(Dfull));
-% pbaspect([1 1 1]);
-% title('true complete conc. mat.');
-% colorbar
-% subplot(3,2,2)
-% imagesc(abs(Dfull)>1e-15);
-% pbaspect([1 1 1]);
-% title('true support');
-% colorbar
-% subplot(3,2,3)
-% imagesc(abs(Dfin));
-% pbaspect([1 1 1]);
-% title('estimated complete conc. mat.');
-% colorbar
-% subplot(3,2,4)
-% imagesc(abs(Dfin)>1e-15);
-% pbaspect([1 1 1]);
-% title('estimated support');
-% colorbar
-% subplot(3,2,5)
-% imagesc(abs(Dfin_tr));
-% pbaspect([1 1 1]);
-% title('estimated complete conc. mat.');
-% colorbar
-% subplot(3,2,6)
-% imagesc(abs(Dfin_tr)>1e-15);
-% pbaspect([1 1 1]);
-% title('estimated support');
-% colorbar
-% 
-% 
-% %% saving
-% % %filename = ['lggm2_' datestr(datetime('now'),'yyyymmddTHHMMSS') '.ps'];
-% % filename = ['lggm4_' datestr(clock) '.ps'];
-% % %print ( '-dpsc2', filename, '-f1' )
-% % print ( '-dpsc2', filename, '-append', '-f1' )
-% % print ( '-dpsc2', filename, '-append', '-f2' )
-% % print ( '-dpsc2', filename, '-append', '-f3' )
-% % print ( '-dpsc2', filename, '-append', '-f4' )
-% % print ( '-dpsc2', filename, '-append', '-f5' )
-% 
-% % % keyboard
-% % save('lggm4_03_16','k','p','n','inputData','Dfull','Dmargo', ...
-% % 'Z', 'Z1', 'Z2', 'ActiveSet', 'hist' ,'param', 'flag' ,'output',...
-% % 'Z_tr', 'Z1_tr', 'Z2_tr', 'ActiveSet_tr', 'hist_tr', 'param_tr', 'flag_tr', 'output_tr');
-% 
-% 
+%%
+
+figure(4);clf;
+subplot(2,2,1);
+imagesc(abs(Dmargo));
+pbaspect([1 1 1]);
+title('true marginal conc. mat.');
+colorbar
+subplot(2,2,2);
+imagesc(abs(Z1+Z2));
+pbaspect([1 1 1]);
+title('observed conc. mat.');
+colorbar
+subplot(2,2,3)
+imagesc(abs(Dmargo)>1e-15);
+pbaspect([1 1 1]);
+title('true support');
+colorbar
+subplot(2,2,4)
+imagesc(abs(Z1+Z2)>1e-15);
+pbaspect([1 1 1]);
+title('estimated support');
+colorbar
+
+figure(5);clf
+loglog(hist.time,hist.dg,'-','LineWidth',2,'Color',[1 0 0],'DisplayName','dg');hold on;
+loglog(hist.time_sup,hist.dg_sup,'-','LineWidth',2,'Color',[0 0 0],'DisplayName','dg sup');hold on;
+legend('show','Location','southwest');
+grid on
+hold off
+
+figure(6);clf;
+subplot(3,2,1)
+imagesc(abs(Dfull));
+pbaspect([1 1 1]);
+title('true complete conc. mat.');
+colorbar
+subplot(3,2,2)
+imagesc(abs(Dfull)>1e-15);
+pbaspect([1 1 1]);
+title('true support');
+colorbar
+subplot(3,2,3)
+imagesc(abs(Dfin));
+pbaspect([1 1 1]);
+title('estimated complete conc. mat.');
+colorbar
+subplot(3,2,4)
+imagesc(abs(Dfin)>1e-15);
+pbaspect([1 1 1]);
+title('estimated support');
+colorbar
+subplot(3,2,5)
+imagesc(abs(Dfin_tr));
+pbaspect([1 1 1]);
+title('estimated complete conc. mat.');
+colorbar
+subplot(3,2,6)
+imagesc(abs(Dfin_tr)>1e-15);
+pbaspect([1 1 1]);
+title('estimated support');
+colorbar
+
+
+%% saving
+% %filename = ['lggm2_' datestr(datetime('now'),'yyyymmddTHHMMSS') '.ps'];
+% filename = ['lggm4_' datestr(clock) '.ps'];
+% %print ( '-dpsc2', filename, '-f1' )
+% print ( '-dpsc2', filename, '-append', '-f1' )
+% print ( '-dpsc2', filename, '-append', '-f2' )
+% print ( '-dpsc2', filename, '-append', '-f3' )
+% print ( '-dpsc2', filename, '-append', '-f4' )
+% print ( '-dpsc2', filename, '-append', '-f5' )
+
+% % keyboard
+% save('lggm4_03_16','k','p','n','inputData','Dfull','Dmargo', ...
+% 'Z', 'Z1', 'Z2', 'ActiveSet', 'hist' ,'param', 'flag' ,'output',...
+% 'Z_tr', 'Z1_tr', 'Z2_tr', 'ActiveSet_tr', 'hist_tr', 'param_tr', 'flag_tr', 'output_tr');
+

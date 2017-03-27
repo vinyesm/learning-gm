@@ -6,11 +6,11 @@ clear all; clc;
 d=6;
 pl=1;
 po=d^2;
-n=500*po;
+n=200*po;
 
 
 pt=pl+po;
-density=.5;
+density=.6;
 pb= round(po*density);
 grid=eye(d); %grid of correlations
 corr=eye(po);
@@ -58,6 +58,7 @@ Doo=corr;
 Dol=corr_all(2:end,1);
 Dmargo=Doo-Dol*Dol';
 
+
 %%
 descr = {'Plot of the groundtruth '
     'concentration matrix';
@@ -84,6 +85,24 @@ Xfull=mvnrnd(mu, inv(Dfull), n)';
 X=Xfull((pl+1):pt,:);
 S=cov(X');
 % S=inv(Dmargo);
+
+%%
+nnz=sum(Doo(:)~=0);
+Z1_star=-Doo;
+Z2_star=Dol*Dol';
+grad=S*(Z1_star+Z2_star)*S+S;
+grad=.5*(grad+grad');
+grad_op=abs(eigs(grad,1,'lm'));
+grad_inf=max(abs(grad(:)));
+xsi_Z2=2/pb;
+mu_Z1=nnz/(po*po);
+gamma_inf=xsi_Z2/(1-4*mu_Z1*xsi_Z2);
+gamma_sup=(1-3*mu_Z1*xsi_Z2)/mu_Z1;
+c_inf=max(grad_inf/gamma_inf,grad_op);
+
+% grad_SM=.5*(S*(Z1+Z2) +(Z1+Z2)*S)-inputData.Y;
+% grad_op_SM=abs(eigs(grad_SM,1,'lm'));
+% grad_inf_SM=max(abs(grad_SM(:)));
 
 %% plotting
 

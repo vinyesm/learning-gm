@@ -98,7 +98,7 @@ while cont
             end
         end
         
-        eps_alph=1e-12;
+        eps_alph=1e-8;
 %         eps_alph=0;
         if(min(abs(alph(Jset))))<eps_alph
             fprintf('small alph\n');
@@ -276,6 +276,27 @@ while cont
             anew=sparse(new_i,ones(length(new_i),1),new_val,p,1);
 %             %check if too correlated with previous atom
             K=true(1,ActiveSet.atom_count);
+%             if ActiveSet.atom_count>0
+%                 %fprintf('\n atom count  %d\n',ActiveSet.atom_count);
+%                 correl = 1-abs(sum(bsxfun(@times,ActiveSet.atoms(:,1:ActiveSet.atom_count),anew),1));
+%                 K=correl>1e-10;
+%                 if sum(K==0)>0
+%                     fprintf('\n too correlated atoms\n');
+%                     keyboard;
+%                 end
+%                 new_atom_count=sum(K);
+%                 ActiveSet.atom_count=new_atom_count;
+%                 ActiveSet.atoms=ActiveSet.atoms(:,K);
+%                 ActiveSet.alpha=ActiveSet.alpha(K);
+%                 cardVal=cardVal(K);
+%                 Jset= [K,true(1,length(ActiveSet.I_l1))];
+%                 %Hold=Hall;%for debug here
+%                 %fold=fall;%for debug here
+%                 Hall=Hall(Jset,Jset);
+%                 fall=fall(Jset);
+%                 %fprintf('norm(Hold-Hall)=%f\n', norm(Hold-Hall,'fro'));
+%                 %keyboard;
+%             end
             if sum(K)>0
                 aom=[ActiveSet.atoms(:,1:ActiveSet.atom_count) anew];
             else

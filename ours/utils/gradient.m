@@ -10,6 +10,7 @@ switch param.f
     case 4 % bilinear
         H = inputData.X1'*(inputData.X1*Z*inputData.X2 - inputData.Y)*inputData.X2';
     case 5 % score matching 
+%         H = .5*(inputData.X*Z+Z*inputData.X)-inputData.Y;
         H = .5*(inputData.X*Z+Z*inputData.X)-inputData.Y;
 end
 

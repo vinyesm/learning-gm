@@ -16,13 +16,14 @@
 % addpath('../TPower_1.0');
 % addpath('../TPower_1.0/algorithms/TPower/');
 % addpath('../TPower_1.0/misc/');
-% % 
-% % %% data
-run('../../toy-data/toy04.m');k=pb;
+% % % 
+% % % %% data
+% run('../../toy-data/toy04.m');k=pb;
+% % S=inv(Dmargo);
 
 %% our norm psd with decomposition S-M sparse_omega_lgm
 p=po;
-% % symmetric loss
+% symmetric loss
 param.f=4;
 inputData.X1=S^.5;
 inputData.X2=S^.5;
@@ -33,6 +34,8 @@ param.max_nb_main_loop=100;
 % inputData.X=S;
 % inputData.Y=eye(po);
 % param.max_nb_main_loop=100;%2;%1000
+% param.lambda=3.5*grad_op; %lamda ~ 2/k*mu
+% param.mu=2.5*grad_inf;
 
 % param.diag=0;
 param.PSD=true;
@@ -40,7 +43,7 @@ param.PSD=true;
 param.powerIter=500;
 param.stPtPowerIter=1000;
 param.niterPS=5000;%10000;%5000
-param.epsStop=1e-6;1e-8;
+param.epsStop=1e-12;
 param.PSdualityEpsilon=1e-8;
 param.k=0;
 param.PSmu=0; %strong convexity
@@ -57,11 +60,16 @@ param.cardfun(k)=1;
 % param.cardfun(1)=inf;
 
 % %param;f==4
-c=sqrt(k/n);
-c=1;
-gamma=0.2;
-param.lambda=c; %lamda ~ 2/k*mu
-param.mu=c*gamma;
+%c=sqrt(k/n);
+% c=.3;
+% gamma=0.4;
+% param.lambda=c; %lamda ~ 2/k*mu
+% param.mu=c*gamma;
+
+%lambda>grad_op
+%mu>grad_inf
+param.lambda=1.5*grad_op; %lamda ~ 2/k*mu
+param.mu=1.1*grad_inf;
 
 %param;f==4
 
@@ -234,3 +242,4 @@ colorbar
 % 'Z', 'Z1', 'Z2', 'ActiveSet', 'hist' ,'param', 'flag' ,'output',...
 % 'Z_tr', 'Z1_tr', 'Z2_tr', 'ActiveSet_tr', 'hist_tr', 'param_tr', 'flag_tr', 'output_tr');
 
+obj_l1_om

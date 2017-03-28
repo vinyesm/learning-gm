@@ -29,7 +29,7 @@ param.max_nb_main_loop=100;%2;%1000
 param.powerIter=500;
 param.stPtPowerIter=1000;
 param.niterPS=5000;%10000;%5000
-param.epsStop=1e-8;
+param.epsStop=1e-10;
 param.PSdualityEpsilon=1e-8;
 param.k=0;
 param.PSmu=0; %strong convexity
@@ -44,16 +44,17 @@ param.cardfun=inf*ones(1,p);
 param.cardfun(k)=1;
 
 
-param.lambda=.01; %lamda ~ 2/k*mu
-param.mu=.05;
+param.lambda=.04; %lamda ~ 2/k*mu
+param.mu=.1;
 
 
 %% blocks
 [Z Z1 Z2 ActiveSet hist param flag output] = cgan_l1_omega(inputData,param);
 
 %% tr+l1
-param.lambda=.1; %lamda ~ 2/k*mu
-param.mu=.1;
+param.lambda=.05; %lamda ~ 2/k*mu
+param.mu=.025;
+
 param.max_nb_main_loop=10;
 param.niterPS=10000;
 param.cardfun=inf*ones(1,p);

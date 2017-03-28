@@ -5,7 +5,7 @@
 % S : connected grid 6x6
 % L : one latent variable connected to 60% of observed
 %
-
+% no noise
 
 %% add paths
 clc; clear all; close all;
@@ -68,7 +68,7 @@ param.cardfun(k)=1;
 
 %lambda>grad_op
 %mu>grad_inf
-param.lambda=.27; %lamda ~ 2/k*mu
+param.lambda=2; %lamda ~ 2/k*mu
 param.mu=.05;
 
 %param;f==4

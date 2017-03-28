@@ -52,4 +52,12 @@ if ~isfield(param,'sloppy')
     param.sloppy = 0;
 end
 
+if ~isfield(param,'Sfixed')
+    param.Sfixed = false;
+end
+
+if ~isfield(param,'Sstar')
+    param.Sstar = 0;
+end
+
 end

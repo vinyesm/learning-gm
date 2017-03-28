@@ -10,7 +10,7 @@ if param.PSD
         currS=0.5*(currS+currS');
         
         if rcond(currS)<1e-14 || sum(sum(isnan(currS)))
-            error('get_dg_l1_omega_asqp: bad conditioned or nan\n');
+            fprintf('get_dg_l1_omega_asqp: bad conditioned or nan\n');
         end
         
         currTemp = eigs(currS,1,'la');

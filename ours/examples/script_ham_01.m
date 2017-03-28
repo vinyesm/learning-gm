@@ -17,13 +17,13 @@ addpath('../TPower_1.0/algorithms/TPower/');
 addpath('../TPower_1.0/misc/');
 
 %% data
-run('../../toy-data/toy04.m');k=pb;rank=1;p=size(S,1);Z0=eye(p);S05=S^.5;
+run('../../toy-data/toy04.m');k=pb;rank=1;p=size(S,1);Z0=Doo;S05=S^.5;
 
 
 %%
 objective = @(S05,Z) .5*norm(S05*Z*S05+eye(size(Z,1)),'fro')^2;
 rankdiff = @(ActiveSet) abs((rank-size(ActiveSet.atoms,2)));
-suppdiff = @(Z,Z0) (sum(sign(Z(:))==sign(Z0(:))));
+suppdiff = @(Z,Z0) (sum(sign(Z(:))~=sign(Z0(:))));
 
 %%
 % lambda < k*mus

@@ -55,7 +55,11 @@ if atom_added==2,
         Ui=aom(:,i)*aom(:,i)';
         suppi=sum(abs(aom(:,i))>0);
         %     fall(nb_atoms_l1+i)=-trace(S*Ui)+lambda; %(*)
-        fall(nb_atoms)=+trace(S*Ui)+lambda*param.cardfun(suppi);
+        if param.Sfixed
+            fall(nb_atoms)=+trace(S*Ui)+trace(S*param.Sstar*S*Ui)+lambda*param.cardfun(suppi);
+        else
+            fall(nb_atoms)=+trace(S*Ui)+lambda*param.cardfun(suppi);
+        end
         for j=1:i
             Uj=aom(:,j)*aom(:,j)';
             Hall(nb_atoms,nb_atoms_l1+j)=trace(S*Ui*S*Uj);

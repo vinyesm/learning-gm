@@ -141,10 +141,12 @@ while cont
             Z2_old=Z2;
         end
         
-        Z1=zeros(p);
-        nz=find(ActiveSet.beta>1e-15);
-        for j=nz'
-            Z1=Z1+ActiveSet.beta(j)*reshape(atoms_l1_sym(:,ActiveSet.I_l1(j)),p,p);
+        if ~param.Sfixed
+            Z1=zeros(p);
+            nz=find(ActiveSet.beta>1e-15);
+            for j=nz'
+                Z1=Z1+ActiveSet.beta(j)*reshape(atoms_l1_sym(:,ActiveSet.I_l1(j)),p,p);
+            end
         end
         Z2=zeros(p);
         nz=find(ActiveSet.alpha>1e-15);
@@ -248,6 +250,9 @@ while cont
             i2=(new_col-1)*p+new_row;
             idx_l1 = find((atoms_l1_sym(i1, :) == sa) & (atoms_l1_sym(i2, :) == sa));
         else
+            maxval_l1=-inf;
+        end
+        if param.Sfixed
             maxval_l1=-inf;
         end
         

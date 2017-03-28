@@ -4,13 +4,13 @@ MAX_NB_ATOMS=50;
 param.max_nb_atoms=MAX_NB_ATOMS;
 
 
-
+param = set_default_param(param);
 %% init
 if nargin < 3
     startingZ = set_default_Z(inputData,param);
     Z = startingZ;
-    Z1 =Z;
-    Z2=Z;
+    Z1 = Z;
+    Z2 = Z;
     ActiveSet = {};
     ActiveSet.I = {};
     ActiveSet.U = {};
@@ -28,7 +28,11 @@ else
     Z = startingZ;
 end
 
-param = set_default_param(param);
+if param.Sfixed
+    Z1 = param.Sstar;
+    Z = Z1;
+end
+
 
 obj  = [];
 loss = [];
@@ -71,6 +75,7 @@ hist.time=toc;
 c = 1;
 i = 0;
 
+
 while c
     i = i+1;
     
@@ -84,7 +89,6 @@ while c
         if param.verbose==1
             fprintf('   solving PS..\n ')
         end
-        
         [Z, Z1, Z2,U,Hall,fall,cardVal, ActiveSet, hist_ps] = solve_ps_l1_omega_asqp(Z,Z1,Z2, ActiveSet,param,inputData,atoms_l1_sym,U,Hall,fall,cardVal);
         if ~isempty(ActiveSet.alpha) && param.debug==1
             hist.nzalphas=[hist.nzalphas full(sum(ActiveSet.alpha>0))];
@@ -114,6 +118,7 @@ while c
     end
 
     [u, kBest,val] = lmo_spsd_TPower(-H,param);
+
     if val<0
         currI=[];
         fprintf('   all eigs are negative\n')
@@ -221,6 +226,10 @@ end
 
 
 %%
+if param.Sfixed
+    Z1 = param.Sstar;
+    Z=Z1+Z2;
+end
 hist.obj = obj;
 hist.loss = loss;
 hist.pen = pen;

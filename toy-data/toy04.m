@@ -83,8 +83,8 @@ end
 mu=zeros(1,pt); % vector of means
 Xfull=mvnrnd(mu, inv(Dfull), n)';
 X=Xfull((pl+1):pt,:);
-S=cov(X');
-% S=inv(Dmargo);
+%S=cov(X');
+S=inv(Dmargo);
 
 %%
 nnz=sum(Doo(:)~=0);
@@ -100,9 +100,6 @@ gamma_inf=xsi_Z2/(1-4*mu_Z1*xsi_Z2);
 gamma_sup=(1-3*mu_Z1*xsi_Z2)/mu_Z1;
 c_inf=max(grad_inf/gamma_inf,grad_op);
 
-% grad_SM=.5*(S*(Z1+Z2) +(Z1+Z2)*S)-inputData.Y;
-% grad_op_SM=abs(eigs(grad_SM,1,'lm'));
-% grad_inf_SM=max(abs(grad_SM(:)));
 
 %% plotting
 

@@ -1,24 +1,26 @@
 % TESTING NEW FUNCTION cgan_l1_omega.m
 % EXPERIMENT ON  LARGE BLOCKS AND SPARSE MATRIX ON OBSRVED VAR
-%non oriented graph structure learning with latent variables
+% non oriented graph structure learning with latent variables
 % 
-% We build the complete model and sample from it
-% We assume latept variables ndependept
+% S : connected grid 6x6
+% L : one latent variable connected to 60% of observed
+%
 
-% % %% add paths
-% clc; clear all; close all;
-% addpath('../main');
-% addpath('../active-set');
-% addpath('../atom-selection');
-% addpath('../utils');
-% addpath('../other');
-% addpath('../prox');
-% addpath('../TPower_1.0');
-% addpath('../TPower_1.0/algorithms/TPower/');
-% addpath('../TPower_1.0/misc/');
-% % % 
+
+%% add paths
+clc; clear all; close all;
+addpath('../main');
+addpath('../active-set');
+addpath('../atom-selection');
+addpath('../utils');
+addpath('../other');
+addpath('../prox');
+addpath('../TPower_1.0');
+addpath('../TPower_1.0/algorithms/TPower/');
+addpath('../TPower_1.0/misc/');
+% % 
 % % % %% data
-% run('../../toy-data/toy04.m');k=pb;
+run('../../toy-data/toy04.m');k=pb;
 % % S=inv(Dmargo);
 
 %% our norm psd with decomposition S-M sparse_omega_lgm
@@ -37,13 +39,11 @@ param.max_nb_main_loop=100;
 % param.lambda=3.5*grad_op; %lamda ~ 2/k*mu
 % param.mu=2.5*grad_inf;
 
-% param.diag=0;
 param.PSD=true;
-% param.max_nb_main_loop=100;%2;%1000
 param.powerIter=500;
 param.stPtPowerIter=1000;
 param.niterPS=5000;%10000;%5000
-param.epsStop=1e-12;
+param.epsStop=1e-8;
 param.PSdualityEpsilon=1e-8;
 param.k=0;
 param.PSmu=0; %strong convexity
@@ -68,8 +68,8 @@ param.cardfun(k)=1;
 
 %lambda>grad_op
 %mu>grad_inf
-param.lambda=1.5*grad_op; %lamda ~ 2/k*mu
-param.mu=1.1*grad_inf;
+param.lambda=.27; %lamda ~ 2/k*mu
+param.mu=.05;
 
 %param;f==4
 
@@ -84,8 +84,8 @@ param.mu=1.1*grad_inf;
 obj_l1_om=hist.obj(end);
 obj_l1_om
 % %% tr+l1
-% param.lambda=10; %lamda ~ 2/k*mu
-% param.mu=0.01;
+param.lambda=.75; %lamda ~ 2/k*mu
+param.mu=.08;
 
 param.max_nb_main_loop=2;
 param.niterPS=10000;

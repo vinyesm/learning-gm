@@ -112,7 +112,7 @@ while c
     if param.verbose==1
         fprintf('%d/%d   \n',i,max_nb_main_loop);
     end
-    
+
     [u, kBest,val] = lmo_spsd_TPower(-H,param);
     if val<0
         currI=[];

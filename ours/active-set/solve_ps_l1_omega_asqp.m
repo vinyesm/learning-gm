@@ -358,7 +358,8 @@ while cont
             end
             if sum(ActiveSet.I_l1==idx_l1)
                 new_atom_added=false;
-                fprintf('\n this atom is already in the collection\n');
+                fprintf('\n this l1 atom is already in the collection\n');
+                keyboard;
             else
                 ActiveSet.I_l1=[ActiveSet.I_l1 idx_l1]; %to avoid adding same atom
                 if ActiveSet.atom_count>0

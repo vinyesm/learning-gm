@@ -1,4 +1,8 @@
-pp=188;%192
+
+K=find(cv1_rank==0);
+[(1:length(cv1_rank))' cv1_rank cv1_supp];
+
+pp=pp+1;
 
 figure(1);clf
 subplot(2,2,1);
@@ -16,4 +20,4 @@ title(['lat+obs l1+om  best obj lam=' num2str(pair(pp).lambda) ' mu=' num2str(pa
 subplot(2,2,4);
 imagesc(abs(Dfin2{pp})>1e-12);
 pbaspect([1 1 1])
-title(['lat+obs l1+tr best obj  lam=' num2str(pair(pp).lambda) ' mu=' num2str(pair(pp).mu)] 
+title(['lat+obs l1+tr best obj  lam=' num2str(pair(pp).lambda) ' mu=' num2str(pair(pp).mu)] )

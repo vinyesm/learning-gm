@@ -27,8 +27,8 @@ suppdiff = @(Z,Z0) (sum(sign(Z(:))~=sign(Z0(:))));
 
 %%
 % lambda < k*mus
-mus= linspace(.01,1,10);
-las= linspace(.1,1,20);
+mus= linspace(.01,0.15,10);
+las= linspace(.01,.5,10);
 pair=[];
 count=1;
 for i=1:length(las)

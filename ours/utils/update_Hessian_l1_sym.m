@@ -54,11 +54,13 @@ if atom_added==2,
     for i=nb_atoms_om
         Ui=aom(:,i)*aom(:,i)';
         suppi=sum(abs(aom(:,i))>0);
+        cf=min(param.cardfun(suppi:end));
         %     fall(nb_atoms_l1+i)=-trace(S*Ui)+lambda; %(*)
         if param.Sfixed
-            fall(nb_atoms)=+trace(S*Ui)+trace(S*param.Sstar*S*Ui)+lambda*param.cardfun(suppi);
+            
+            fall(nb_atoms)=+trace(S*Ui)+trace(S*param.Sstar*S*Ui)+lambda*cf;
         else
-            fall(nb_atoms)=+trace(S*Ui)+lambda*param.cardfun(suppi);
+            fall(nb_atoms)=+trace(S*Ui)+lambda*cf;
         end
         for j=1:i
             Uj=aom(:,j)*aom(:,j)';

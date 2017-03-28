@@ -43,6 +43,7 @@ cont=true;
 H = gradient(Z,inputData,param);
 maxIJ=max(abs(H(:)));
 maxvar=inf;
+res_corr=0; % remove too correlated atoms
 
 while cont
     %% get a new atom ui  [si=ui'*ui] in ActiveSet.atoms  from some C_I I
@@ -61,7 +62,7 @@ while cont
         
         if new_atom_added
             if new_atom_om
-                alpha0=[ActiveSet.beta;ActiveSet.alpha;0];
+                alpha0=[ActiveSet.beta;ActiveSet.alpha;res_corr];
                 idx_added=length(alpha0);
             elseif new_atom_l1
                 alpha0=[ActiveSet.beta;0;ActiveSet.alpha];
@@ -231,6 +232,7 @@ while cont
         
         if ~isempty(ActiveSet.I)
             [new_i, new_val, maxval_om0]=get_new_atom_spca(H,ActiveSet,param);
+            anew=sparse(new_i,ones(length(new_i),1),new_val,p,1);
             if maxval_om0<param.lambda*(1+param.epsStop)
                 maxval_om=-inf;
             else
@@ -239,6 +241,16 @@ while cont
         else
             maxval_om=-inf;
         end
+        
+%         if ActiveSet.atom_count>0
+%             correl = 1-abs(sum(bsxfun(@times,ActiveSet.atoms(:,1:ActiveSet.atom_count),anew),1));
+%             K=correl>1e-3;
+%             if sum(K==0)>0
+%                 fprintf('\n too correlated atoms\n');
+%                 maxval_om=-inf;
+%             end
+%         end
+
         
         %% l1 sym atom
         
@@ -255,6 +267,7 @@ while cont
         if param.Sfixed
             maxval_l1=-inf;
         end
+        
         
         %%
 
@@ -278,20 +291,23 @@ while cont
             if debug
                 fprintf('\n adding omega atom\n');
             end
-            anew=sparse(new_i,ones(length(new_i),1),new_val,p,1);
+%             anew=sparse(new_i,ones(length(new_i),1),new_val,p,1);
 %             %check if too correlated with previous atom
             K=true(1,ActiveSet.atom_count);
+%              res_corr=0;
 %             if ActiveSet.atom_count>0
 %                 %fprintf('\n atom count  %d\n',ActiveSet.atom_count);
 %                 correl = 1-abs(sum(bsxfun(@times,ActiveSet.atoms(:,1:ActiveSet.atom_count),anew),1));
-%                 K=correl>1e-10;
+%                 K=correl>1e-8;
 %                 if sum(K==0)>0
 %                     fprintf('\n too correlated atoms\n');
+%                     cont=0;
 %                     keyboard;
 %                 end
 %                 new_atom_count=sum(K);
 %                 ActiveSet.atom_count=new_atom_count;
 %                 ActiveSet.atoms=ActiveSet.atoms(:,K);
+%                 res_corr=sum(ActiveSet.alpha(~K));
 %                 ActiveSet.alpha=ActiveSet.alpha(K);
 %                 cardVal=cardVal(K);
 %                 Jset= [K,true(1,length(ActiveSet.I_l1))];
@@ -361,7 +377,7 @@ while cont
             if debug
                 fprintf('\n adding l1 atom row=%d col=%d\n', new_row, new_col);
             end
-            if sum(ActiveSet.I_l1==idx_l1)
+            if ~isempty(ActiveSet.I_l1) && sum(ActiveSet.I_l1==idx_l1)
                 new_atom_added=false;
                 fprintf('\n this l1 atom is already in the collection\n');
                 keyboard;

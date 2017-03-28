@@ -78,6 +78,9 @@ title('true complete conc. mat.');
 if eigs(Dfull,1,'sa')<0
     error('The conceptration matrix of the complete model is not PSD \n')
 end
+if eigs(Dmargo,1,'sa')<0
+    error('Dmargo matrix of the complete model is not PSD \n')
+end
 
 %% sampling data
 mu=zeros(1,pt); % vector of means

@@ -54,8 +54,9 @@ if atom_added==2,
     for i=nb_atoms_om
         Ui=aom(:,i)*aom(:,i)';
         suppi=sum(abs(aom(:,i))>0);
+        cf=min(param.cardfun(suppi:end));
         %     fall(nb_atoms_l1+i)=-trace(S*Ui)+lambda; %(*)
-        fall(nb_atoms)=-trace(Ui)+lambda*param.cardfun(suppi);
+        fall(nb_atoms)=-trace(Ui)+lambda*cf;
         for j=1:i
             Uj=aom(:,j)*aom(:,j)';
             Hall(nb_atoms,nb_atoms_l1+j)=trace(Ui*S*Uj);

@@ -1,46 +1,49 @@
 % Toy example
-% with three blocks of size 5
+% 5 blocks of size 10
 
-clear all; clc; close all;
-%% settings
+clear all; clc;
 
-n=500; % number of samples
+pl=5;
+k=10;
+ks=10*ones(1,pl);
+po=sum(ks);
+n=100*po;
 
-k=10;  %size of the block
-B=5;   %nb of blocks
 
-pl=B; % number of latept variables
-po=k*B;% number of observed variables
+pt=pl+po;
+c=1;
+clo=.7/sqrt(k);
+corr=eye(po);
 
-pt=po+pl;
-sigma2l=.2;
-sigma2lo=.2;
-scale=1/sqrt(k);
-scale=1;
+corr_all= zeros(pl+po,pl+po);
+corr_all(pl+1:end,pl+1:end)=c*eye(po);
+corr_all(1:pl,1:pl)=eye(pl);
 
-% slo=.2; % level of sparsity on latent-observed block of conceptration mat
-% soo=.2; % level of sparsity on latent-observed block of conceptration mat
-Doo=eye(po)/sigma2lo;
-Dol=zeros(po,pl);
-for i=1:B
-    i1=k*(i-1)+1;
-    i2=i1+k-1;
-    Dol(i1:i2,i)=ones(k,1);
+for i=1:pl
+    if i>1
+        i1=sum(ks(1:(i-1)))+1+pl;
+    else
+        i1=1+pl;
+    end
+    i2=i1+ks(i)-1;
+%     Uall((pl+i1):(pl+i2),i)=-.5*ones(ks(i),1);
+    corr_all(i1:i2,i)=ones(ks(i),1)*clo;
+    corr_all(i,i1:i2)=ones(ks(i),1)'*clo;
 end
-Dol=-Dol*scale/sigma2lo;
-Dll=eye(pl)*(1/sigma2l+k*scale^2/sigma2lo);
 
-%% construction of the conceptration matrix
-Dfull=zeros(pt);
-Dfull(1:pl,1:pl)=Dll;
-Dfull((pl+1):pt,(pl+1):pt)=Doo;
-Dfull(1:pl,(pl+1):pt)=Dol';
-Dfull((pl+1):pt,1:pl)=Dol;
 
-Dfull=.5*(Dfull+Dfull');
+figure(1); clf;
+imagesc(corr_all);
+pbaspect([1 1 1]);
+
+%%
+Dfull=corr_all;
+Doo=corr;
+Dol=corr_all(pl+1:end,1:pl);
 Dmargo=Doo-Dol*Dol';
 
 
+%%
 descr = {'Plot of the groundtruth '
     'concentration matrix';
     'of the complete model'};
@@ -57,7 +60,7 @@ pbaspect([1 1 1]);
 title('true complete conc. mat.');
 
 if eigs(Dfull,1,'sa')<0
-    error('The conceptration matrix of the complete model is not PSD \n')
+    error('The concentration matrix of the complete model is not PSD \n')
 end
 if eigs(Dmargo,1,'sa')<0
     error('Dmargo matrix of the complete model is not PSD \n')
@@ -69,6 +72,9 @@ Xfull=mvnrnd(mu, inv(Dfull), n)';
 X=Xfull((pl+1):pt,:);
 S=cov(X');
 % S=inv(Dmargo);
+
+%%
+
 
 %% plotting
 
@@ -92,3 +98,4 @@ title('observed cov');
 
 
  
+

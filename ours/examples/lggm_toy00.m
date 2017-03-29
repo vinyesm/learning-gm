@@ -52,8 +52,8 @@ param.mu=.1;
 [Z Z1 Z2 ActiveSet hist param flag output] = cgan_l1_omega(inputData,param);
 
 %% tr+l1
-param.lambda=.05; %lamda ~ 2/k*mu
-param.mu=.025;
+param.lambda=.6; %lamda ~ 2/k*mu
+param.mu=.25;
 
 param.max_nb_main_loop=10;
 param.niterPS=10000;

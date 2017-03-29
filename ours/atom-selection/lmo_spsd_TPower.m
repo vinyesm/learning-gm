@@ -23,9 +23,13 @@ for k=1:size(B,1)
         options.cardinality_vec=k;
         options.initType=1; %default 2
         [u,lambda] = TPower_SPCA(B, options);
-        lambda=lambda/cf;
+        if emin<0
+            lambda=(lambda+2*emin)/cf;
+        else
+            lambda=lambda/cf;
+        end
         allVal(k)=lambda;
-        if lambdaBest < lambda
+        if  lambdaBest < lambda
             uBest = u/sqrt(cf);
             lambdaBest = lambda;
             cfBest=cf;
@@ -33,13 +37,14 @@ for k=1:size(B,1)
         end
     end
 end
-if emin<0
-    lambdaBest=lambdaBest*cfBest+2*emin;   
-end
-lambdaBest=lambdaBest/cfBest;
+% if emin<0
+%     lambdaBest=lambdaBest*cfBest+2*emin;   
+% end
+% lambdaBest=lambdaBest/cfBest;
 
 if lambdaBest<0
     fprintf('in lmo_spca no descent direction\n');
+%     keyboard;
 end
 
 end

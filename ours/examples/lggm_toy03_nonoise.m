@@ -6,19 +6,19 @@
 % We assume latept variables ndependept
 
 % %% add paths
-% clc; clear all; close all;
-% addpath('../main');
-% addpath('../active-set');
-% addpath('../atom-selection');
-% addpath('../utils');
-% addpath('../other');
-% addpath('../prox');
-% addpath('../TPower_1.0');
-% addpath('../TPower_1.0/algorithms/TPower/');
-% addpath('../TPower_1.0/misc/');
-% 
+clc; clear all; close all;
+addpath('../main');
+addpath('../active-set');
+addpath('../atom-selection');
+addpath('../utils');
+addpath('../other');
+addpath('../prox');
+addpath('../TPower_1.0');
+addpath('../TPower_1.0/algorithms/TPower/');
+addpath('../TPower_1.0/misc/');
+
 % %% data
-run('../../toy-data/toy03.m');k=15;
+run('../../toy-data/toy03.m');S=inv(Dmargo);k=15;
 
 %% our norm psd with decomposition S-M sparse_omega_lgm
 p=po;
@@ -40,27 +40,14 @@ param.max_nb_atoms=param.max_nb_main_loop*param.niterPS;
 inputData.X1=S^.5;
 inputData.X2=S^.5;
 inputData.Y=-eye(po);
-param.cardfun=inf*ones(1,p);
-param.cardfun(k)=1;
-% param.cardfun(p)=1;
-% beta=0.3;
-% param.cardfun=((1:p).^beta)./(p^beta);
-% param.cardfun(1)=inf;
+% param.cardfun=inf*ones(1,p);
+% param.cardfun(k)=1;
+beta=0.5;
+param.cardfun=((1:p).^beta)./(p^beta);
+param.cardfun(1)=inf;
 
-%choice s.t. mu*k^=lambda
-% aa=0.1;
-% param.lambda=aa; %lamda ~ 2/k*mu
-% param.mu=0.3;
-
-%%% n=10000
-% c=2*sqrt(k/n);
-% param.lambda=10*c; %lamda ~ 2/k*mu
-% param.mu=2*c;
-
-%%% n=5000
-c=sqrt(p/n);
-param.lambda=5*c; %lamda ~ 2/k*mu
-param.mu=1*c;
+param.lambda=1e-4; %lamda ~ 2/k*mu
+param.mu=.1;
 
 
 
@@ -69,10 +56,10 @@ param.mu=1*c;
 obj_l1_om=hist.obj(end);
 
 %% tr+l1
-param.lambda=10; %lamda ~ 2/k*mu
-param.mu=0.01;
-param.max_nb_main_loop=2;
-param.niterPS=1;%10000;
+param.lambda=1e-3; %lamda ~ 2/k*mu
+param.mu=0.1;
+param.max_nb_main_loop=5;
+param.niterPS=10000;
 param.cardfun=inf*ones(1,p);
 param.cardfun(p)=1;
 [Z_tr Z1_tr Z2_tr ActiveSet_tr hist_tr param_tr flag_tr output_tr] = cgan_l1_omega(inputData,param);
@@ -117,113 +104,34 @@ descr_gen = {'Formulation Z1+Z2 where ';
 descr_par = {['\lambda = ' num2str(param.lambda) '  (omega reg)'];
     ['\mu = ' num2str(param.mu) '  (l_1 reg)'];};
 
-%%
-figure(3);clf;
+figure(6);clf;
 subplot(3,2,1)
-axis off;
-text(0,.5,descr_gen)
-pbaspect([1 1 1]);
-subplot(3,2,2)
-axis off;
-text(0,.5,descr_par)
-pbaspect([1 1 1]);
-subplot(3,2,3)
 imagesc(abs(Dfull));
 pbaspect([1 1 1]);
 title('true complete conc. mat.');
 colorbar
-subplot(3,2,4)
-imagesc(abs(Dfin));
-pbaspect([1 1 1]);
-title('estimated complete conc. mat.');
-colorbar
-subplot(3,2,5)
+subplot(3,2,2)
 imagesc(abs(Dfull)>1e-15);
 pbaspect([1 1 1]);
 title('true support');
 colorbar
-subplot(3,2,6)
+subplot(3,2,3)
+imagesc(abs(Dfin));
+pbaspect([1 1 1]);
+title('estimated complete conc. mat.');
+colorbar
+subplot(3,2,4)
 imagesc(abs(Dfin)>1e-15);
 pbaspect([1 1 1]);
 title('estimated support');
 colorbar
-% %%
-% 
-% figure(4);clf;
-% subplot(2,2,1);
-% imagesc(abs(Dmargo));
-% pbaspect([1 1 1]);
-% title('true marginal conc. mat.');
-% colorbar
-% subplot(2,2,2);
-% imagesc(abs(Z1+Z2));
-% pbaspect([1 1 1]);
-% title('observed conc. mat.');
-% colorbar
-% subplot(2,2,3)
-% imagesc(abs(Dmargo)>1e-15);
-% pbaspect([1 1 1]);
-% title('true support');
-% colorbar
-% subplot(2,2,4)
-% imagesc(abs(Z1+Z2)>1e-15);
-% pbaspect([1 1 1]);
-% title('estimated support');
-% colorbar
-% 
-% figure(5);clf
-% loglog(hist.time,hist.dg,'-','LineWidth',2,'Color',[1 0 0],'DisplayName','dg');hold on;
-% loglog(hist.time_sup,hist.dg_sup,'-','LineWidth',2,'Color',[0 0 0],'DisplayName','dg sup');hold on;
-% legend('show','Location','southwest');
-% grid on
-% hold off
-% 
-% figure(6);clf;
-% subplot(3,2,1)
-% imagesc(abs(Dfull));
-% pbaspect([1 1 1]);
-% title('true complete conc. mat.');
-% colorbar
-% subplot(3,2,2)
-% imagesc(abs(Dfull)>1e-15);
-% pbaspect([1 1 1]);
-% title('true support');
-% colorbar
-% subplot(3,2,3)
-% imagesc(abs(Dfin));
-% pbaspect([1 1 1]);
-% title('estimated complete conc. mat.');
-% colorbar
-% subplot(3,2,4)
-% imagesc(abs(Dfin)>1e-15);
-% pbaspect([1 1 1]);
-% title('estimated support');
-% colorbar
-% subplot(3,2,5)
-% imagesc(abs(Dfin_tr));
-% pbaspect([1 1 1]);
-% title('estimated complete conc. mat.');
-% colorbar
-% subplot(3,2,6)
-% imagesc(abs(Dfin_tr)>1e-15);
-% pbaspect([1 1 1]);
-% title('estimated support');
-% colorbar
-% 
-% 
-% %% saving
-% % %filename = ['lggm2_' datestr(datetime('now'),'yyyymmddTHHMMSS') '.ps'];
-% % filename = ['lggm4_' datestr(clock) '.ps'];
-% % %print ( '-dpsc2', filename, '-f1' )
-% % print ( '-dpsc2', filename, '-append', '-f1' )
-% % print ( '-dpsc2', filename, '-append', '-f2' )
-% % print ( '-dpsc2', filename, '-append', '-f3' )
-% % print ( '-dpsc2', filename, '-append', '-f4' )
-% % print ( '-dpsc2', filename, '-append', '-f5' )
-% 
-% % % keyboard
-% % save('lggm4_03_16','k','p','n','inputData','Dfull','Dmargo', ...
-% % 'Z', 'Z1', 'Z2', 'ActiveSet', 'hist' ,'param', 'flag' ,'output',...
-% % 'Z_tr', 'Z1_tr', 'Z2_tr', 'ActiveSet_tr', 'hist_tr', 'param_tr', 'flag_tr', 'output_tr');
-% 
-% obj_l1_om
+subplot(3,2,5)
+imagesc(abs(Dfin_tr));
+pbaspect([1 1 1]);
+title('estimated complete conc. mat.');
+colorbar
+subplot(3,2,6)
+imagesc(abs(Dfin_tr)>1e-15);
+pbaspect([1 1 1]);
+title('estimated support');
+colorbar

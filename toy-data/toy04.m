@@ -15,7 +15,12 @@ pb= round(po*density);
 grid=eye(d); %grid of correlations
 corr=eye(po);
 c=.2;
+
+% %%latent component
 clo=1.2/sqrt(pb);
+ul=ones(pb,1)*clo;
+% clo=1/sqrt(pb);
+% ul=clo*(rand(pb,1)+.5);
 
 for i=1:d
     for j=1:d
@@ -46,8 +51,8 @@ end
 corr_all= zeros(1+po,1+po);
 corr_all(1,1)=1;
 corr_all(2:end,2:end)=corr;
-corr_all(2:pb+1,1)=ones(pb,1)*clo;
-corr_all(1,2:pb+1)=ones(pb,1)'*clo;
+corr_all(2:pb+1,1)=ul;
+corr_all(1,2:pb+1)=ul';
 figure(1); clf;
 imagesc(corr_all);
 pbaspect([1 1 1]);
@@ -86,8 +91,8 @@ end
 mu=zeros(1,pt); % vector of means
 Xfull=mvnrnd(mu, inv(Dfull), n)';
 X=Xfull((pl+1):pt,:);
-%S=cov(X');
-S=inv(Dmargo);
+S=cov(X');
+% S=inv(Dmargo);
 
 %%
 nnz=sum(Doo(:)~=0);

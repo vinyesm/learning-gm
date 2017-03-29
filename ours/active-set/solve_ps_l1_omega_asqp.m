@@ -179,6 +179,8 @@ while cont
             %% Verify sttopping criterion
             H = gradient(Z,inputData,param);
             [maxIJ,new_row, new_col] = dual_l1_spca(H);
+            omega=pen(i-1);
+            dotHZ=trace(-H*Z);
             if ~isempty(ActiveSet.I)
                 maxvarold=maxvar;
 %                 [maxvar]=dual_om_k_spca(H,ActiveSet,param);
@@ -187,13 +189,16 @@ while cont
                     fprintf('maxvar not changing\n');
 %                     keyboard;
                 end
-                %size_supp=length(ActiveSet.I{kmaxvar});
-                %if maxvar < param.lambda*(1+param.epsStop / size_supp)* param.cardfun(size_supp) && maxIJ<param.mu*(1+param.epsStop)
-                if maxvar < param.lambda*(1+param.epsStop) && maxIJ<param.mu*(1+param.epsStop) %&& dualgap/param.PSdualityEpsilon<1
+                
+                dualomega=max(maxvar/param.lambda,maxIJ/param.mu);
+                cond=omega*dualomega - dotHZ;
+                epscond=1e-6;
+                
+                if maxvar < param.lambda*(1+param.epsStop) && maxIJ<param.mu*(1+param.epsStop) && cond<epscond %&& dualgap/param.PSdualityEpsilon<1
                     cont=false;
 %                     keyboard;
                 end
-                fprintf('  maxIJ/mu=%4.2f < 1     varmax/lambda=%4.2f < 1 dg/eps=%f<1\n',maxIJ/param.mu,maxvar/param.lambda,dualgap/param.PSdualityEpsilon);
+                fprintf('  maxIJ/mu=%4.2f < 1     varmax/lambda=%4.2f < 1 dg/eps=%f<1  cond=%f< %f\n',maxIJ/param.mu,maxvar/param.lambda,dualgap/param.PSdualityEpsilon,cond,epscond);
                 if debug 
                     fprintf('  maxIJ/mu=%4.2f < 1     varmax/lambda=%4.2f < 1 var-varold=%4.2f continue=%d  count=%d\n',maxIJ/param.mu,maxvar/param.lambda,norm(maxvar-maxvarold),cont && count< param.niterPS,count);
 %                     keyboard;
@@ -257,7 +262,7 @@ while cont
         [maxval_l1,new_row, new_col] = dual_l1_spca(H);
         
         if maxval_l1>param.mu*(1+param.epsStop)
-            sa=-sign(maxval_l1*H(new_row,new_col));
+            sa=-sign(H(new_row,new_col));
             i1=(new_row-1)*p+new_col;
             i2=(new_col-1)*p+new_row;
             idx_l1 = find((atoms_l1_sym(i1, :) == sa) & (atoms_l1_sym(i2, :) == sa));
@@ -267,7 +272,7 @@ while cont
         if param.Sfixed
             maxval_l1=-inf;
         end
-        
+
         
         %%
 

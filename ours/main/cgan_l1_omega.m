@@ -118,6 +118,7 @@ while c
     end
 
     [u, kBest,val] = lmo_spsd_TPower(-H,param);
+%     keyboard;
 
     if val<0
         currI=[];

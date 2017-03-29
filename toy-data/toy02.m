@@ -6,7 +6,7 @@ clear all; clc; close all;
 
 n=5000; % number of samples
 
-ks=[15 15];
+ks=[20 10 5];
 
 
 pl=length(ks); % number of latent variables
@@ -66,6 +66,9 @@ title('true complete conc. mat.');
 
 if eigs(Dfull,1,'sa')<0
     error('The conceptration matrix of the complete model is not PSD \n')
+end
+if eigs(Dmargo,1,'sa')<0
+    error('Dmargo matrix of the complete model is not PSD \n')
 end
 
 %% sampling data

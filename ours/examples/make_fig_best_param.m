@@ -2,7 +2,7 @@
 K=find(cv1_rank==0);
 [(1:length(cv1_rank))' cv1_rank cv1_supp];
 
-pp=pp+1;
+pp=172;
 
 figure(1);clf
 subplot(2,2,1);

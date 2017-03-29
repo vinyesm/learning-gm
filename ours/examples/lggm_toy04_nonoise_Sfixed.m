@@ -21,7 +21,7 @@ addpath('../TPower_1.0/algorithms/TPower/');
 addpath('../TPower_1.0/misc/');
 % % 
 % % % %% data
-run('../../toy-data/toy04.m');k=pb;
+run('../../toy-data/toy04.m');S=inv(Dmargo);k=pb;
 param.Sfixed=true;
 param.Sstar=-Doo;
 

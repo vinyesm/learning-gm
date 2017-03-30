@@ -90,30 +90,30 @@ while cont
             break;
         end
         [alph,Jset,npiv]=asqp2(Hall+0*1e-12*eye(length(fall)),-fall,alpha0,param_as,new_atom_added,idx_added);
-%         [alph,Jset,npiv]=asqp3(Hall+0*1e-12*eye(length(fall)),-fall,alpha0,param_as,new_atom_added,idx_added);
+        
         if debug
             obj1=.5*alph'*Hall*alph+fall'*alph;
             if obj1>obj0
                 fprintf('objective increasing in asqp\n');
-                %                 keyboard;
             end
         end
         
+        %% for robustness (too small alpha are deleted)
         eps_alph=1e-8;
-%         eps_alph=0;
         if(min(abs(alph(Jset))))<eps_alph
             fprintf('small alph\n');
             alph(abs(alph)<eps_alph | alph<0)=0;
             Jset(abs(alph)<eps_alph | alph<0)=0;
-            %             keyboard;
         end
         
+        
+        
+        %%
         if nbetas>0
             Jbeta=Jset(1:nbetas);
             ActiveSet.beta=alph(1:nbetas);
             ActiveSet.beta=ActiveSet.beta(Jbeta);
             ActiveSet.I_l1=ActiveSet.I_l1(Jbeta);
-            
         end
         
         if length(alph)>nbetas
@@ -123,10 +123,35 @@ while cont
             ActiveSet.atoms=ActiveSet.atoms(:,Jalpha);%not necessary (for debbuggging here)
             ActiveSet.alpha=alph((nbetas+1):end);
             ActiveSet.alpha=ActiveSet.alpha(Jalpha);
-            %             U=U(:,Jalpha);
             cardVal=cardVal(Jalpha);
+%             %% for robustness, fuisioning too correlated atoms
+%             if ActiveSet.atom_count>1
+%                 atom=ActiveSet.atoms(:,ActiveSet.atom_count);
+%                 correl = 1-abs(sum(bsxfun(@times,ActiveSet.atoms(:,1:(ActiveSet.atom_count)),atom),1));
+%                 K=correl<1e-6;
+%                 if sum(K)>1
+%                     fprintf('\n too correlated atoms\n');
+% %                     keyboard;
+%                     idx=find(K);
+%                     idx=idx(1);
+%                     Jalpha(K)=0;
+%                     Jalpha(idx)=1;
+%                     v=sum(full(bsxfun(@times,ActiveSet.atoms(:,1:(ActiveSet.atom_count)),alph(K)')),2);
+% %                     keyboard;
+%                     ActiveSet.atoms(:,idx)=v/norm(v);
+%                     ActiveSet.alpha(idx)=norm(v);
+%                     new_atom_count=sum(Jalpha);
+%                     ActiveSet.atom_count=new_atom_count;
+%                     ActiveSet.atoms=ActiveSet.atoms(:,Jalpha);%not necessary (for debbuggging here)
+%                     ActiveSet.alpha=ActiveSet.alpha(Jalpha);
+%                     cardVal=cardVal(Jalpha);
+%                 end
+%             end
+            
         end
-        %ActiveSet.alpha
+        
+        
+        
         nbetas=length(ActiveSet.beta);
         Hall=Hall(Jset,Jset);
         fall=fall(Jset);
@@ -134,7 +159,6 @@ while cont
             ab=[ActiveSet.beta;ActiveSet.alpha];
             obj2=.5*ab'*Hall*ab+fall'*ab;
         end
-        
         
         %% Update ActiveSet and Z
         if 1 %debug
@@ -190,7 +214,7 @@ while cont
             dualomega=max(maxvar/param.lambda,maxIJ/param.mu);
             cond=omega*dualomega - dotHZ;
             epscond=1e-6;
-            %sanity check (output of active set
+            %sanity check (output of active set)
             if ~isempty(ActiveSet.I)
             valmax_om=-inf;
             atmax_om=-1;
@@ -220,54 +244,21 @@ while cont
                 end
             end
             if valmax_l1>param.epsStop || valmax_om>param.epsStop
-                fprintf('Sanity check :  |maxIJ-mu|=%f<%f  |maxvart-lambda|=%f<%f \n',valmax_l1,param.epsStop,valmax,param.epsStop);
+                fprintf('Sanity check :  |maxIJ-mu|=%f<%f  |maxvart-lambda|=%f<%f \n',valmax_l1,param.epsStop,valmax_om,param.epsStop);
                 keyboard;
             end
+            % end of sanity check (output of active set
+            
+            % Stopping criterion
             if maxvar < param.lambda*(1+param.epsStop) && maxIJ<param.mu*(1+param.epsStop) && cond<epscond %&& dualgap/param.PSdualityEpsilon<1
                 cont=false;
             end
-%             fprintf('Sanity check :  abs(maxIJ-mu)=%f<%f     abs(maxvar- lambda)=%f<%f\n',abs(maxIJ-param.mu),param.epsStop,abs(maxvar- param.lambda),param.epsStop);
-%             keyboard;
             fprintf('maxIJ/mu=%4.2f<1     varmax/lambda=%4.2f<1   dg/eps=%4.2f<1  cond=%4.2f<%4.2f\n',maxIJ/param.mu,maxvar/param.lambda,dualgap/param.PSdualityEpsilon,cond,epscond);
             if debug 
                 fprintf('  maxIJ/mu=%4.2f < 1     varmax/lambda=%4.2f < 1 var-varold=%4.2f continue=%d  count=%d\n',maxIJ/param.mu,maxvar/param.lambda,norm(maxvar-maxvarold),cont && count< param.niterPS,count);
 %                     keyboard;
             end
-%             if ~isempty(ActiveSet.I)
-%                 maxvarold=maxvar;
-% %                 [maxvar]=dual_om_k_spca(H,ActiveSet,param);
-%                 [new_i,new_val,maxvar]=get_new_atom_spca(H,ActiveSet,param);
-%                 if debug && norm(maxvar-maxvarold)<1e-10
-%                     fprintf('maxvar not changing\n');
-% %                     keyboard;
-%                 end
-%                 
-%                 dualomega=max(maxvar/param.lambda,maxIJ/param.mu);
-%                 cond=omega*dualomega - dotHZ;
-%                 epscond=1e-6;
-%                 
-%                 if maxvar < param.lambda*(1+param.epsStop) && maxIJ<param.mu*(1+param.epsStop) && cond<epscond %&& dualgap/param.PSdualityEpsilon<1
-%                     cont=false;
-%                 end
-%                 
-%                 fprintf('Sanity check :  abs(maxIJ-mu)=%f<%f     abs(maxvar- lambda)=%f<%f\n',abs(maxIJ-param.mu),param.epsStop,abs(maxvar- param.lambda),param.epsStop);
-%                 keyboard;
-%                 fprintf('maxIJ/mu=%4.2f<1     varmax/lambda=%4.2f<1   dg/eps=%4.2f<1  cond=%4.2f<%4.2f\n',maxIJ/param.mu,maxvar/param.lambda,dualgap/param.PSdualityEpsilon,cond,epscond);
-%                 if debug 
-%                     fprintf('  maxIJ/mu=%4.2f < 1     varmax/lambda=%4.2f < 1 var-varold=%4.2f continue=%d  count=%d\n',maxIJ/param.mu,maxvar/param.lambda,norm(maxvar-maxvarold),cont && count< param.niterPS,count);
-% %                     keyboard;
-%                 end
-%             else
-%                 if  maxIJ<param.mu*(1+param.epsStop)
-%                     cont=false;
-%                 end
-%                 if debug 
-%                     fprintf('maxIJ/mu=%f < 1 \n',maxIJ/param.mu);
-%                 end
-%             end
-            %             if count> param.niterPS;
-            %                 keyboard;
-            %             end
+
             cont=cont && count< param.niterPS;
         end
     end

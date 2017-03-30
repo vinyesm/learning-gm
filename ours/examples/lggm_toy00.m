@@ -6,19 +6,19 @@
 % We assume latept variables ndependept
 
 %% add paths
-% clc; clear all; close all;
-% addpath('../main');
-% addpath('../active-set');
-% addpath('../atom-selection');
-% addpath('../utils');
-% addpath('../other');
-% addpath('../prox');
-% addpath('../TPower_1.0');
-% addpath('../TPower_1.0/algorithms/TPower/');
-% addpath('../TPower_1.0/misc/');
-% 
-% %% data
-% run('../../toy-data/toy00.m');k=10;
+clc; clear all; close all;
+addpath('../main');
+addpath('../active-set');
+addpath('../atom-selection');
+addpath('../utils');
+addpath('../other');
+addpath('../prox');
+addpath('../TPower_1.0');
+addpath('../TPower_1.0/algorithms/TPower/');
+addpath('../TPower_1.0/misc/');
+
+%% data
+run('../../toy-data/toy00.m');k=10;
 
 %% our norm psd with decomposition S-M sparse_omega_lgm
 p=po;
@@ -29,7 +29,7 @@ param.max_nb_main_loop=100;%2;%1000
 param.powerIter=500;
 param.stPtPowerIter=1000;
 param.niterPS=5000;%10000;%5000
-param.epsStop=1e-8;
+param.epsStop=1e-10;
 param.PSdualityEpsilon=1e-8;
 param.k=0;
 param.PSmu=0; %strong convexity
@@ -44,7 +44,7 @@ param.cardfun=inf*ones(1,p);
 param.cardfun(k)=1;
 
 lambda_om=.005;
-mu_om=.15;
+mu_om=.1;
 param.lambda=lambda_om; %lamda ~ 2/k*mu
 param.mu=mu_om;
 
@@ -54,8 +54,11 @@ param.mu=mu_om;
 hist.obj(end)
 
 %% tr+l1
-lambda_tr=.72;
-mu_tr=.21;
+% lambda_tr=.72;
+% mu_tr=.21;
+lambda_tr=.4;
+mu_tr=.3;
+
 param.lambda=lambda_tr; %lamda ~ 2/k*mu
 param.mu=mu_tr;
 

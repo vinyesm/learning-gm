@@ -57,7 +57,6 @@ if atom_added==2,
         cf=min(param.cardfun(suppi:end));
         %     fall(nb_atoms_l1+i)=-trace(S*Ui)+lambda; %(*)
         if param.Sfixed
-            
             fall(nb_atoms)=+trace(S*Ui)+trace(S*param.Sstar*S*Ui)+lambda*cf;
         else
             fall(nb_atoms)=+trace(S*Ui)+lambda*cf;

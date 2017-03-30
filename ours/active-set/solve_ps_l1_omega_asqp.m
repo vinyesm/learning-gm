@@ -179,38 +179,92 @@ while cont
             %% Verify sttopping criterion
             H = gradient(Z,inputData,param);
             [maxIJ,new_row, new_col] = dual_l1_spca(H);
+            if ~isempty(ActiveSet.I)
+                [new_i,new_val,maxvar]=get_new_atom_spca(H,ActiveSet,param);
+            else
+                maxvar=0;
+            end
+            %% extra condition
             omega=pen(i-1);
             dotHZ=trace(-H*Z);
+            dualomega=max(maxvar/param.lambda,maxIJ/param.mu);
+            cond=omega*dualomega - dotHZ;
+            epscond=1e-6;
+            %sanity check (output of active set
             if ~isempty(ActiveSet.I)
-                maxvarold=maxvar;
-%                 [maxvar]=dual_om_k_spca(H,ActiveSet,param);
-                [new_i,new_val,maxvar]=get_new_atom_spca(H,ActiveSet,param);
-                if debug && norm(maxvar-maxvarold)<1e-10
-                    fprintf('maxvar not changing\n');
-%                     keyboard;
-                end
-                
-                dualomega=max(maxvar/param.lambda,maxIJ/param.mu);
-                cond=omega*dualomega - dotHZ;
-                epscond=1e-6;
-                
-                if maxvar < param.lambda*(1+param.epsStop) && maxIJ<param.mu*(1+param.epsStop) && cond<epscond %&& dualgap/param.PSdualityEpsilon<1
-                    cont=false;
-%                     keyboard;
-                end
-                fprintf('  maxIJ/mu=%4.2f < 1     varmax/lambda=%4.2f < 1 dg/eps=%f<1  cond=%f< %f\n',maxIJ/param.mu,maxvar/param.lambda,dualgap/param.PSdualityEpsilon,cond,epscond);
-                if debug 
-                    fprintf('  maxIJ/mu=%4.2f < 1     varmax/lambda=%4.2f < 1 var-varold=%4.2f continue=%d  count=%d\n',maxIJ/param.mu,maxvar/param.lambda,norm(maxvar-maxvarold),cont && count< param.niterPS,count);
-%                     keyboard;
-                end
-            else
-                if  maxIJ<param.mu*(1+param.epsStop)
-                    cont=false;
-                end
-                if debug 
-                    fprintf('maxIJ/mu=%f < 1 \n',maxIJ/param.mu);
+            valmax_om=-inf;
+            atmax_om=-1;
+            for at=1:ActiveSet.atom_count
+                atom=ActiveSet.atoms(:,at);
+                supp=sum(abs(atom)>0);
+                cf=min(param.cardfun(supp:end));
+                val= abs(-atom'*H*atom/cf-param.lambda);
+                if val>valmax_om
+                    valmax_om=val;
+                    atmax_om=at;
                 end
             end
+            else
+                valmax_om=0;
+            end
+            valmax_l1=-inf;
+            for at=length(ActiveSet.I_l1)
+                atom=atoms_l1_sym(:,ActiveSet.I_l1(at));
+                val=-dot(H(:),atom);
+                if abs(sum(aom))>1
+                    val=val/2;
+                end
+                val=val-param.mu;
+                if val>valmax_l1
+                    valmax_l1=val;
+                end
+            end
+            if valmax_l1>param.epsStop || valmax_om>param.epsStop
+                fprintf('Sanity check :  |maxIJ-mu|=%f<%f  |maxvart-lambda|=%f<%f \n',valmax_l1,param.epsStop,valmax,param.epsStop);
+                keyboard;
+            end
+            if maxvar < param.lambda*(1+param.epsStop) && maxIJ<param.mu*(1+param.epsStop) && cond<epscond %&& dualgap/param.PSdualityEpsilon<1
+                cont=false;
+            end
+%             fprintf('Sanity check :  abs(maxIJ-mu)=%f<%f     abs(maxvar- lambda)=%f<%f\n',abs(maxIJ-param.mu),param.epsStop,abs(maxvar- param.lambda),param.epsStop);
+%             keyboard;
+            fprintf('maxIJ/mu=%4.2f<1     varmax/lambda=%4.2f<1   dg/eps=%4.2f<1  cond=%4.2f<%4.2f\n',maxIJ/param.mu,maxvar/param.lambda,dualgap/param.PSdualityEpsilon,cond,epscond);
+            if debug 
+                fprintf('  maxIJ/mu=%4.2f < 1     varmax/lambda=%4.2f < 1 var-varold=%4.2f continue=%d  count=%d\n',maxIJ/param.mu,maxvar/param.lambda,norm(maxvar-maxvarold),cont && count< param.niterPS,count);
+%                     keyboard;
+            end
+%             if ~isempty(ActiveSet.I)
+%                 maxvarold=maxvar;
+% %                 [maxvar]=dual_om_k_spca(H,ActiveSet,param);
+%                 [new_i,new_val,maxvar]=get_new_atom_spca(H,ActiveSet,param);
+%                 if debug && norm(maxvar-maxvarold)<1e-10
+%                     fprintf('maxvar not changing\n');
+% %                     keyboard;
+%                 end
+%                 
+%                 dualomega=max(maxvar/param.lambda,maxIJ/param.mu);
+%                 cond=omega*dualomega - dotHZ;
+%                 epscond=1e-6;
+%                 
+%                 if maxvar < param.lambda*(1+param.epsStop) && maxIJ<param.mu*(1+param.epsStop) && cond<epscond %&& dualgap/param.PSdualityEpsilon<1
+%                     cont=false;
+%                 end
+%                 
+%                 fprintf('Sanity check :  abs(maxIJ-mu)=%f<%f     abs(maxvar- lambda)=%f<%f\n',abs(maxIJ-param.mu),param.epsStop,abs(maxvar- param.lambda),param.epsStop);
+%                 keyboard;
+%                 fprintf('maxIJ/mu=%4.2f<1     varmax/lambda=%4.2f<1   dg/eps=%4.2f<1  cond=%4.2f<%4.2f\n',maxIJ/param.mu,maxvar/param.lambda,dualgap/param.PSdualityEpsilon,cond,epscond);
+%                 if debug 
+%                     fprintf('  maxIJ/mu=%4.2f < 1     varmax/lambda=%4.2f < 1 var-varold=%4.2f continue=%d  count=%d\n',maxIJ/param.mu,maxvar/param.lambda,norm(maxvar-maxvarold),cont && count< param.niterPS,count);
+% %                     keyboard;
+%                 end
+%             else
+%                 if  maxIJ<param.mu*(1+param.epsStop)
+%                     cont=false;
+%                 end
+%                 if debug 
+%                     fprintf('maxIJ/mu=%f < 1 \n',maxIJ/param.mu);
+%                 end
+%             end
             %             if count> param.niterPS;
             %                 keyboard;
             %             end

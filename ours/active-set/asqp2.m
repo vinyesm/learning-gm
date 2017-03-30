@@ -151,7 +151,7 @@ if 0 && debug_mode,
     if any(diff(hist.obj)>tol),
         display('objective increases in asqp');
     end
-    if iter>max_iter || nb_full_steps>10,
+    if iter>max_iter || nb_full_steps>100,
         figure(15);
         plot(hist.obj);
         keyboard;

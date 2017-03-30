@@ -5,20 +5,20 @@
 % We build the complete model and sample from it
 % We assume latept variables ndependept
 
-%% add paths
-clc; clear all; close all;
-addpath('../main');
-addpath('../active-set');
-addpath('../atom-selection');
-addpath('../utils');
-addpath('../other');
-addpath('../prox');
-addpath('../TPower_1.0');
-addpath('../TPower_1.0/algorithms/TPower/');
-addpath('../TPower_1.0/misc/');
-
-%% data
-run('../../toy-data/toy00.m');k=10;
+% %% add paths
+% clc; clear all; close all;
+% addpath('../main');
+% addpath('../active-set');
+% addpath('../atom-selection');
+% addpath('../utils');
+% addpath('../other');
+% addpath('../prox');
+% addpath('../TPower_1.0');
+% addpath('../TPower_1.0/algorithms/TPower/');
+% addpath('../TPower_1.0/misc/');
+% 
+% %% data
+% run('../../toy-data/toy00.m');k=10;
 
 %% our norm psd with decomposition S-M sparse_omega_lgm
 p=po;
@@ -29,7 +29,7 @@ param.max_nb_main_loop=100;%2;%1000
 param.powerIter=500;
 param.stPtPowerIter=1000;
 param.niterPS=5000;%10000;%5000
-param.epsStop=1e-10;
+param.epsStop=1e-6;
 param.PSdualityEpsilon=1e-8;
 param.k=0;
 param.PSmu=0; %strong convexity

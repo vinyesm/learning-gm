@@ -23,7 +23,6 @@ run('../../toy-data/toy03.m');k=15;
 %% our norm psd with decomposition S-M sparse_omega_lgm
 p=po;
 param.f=4;
-param.diag=0;
 param.PSD=true;
 param.max_nb_main_loop=100;%2;%1000
 param.powerIter=500;
@@ -31,11 +30,7 @@ param.stPtPowerIter=1000;
 param.niterPS=5000;%10000;%5000
 param.epsStop=1e-8;
 param.PSdualityEpsilon=1e-8;
-param.k=0;
-param.PSmu=0; %strong convexity
 param.verbose=1;
-param.debug=0;
-param.sloppy=0;
 param.max_nb_atoms=param.max_nb_main_loop*param.niterPS;
 inputData.X1=S^.5;
 inputData.X2=S^.5;
@@ -46,16 +41,6 @@ param.cardfun(p)=1;
 beta=0.3;
 param.cardfun=((1:p).^beta)./(p^beta);
 param.cardfun(1)=inf;
-
-%choice s.t. mu*k^=lambda
-% aa=0.1;
-% param.lambda=aa; %lamda ~ 2/k*mu
-% param.mu=0.3;
-
-%%% n=10000
-% c=2*sqrt(k/n);
-% param.lambda=10*c; %lamda ~ 2/k*mu
-% param.mu=2*c;
 
 %%% n=5000
 c=sqrt(p/n);

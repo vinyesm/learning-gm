@@ -267,7 +267,7 @@ while cont
             if maxvar < param.lambda*(1+param.epsStop) && maxIJ<param.mu*(1+param.epsStop) && cond<epscond %&& dualgap/param.PSdualityEpsilon<1
                 cont=false;
             end
-            fprintf('maxIJ/mu=%4.2f<1     varmax/lambda=%4.2f<1   dg/eps=%4.2f<1  cond=%4.2f<%4.2f\n',maxIJ/param.mu,maxvar/param.lambda,dualgap/param.PSdualityEpsilon,cond,epscond);
+%             fprintf('maxIJ/mu=%4.2f<1     varmax/lambda=%4.2f<1   dg/eps=%4.2f<1  cond=%4.2f<%4.2f\n',maxIJ/param.mu,maxvar/param.lambda,dualgap/param.PSdualityEpsilon,cond,epscond);
             if debug 
                 fprintf('  maxIJ/mu=%4.2f < 1     varmax/lambda=%4.2f < 1 var-varold=%4.2f continue=%d  count=%d\n',maxIJ/param.mu,maxvar/param.lambda,norm(maxvar-maxvarold),cont && count< param.niterPS,count);
 %                     keyboard;

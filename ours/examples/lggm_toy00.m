@@ -43,7 +43,7 @@ inputData.Y=-eye(po);
 param.cardfun=inf*ones(1,p);
 param.cardfun(k)=1;
 
-lambda_om=.001;
+lambda_om=.002;
 mu_om=.1;
 param.lambda=lambda_om; %lamda ~ 2/k*mu
 param.mu=mu_om;

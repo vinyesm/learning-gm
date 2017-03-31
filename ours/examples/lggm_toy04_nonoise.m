@@ -8,20 +8,20 @@
 % no noise
 
 %% add paths
-% clc; clear all; close all;
-% addpath('../main');
-% addpath('../active-set');
-% addpath('../atom-selection');
-% addpath('../utils');
-% addpath('../other');
-% addpath('../prox');
-% addpath('../TPower_1.0');
-% addpath('../TPower_1.0/algorithms/TPower/');
-% addpath('../TPower_1.0/misc/');
-% % % 
-% % % % %% data
-% run('../../toy-data/toy04.m');S=inv(Dmargo);k=pb;
-% % % S=inv(Dmargo);
+clc; clear all; close all;
+addpath('../main');
+addpath('../active-set');
+addpath('../atom-selection');
+addpath('../utils');
+addpath('../other');
+addpath('../prox');
+addpath('../TPower_1.0');
+addpath('../TPower_1.0/algorithms/TPower/');
+addpath('../TPower_1.0/misc/');
+% % 
+% % % %% data
+run('../../toy-data/toy04.m');S=inv(Dmargo);k=pb;
+% % S=inv(Dmargo);
 
 %% our norm psd with decomposition S-M sparse_omega_lgm
 p=po;
@@ -36,7 +36,7 @@ param.PSD=true;
 param.powerIter=500;
 param.stPtPowerIter=1000;
 param.niterPS=5000;%10000;%5000
-param.epsStop=1e-8;
+param.epsStop=1e-6;
 param.PSdualityEpsilon=1e-8;
 param.k=0;
 param.PSmu=0; %strong convexity
@@ -51,7 +51,7 @@ param.cardfun(k)=1;
 %% blocks
 % lambda_om=.45;
 % mu_om=.1;
-lambda_om=.45;
+lambda_om=.6;
 mu_om=.1;
 param.lambda=lambda_om; %lamda ~ 2/k*mu
 param.mu=mu_om;

@@ -71,11 +71,13 @@ tic
 max_nb_atoms = param.max_nb_atoms;
 max_nb_main_loop = param.max_nb_main_loop;
 hist.time=toc;
-
-c = 1;
-i = 0;
+epsStop=param.epsStop;
 
 
+for q=1%q=4:-1:1
+    param.epsStop=2^q*epsStop;
+    c = 1;
+    i = 0;
 while c
     i = i+1;
     
@@ -89,7 +91,11 @@ while c
         if param.verbose==1
             fprintf('   solving PS..\n ')
         end
+        
+        param.epsStop=2^(q-1)*epsStop;
         [Z, Z1, Z2,U,Hall,fall,cardVal, ActiveSet, hist_ps] = solve_ps_l1_omega_asqp(Z,Z1,Z2, ActiveSet,param,inputData,atoms_l1_sym,U,Hall,fall,cardVal);
+        param.epsStop=2^q*epsStop;
+        
         if ~isempty(ActiveSet.alpha) && param.debug==1
             hist.nzalphas=[hist.nzalphas full(sum(ActiveSet.alpha>0))];
             hist.normalpha=[hist.normalpha full(sum(ActiveSet.alpha))];
@@ -187,6 +193,7 @@ while c
     end
     c = i<max_nb_main_loop & c;
 end
+end
 
 if param.debug==1
     if i>=max_nb_main_loop
@@ -221,10 +228,13 @@ end
 
 %% postprocessing to blocks
 
-fprintf('Postprocessing.. \n');
-thresh=1e-6;
-[Z2,ActiveSet]=postprocessing(ActiveSet, thresh);
-Z=Z1+Z2;
+
+if ~isempty(ActiveSet.atoms)
+    fprintf('Postprocessing.. \n');
+    thresh=1e-6;
+    [Z2,ActiveSet]=postprocessing(ActiveSet, thresh);
+    Z=Z1+Z2;
+end
 
 end
 

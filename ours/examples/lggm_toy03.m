@@ -5,18 +5,18 @@
 % We build the complete model and sample from it
 % We assume latept variables ndependept
 
-% %% add paths
-% clc; clear all; close all;
-% addpath('../main');
-% addpath('../active-set');
-% addpath('../atom-selection');
-% addpath('../utils');
-% addpath('../other');
-% addpath('../prox');
-% addpath('../TPower_1.0');
-% addpath('../TPower_1.0/algorithms/TPower/');
-% addpath('../TPower_1.0/misc/');
-% 
+%% add paths
+clc; clear all; close all;
+addpath('../main');
+addpath('../active-set');
+addpath('../atom-selection');
+addpath('../utils');
+addpath('../other');
+addpath('../prox');
+addpath('../TPower_1.0');
+addpath('../TPower_1.0/algorithms/TPower/');
+addpath('../TPower_1.0/misc/');
+
 % %% data
 run('../../toy-data/toy03.m');k=15;
 
@@ -40,12 +40,12 @@ param.max_nb_atoms=param.max_nb_main_loop*param.niterPS;
 inputData.X1=S^.5;
 inputData.X2=S^.5;
 inputData.Y=-eye(po);
-param.cardfun=inf*ones(1,p);
-param.cardfun(k)=1;
-% param.cardfun(p)=1;
-% beta=0.3;
-% param.cardfun=((1:p).^beta)./(p^beta);
-% param.cardfun(1)=inf;
+% param.cardfun=inf*ones(1,p);
+% param.cardfun(k)=1;
+param.cardfun(p)=1;
+beta=0.3;
+param.cardfun=((1:p).^beta)./(p^beta);
+param.cardfun(1)=inf;
 
 %choice s.t. mu*k^=lambda
 % aa=0.1;
@@ -178,37 +178,37 @@ colorbar
 % grid on
 % hold off
 % 
-% figure(6);clf;
-% subplot(3,2,1)
-% imagesc(abs(Dfull));
-% pbaspect([1 1 1]);
-% title('true complete conc. mat.');
-% colorbar
-% subplot(3,2,2)
-% imagesc(abs(Dfull)>1e-15);
-% pbaspect([1 1 1]);
-% title('true support');
-% colorbar
-% subplot(3,2,3)
-% imagesc(abs(Dfin));
-% pbaspect([1 1 1]);
-% title('estimated complete conc. mat.');
-% colorbar
-% subplot(3,2,4)
-% imagesc(abs(Dfin)>1e-15);
-% pbaspect([1 1 1]);
-% title('estimated support');
-% colorbar
-% subplot(3,2,5)
-% imagesc(abs(Dfin_tr));
-% pbaspect([1 1 1]);
-% title('estimated complete conc. mat.');
-% colorbar
-% subplot(3,2,6)
-% imagesc(abs(Dfin_tr)>1e-15);
-% pbaspect([1 1 1]);
-% title('estimated support');
-% colorbar
+figure(6);clf;
+subplot(3,2,1)
+imagesc(abs(Dfull));
+pbaspect([1 1 1]);
+title('true complete conc. mat.');
+colorbar
+subplot(3,2,2)
+imagesc(abs(Dfull)>1e-15);
+pbaspect([1 1 1]);
+title('true support');
+colorbar
+subplot(3,2,3)
+imagesc(abs(Dfin));
+pbaspect([1 1 1]);
+title('estimated complete conc. mat.');
+colorbar
+subplot(3,2,4)
+imagesc(abs(Dfin)>1e-15);
+pbaspect([1 1 1]);
+title('estimated support');
+colorbar
+subplot(3,2,5)
+imagesc(abs(Dfin_tr));
+pbaspect([1 1 1]);
+title('estimated complete conc. mat.');
+colorbar
+subplot(3,2,6)
+imagesc(abs(Dfin_tr)>1e-15);
+pbaspect([1 1 1]);
+title('estimated support');
+colorbar
 % 
 % 
 % %% saving

@@ -120,27 +120,27 @@ while cont
         if length(alph)>nbetas
             Jalpha=Jset((nbetas+1):end);
             ActiveSet.alpha=alph((nbetas+1):end);
-            %% for robustness, fuisioning too correlated atoms
-            if ActiveSet.atom_count>1
-                atom=ActiveSet.atoms(:,ActiveSet.atom_count);
-                correl = 1-abs(sum(bsxfun(@times,ActiveSet.atoms(:,1:ActiveSet.atom_count),atom),1));
-                K0= correl'<1e-8;
-                K = Jalpha & K0;
-                if sum(K)>1
-                    fprintf('\n too correlated atoms\n');
-                    fusioned_atoms=true;
-%                     keyboard;
-                    Jalpha = Jalpha & ~K0;
-                    idx=find(K);
-                    idx=idx(1);
-                    Jalpha(idx)=1;
-                    v=sum(full(bsxfun(@times,ActiveSet.atoms(:,K),ActiveSet.alpha(K)')),2);
-%                     keyboard;
-                    ActiveSet.atoms(:,idx)=v/norm(v);
-                    ActiveSet.alpha(idx)=norm(v);
-                    Jset((nbetas+1):end)=Jalpha;
-                end
-            end
+%             %% for robustness, fuisioning too correlated atoms
+%             if ActiveSet.atom_count>1
+%                 atom=ActiveSet.atoms(:,ActiveSet.atom_count);
+%                 correl = 1-abs(sum(bsxfun(@times,ActiveSet.atoms(:,1:ActiveSet.atom_count),atom),1));
+%                 K0= correl'<1e-8;
+%                 K = Jalpha & K0;
+%                 if sum(K)>1
+%                     fprintf('\n too correlated atoms\n');
+%                     fusioned_atoms=true;
+% %                     keyboard;
+%                     Jalpha = Jalpha & ~K0;
+%                     idx=find(K);
+%                     idx=idx(1);
+%                     Jalpha(idx)=1;
+%                     v=sum(full(bsxfun(@times,ActiveSet.atoms(:,K),ActiveSet.alpha(K)')),2);
+% %                     keyboard;
+%                     ActiveSet.atoms(:,idx)=v/norm(v);
+%                     ActiveSet.alpha(idx)=norm(v);
+%                     Jset((nbetas+1):end)=Jalpha;
+%                 end
+%             end
             new_atom_count=sum(Jalpha);
             ActiveSet.atom_count=new_atom_count;
             ActiveSet.atoms=ActiveSet.atoms(:,Jalpha);%not necessary (for debbuggging here)

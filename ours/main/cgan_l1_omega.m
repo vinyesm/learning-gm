@@ -194,38 +194,6 @@ if param.debug==1
     end
 end
 
-% % ActiveSet = postProcessFactors(ActiveSet,Z);
-% 
-% al1=atoms_l1_sym(:,ActiveSet.I_l1);
-% aom=ActiveSet.atoms;
-% [Hp,fp] = build_Hessian_postprocess(inputData,param,al1,aom);
-% lb=zeros(1,length(fp));
-% ub=ones(1,length(fp));
-% param_as.max_iter=1e3;
-% param_as.epsilon=1e-14;
-% param_as.debug_mode=false;
-% param_as.ws=true;
-% 
-% %options.OptimalityTolerance=1e-10;
-% [alph]=quadprog(Hp,fp,[],[],[],[],lb,ub);
-% keyboard;
-% Jset= alph>1e-2;
-% 
-% nbetas=length(ActiveSet.beta);
-% if length(alph)>nbetas
-%     Jalpha=Jset((nbetas+1):end);
-%     new_atom_count=sum(Jalpha);
-%     ActiveSet.atom_count=new_atom_count;
-%     ActiveSet.atoms=ActiveSet.atoms(:,Jalpha);%not necessary (for debbuggging here)
-%     ActiveSet.alpha=alph((nbetas+1):end);
-%     ActiveSet.alpha=ActiveSet.alpha(Jalpha);
-%     %             U=U(:,Jalpha);
-%     cardVal=cardVal(Jalpha);
-% end
-% %ActiveSet.alpha
-        
-
-
 %%
 if param.Sfixed
     Z1 = param.Sstar;
@@ -250,6 +218,48 @@ ActiveSet.matrix_atoms={};
 for i=1:ActiveSet.atom_count
     ActiveSet.matrix_atoms{i}=ActiveSet.atoms(:,i)*ActiveSet.atoms(:,i)';
 end
+
+%% postprocessing to blocks
+
+fprintf('Postprocessing.. \n');
+
+thresh=1e-6;
+J=false(1,ActiveSet.atom_count);
+for i=1:length(ActiveSet.I)
+    supp=ActiveSet.I{i};
+    len=length(supp);
+    block=zeros(len);
+    K=false(1,ActiveSet.atom_count);
+    for at=1:ActiveSet.atom_count
+        u=ActiveSet.atoms(:,at);
+%         keyboard;
+        if len==sum(u~=0) && all(supp==find(u~=0))
+            K(at)=1;
+            block=block+ActiveSet.alpha(at)*(u(supp)*u(supp)');
+        end
+    end  
+    ActiveSet.block{i}=block;
+    [U,D]=eig(block);
+    D=diag(D);
+    KS=abs(D)>thresh;
+    KK=find(K);
+    KK=KK(1:sum(KS));
+    J(KK)=1;
+    ActiveSet.atoms(supp,KK)=U(:,KS);
+    ActiveSet.alpha(KK)=D(KS);
+end
+ActiveSet.atom_count=sum(J);
+ActiveSet.atoms=ActiveSet.atoms(:,J);
+ActiveSet.alpha=ActiveSet.alpha(J);
+
+Z2=zeros(p);
+nz=find(ActiveSet.alpha>1e-15);
+for j=nz'
+    u=ActiveSet.atoms(:,j);
+    Z2=Z2+ActiveSet.alpha(j)*(u*u');
+end
+Z=Z1+Z2;
+
 
 end
 

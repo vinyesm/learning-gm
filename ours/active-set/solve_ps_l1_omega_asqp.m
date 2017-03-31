@@ -36,6 +36,7 @@ end
 new_atom_added=false;
 idx_added=-1;
 first_pass=1;
+fusioned_atoms=false;
 i=1;
 count=1;
 cont=true;
@@ -89,7 +90,9 @@ while cont
             cont=false;
             break;
         end
+        
         [alph,Jset,npiv]=asqp2(Hall+0*1e-12*eye(length(fall)),-fall,alpha0,param_as,new_atom_added,idx_added);
+        fusioned_atoms=false;
         
         if debug
             obj1=.5*alph'*Hall*alph+fall'*alph;
@@ -105,9 +108,7 @@ while cont
             alph(abs(alph)<eps_alph | alph<0)=0;
             Jset(abs(alph)<eps_alph | alph<0)=0;
         end
-        
-        
-        
+
         %%
         if nbetas>0
             Jbeta=Jset(1:nbetas);
@@ -118,39 +119,34 @@ while cont
         
         if length(alph)>nbetas
             Jalpha=Jset((nbetas+1):end);
+            ActiveSet.alpha=alph((nbetas+1):end);
+            %% for robustness, fuisioning too correlated atoms
+            if ActiveSet.atom_count>1
+                atom=ActiveSet.atoms(:,ActiveSet.atom_count);
+                correl = 1-abs(sum(bsxfun(@times,ActiveSet.atoms(:,1:ActiveSet.atom_count),atom),1));
+                K0= correl'<1e-8;
+                K = Jalpha & K0;
+                if sum(K)>1
+                    fprintf('\n too correlated atoms\n');
+                    fusioned_atoms=true;
+%                     keyboard;
+                    Jalpha = Jalpha & ~K0;
+                    idx=find(K);
+                    idx=idx(1);
+                    Jalpha(idx)=1;
+                    v=sum(full(bsxfun(@times,ActiveSet.atoms(:,K),ActiveSet.alpha(K)')),2);
+%                     keyboard;
+                    ActiveSet.atoms(:,idx)=v/norm(v);
+                    ActiveSet.alpha(idx)=norm(v);
+                    Jset((nbetas+1):end)=Jalpha;
+                end
+            end
             new_atom_count=sum(Jalpha);
             ActiveSet.atom_count=new_atom_count;
             ActiveSet.atoms=ActiveSet.atoms(:,Jalpha);%not necessary (for debbuggging here)
-            ActiveSet.alpha=alph((nbetas+1):end);
             ActiveSet.alpha=ActiveSet.alpha(Jalpha);
             cardVal=cardVal(Jalpha);
-%             %% for robustness, fuisioning too correlated atoms
-%             if ActiveSet.atom_count>1
-%                 atom=ActiveSet.atoms(:,ActiveSet.atom_count);
-%                 correl = 1-abs(sum(bsxfun(@times,ActiveSet.atoms(:,1:(ActiveSet.atom_count)),atom),1));
-%                 K=correl<1e-6;
-%                 if sum(K)>1
-%                     fprintf('\n too correlated atoms\n');
-% %                     keyboard;
-%                     idx=find(K);
-%                     idx=idx(1);
-%                     Jalpha(K)=0;
-%                     Jalpha(idx)=1;
-%                     v=sum(full(bsxfun(@times,ActiveSet.atoms(:,1:(ActiveSet.atom_count)),alph(K)')),2);
-% %                     keyboard;
-%                     ActiveSet.atoms(:,idx)=v/norm(v);
-%                     ActiveSet.alpha(idx)=norm(v);
-%                     new_atom_count=sum(Jalpha);
-%                     ActiveSet.atom_count=new_atom_count;
-%                     ActiveSet.atoms=ActiveSet.atoms(:,Jalpha);%not necessary (for debbuggging here)
-%                     ActiveSet.alpha=ActiveSet.alpha(Jalpha);
-%                     cardVal=cardVal(Jalpha);
-%                 end
-%             end
-            
         end
-        
-        
         
         nbetas=length(ActiveSet.beta);
         Hall=Hall(Jset,Jset);
@@ -159,6 +155,24 @@ while cont
             ab=[ActiveSet.beta;ActiveSet.alpha];
             obj2=.5*ab'*Hall*ab+fall'*ab;
         end
+        
+        %%
+        if fusioned_atoms
+            keyboard;
+            alpha0=[ActiveSet.beta;ActiveSet.alpha];
+            [alph2,Jset2,npiv]=asqp2(Hall+0*1e-12*eye(length(fall)),-fall,alpha0,param_as,false,idx_added);
+%             keyboard;
+            if nbetas>0
+                Jbeta=Jset2(1:nbetas);
+                ActiveSet.beta=alph2(1:nbetas);
+                ActiveSet.beta=ActiveSet.beta(Jbeta);
+                ActiveSet.I_l1=ActiveSet.I_l1(Jbeta);
+            end
+            if length(alph)>nbetas
+                ActiveSet.alpha=alph2((nbetas+1):end);
+            end
+        end
+        %%
         
         %% Update ActiveSet and Z
         if 1 %debug
@@ -235,10 +249,10 @@ while cont
             for at=length(ActiveSet.I_l1)
                 atom=atoms_l1_sym(:,ActiveSet.I_l1(at));
                 val=-dot(H(:),atom);
-                if abs(sum(aom))>1
-                    val=val/2;
-                end
-                val=val-param.mu;
+%                 if abs(sum(aom))>1
+%                     val=val/2;
+%                 end
+                val=abs(val-param.mu);
                 if val>valmax_l1
                     valmax_l1=val;
                 end
@@ -430,7 +444,8 @@ while cont
             if ~isempty(ActiveSet.I_l1) && sum(ActiveSet.I_l1==idx_l1)
                 new_atom_added=false;
                 fprintf('\n this l1 atom is already in the collection\n');
-                keyboard;
+%                 keyboard;
+                break;
             else
                 ActiveSet.I_l1=[ActiveSet.I_l1 idx_l1]; %to avoid adding same atom
                 if ActiveSet.atom_count>0

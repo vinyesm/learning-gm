@@ -1,7 +1,9 @@
 function param = set_default_param(param)
 %% set default values to param 
 
-
+if ~isfield(param,'k')
+    param.k = 0;
+end
 
 if ~isfield(param,'q')
     param.q = param.k;

@@ -6,19 +6,20 @@
 % We assume latept variables ndependept
 
 %% add paths
-clc; clear all; close all;
-addpath('../main');
-addpath('../active-set');
-addpath('../atom-selection');
-addpath('../utils');
-addpath('../other');
-addpath('../prox');
-addpath('../TPower_1.0');
-addpath('../TPower_1.0/algorithms/TPower/');
-addpath('../TPower_1.0/misc/');
+clc;
+% clear all; close all;
+% addpath('../main');
+% addpath('../active-set');
+% addpath('../atom-selection');
+% addpath('../utils');
+% addpath('../other');
+% addpath('../prox');
+% addpath('../TPower_1.0');
+% addpath('../TPower_1.0/algorithms/TPower/');
+% addpath('../TPower_1.0/misc/');
 
 %% data
-run('../../toy-data/toy00.m');k=10;
+% run('../../toy-data/toy00.m');k=10;
 
 %% our norm psd with decomposition S-M sparse_omega_lgm
 p=po;
@@ -43,7 +44,7 @@ inputData.Y=-eye(po);
 param.cardfun=inf*ones(1,p);
 param.cardfun(k)=1;
 
-lambda_om=.002;
+lambda_om=.02;
 mu_om=.1;
 param.lambda=lambda_om; %lamda ~ 2/k*mu
 param.mu=mu_om;

@@ -1,5 +1,6 @@
 function [Z Z1 Z2 ActiveSet hist param flag output] = cgan_l1_omega(inputData,param,startingZ,ActiveSet)
 
+pp=0; %postprocessing
 MAX_NB_ATOMS=50;
 param.max_nb_atoms=MAX_NB_ATOMS;
 
@@ -74,7 +75,7 @@ hist.time=toc;
 epsStop=param.epsStop;
 
 
-for q=1%q=4:-1:1
+for q=5:-1:0
     param.epsStop=2^q*epsStop;
     c = 1;
     i = 0;
@@ -168,7 +169,11 @@ while c
     
     if param.verbose==1
         fprintf('   maxIJ = %2.4e, thresh = %2.4e\n',maxIJ, param.mu*(1+param.epsStop));
-        fprintf('   varIJ = %2.4e, thresh = %2.4e, length(currI)=%d\n',varIJ, param.lambda*(1+param.epsStop / kBest)* param.cardfun(kBest), length(currI))
+        fprintf('   varIJ = %2.4e, thresh = %2.4e, length(currI)=%d\n',varIJ, param.lambda*(1+param.epsStop / kBest)* param.cardfun(kBest), length(currI));
+        rho=p/2;
+        dg1=abs(trace(H*Z)+pen(end));
+        dg2=max(maxIJ-param.mu, varIJ-param.lambda)*rho; 
+        fprintf('   dg1 = %2.4e dg2 = %2.4e  dg =  %2.4e\n',dg1,dg2,dg1+dg2);
     end
     
     
@@ -228,12 +233,13 @@ end
 
 %% postprocessing to blocks
 
-
-if ~isempty(ActiveSet.atoms)
-    fprintf('Postprocessing.. \n');
-    thresh=1e-6;
-    [Z2,ActiveSet]=postprocessing(ActiveSet, thresh);
-    Z=Z1+Z2;
+if pp==1
+    if ~isempty(ActiveSet.atoms)
+        fprintf('Postprocessing.. \n');
+        thresh=1e-6;
+        [Z2,ActiveSet]=postprocessing(ActiveSet, thresh);
+        Z=Z1+Z2;
+    end
 end
 
 end

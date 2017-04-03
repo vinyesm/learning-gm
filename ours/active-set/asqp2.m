@@ -1,4 +1,4 @@
-function [c,A,nbpivot]=asqp2(Q,b,c0,param,new_atom_added,idx_atom)
+function [c,A,nbpivot,ng]=asqp2(Q,b,c0,param,new_atom_added,idx_atom)
 %
 % SOLVING QUADRATIC PROBLEM WITH ACTIVE SET, WITH WARM START
 % min_c 0.5*c'Qc-c'*b s.t. c \geq 0
@@ -143,6 +143,7 @@ while(iter<=max_iter)
 end
 
 nbpivot=nb_full_steps+nb_drop_steps;
+ng=norm(g(J));
 %fprintf('\n');
 
 if 0 && debug_mode,

@@ -27,7 +27,7 @@ if ~isfield(param,'stPtPowerIter')
 end
 
 if ~isfield(param,'epsStop')
-    param.epsStop = .1;
+    param.epsStop = 1e-6;
 end
 
 if ~isfield(param,'innerLoopIter')
@@ -35,11 +35,11 @@ if ~isfield(param,'innerLoopIter')
 end
 
 if ~isfield(param,'niterPS')
-    param.niterPS =  200;
+    param.niterPS =  5000;
 end
 
 if ~isfield(param,'PSdualityEpsilon')
-    param.PSdualityEpsilon = 1e-3;
+    param.PSdualityEpsilon = 1e-6;
 end
 
 if ~isfield(param,'verbose')

@@ -1,6 +1,6 @@
 function [ Z,Z1,Z2,U,Hall,fall,cardVal, ActiveSet, hist] = solve_ps_l1_omega_asqp( Z,Z1,Z2,ActiveSet,param,inputData,atoms_l1_sym,U,Hall,fall,cardVal)
 %Using Active Set to solve (PS) problem
-
+fus=false; %fusionning correlated atoms
 
 debug_update=0;
 debug=0;
@@ -55,7 +55,7 @@ while cont
         ActiveSet.atom_count=ActiveSet.atom_count-1;
         cont=false;
         display('maximum number of atoms added');
-%         keyboard;
+        %         keyboard;
         break;
     end
     
@@ -83,7 +83,7 @@ while cont
         if debug
             obj0=.5*alpha0'*Hall*alpha0+fall'*alpha0;
         end
-%         fprintf('    nb l1 atoms=%d    nb om atoms=%d\n',length(ActiveSet.I_l1),ActiveSet.atom_count);
+        %         fprintf('    nb l1 atoms=%d    nb om atoms=%d\n',length(ActiveSet.I_l1),ActiveSet.atom_count);
         if ActiveSet.atom_count>param.max_nb_atoms
             fprintf('    nb l1 atoms=%d    nb om atoms=%d\n',length(ActiveSet.I_l1),ActiveSet.atom_count);
             fprintf('    max nb om atoms %d reached \n',param.max_nb_atoms);
@@ -92,6 +92,9 @@ while cont
         end
         
         [alph,Jset,npiv]=asqp2(Hall+0*1e-12*eye(length(fall)),-fall,alpha0,param_as,new_atom_added,idx_added);
+        %         fprintf('out asqp norm(grad)=%f\n',ng);
+        
+        
         fusioned_atoms=false;
         
         if debug
@@ -108,7 +111,7 @@ while cont
             alph(abs(alph)<eps_alph | alph<0)=0;
             Jset(abs(alph)<eps_alph | alph<0)=0;
         end
-
+        
         %%
         if nbetas>0
             Jbeta=Jset(1:nbetas);
@@ -120,27 +123,29 @@ while cont
         if length(alph)>nbetas
             Jalpha=Jset((nbetas+1):end);
             ActiveSet.alpha=alph((nbetas+1):end);
-%             %% for robustness, fuisioning too correlated atoms
-%             if ActiveSet.atom_count>1
-%                 atom=ActiveSet.atoms(:,ActiveSet.atom_count);
-%                 correl = 1-abs(sum(bsxfun(@times,ActiveSet.atoms(:,1:ActiveSet.atom_count),atom),1));
-%                 K0= correl'<1e-8;
-%                 K = Jalpha & K0;
-%                 if sum(K)>1
-%                     fprintf('\n too correlated atoms\n');
-%                     fusioned_atoms=true;
-% %                     keyboard;
-%                     Jalpha = Jalpha & ~K0;
-%                     idx=find(K);
-%                     idx=idx(1);
-%                     Jalpha(idx)=1;
-%                     v=sum(full(bsxfun(@times,ActiveSet.atoms(:,K),ActiveSet.alpha(K)')),2);
-% %                     keyboard;
-%                     ActiveSet.atoms(:,idx)=v/norm(v);
-%                     ActiveSet.alpha(idx)=norm(v);
-%                     Jset((nbetas+1):end)=Jalpha;
-%                 end
-%             end
+            %% for robustness, fuisioning too correlated atoms
+            if fus
+                if ActiveSet.atom_count>1
+                    atom=ActiveSet.atoms(:,ActiveSet.atom_count);
+                    correl = 1-abs(sum(bsxfun(@times,ActiveSet.atoms(:,1:ActiveSet.atom_count),atom),1));
+                    K0= correl'<1e-8;
+                    K = Jalpha & K0;
+                    if sum(K)>1
+                        fprintf('\n too correlated atoms\n');
+                        fusioned_atoms=true;
+                        %                     keyboard;
+                        Jalpha = Jalpha & ~K0;
+                        idx=find(K);
+                        idx=idx(1);
+                        Jalpha(idx)=1;
+                        v=sum(full(bsxfun(@times,ActiveSet.atoms(:,K),ActiveSet.alpha(K)')),2);
+                        %                     keyboard;
+                        ActiveSet.atoms(:,idx)=v/norm(v);
+                        ActiveSet.alpha(idx)=norm(v);
+                        Jset((nbetas+1):end)=Jalpha;
+                    end
+                end
+            end
             new_atom_count=sum(Jalpha);
             ActiveSet.atom_count=new_atom_count;
             ActiveSet.atoms=ActiveSet.atoms(:,Jalpha);%not necessary (for debbuggging here)
@@ -157,11 +162,11 @@ while cont
         end
         
         %%
-        if fusioned_atoms
-            keyboard;
+        if fusioned_atoms && fus
+            %             keyboard;
             alpha0=[ActiveSet.beta;ActiveSet.alpha];
             [alph2,Jset2,npiv]=asqp2(Hall+0*1e-12*eye(length(fall)),-fall,alpha0,param_as,false,idx_added);
-%             keyboard;
+            %             keyboard;
             if nbetas>0
                 Jbeta=Jset2(1:nbetas);
                 ActiveSet.beta=alph2(1:nbetas);
@@ -199,19 +204,19 @@ while cont
         %% Compute objective, loss, penalty and duality gap
         if (param.sloppy==0 || (param.sloppy~=0 && mod(count,100)==1)) %&& ~isempty(ActiveSet.alpha)
             if compute_dg
-            [loss(i),pen(i),obj(i),dg(i),time(i)]=get_val_l1_omega_asqp(Z,ActiveSet,inputData,param,cardVal);
-            nb_pivot(i)=npiv;
-            active_var(i)= sum(ActiveSet.alpha>0);
-            dualgap=dg(i);
-            %cont = (dg(i)>param.PSdualityEpsilon) && count< param.niterPS;
-            
-            if debug && i>1
-                fprintf(' PS info obj=%f  loss=%f  pen=%f penl1=%f pen_om=%f dg=%f  \n', obj(i),loss(i), pen(i), param.lambda*sum(ActiveSet.alpha),param.mu*sum(ActiveSet.beta), dg(i));
-                if obj(i)>obj(i-1)+1e-10
-                    fprintf('objective increasing\n');
-                    keyboard;
+                [loss(i),pen(i),obj(i),dg(i),time(i)]=get_val_l1_omega_asqp(Z,ActiveSet,inputData,param,cardVal);
+                nb_pivot(i)=npiv;
+                active_var(i)= sum(ActiveSet.alpha>0);
+                dualgap=dg(i);
+                %cont = (dg(i)>param.PSdualityEpsilon) && count< param.niterPS;
+                
+                if debug && i>1
+                    fprintf(' PS info obj=%f  loss=%f  pen=%f penl1=%f pen_om=%f dg=%f  \n', obj(i),loss(i), pen(i), param.lambda*sum(ActiveSet.alpha),param.mu*sum(ActiveSet.beta), dg(i));
+                    if obj(i)>obj(i-1)+1e-10
+                        fprintf('objective increasing\n');
+                        keyboard;
+                    end
                 end
-            end
             end
             i=i+1;
             %% Verify sttopping criterion
@@ -230,18 +235,18 @@ while cont
             epscond=1e-6;
             %sanity check (output of active set)
             if ~isempty(ActiveSet.I)
-            valmax_om=-inf;
-            atmax_om=-1;
-            for at=1:ActiveSet.atom_count
-                atom=ActiveSet.atoms(:,at);
-                supp=sum(abs(atom)>0);
-                cf=min(param.cardfun(supp:end));
-                val= abs(-atom'*H*atom/cf-param.lambda);
-                if val>valmax_om
-                    valmax_om=val;
-                    atmax_om=at;
+                valmax_om=-inf;
+                atmax_om=-1;
+                for at=1:ActiveSet.atom_count
+                    atom=ActiveSet.atoms(:,at);
+                    supp=sum(abs(atom)>0);
+                    cf=min(param.cardfun(supp:end));
+                    val= abs(-atom'*H*atom/cf-param.lambda);
+                    if val>valmax_om
+                        valmax_om=val;
+                        atmax_om=at;
+                    end
                 end
-            end
             else
                 valmax_om=0;
             end
@@ -249,37 +254,36 @@ while cont
             for at=length(ActiveSet.I_l1)
                 atom=atoms_l1_sym(:,ActiveSet.I_l1(at));
                 val=-dot(H(:),atom);
-%                 if abs(sum(aom))>1
-%                     val=val/2;
-%                 end
+                %                 if abs(sum(aom))>1
+                %                     val=val/2;
+                %                 end
                 val=abs(val-param.mu);
                 if val>valmax_l1
                     valmax_l1=val;
                 end
             end
-            if valmax_l1>param.epsStop || valmax_om>param.epsStop
+            if valmax_l1>param.epsStop/2 || valmax_om>param.epsStop/2
                 fprintf('Sanity check :  |maxIJ-mu|=%f<%f  |maxvart-lambda|=%f<%f \n',valmax_l1,param.epsStop,valmax_om,param.epsStop);
-                keyboard;
+                %                 keyboard;
             end
             % end of sanity check (output of active set
             
             % Stopping criterion
-            if maxvar < param.lambda*(1+param.epsStop) && maxIJ<param.mu*(1+param.epsStop) && cond<epscond %&& dualgap/param.PSdualityEpsilon<1
+%             if maxvar < param.lambda*(1+param.epsStop) && maxIJ < param.mu*(1+param.epsStop) && cond<epscond %&& dualgap/param.PSdualityEpsilon<1
+%                 cont=false;
+%             end
+            if cond<epscond %&& dualgap/param.PSdualityEpsilon<1
                 cont=false;
             end
-%             fprintf('maxIJ/mu=%4.2f<1     varmax/lambda=%4.2f<1   dg/eps=%4.2f<1  cond=%4.2f<%4.2f\n',maxIJ/param.mu,maxvar/param.lambda,dualgap/param.PSdualityEpsilon,cond,epscond);
-            if debug 
+            fprintf('maxIJ/mu=%4.2f<1     varmax/lambda=%4.2f<1   dg/eps=%4.2f<1  cond=%4.2f<%4.2f\n',maxIJ/param.mu,maxvar/param.lambda,dualgap/param.PSdualityEpsilon,cond,epscond);
+            if debug
                 fprintf('  maxIJ/mu=%4.2f < 1     varmax/lambda=%4.2f < 1 var-varold=%4.2f continue=%d  count=%d\n',maxIJ/param.mu,maxvar/param.lambda,norm(maxvar-maxvarold),cont && count< param.niterPS,count);
-%                     keyboard;
+                %                     keyboard;
             end
-
+            
             cont=cont && count< param.niterPS;
         end
     end
-    
-    %     if isempty(ActiveSet.I)
-    %         cont=false;
-    %     end
     
     %% get new atom
     if debug
@@ -297,30 +301,22 @@ while cont
         if ~isempty(ActiveSet.I)
             [new_i, new_val, maxval_om0]=get_new_atom_spca(H,ActiveSet,param);
             anew=sparse(new_i,ones(length(new_i),1),new_val,p,1);
-            if maxval_om0<param.lambda*(1+param.epsStop)
-                maxval_om=-inf;
-            else
+%             if maxval_om0>param.lambda*(1+param.epsStop)
+            if maxval_om0-param.lambda>1e-16
                 maxval_om=maxval_om0;
+            else
+                maxval_om=-inf; 
             end
         else
             maxval_om=-inf;
         end
         
-%         if ActiveSet.atom_count>0
-%             correl = 1-abs(sum(bsxfun(@times,ActiveSet.atoms(:,1:ActiveSet.atom_count),anew),1));
-%             K=correl>1e-3;
-%             if sum(K==0)>0
-%                 fprintf('\n too correlated atoms\n');
-%                 maxval_om=-inf;
-%             end
-%         end
-
-        
         %% l1 sym atom
         
         [maxval_l1,new_row, new_col] = dual_l1_spca(H);
         
-        if maxval_l1>param.mu*(1+param.epsStop)
+%         if maxval_l1>param.mu*(1+param.epsStop)
+        if maxval_l1-param.mu>1e-16
             sa=-sign(H(new_row,new_col));
             i1=(new_row-1)*p+new_col;
             i2=(new_col-1)*p+new_row;
@@ -331,23 +327,24 @@ while cont
         if param.Sfixed
             maxval_l1=-inf;
         end
-
+        
         
         %%
-
         if debug
             fprintf('  maxval_l1=%f < %f     maxval_om=%f < %f\n',maxval_l1,param.mu,maxval_om,param.lambda);
             fprintf('maxval_l1/mu = %f maxval_om/lambda = %f\n',maxval_l1/param.mu,maxval_om/param.lambda);
         end
-
+        
+        %% no atoms added, break
         if maxval_l1==-inf && maxval_om==-inf
             fprintf('\n maxval_l1 maxval_om are -inf\n');
-%             keyboard;
+            %             keyboard;
             break
         end
         
+        %% adding new atom
         if (new_row==new_col && maxval_l1/param.mu<=maxval_om/param.lambda) || (new_row~=new_col && 2*maxval_l1/param.mu<=maxval_om/param.lambda)
-            %ading omega atom
+            %% ading omega atom
             if maxval_om<param.lambda
                 fprintf('\n not good atom omega d=%f\n',maxval_om);
                 keyboard;
@@ -355,34 +352,8 @@ while cont
             if debug
                 fprintf('\n adding omega atom\n');
             end
-%             anew=sparse(new_i,ones(length(new_i),1),new_val,p,1);
-%             %check if too correlated with previous atom
-            K=true(1,ActiveSet.atom_count);
-%              res_corr=0;
-%             if ActiveSet.atom_count>0
-%                 %fprintf('\n atom count  %d\n',ActiveSet.atom_count);
-%                 correl = 1-abs(sum(bsxfun(@times,ActiveSet.atoms(:,1:ActiveSet.atom_count),anew),1));
-%                 K=correl>1e-8;
-%                 if sum(K==0)>0
-%                     fprintf('\n too correlated atoms\n');
-%                     cont=0;
-%                     keyboard;
-%                 end
-%                 new_atom_count=sum(K);
-%                 ActiveSet.atom_count=new_atom_count;
-%                 ActiveSet.atoms=ActiveSet.atoms(:,K);
-%                 res_corr=sum(ActiveSet.alpha(~K));
-%                 ActiveSet.alpha=ActiveSet.alpha(K);
-%                 cardVal=cardVal(K);
-%                 Jset= [K,true(1,length(ActiveSet.I_l1))];
-%                 %Hold=Hall;%for debug here
-%                 %fold=fall;%for debug here
-%                 Hall=Hall(Jset,Jset);
-%                 fall=fall(Jset);
-%                 %fprintf('norm(Hold-Hall)=%f\n', norm(Hold-Hall,'fro'));
-%                 %keyboard;
-%             end
-            if sum(K)>0
+            
+            if ActiveSet.atom_count>0
                 aom=[ActiveSet.atoms(:,1:ActiveSet.atom_count) anew];
             else
                 aom=anew;
@@ -407,7 +378,7 @@ while cont
                     imagesc(Hall_new);
                     pbaspect([1 1 1]);
                     error('the update is not correct\n');
-                end    
+                end
             else
                 if param.f==4
                     [Hall_new,fall_new] = update_Hessian_l1_sym(S,param,Hall, fall,atoms_l1_sym(:,ActiveSet.I_l1),aom,2);
@@ -434,7 +405,7 @@ while cont
                 new_atom_om=true;
             end
         else
-            %adding l1 atom
+            %% adding l1 atom
             if maxval_l1<param.mu
                 fprintf('\n not good atom l1 \n');
             end
@@ -444,7 +415,7 @@ while cont
             if ~isempty(ActiveSet.I_l1) && sum(ActiveSet.I_l1==idx_l1)
                 new_atom_added=false;
                 fprintf('\n this l1 atom is already in the collection\n');
-%                 keyboard;
+                %                 keyboard;
                 break;
             else
                 ActiveSet.I_l1=[ActiveSet.I_l1 idx_l1]; %to avoid adding same atom
@@ -481,9 +452,9 @@ while cont
                         [Hall_new,fall_new] = update_Hessian_l1_sym(S,param,Hall, fall,atoms_l1_sym(:,ActiveSet.I_l1),aom,1);
                     elseif param.f==5
                         [Hall_new,fall_new] = update_Hessian_l1_SM(S,param,Hall, fall,atoms_l1_sym(:,ActiveSet.I_l1),aom,1);
-                    end   
+                    end
                 end
-%                 keyboard;
+                %                 keyboard;
                 
                 g=Hall_new*[ActiveSet.beta;0;ActiveSet.alpha]+fall_new;
                 idx=length(ActiveSet.beta)+1;

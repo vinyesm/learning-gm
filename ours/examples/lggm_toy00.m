@@ -44,7 +44,7 @@ inputData.Y=-eye(po);
 param.cardfun=inf*ones(1,p);
 param.cardfun(k)=1;
 
-lambda_om=.02;
+lambda_om=.06;
 mu_om=.1;
 param.lambda=lambda_om; %lamda ~ 2/k*mu
 param.mu=mu_om;
@@ -204,16 +204,17 @@ colorbar
 
 
 %% saving
-%filename = ['lggm2_' datestr(datetime('now'),'yyyymmddTHHMMSS') '.ps'];
-filename = ['lggm4_' datestr(clock) '.ps'];
-%print ( '-dpsc2', filename, '-f1' )
-print ( '-dpsc2', filename, '-append', '-f1' )
-print ( '-dpsc2', filename, '-append', '-f2' )
-print ( '-dpsc2', filename, '-append', '-f3' )
-print ( '-dpsc2', filename, '-append', '-f4' )
-print ( '-dpsc2', filename, '-append', '-f5' )
+% %filename = ['lggm2_' datestr(datetime('now'),'yyyymmddTHHMMSS') '.ps'];
+% filename = ['lggm4_' datestr(clock) '.ps'];
+% %print ( '-dpsc2', filename, '-f1' )
+% print ( '-dpsc2', filename, '-append', '-f1' )
+% print ( '-dpsc2', filename, '-append', '-f2' )
+% print ( '-dpsc2', filename, '-append', '-f3' )
+% print ( '-dpsc2', filename, '-append', '-f4' )
+% print ( '-dpsc2', filename, '-append', '-f5' )
 
 % % keyboard
-% save('lggm4_03_16','k','p','n','inputData','Dfull','Dmargo', ...
-% 'Z', 'Z1', 'Z2', 'ActiveSet', 'hist' ,'param', 'flag' ,'output',...
-% 'Z_tr', 'Z1_tr', 'Z2_tr', 'ActiveSet_tr', 'hist_tr', 'param_tr', 'flag_tr', 'output_tr');
+count=count+1;
+save(['toy00_' num2str(count)],'k','p','n','inputData','Dfull','Dmargo', ...
+'Z', 'Z1', 'Z2', 'ActiveSet', 'hist' ,'param', 'flag' ,'output',...
+'Z_tr', 'Z1_tr', 'Z2_tr', 'ActiveSet_tr', 'hist_tr', 'param_tr', 'flag_tr', 'output_tr');

@@ -128,6 +128,7 @@ while c
 %     keyboard;
 
     if val<0
+        %%      few proximal steps for postprcessing
         currI=[];
         fprintf('   all eigs are negative\n')
 %         keyboard;

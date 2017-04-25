@@ -7,19 +7,19 @@
 
 %% add paths
 clc
-% clc; clear all; close all;
-% addpath('../main');
-% addpath('../active-set');
-% addpath('../atom-selection');
-% addpath('../utils');
-% addpath('../other');
-% addpath('../prox');
-% addpath('../TPower_1.0');
-% addpath('../TPower_1.0/algorithms/TPower/');
-% addpath('../TPower_1.0/misc/');
-% 
-% % %% data
-% run('../../toy-data/toy03.m');%k=15;
+clc; clear all; close all;
+addpath('../main');
+addpath('../active-set');
+addpath('../atom-selection');
+addpath('../utils');
+addpath('../other');
+addpath('../prox');
+addpath('../TPower_1.0');
+addpath('../TPower_1.0/algorithms/TPower/');
+addpath('../TPower_1.0/misc/');
+
+% %% data
+run('../../toy-data/toy03.m');%k=15;
 
 %% our norm psd with decomposition S-M sparse_omega_lgm
 p=po;

@@ -116,6 +116,8 @@ while c
         obj_sup = [obj_sup hist_ps.obj_sup];
     end
     
+    %% Cleaning, proximal steps
+    
     %% get a new descent direction using truncated power iteration
     
     H = gradient(Z,inputData,param);

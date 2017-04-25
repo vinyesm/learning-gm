@@ -1,11 +1,15 @@
-function  [Z2,ActiveSet]=prox_cleaning(ActiveSet,thresh)
+function  [Z2,ActiveSet]=prox_cleaning(Z1,Z2,S,ActiveSet,param)
 
-
+S05=S^.5;
+Z=Z2;
 p=size(ActiveSet.atoms,1);
-
+nb=length(ActiveSet.I);
+T=10;
+L= norm(S,'fro');%lipshitz
 
 J=false(1,ActiveSet.atom_count);
-for i=1:length(ActiveSet.I)
+%building blocks
+for i=1:nb
     supp=ActiveSet.I{i};
     len=length(supp);
     block=zeros(len);
@@ -15,28 +19,22 @@ for i=1:length(ActiveSet.I)
         %         keyboard;
         if len==sum(u~=0) && all(supp==find(u~=0))
             K(at)=1;
-            block=block+ActiveSet.alpha(at)*(u(supp)*u(supp)');
+            block=block+ActiveSet.alpha(at)*(u*u');
         end
     end
-    ActiveSet.block{i}=block;
-    [U,D]=eig(block);
-    D=diag(D);
-    KS=abs(D)>thresh;
-    KK=find(K);
-    KK=KK(1:sum(KS));
-    J(KK)=1;
-    ActiveSet.atoms(supp,KK)=U(:,KS);
-    ActiveSet.alpha(KK)=D(KS);
 end
-ActiveSet.atom_count=sum(J);
-ActiveSet.atoms=ActiveSet.atoms(:,J);
-ActiveSet.alpha=ActiveSet.alpha(J);
+%proximal steps
+for t=1:T
+    order=randperm(nb); 
+    for i=order
+        block=ActiveSet.block{i};
+        Z2i=Z-block;
+        grad=S*(Z1+Z)*S+S;
+        supp=sum(block(1,:)~=0);
+        cf=param.cardfun(supp);
+%         ActiveSet.block{i}=prox_trace(block-grad/L,param.lambda*cf/L);
+    end    
+end
 
-Z2=zeros(p);
-nz=find(ActiveSet.alpha>1e-15);
-for j=nz'
-    u=ActiveSet.atoms(:,j);
-    Z2=Z2+ActiveSet.alpha(j)*(u*u');
-end
 
 end

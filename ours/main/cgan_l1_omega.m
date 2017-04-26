@@ -1,6 +1,6 @@
 function [Z Z1 Z2 ActiveSet hist param flag output] = cgan_l1_omega(inputData,param,startingZ,ActiveSet)
 
-pp=0; %postprocessing
+pp=1; %postprocessing
 MAX_NB_ATOMS=50;
 param.max_nb_atoms=MAX_NB_ATOMS;
 
@@ -239,11 +239,20 @@ end
 if pp==1
     if ~isempty(ActiveSet.atoms)
         fprintf('Postprocessing.. \n');
-        thresh=1e-6;
-        [Z2,ActiveSet]=postprocessing(ActiveSet, thresh);
+        S=inputData.X1*inputData.X1;
+        [Z2,ActiveSet]=prox_cleaning(Z1,Z2,S,ActiveSet,param);
         Z=Z1+Z2;
     end
 end
+
+% if pp==1
+%     if ~isempty(ActiveSet.atoms)
+%         fprintf('Postprocessing.. \n');
+%         thresh=1e-6;
+%         [Z2,ActiveSet]=postprocessing(ActiveSet, thresh);
+%         Z=Z1+Z2;
+%     end
+% end
 
 end
 

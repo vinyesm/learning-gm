@@ -222,15 +222,17 @@ while cont
             %% Verify sttopping criterion
             H = gradient(Z,inputData,param);
             [maxIJ,new_row, new_col] = dual_l1_spca(H);
+            cf=1;
             if ~isempty(ActiveSet.I)
                 [new_i,new_val,maxvar]=get_new_atom_spca(H,ActiveSet,param);
+                cf=min(param.cardfun(length(new_i):end));
             else
                 maxvar=0;
             end
             %% extra condition
             omega=pen(i-1);
             dotHZ=trace(-H*Z);
-            dualomega=max(maxvar/param.lambda,maxIJ/param.mu);
+            dualomega=max(maxvar/(cf*param.lambda),maxIJ/param.mu);
             cond=omega*dualomega - dotHZ;
             epscond=1e-6;
             %sanity check (output of active set)
@@ -275,7 +277,7 @@ while cont
             if cond<epscond %&& dualgap/param.PSdualityEpsilon<1
                 cont=false;
             end
-            fprintf('maxIJ/mu=%4.2f<1     varmax/lambda=%4.2f<1   dg/eps=%4.2f<1  cond=%4.2f<%4.2f\n',maxIJ/param.mu,maxvar/param.lambda,dualgap/param.PSdualityEpsilon,cond,epscond);
+            fprintf('maxIJ/mu=%4.2f<1     varmax/cf*lambda=%4.2f<1   dg/eps=%4.2f<1  cond=%4.2f<%4.2f\n',maxIJ/param.mu,maxvar/(cf*param.lambda),dualgap/param.PSdualityEpsilon,cond,epscond);
             if debug
                 fprintf('  maxIJ/mu=%4.2f < 1     varmax/lambda=%4.2f < 1 var-varold=%4.2f continue=%d  count=%d\n',maxIJ/param.mu,maxvar/param.lambda,norm(maxvar-maxvarold),cont && count< param.niterPS,count);
                 %                     keyboard;
@@ -298,11 +300,13 @@ while cont
         
         %% omega atom
         
+        cf=1;
         if ~isempty(ActiveSet.I)
             [new_i, new_val, maxval_om0]=get_new_atom_spca(H,ActiveSet,param);
             anew=sparse(new_i,ones(length(new_i),1),new_val,p,1);
+            cf=min(param.cardfun(length(new_i):end));
 %             if maxval_om0>param.lambda*(1+param.epsStop)
-            if maxval_om0-param.lambda>1e-16
+            if maxval_om0-cf*param.lambda>1e-16
                 maxval_om=maxval_om0;
             else
                 maxval_om=-inf; 
@@ -331,7 +335,7 @@ while cont
         
         %%
         if debug
-            fprintf('  maxval_l1=%f < %f     maxval_om=%f < %f\n',maxval_l1,param.mu,maxval_om,param.lambda);
+            fprintf('  maxval_l1=%f < %f     maxval_om=%f < %f\n',maxval_l1,param.mu,maxval_om,param.lambda*cf);
             fprintf('maxval_l1/mu = %f maxval_om/lambda = %f\n',maxval_l1/param.mu,maxval_om/param.lambda);
         end
         
@@ -343,9 +347,9 @@ while cont
         end
         
         %% adding new atom
-        if (new_row==new_col && maxval_l1/param.mu<=maxval_om/param.lambda) || (new_row~=new_col && 2*maxval_l1/param.mu<=maxval_om/param.lambda)
+        if (new_row==new_col && maxval_l1/param.mu<=maxval_om/(cf*param.lambda)) || (new_row~=new_col && 2*maxval_l1/param.mu<=maxval_om/(cf*param.lambda))
             %% ading omega atom
-            if maxval_om<param.lambda
+            if maxval_om<cf*param.lambda
                 fprintf('\n not good atom omega d=%f\n',maxval_om);
                 keyboard;
             end

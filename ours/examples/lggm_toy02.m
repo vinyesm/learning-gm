@@ -178,37 +178,37 @@ colorbar
 % grid on
 % hold off
 % 
-% figure(6);clf;
-% subplot(3,2,1)
-% imagesc(abs(Dfull));
-% pbaspect([1 1 1]);
-% title('true complete conc. mat.');
-% colorbar
-% subplot(3,2,2)
-% imagesc(abs(Dfull)>1e-15);
-% pbaspect([1 1 1]);
-% title('true support');
-% colorbar
-% subplot(3,2,3)
-% imagesc(abs(Dfin));
-% pbaspect([1 1 1]);
-% title('estimated complete conc. mat.');
-% colorbar
-% subplot(3,2,4)
-% imagesc(abs(Dfin)>1e-15);
-% pbaspect([1 1 1]);
-% title('estimated support');
-% colorbar
-% subplot(3,2,5)
-% imagesc(abs(Dfin_tr));
-% pbaspect([1 1 1]);
-% title('estimated complete conc. mat.');
-% colorbar
-% subplot(3,2,6)
-% imagesc(abs(Dfin_tr)>1e-15);
-% pbaspect([1 1 1]);
-% title('estimated support');
-% colorbar
+figure(6);clf;
+subplot(3,2,1)
+imagesc(abs(Dfull));
+pbaspect([1 1 1]);
+title('true complete conc. mat.');
+colorbar
+subplot(3,2,2)
+imagesc(abs(Dfull)>1e-15);
+pbaspect([1 1 1]);
+title('true support');
+colorbar
+subplot(3,2,3)
+imagesc(abs(Dfin));
+pbaspect([1 1 1]);
+title('estimated complete conc. mat.');
+colorbar
+subplot(3,2,4)
+imagesc(abs(Dfin)>1e-15);
+pbaspect([1 1 1]);
+title('estimated support');
+colorbar
+subplot(3,2,5)
+imagesc(abs(Dfin_tr));
+pbaspect([1 1 1]);
+title('estimated complete conc. mat.');
+colorbar
+subplot(3,2,6)
+imagesc(abs(Dfin_tr)>1e-15);
+pbaspect([1 1 1]);
+title('estimated support');
+colorbar
 % 
 % 
 % %% saving

@@ -1,7 +1,7 @@
-function  [Z2,ActiveSet]=prox_cleaning(Z1,Z2,S,ActiveSet,param)
+function  [Z2,ActiveSet]=prox_cleaning(Z1,Z2,S,ActiveSet,param,T,debug)
 
-lam=1;
-debug=1;
+lam=param.lambda;
+% debug=0;
 
 if debug
     obj=[];
@@ -11,7 +11,6 @@ S05=S^.5;
 Z=Z2;
 p=size(Z1,1);
 nb=length(ActiveSet.I);
-T=10;
 L= norm(S,'fro')^2;%lipshitz
 
 J=false(1,ActiveSet.atom_count);

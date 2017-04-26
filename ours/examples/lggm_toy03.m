@@ -34,13 +34,15 @@ inputData.Y=-eye(po);
 % param.cardfun(k)=1;
 param.cardfun(p)=1;
 beta=.5;
-param.cardfun=((1:p).^beta)./(p^beta);
+param.cardfun=((1:p).^beta)/p^.5;c=1;param.lambda=0.25*c;param.mu=0.2*c;
+% param.cardfun=((1:p).^beta);
+% param.cardfun=param.cardfun./sum(param.cardfun);
 param.cardfun(1)=inf;
 
 %%% n=5000
-c=sqrt(p/n);
-param.lambda=0.25; %lamda ~ 2/k*mu
-param.mu=0.2;
+% c=.5;
+% param.lambda=0.25*c; %lamda ~ 2/k*mu
+% param.mu=0.2*c;
 
 
 
@@ -206,4 +208,5 @@ colorbar
 % % 'Z', 'Z1', 'Z2', 'ActiveSet', 'hist' ,'param', 'flag' ,'output',...
 % % 'Z_tr', 'Z1_tr', 'Z2_tr', 'ActiveSet_tr', 'hist_tr', 'param_tr', 'flag_tr', 'output_tr');
 % 
-% obj_l1_om
+obj_l1_om
+hist_tr.obj(end)

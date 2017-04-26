@@ -1,6 +1,8 @@
 function [Z Z1 Z2 ActiveSet hist param flag output] = cgan_l1_omega(inputData,param,startingZ,ActiveSet)
 
+pm=1; %postprocessing after PS if no new atom found
 pp=1; %postprocessing
+pt=0; %postprocessing thresh
 MAX_NB_ATOMS=50;
 param.max_nb_atoms=MAX_NB_ATOMS;
 
@@ -127,10 +129,27 @@ while c
     end
 
     [u, kBest,val] = lmo_spsd_TPower(-H,param);
+    cf=min(param.cardfun(kBest:end));
 %     keyboard;
 
-    if val<0
+    if val<param.lambda*(1+param.epsStop)
         %%      few proximal steps for postprcessing
+        if pm
+            fprintf('No new atom found, prox steps for cleaning after PS.. \n');
+            S=inputData.X1*inputData.X1;
+            [Z2,ActiveSet]=prox_cleaning(Z1,Z2,S,ActiveSet,param,10,0);
+            Z=Z1+Z2;
+            [Hall,fall] = build_Hessian_l1_sym(inputData,param,atoms_l1_sym(:,ActiveSet.I_l1),ActiveSet.atoms);
+            H = gradient(Z,inputData,param);
+            val_old=val;
+            [u, kBest,val] = lmo_spsd_TPower(-H,param);
+            cf=min(param.cardfun(kBest:end));
+%             fprintf('old val=%f new val=%f < %f.. \n',val_old,val, param.lambda*cf);
+%             keyboard;
+        end
+    end
+
+    if val<0
         currI=[];
         fprintf('   all eigs are negative\n')
 %         keyboard;
@@ -174,13 +193,17 @@ while c
         fprintf('   maxIJ = %2.4e, thresh = %2.4e\n',maxIJ, param.mu*(1+param.epsStop));
         fprintf('   varIJ = %2.4e, thresh = %2.4e, length(currI)=%d\n',varIJ, param.lambda*(1+param.epsStop / kBest)* param.cardfun(kBest), length(currI));
         rho=p/2;
-        dg1=abs(trace(H*Z)+pen(end));
-        dg2=max(maxIJ-param.mu, varIJ-param.lambda)*rho; 
+        if ~isempty(pen)
+            dg1=abs(trace(H*Z)+pen(end));
+        else
+            dg1=abs(trace(H*Z));
+        end
+        dg2=max(maxIJ-param.mu, varIJ-param.lambda)*rho;
         fprintf('   dg1 = %2.4e dg2 = %2.4e  dg =  %2.4e\n',dg1,dg2,dg1+dg2);
     end
     
     
-    if varIJ < param.lambda*(1+param.epsStop) && maxIJ < param.mu*(1+param.epsStop)
+    if varIJ < param.lambda*cf*(1+param.epsStop) && maxIJ < param.mu*(1+param.epsStop)
         c=0;
     elseif ActiveSet.atom_count>=param.max_nb_atoms
 %         keyboard;
@@ -188,7 +211,7 @@ while c
     elseif takenI
         fprintf('This support has already been added. Stopping\n');
         %c=0;
-    elseif varIJ > param.lambda*(1+param.epsStop)
+    elseif varIJ > param.lambda*cf*(1+param.epsStop)
         ActiveSet.I = [ActiveSet.I, currI];
         %ActiveSet.U = [ActiveSet.U, u(currI)];
         ActiveSet.Sigma = [ActiveSet.Sigma, varIJ];
@@ -240,19 +263,19 @@ if pp==1
     if ~isempty(ActiveSet.atoms)
         fprintf('Postprocessing.. \n');
         S=inputData.X1*inputData.X1;
-        [Z2,ActiveSet]=prox_cleaning(Z1,Z2,S,ActiveSet,param);
+        [Z2,ActiveSet]=prox_cleaning(Z1,Z2,S,ActiveSet,param,100,1);
         Z=Z1+Z2;
     end
 end
 
-% if pp==1
-%     if ~isempty(ActiveSet.atoms)
-%         fprintf('Postprocessing.. \n');
-%         thresh=1e-6;
-%         [Z2,ActiveSet]=postprocessing(ActiveSet, thresh);
-%         Z=Z1+Z2;
-%     end
-% end
+if pt==1
+    if ~isempty(ActiveSet.atoms)
+        fprintf('Postprocessing.. \n');
+        thresh=1e-6;
+        [Z2,ActiveSet]=postprocessing(ActiveSet, thresh);
+        Z=Z1+Z2;
+    end
+end
 
 end
 

@@ -1,6 +1,6 @@
 %% TOY EXAMPLE WITH TREE STRUCTURE ON OBSERVED VARIABLES
 clear all; clc;
-addpath ../utils/
+addpath ../ours/utils/
 
 %%
 
@@ -22,6 +22,7 @@ corr_all(1:pl,1:pl)=eye(pl);
 %% observed correlation matrix
 CostMatrix = rand(po);
 [ Tree,Cost ] =  UndirectedMaximumSpanningTree ( CostMatrix );
+Tree=.2*Tree;
 Tree = Tree - diag(diag(Tree)) + eye(po);
 corr_all(pl+1:end,pl+1:end)=Tree;
 
@@ -44,7 +45,7 @@ pbaspect([1 1 1]);
 
 %%
 Dfull=corr_all;
-Doo=corr;
+Doo=Tree;
 Dol=corr_all(pl+1:end,1:pl);
 Dmargo=Doo-Dol*Dol';
 
@@ -78,37 +79,6 @@ Xfull=mvnrnd(mu, inv(Dfull), n)';
 X=Xfull((pl+1):pt,:);
 S=cov(X');
 % S=inv(Dmargo);
-
-%% active set
-ActiveSet.max_atom_count_reached=0;
-ActiveSet.I={};
-ActiveSet.alpha= [];
-ActiveSet.atoms=pl;
-ActiveSet.atom_count = pl;
-ActiveSet.beta=[];
-ActiveSet.I_l1=[];
-p=size(S,1);
-pairs=fullfact([p p]);
-ii=pairs(:,1)>=pairs(:,2);
-pairs=[pairs(ii,1) pairs(ii,2)];
-count=1;
-for j=1:length(pairs);
-    if pairs(j,1)==pairs(j,2)
-        ActiveSet.I_l1=[ActiveSet.I_l1 count];
-        ActiveSet.beta=[ActiveSet.beta corr(pairs(j,1),pairs(j,2))];
-    end
-    count=count+1;
-end
-ActiveSet.beta=ActiveSet.beta';
-ActiveSet.I_l1=ActiveSet.I_l1+length(pairs);
-ActiveSet.k=mat2cell(ks,1,ones(1,length(ks)));
-ActiveSet.alpha=sum(Dol.^2)';
-ActiveSet.atoms=sparse(bsxfun(@rdivide, Dol, sqrt(sum(Dol.^2))));
-for i=1:pl
-    ActiveSet.I{i}=find(Dol(:,i));
-end
-% keyboard;
-
 
 %% plotting
 

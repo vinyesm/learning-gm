@@ -9,7 +9,6 @@ pl=length(ks);
 po=sum(ks);
 n=200*po;
 
-c=0;
 pt=pl+po;
 clo=.7./sqrt(ks);
 % clo=.5./(ones(1,pl));

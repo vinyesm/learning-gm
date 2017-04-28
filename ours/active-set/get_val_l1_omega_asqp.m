@@ -1,4 +1,4 @@
-function [loss,pen,obj,dualityGap,time]=get_val_l1_omega_asqp(Z,ActiveSet,inputData,param,cardVal)
+function [loss,pen,obj,dualityGap,time]=get_val_l1_omega_asqp(Z,ActiveSet,inputData,param)
 
 if param.f==4
     currloss = .5*norm(inputData.Y - inputData.X1*Z*inputData.X2, 'fro')^2;

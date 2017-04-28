@@ -34,7 +34,10 @@ if nargin < 3
     cardVal=[];
     U=[];
 else
-    Z = startingZ;
+%     Z = startingZ;
+    Z1 = startingZ.Z1;
+    Z2 = startingZ.Z2;
+    Z = Z1+Z2;
 end
 
 if param.Sfixed
@@ -68,7 +71,9 @@ elseif param.f==5
     [ Q,q,atoms_l1_sym ] = build_atoms_hessian_l1_SM(inputData.X,param.mu); %score matching
 end
 
-
+if nargin > 2
+    [Hall,fall] = build_Hessian_l1_sym(inputData,param,atoms_l1_sym(:,ActiveSet.I_l1),ActiveSet.atoms);
+end
 
 tic
 
@@ -97,7 +102,7 @@ for q=5:-1:0
             end
             
             param.epsStop=2^(q-1)*epsStop;
-            [Z, Z1, Z2,U,Hall,fall,cardVal, ActiveSet, hist_ps] = solve_ps_l1_omega_asqp(Z,Z1,Z2, ActiveSet,param,inputData,atoms_l1_sym,U,Hall,fall,cardVal);
+            [Z, Z1, Z2,Hall,fall, ActiveSet, hist_ps] = solve_ps_l1_omega_asqp(Z,Z1,Z2, ActiveSet,param,inputData,atoms_l1_sym,Hall,fall);
             param.epsStop=2^q*epsStop;
             
             if ~isempty(ActiveSet.alpha) && param.debug==1
@@ -215,7 +220,7 @@ for q=5:-1:0
         elseif varIJ > param.lambda*cf*(1+param.epsStop)
             ActiveSet.I = [ActiveSet.I, currI];
             %ActiveSet.U = [ActiveSet.U, u(currI)];
-            ActiveSet.Sigma = [ActiveSet.Sigma, varIJ];
+            %ActiveSet.Sigma = [ActiveSet.Sigma, varIJ];
             ActiveSet.Z = [ActiveSet.Z, zeros(param.k,param.k)];
             ActiveSet.tracenorm = [ ActiveSet.tracenorm , 0];
             ActiveSet.k = [ActiveSet.k , kBest];

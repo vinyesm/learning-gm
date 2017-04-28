@@ -1,5 +1,7 @@
-function [ Z,Z1,Z2,U,Hall,fall,cardVal, ActiveSet, hist] = solve_ps_l1_omega_asqp( Z,Z1,Z2,ActiveSet,param,inputData,atoms_l1_sym,U,Hall,fall,cardVal)
+function [ Z,Z1,Z2,Hall,fall, ActiveSet, hist] = solve_ps_l1_omega_asqp( Z,Z1,Z2,ActiveSet,param,inputData,atoms_l1_sym,Hall,fall)
 %Using Active Set to solve (PS) problem
+
+
 fus=false; %fusionning correlated atoms
 
 debug_update=0;
@@ -150,7 +152,6 @@ while cont
             ActiveSet.atom_count=new_atom_count;
             ActiveSet.atoms=ActiveSet.atoms(:,Jalpha);%not necessary (for debbuggging here)
             ActiveSet.alpha=ActiveSet.alpha(Jalpha);
-            cardVal=cardVal(Jalpha);
         end
         
         nbetas=length(ActiveSet.beta);
@@ -204,7 +205,7 @@ while cont
         %% Compute objective, loss, penalty and duality gap
         if (param.sloppy==0 || (param.sloppy~=0 && mod(count,100)==1)) %&& ~isempty(ActiveSet.alpha)
             if compute_dg
-                [loss(i),pen(i),obj(i),dg(i),time(i)]=get_val_l1_omega_asqp(Z,ActiveSet,inputData,param,cardVal);
+                [loss(i),pen(i),obj(i),dg(i),time(i)]=get_val_l1_omega_asqp(Z,ActiveSet,inputData,param);
                 nb_pivot(i)=npiv;
                 active_var(i)= sum(ActiveSet.alpha>0);
                 dualgap=dg(i);
@@ -399,12 +400,10 @@ while cont
             else
                 ActiveSet.atom_count = ActiveSet.atom_count +1;
                 ActiveSet.max_atom_count_reached=max(ActiveSet.max_atom_count_reached,ActiveSet.atom_count);
-                ActiveSet.atomsSupport=[ActiveSet.atomsSupport new_i];
+                %ActiveSet.atomsSupport=[ActiveSet.atomsSupport new_i];
                 ActiveSet.atoms(:,ActiveSet.atom_count)=anew;
                 Hall=Hall_new;
                 fall=fall_new;
-                weight=1;
-                cardVal=[cardVal;weight];
                 new_atom_added=true;
                 new_atom_om=true;
             end

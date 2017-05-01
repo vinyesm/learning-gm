@@ -1,11 +1,10 @@
 function [ Z,Z1,Z2,Hall,fall, ActiveSet, hist] = solve_ps_l1_omega_asqp( Z,Z1,Z2,ActiveSet,param,inputData,atoms_l1_sym,Hall,fall)
 %Using Active Set to solve (PS) problem
 
-
 fus=false; %fusionning correlated atoms
 
 debug_update=0;
-debug=0;
+debug=1;
 compute_dg=1;
 display('in solve_ps change S when changing loss fun\n');
 if param.f==4
@@ -61,7 +60,7 @@ while cont
         break;
     end
     
-    if ~first_pass %|| ActiveSet.atom_count==0
+    if ~isempty(Hall)%~first_pass %|| ActiveSet.atom_count==0
         
         if new_atom_added
             if new_atom_om
@@ -107,7 +106,7 @@ while cont
         end
         
         %% for robustness (too small alpha are deleted)
-        eps_alph=1e-8;
+        eps_alph=0;1e-8;
         if(min(abs(alph(Jset))))<eps_alph
             fprintf('small alph\n');
             alph(abs(alph)<eps_alph | alph<0)=0;
@@ -213,7 +212,7 @@ while cont
                 
                 if debug && i>1
                     fprintf(' PS info obj=%f  loss=%f  pen=%f penl1=%f pen_om=%f dg=%f  \n', obj(i),loss(i), pen(i), param.lambda*sum(ActiveSet.alpha),param.mu*sum(ActiveSet.beta), dg(i));
-                    if obj(i)>obj(i-1)+1e-10
+                    if obj(i)>obj(i-1)+param.epsStop
                         fprintf('objective increasing\n');
                         keyboard;
                     end
@@ -235,7 +234,7 @@ while cont
             dotHZ=trace(-H*Z);
             dualomega=max(maxvar/(cf*param.lambda),maxIJ/param.mu);
             cond=omega*dualomega - dotHZ;
-            epscond=1e-6;
+            epscond=param.epsStop;
             %sanity check (output of active set)
             if ~isempty(ActiveSet.I)
                 valmax_om=-inf;
@@ -279,10 +278,10 @@ while cont
                 cont=false;
             end
             fprintf('maxIJ/mu=%4.2f<1     varmax/cf*lambda=%4.2f<1   dg/eps=%4.2f<1  cond=%4.2f<%4.2f\n',maxIJ/param.mu,maxvar/(cf*param.lambda),dualgap/param.PSdualityEpsilon,cond,epscond);
-            if debug
-                fprintf('  maxIJ/mu=%4.2f < 1     varmax/lambda=%4.2f < 1 var-varold=%4.2f continue=%d  count=%d\n',maxIJ/param.mu,maxvar/param.lambda,norm(maxvar-maxvarold),cont && count< param.niterPS,count);
-                %                     keyboard;
-            end
+%             if debug
+%                 fprintf('  maxIJ/mu=%4.2f < 1     varmax/(cf*lambda)=%4.2f < 1 continue=%d  count=%d\n',maxIJ/param.mu,maxvar/(cf*param.lambda),cont && count< param.niterPS,count);
+%                 %                     keyboard;
+%             end
             
             cont=cont && count< param.niterPS;
         end
@@ -307,7 +306,7 @@ while cont
             anew=sparse(new_i,ones(length(new_i),1),new_val,p,1);
             cf=min(param.cardfun(length(new_i):end));
 %             if maxval_om0>param.lambda*(1+param.epsStop)
-            if maxval_om0-cf*param.lambda>1e-16
+            if maxval_om0-cf*param.lambda>param.epsStop/10
                 maxval_om=maxval_om0;
             else
                 maxval_om=-inf; 
@@ -321,7 +320,7 @@ while cont
         [maxval_l1,new_row, new_col] = dual_l1_spca(H);
         
 %         if maxval_l1>param.mu*(1+param.epsStop)
-        if maxval_l1-param.mu>1e-16
+        if maxval_l1-param.mu>param.epsStop/10
             sa=-sign(H(new_row,new_col));
             i1=(new_row-1)*p+new_col;
             i2=(new_col-1)*p+new_row;
@@ -337,7 +336,7 @@ while cont
         %%
         if debug
             fprintf('  maxval_l1=%f < %f     maxval_om=%f < %f\n',maxval_l1,param.mu,maxval_om,param.lambda*cf);
-            fprintf('maxval_l1/mu = %f maxval_om/lambda = %f\n',maxval_l1/param.mu,maxval_om/param.lambda);
+            fprintf('maxval_l1/mu = %f maxval_om/(cf*lambda) = %f\n',maxval_l1/param.mu,maxval_om/(cf*param.lambda));
         end
         
         %% no atoms added, break

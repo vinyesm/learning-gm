@@ -221,8 +221,8 @@ for q=5:-1:0
             ActiveSet.I = [ActiveSet.I, currI];
             %ActiveSet.U = [ActiveSet.U, u(currI)];
             %ActiveSet.Sigma = [ActiveSet.Sigma, varIJ];
-            ActiveSet.Z = [ActiveSet.Z, zeros(param.k,param.k)];
-            ActiveSet.tracenorm = [ ActiveSet.tracenorm , 0];
+            %ActiveSet.Z = [ActiveSet.Z, zeros(param.k,param.k)];
+            %ActiveSet.tracenorm = [ ActiveSet.tracenorm , 0];
             ActiveSet.k = [ActiveSet.k , kBest];
             ActiveSet.fronorm = [ ActiveSet.fronorm , 0];
         else

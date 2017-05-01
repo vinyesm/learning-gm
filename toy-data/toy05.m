@@ -4,7 +4,7 @@ addpath ../ours/utils/
 
 %%
 
-ks=[10 10 10];
+ks=[30 30 30];
 pl=length(ks);
 po=sum(ks);
 n=200*po;

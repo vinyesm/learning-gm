@@ -1,0 +1,216 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<!--NPG Hosting Status Page-->
+<!--
+## Site Configuration
+## @siteName	Nature Status
+## @scope		Site
+## @adaption	jdg2007
+-->
+
+
+
+
+<!-- SET THE BASE FOLDERS FOR THE SITE -->
+
+
+
+
+
+
+<head profile="#/includes/xmdp-profiles/xoxo.html">
+<title>Home : Nature Status</title>
+<!-- metadata and links -->
+<meta http-equiv="Content-Style-Type" content="text/css" />
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+<link rel="home" href="/index.shtml" title="home" />
+
+
+<meta name="Description" content="" />
+<meta http-equiv="refresh" content="60;url=http://www.nature.com/"> 
+<meta http-equiv="expires" content="Wed, 23 Feb 1997 08:21:57 GMT">
+<meta http-equiv="pragma" content="no-cache">
+<meta http-equiv="cache-control" content="no-cache">
+<meta name="Keywords" content="" />
+<!-- end metadata and links -->
+<style type="text/css" media="screen, projection"><!--/*--><![CDATA[/*><!--*/
+		    @import "/style/site.css";
+/*]]>*/--></style>
+
+<!-- IE specific -->
+<!--[if lte IE 7]>
+	<style type="text/css" media="screen, projection">
+		@import "/style/ie-specific/lte-ie-7.css";
+	</style>
+<![endif]-->
+
+<!--[if IE 7]>
+	<style type="text/css" media="screen, projection">
+		@import "/style/ie-specific/ie-7.css";
+	</style>
+<![endif]-->
+
+<!--[if lte IE 6]>
+	<script type="text/javascript" src="/scripts/ie-specific/lte-ie-6.js"></script>
+<![endif]-->
+
+<!--[if IE 6]>
+	<style type="text/css" media="screen, projection">
+		@import "/style/ie-specific/ie-6.css";
+	</style>
+<![endif]-->
+<!-- end IE specific -->
+
+
+
+</head>
+<body class="nature-status" id="home">
+	
+	<div id="constrain">
+		<div class="constrain">
+			
+			<div id="header" class="row">
+				
+			    <div class="left">
+			    	<div class="container">
+		    		
+		    			<h1 class="hidden"><a href="http://www.nature.com">Nature.com status</a></h1>		    			
+			    		
+			    	</div>
+			    </div>
+			    
+			    <div class="right">
+			    	<div class="logo-status">
+			    	</div>
+			    </div>
+			    
+			    
+			</div>	
+		
+	 		
+			<!--<ul id="current-status" class="row">-->
+			   <!-- <li class="left">
+			    	<dl>
+			    		<dt>
+			    			Current Live Status
+			    		</dt>
+			    			<dd>
+			    				<p></p>
+			    			</dd>
+			    	</dl>
+			    </li> -->
+			    <!--<li class="right">
+			    	<dl>
+			    		<dt>
+			    			About Status
+			    		</dt>
+			    			<dd>
+		<p> If you have reached this page while attempting to access a Nature.com site, we apologize for the inconvenience and are working to restore services as quickly as possible.</p>
+
+<p>Please <A HREF="javascript:history.go(-1)">click here</A> to attempt to reload the previous page.</p>
+
+			    				<p>This page lists upcoming maintenance and technical announcements regarding the availability of <a href="http://www.nature.com">www.nature.com</a>. This includes site license access to all NPG publications and access to online services.</p>
+							</dd>
+			    	</dl>
+			    </li> 
+			</ul> -->
+			
+			
+			<ul id="maintainance" class="row">	
+				<li class="left">
+					<div class="container">
+						<h2 id="upcoming_maintenance_events">Essential Maintenance:</h2>
+				    	<p></p>
+
+
+
+<p></p>
+<p>Please return to the website later to make your purchase.</p>
+ <p> Please see contact details to the right of this page should you require more urgent assistance. Thank you for your patience and apologies for any inconvenience caused. </p>
+					</div>
+				</li>
+				
+				
+				<li class="right">
+					<div class="container">
+						<h2>Contact NPG</h2>
+						<!--<p>If you are the site license administrator and are currently experiencing problems with <a href="http://www.nature.com">www.nature.com</a> when there is no scheduled maintenance listed, please contact your local Customer Services team.</p>
+						<p>If you know your institution has a site license but you are not the administrator, please ask your library or information resources department to contact NPG.  Our customer services teams will not be able to respond to queries from non-administrators.</p>-->
+						
+						<ul class="xoxo contact-details">
+						    <li class="vcard">
+					    		<h3 class="fn org">
+					    			<span class="organization-name hidden"></span><span class="organization-unit">For customers in the US, Canada and Central and South Americas</span>					    		</h3>
+						    	<ul>
+						    	    <li>Nature Publishing Group</li>
+						    	    <li>75 Varick Street</li>
+						    	    <li>New York</li>
+						    	    <li>NY 10013-1917</li>
+					    	    </ul>
+						    </li>
+						    <li class="vcard">
+						      <ul>
+					    	    <li>Email: subscriptions@nature.com<br />
+						    	      Tel: 1-866-363-7860<br />
+						    	      Tel: 1-866-839-0194<br />
+						    	      Fax: 1 212 334 0879
+						    	      <h3 class="fn org">
+					    			<span class="organization-name hidden"></span><span class="organization-unit">For the UK and Rest of World</span>					    		</h3>
+						    	<ul>
+						    	    <li>Nature Publishing Group<br />
+						    	      Brunel Road<br />
+						    	      Houndmills<br />
+						    	      Basingstoke<br />
+						    	      Hampshire<br />
+						    	      RG21 6XS<br />
+						    	      UK</li>
+									  
+							        <li></li>
+						          <li>Email: subscriptions@nature.com<br />
+						    	      Tel: +44-(0)20 7418 5535<br />
+								  						    	</ul>
+						    </li>
+				    	      </ul>
+					      </li>
+				      </ul>
+					</div>
+					<div id="resources">
+					<h2>Resources and Quick Links</h2>
+					<ul class="links">
+						<li class="arrow-link"><a href="http://www.nature.com">Nature.com</a></li>
+						<li class="arrow-link"><a href="http://www.nature.com/libraries">Librarian Gateway</a></li>
+						<li class="arrow-link"><a href="http://nature.custhelp.com/cgi-bin/nature.cfg/php/enduser/std_alp.php">Help</a></li>
+					</ul>
+				</div>
+				</li>		
+			</ul>
+			
+			
+			<div id="footer" class="row">
+				
+			    <div class="left">
+			    	<div class="container">
+			    	</div>
+			    </div>
+			    
+			    <div class="right">
+			    	<div class="logo-status">
+			    	</div>
+			    </div>
+			    
+			    
+			</div>	
+			
+		</div>
+	</div>
+<script type="text/javascript">
+var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+</script>
+<script type="text/javascript">
+try {
+var pageTracker = _gat._getTracker("UA-9734104-1");
+pageTracker._trackPageview();
+} catch(err) {}</script>
+</body>
+</html>

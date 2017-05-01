@@ -1,0 +1,298 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<bookmarks xmlns:ns2="http://www.w3.org/1999/xlink" version="0.5">
+    <description>
+		Bookmark file for Cytoscape 2.4 and later.
+	</description>
+    <category name="ontology">
+        <dataSource ns2:href="http://www.geneontology.org/ontology/gene_ontology_edit.obo" name="Gene Ontology Full" format="obo">
+            <attribute name="description">
+				The Gene Ontology (GO) project provides a
+				controlled vocabulary to describe gene and gene product attributes
+				in any organism. This data source contains full size GO dag, which
+				contains all GO terms. This OBO file is written in version 1.2
+				format.
+			</attribute>
+            <attribute name="ontologyType">GO</attribute>
+        </dataSource>
+        <dataSource ns2:href="http://www.geneontology.org/GO_slims/goslim_generic.obo" name="Generic GO slim" format="obo">
+            <attribute name="description">
+				Subset of general GO Terms.
+			</attribute>
+            <attribute name="ontologyType">GO</attribute>
+        </dataSource>
+        <dataSource ns2:href="http://www.geneontology.org/GO_slims/goslim_yeast.obo" name="Yeast GO slim" format="obo">
+            <attribute name="description">
+				Subset of GO Terms for annotating Yeast
+				data sets. Maintained by SGD.
+			</attribute>
+            <attribute name="ontologyType">GO</attribute>
+        </dataSource>
+        <dataSource ns2:href="http://obo.cvs.sourceforge.net/*checkout*/obo/obo/ontology/genomic-proteomic/molecule_role.obo" name="Molecule role (INOH Protein name/family name ontology)" format="obo">
+            <attribute name="description">
+				A structured controlled vocabulary of
+				concrete protein names and generic (abstract) protein names. This
+				ontology is a INOH pathway annotation ontology, one of a set of
+				ontologies intended to be used in pathway data annotation to ease
+				data integration. This ontology is used to annotate protein names,
+				protein family names, generic/concrete protein names in the INOH
+				pathway data.
+				INOH is part of the BioPAX working group.
+			</attribute>
+        </dataSource>
+        <dataSource ns2:href="http://obo.cvs.sourceforge.net/*checkout*/obo/obo/ontology/genomic-proteomic/event.obo" name="Event (INOH pathway ontology)" format="obo">
+            <attribute name="description">
+				A structured controlled vocabulary of
+				pathway centric biological processes. This ontology is a INOH
+				pathway annotation ontology, one of a set of ontologies intended to
+				be used in pathway data annotation to ease data integration. This
+				ontology is used to annotate biological processes, pathways,
+				sub-pathways in the INOH pathway data.
+				INOH is part of the BioPAX
+				working group.
+			</attribute>
+        </dataSource>
+        <dataSource ns2:href="http://obo.cvs.sourceforge.net/*checkout*/obo/obo/ontology/genomic-proteomic/protein/psi-mi.obo" name="Protein-protein interaction" format="obo">
+            <attribute name="description">
+				A structured controlled vocabulary for the
+				annotation of experiments concerned with protein-protein
+				interactions.
+			</attribute>
+        </dataSource>
+        <dataSource ns2:href="http://obo.cvs.sourceforge.net/*checkout*/obo/obo/ontology/genomic-proteomic/pathway.obo" name="Pathway Ontology" format="obo">
+            <attribute name="description">
+				The Pathway Ontology is a controlled
+				vocabulary for pathways that provides standard terms for the
+				annotation of geneproducts.
+			</attribute>
+        </dataSource>
+        <dataSource ns2:href="http://obo.cvs.sourceforge.net/*checkout*/obo/obo/ontology/phenotype/quality.obo" name="PATO" format="obo">
+            <attribute name="description">
+				PATO is an ontology of phenotypic
+				qualities, intended for use in a number of applications, primarily
+				phenotype annotation. For more information, please visit PATO wiki
+				(http://www.bioontology.org/wiki/index.php/PATO:Main_Page). 
+			</attribute>
+        </dataSource>
+        <dataSource ns2:href="http://obo.cvs.sourceforge.net/*checkout*/obo/obo/ontology/phenotype/mouse_pathology/mouse_pathology.obo" name="Mouse pathology" format="obo">
+            <attribute name="description">
+				Mouse Pathology Ontology (MPATH) is an
+				ontology for mutant mouse pathology. This is Version 1.
+			</attribute>
+        </dataSource>
+        <dataSource ns2:href="http://obo.cvs.sourceforge.net/*checkout*/obo/obo/ontology/phenotype/human_disease.obo" name="Human disease" format="obo">
+            <attribute name="description">
+				This ontology is a comprehensive
+				hierarchical controlled vocabulary for human disease representation.
+				For more information, please visit Disease Ontology website
+				(http://diseaseontology.sourceforge.net/).
+			</attribute>
+        </dataSource>
+        <category name="annotation">
+            <dataSource ns2:href="http://www.geneontology.org/gene-associations/gene_association.jcvi_Aphagocytophilum.gz" name="Gene Association file for Anaplasma phagocytophilum HZ" format="Gene Association">
+                <attribute name="curator">JCVI</attribute>
+                <attribute name="species">Anaplasma phagocytophilum HZ</attribute>
+            </dataSource>
+            <dataSource ns2:href="http://www.geneontology.org/gene-associations/gene_association.PAMGO_Atumefaciens.gz" name="Gene Association file for Agrobacterium tumefaciensstr. C58" format="Gene Association">
+                <attribute name="curator">PAMGO</attribute>
+                <attribute name="species">Agrobacterium tumefaciensstr. C58</attribute>
+            </dataSource>
+            <dataSource ns2:href="http://www.geneontology.org/gene-associations/gene_association.tair.gz" name="Gene Association file for Arabidopsis thaliana" format="Gene Association">
+                <attribute name="curator">TAIR/JCVI</attribute>
+                <attribute name="species">Arabidopsis thaliana</attribute>
+            </dataSource>
+            <dataSource ns2:href="http://www.geneontology.org/gene-associations/gene_association.aspgd.gz" name="Gene Association file for Aspergillus nidulans" format="Gene Association">
+                <attribute name="curator">AspGD</attribute>
+                <attribute name="species">Aspergillus nidulans</attribute>
+            </dataSource>
+            <dataSource ns2:href="http://www.geneontology.org/gene-associations/gene_association.jcvi_Banthracis.gz" name="Gene Association file for Bacillus anthracis Ames" format="Gene Association">
+                <attribute name="curator">JCVI</attribute>
+                <attribute name="species">Bacillus anthracis Ames</attribute>
+            </dataSource>
+            <dataSource ns2:href="http://www.geneontology.org/gene-associations/gene_association.goa_cow.gz" name="Gene Association file for Bos taurus" format="Gene Association">
+                <attribute name="curator">GO Annotations @ EBI</attribute>
+                <attribute name="species">Bos taurus</attribute>
+            </dataSource>
+            <dataSource ns2:href="http://www.geneontology.org/gene-associations/gene_association.jcvi_Chydrogenoformans.gz" name="Gene Association file for Carboxydothermus hydrogenoformans Z-2901" format="Gene Association">
+                <attribute name="curator">JCVI</attribute>
+                <attribute name="species">Carboxydothermus hydrogenoformans Z-2901</attribute>
+            </dataSource>
+            <dataSource ns2:href="http://www.geneontology.org/gene-associations/gene_association.wb.gz" name="Gene Association file for Caenorhabditis elegans" format="Gene Association">
+                <attribute name="curator">WormBase</attribute>
+                <attribute name="species">Caenorhabditis elegans</attribute>
+            </dataSource>
+            <dataSource ns2:href="http://www.geneontology.org/gene-associations/gene_association.jcvi_Cjejuni.gz" name="Gene Association file for Campylobacter jejuni RM1221" format="Gene Association">
+                <attribute name="curator">JCVI</attribute>
+                <attribute name="species">Campylobacter jejuni RM1221</attribute>
+            </dataSource>
+            <dataSource ns2:href="http://www.geneontology.org/gene-associations/gene_association.cgd.gz" name="Gene Association file for Candida albicans" format="Gene Association">
+                <attribute name="curator">CGD</attribute>
+                <attribute name="species">Candida albicans</attribute>
+            </dataSource>
+            <dataSource ns2:href="http://www.geneontology.org/gene-associations/gene_association.jcvi_Cperfringens.gz" name="Gene Association file for Clostridium perfringens ATCC13124" format="Gene Association">
+                <attribute name="curator">JCVI</attribute>
+                <attribute name="species">Clostridium perfringens ATCC13124</attribute>
+            </dataSource>
+            <dataSource ns2:href="http://www.geneontology.org/gene-associations/gene_association.jcvi_Cpsychrerythraea.gz" name="Gene Association file for Colwellia psychrerythraea 34H" format="Gene Association">
+                <attribute name="curator">JCVI</attribute>
+                <attribute name="species">Colwellia psychrerythraea 34H</attribute>
+            </dataSource>
+            <dataSource ns2:href="http://www.geneontology.org/gene-associations/gene_association.jcvi_Cburnetii.gz" name="Gene Association file for Coxiella burnetii RSA 493" format="Gene Association">
+                <attribute name="curator">JCVI</attribute>
+                <attribute name="species">Coxiella burnetii RSA 493</attribute>
+            </dataSource>
+            <dataSource ns2:href="http://www.geneontology.org/gene-associations/gene_association.zfin.gz" name="Gene Association file for Danio rerio" format="Gene Association">
+                <attribute name="curator">ZFIN</attribute>
+                <attribute name="species">Danio rerio</attribute>
+            </dataSource>
+            <dataSource ns2:href="http://www.geneontology.org/gene-associations/gene_association.jcvi_Dethenogenes.gz" name="Gene Association file for Dehalococcoides ethenogenes 195" format="Gene Association">
+                <attribute name="curator">JCVI</attribute>
+                <attribute name="species">Dehalococcoides ethenogenes 195</attribute>
+            </dataSource>
+            <dataSource ns2:href="http://www.geneontology.org/gene-associations/gene_association.PAMGO_Ddadantii.gz" name="Gene Association file for Dickeya dadantii" format="Gene Association">
+                <attribute name="curator">PAMGO</attribute>
+                <attribute name="species">Dickeya dadantii</attribute>
+            </dataSource>
+            <dataSource ns2:href="http://www.geneontology.org/gene-associations/gene_association.dictyBase.gz" name="Gene Association file for Dictyostelium discoideum" format="Gene Association">
+                <attribute name="curator">dictyBase</attribute>
+                <attribute name="species">Dictyostelium discoideum</attribute>
+            </dataSource>
+            <dataSource ns2:href="http://www.geneontology.org/gene-associations/gene_association.fb.gz" name="Gene Association file for Drosophila melanogaster" format="Gene Association">
+                <attribute name="curator">FlyBase</attribute>
+                <attribute name="species">Drosophila melanogaster</attribute>
+            </dataSource>
+            <dataSource ns2:href="http://www.geneontology.org/gene-associations/gene_association.ecocyc.gz" name="Gene Association file for Escherichia coli" format="Gene Association">
+                <attribute name="curator">EcoCyc and EcoliHub</attribute>
+                <attribute name="species">Escherichia coli</attribute>
+            </dataSource>
+            <dataSource ns2:href="http://www.geneontology.org/gene-associations/gene_association.jcvi_Echaffeensis.gz" name="Gene Association file for Ehrlichia chaffeensis Arkansas" format="Gene Association">
+                <attribute name="curator">JCVI</attribute>
+                <attribute name="species">Ehrlichia chaffeensis Arkansas</attribute>
+            </dataSource>
+            <dataSource ns2:href="http://www.geneontology.org/gene-associations/gene_association.goa_chicken.gz" name="Gene Association file for Gallus gallus" format="Gene Association">
+                <attribute name="curator">GO Annotations @ EBI</attribute>
+                <attribute name="species">Gallus gallus</attribute>
+            </dataSource>
+            <dataSource ns2:href="http://www.geneontology.org/gene-associations/gene_association.jcvi_Gsulfurreducens.gz" name="Gene Association file for Geobacter sulfurreducens PCA" format="Gene Association">
+                <attribute name="curator">JCVI</attribute>
+                <attribute name="species">Geobacter sulfurreducens PCA</attribute>
+            </dataSource>
+            <dataSource ns2:href="http://www.geneontology.org/gene-associations/gene_association.goa_human.gz" name="Gene Association file for Homo sapiens" format="Gene Association">
+                <attribute name="curator">GO Annotations @ EBI</attribute>
+                <attribute name="species">Homo sapiens</attribute>
+            </dataSource>
+            <dataSource ns2:href="http://www.geneontology.org/gene-associations/gene_association.jcvi_Hneptunium.gz" name="Gene Association file for Hyphomonas neptunium ATCC 15444" format="Gene Association">
+                <attribute name="curator">JCVI</attribute>
+                <attribute name="species">Hyphomonas neptunium ATCC 15444</attribute>
+            </dataSource>
+            <dataSource ns2:href="http://www.geneontology.org/gene-associations/gene_association.GeneDB_Lmajor.gz" name="Gene Association file for Leishmania major" format="Gene Association">
+                <attribute name="curator">Sanger GeneDB</attribute>
+                <attribute name="species">Leishmania major</attribute>
+            </dataSource>
+            <dataSource ns2:href="http://www.geneontology.org/gene-associations/gene_association.jcvi_Lmonocytogenes.gz" name="Gene Association file for Listeria monocytogenes 4b F2365" format="Gene Association">
+                <attribute name="curator">JCVI</attribute>
+                <attribute name="species">Listeria monocytogenes 4b F2365</attribute>
+            </dataSource>
+            <dataSource ns2:href="http://www.geneontology.org/gene-associations/gene_association.PAMGO_Mgrisea.gz" name="Gene Association file for Magnaporthe grisea" format="Gene Association">
+                <attribute name="curator">PAMGO</attribute>
+                <attribute name="species">Magnaporthe grisea</attribute>
+            </dataSource>
+            <dataSource ns2:href="http://www.geneontology.org/gene-associations/gene_association.jcvi_Mcapsulatus.gz" name="Gene Association file for Methylococcus capsulatus Bath" format="Gene Association">
+                <attribute name="curator">JCVI</attribute>
+                <attribute name="species">Methylococcus capsulatus Bath</attribute>
+            </dataSource>
+            <dataSource ns2:href="http://www.geneontology.org/gene-associations/gene_association.mgi.gz" name="Gene Association file for Mus musculus" format="Gene Association">
+                <attribute name="curator">MGI</attribute>
+                <attribute name="species">Mus musculus</attribute>
+            </dataSource>
+            <dataSource ns2:href="http://www.geneontology.org/gene-associations/gene_association.jcvi_Nsennetsu.gz" name="Gene Association file for Neorickettsia sennetsu Miyayama" format="Gene Association">
+                <attribute name="curator">JCVI</attribute>
+                <attribute name="species">Neorickettsia sennetsu Miyayama</attribute>
+            </dataSource>
+            <dataSource ns2:href="http://www.geneontology.org/gene-associations/gene_association.PAMGO_Oomycetes.gz" name="Gene Association file for Oomycetes" format="Gene Association">
+                <attribute name="curator">PAMGO</attribute>
+                <attribute name="species">Oomycetes</attribute>
+            </dataSource>
+            <dataSource ns2:href="http://www.geneontology.org/gene-associations/gene_association.gramene_oryza.gz" name="Gene Association file for Oryza sativa" format="Gene Association">
+                <attribute name="curator">Gramene</attribute>
+                <attribute name="species">Oryza sativa</attribute>
+            </dataSource>
+            <dataSource ns2:href="http://www.geneontology.org/gene-associations/gene_association.goa_pdb.gz" name="Gene Association file for Protein Data Bank [multispecies]" format="Gene Association">
+                <attribute name="curator">GO Annotations @ EBI</attribute>
+                <attribute name="species">Protein Data Bank [multispecies]</attribute>
+            </dataSource>
+            <dataSource ns2:href="http://www.geneontology.org/gene-associations/gene_association.GeneDB_Pfalciparum.gz" name="Gene Association file for Plasmodium falciparum" format="Gene Association">
+                <attribute name="curator">Sanger GeneDB</attribute>
+                <attribute name="species">Plasmodium falciparum</attribute>
+            </dataSource>
+            <dataSource ns2:href="http://www.geneontology.org/gene-associations/gene_association.pseudocap.gz" name="Gene Association file for Pseudomonas aeruginosa PAO1" format="Gene Association">
+                <attribute name="curator">PseudoCAP</attribute>
+                <attribute name="species">Pseudomonas aeruginosa PAO1</attribute>
+            </dataSource>
+            <dataSource ns2:href="http://www.geneontology.org/gene-associations/gene_association.jcvi_Pfluorescens.gz" name="Gene Association file for Pseudomonas fluorescens Pf-5" format="Gene Association">
+                <attribute name="curator">JCVI</attribute>
+                <attribute name="species">Pseudomonas fluorescens Pf-5</attribute>
+            </dataSource>
+            <dataSource ns2:href="http://www.geneontology.org/gene-associations/gene_association.jcvi_Psyringae.gz" name="Gene Association file for Pseudomonas syringae DC3000" format="Gene Association">
+                <attribute name="curator">JCVI</attribute>
+                <attribute name="species">Pseudomonas syringae DC3000</attribute>
+            </dataSource>
+            <dataSource ns2:href="http://www.geneontology.org/gene-associations/gene_association.jcvi_Psyringae_phaseolicola.gz" name="Gene Association file for Pseudomonas syringae pv. phaseolicola 1448A" format="Gene Association">
+                <attribute name="curator">JCVI</attribute>
+                <attribute name="species">Pseudomonas syringae pv. phaseolicola
+					1448A</attribute>
+            </dataSource>
+            <dataSource ns2:href="http://www.geneontology.org/gene-associations/gene_association.rgd.gz" name="Gene Association file for Rattus norvegicus" format="Gene Association">
+                <attribute name="curator">RGD</attribute>
+                <attribute name="species">Rattus norvegicus</attribute>
+            </dataSource>
+            <dataSource ns2:href="http://www.geneontology.org/gene-associations/gene_association.reactome.gz" name="Gene Association file for Reactome [multispecies]" format="Gene Association">
+                <attribute name="curator">CSHL and EBI</attribute>
+                <attribute name="species">Reactome [multispecies]</attribute>
+            </dataSource>
+            <dataSource ns2:href="http://www.geneontology.org/gene-associations/gene_association.sgd.gz" name="Gene Association file for Saccharomyces cerevisiae" format="Gene Association">
+                <attribute name="curator">SGD</attribute>
+                <attribute name="species">Saccharomyces cerevisiae</attribute>
+            </dataSource>
+            <dataSource ns2:href="http://www.geneontology.org/gene-associations/gene_association.GeneDB_Spombe.gz" name="Gene Association file for Schizosaccharomyces pombe" format="Gene Association">
+                <attribute name="curator">Sanger GeneDB</attribute>
+                <attribute name="species">Schizosaccharomyces pombe</attribute>
+            </dataSource>
+            <dataSource ns2:href="http://www.geneontology.org/gene-associations/gene_association.jcvi_Soneidensis.gz" name="Gene Association file for Shewanella oneidensis MR-1" format="Gene Association">
+                <attribute name="curator">JCVI</attribute>
+                <attribute name="species">Shewanella oneidensis MR-1</attribute>
+            </dataSource>
+            <dataSource ns2:href="http://www.geneontology.org/gene-associations/gene_association.jcvi_Spomeroyi.gz" name="Gene Association file for Silicibacter pomeroyi DSS-3" format="Gene Association">
+                <attribute name="curator">JCVI</attribute>
+                <attribute name="species">Silicibacter pomeroyi DSS-3</attribute>
+            </dataSource>
+            <dataSource ns2:href="http://www.geneontology.org/gene-associations/gene_association.sgn.gz" name="Gene Association file for Solanaceae" format="Gene Association">
+                <attribute name="curator">SGN</attribute>
+                <attribute name="species">Solanaceae</attribute>
+            </dataSource>
+            <dataSource ns2:href="http://www.geneontology.org/gene-associations/gene_association.GeneDB_Tbrucei.gz" name="Gene Association file for Trypanosoma brucei" format="Gene Association">
+                <attribute name="curator">Sanger GeneDB</attribute>
+                <attribute name="species">Trypanosoma brucei</attribute>
+            </dataSource>
+            <dataSource ns2:href="http://www.geneontology.org/gene-associations/gene_association.goa_uniprot_noiea.gz" name="Gene Association file for UniProt [multispecies] IEA annotations removed" format="Gene Association">
+                <attribute name="curator">GO Annotations @ EBI</attribute>
+                <attribute name="species">UniProt [multispecies] IEA annotations
+					removed</attribute>
+            </dataSource>
+            <dataSource ns2:href="http://www.geneontology.org/gene-associations/gene_association.jcvi_Vcholerae.gz" name="Gene Association file for Vibrio cholerae" format="Gene Association">
+                <attribute name="curator">JCVI</attribute>
+                <attribute name="species">Vibrio cholerae</attribute>
+            </dataSource>
+        </category>
+    </category>
+    <category name="network">
+        <dataSource ns2:href="http://chianti.ucsd.edu/kono/data/galFiltered.sif" name="Yeast Protein-Protein: Ideker, T. et al. (galFiltered.sif)" format="sif"/>
+        <dataSource ns2:href="http://cytoscape.org/datasets/HPRD.sif" name="Human Protein-Protein: HPRD Literature Curated Interactions" format="sif"/>
+        <dataSource ns2:href="http://cytoscape.org/datasets/rual.sif" name="Human Protein-Protein: Rual et al. Toward a proteome-scale map of the human protein-protein interaction network. Nature 2005." format="sif"/>
+        <dataSource ns2:href="http://www.cytoscape.org/tut/getting.started/RUAL.subset.sif" name="Human Protein-Protein: Rual et al. (Subnetwork for tutorial)" format="sif"/>
+        <dataSource ns2:href="http://cytoscape.org/datasets/stelzl.sif" name="Human Protein-Protein: Stelzl et al. A human protein-protein interaction network: a resource for annotating the proteome. Cell 2005." format="sif"/>
+        <dataSource ns2:href="http://cytoscape.org/datasets/ptacek.sif" name="Yeast Protein-Protein: Ptacek et al. Global analysis of protein phosphorylation in yeast. Nature 2005" format="sif"/>
+    </category>
+    <category name="plugins">
+        <dataSource ns2:href="http://cytoscape.org/plugins/plugins.xml" name="Cytoscape"/>
+    </category>
+</bookmarks>

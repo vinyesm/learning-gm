@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<cysession xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" documentVersion="0.9" id="CytoscapeSession-2011_06_12-13_02">
+    <sessionNote>You can add note for this session here.</sessionNote>
+    <sessionState>
+        <desktop>
+            <desktopSize height="1028" width="1676"/>
+            <networkFrames>
+                <networkFrame y="0" x="0" height="669" width="1342" frameID="E. coli 50% precision"/>
+                <networkFrame y="0" x="0" height="669" width="1342" frameID="S. aureus 50% precision"/>
+            </networkFrames>
+        </desktop>
+        <server>
+            <ontologyServer/>
+        </server>
+        <cytopanels>
+            <cytopanel id="CytoPanel1">
+                <panelState>dock</panelState>
+                <selectedPanel>0</selectedPanel>
+                <panels>
+                    <panel id="test"/>
+                </panels>
+            </cytopanel>
+            <cytopanel id="CytoPanel2">
+                <panelState>dock</panelState>
+                <selectedPanel>0</selectedPanel>
+                <panels>
+                    <panel id="test"/>
+                </panels>
+            </cytopanel>
+            <cytopanel id="CytoPanel3">
+                <panelState>hide</panelState>
+                <selectedPanel>-1</selectedPanel>
+                <panels>
+                    <panel id="test"/>
+                </panels>
+            </cytopanel>
+        </cytopanels>
+    </sessionState>
+    <networkTree>
+        <network visualStyle="default" viewAvailable="true" id="E. coli 50% precision" filename="E. coli 50% precision.xgmml">
+            <parent id="Network Root"/>
+        </network>
+        <network visualStyle="default" viewAvailable="true" id="S. aureus 50% precision" filename="S. aureus 50% precision.xgmml">
+            <parent id="Network Root"/>
+        </network>
+        <network visualStyle="default" viewAvailable="false" id="Network Root" filename="Network Root.xgmml">
+            <parent id="NULL"/>
+            <child id="E. coli 50% precision"/>
+            <child id="S. aureus 50% precision"/>
+        </network>
+    </networkTree>
+</cysession>

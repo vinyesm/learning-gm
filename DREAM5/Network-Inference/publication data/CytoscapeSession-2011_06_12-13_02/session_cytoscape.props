@@ -1,0 +1,84 @@
+#Cytoscape Property File
+#Sun Jun 12 13:02:02 EDT 2011
+edgelinkouturl.Entrez.Pubmed=http\://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd\=Search&db\=PubMed&term\=%ID%&doptcmdl\=Abstract
+render.nodeBorderThreshold=200
+nodelinkouturl.Reactome.ReactomeID=http\://www.reactome.org/cgi-bin/eventbrowser?DB\=gk_current&ID\=%ID%
+nodelinkouturl.Model\ Organism\ DB.WormBase\ (worm)=http\://www.wormbase.org/db/gene/gene?name\=%ID%
+nodelinkouturl.Array\ Express.All\ Species=http\://www.ebi.ac.uk/microarray-as/aew/DW?queryFor\=gene&gene_query\=%ID%&species\=&displayInsitu\=on&exp_query\=
+Linkout.externalLinkName=Linkout.ExternalLinks
+nodelinkouturl.Ensembl\ Gene\ View.mouse=http\://www.ensembl.org/Mus_musculus/geneview?gene\=%ID%
+nodelinkouturl.KEGG.yeast\ (use\ ORF\ name)=http\://www.kegg.jp/dbget-bin/www_bget?sce\:%ID%
+nodelinkouturl.KEGG.human\ (use\ NCBI\ GeneID)=http\://www.kegg.jp/dbget-bin/www_bget?hsa\:%ID%
+nodelinkouturl.Ensembl\ Gene\ View.yeast=http\://www.ensembl.org/Saccharomyces_cerevisiae/geneview?gene\=%ID%
+edgelinkouturl.Network\ Database.IntAct=http\://www.ebi.ac.uk/intact/search/do/search?searchString\=%ID%&filter\=ac
+nodelinkouturl.Entrez.All\ Databases\ (Global\ search\ by\ free\ keyword)=http\://www.ncbi.nlm.nih.gov/sites/gquery?GlobalQuery.GQueryCluster.GQuerySearchBox.Term\=%ID%
+maximizeViewOnCreate=false
+nodelinkouturl.Reactome.Wormbase=http\://www.reactome.org/cgi-bin/link?SOURCE\=Wormbase&ID\=%ID%&FOCUS_SPECIES\=Caenorhabditis+elegans
+nodelinkouturl.Entrez.Structure=http\://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd\=Search&db\=structure&term\=%ID%&doptcmdl\=Brief
+nodelinkouturl.Interaction\ Databases.HPRD=http\://www.hprd.org/resultsQuery?multiplefound\=&prot_name\=%ID%&external\=Ref_seq&accession_id\=&hprd\=&gene_symbol\=&chromo_locus\=&function\=&ptm_type\=&localization\=&domain\=&motif\=&expression\=&prot_start\=&prot_end\=&limit\=0&mole_start\=&mole_end\=&disease\=&query_submit\=Search
+nodelinkouturl.Array\ Express.yeast=http\://www.ebi.ac.uk/microarray-as/aew/DW?queryFor\=gene&gene_query\=%ID%&species\=Saccharomyces+cerevisiae&displayInsitu\=on&exp_query\=
+defaultWebBrowser=
+nodelinkouturl.Reactome.Entrez=http\://www.reactome.org/cgi-bin/link?SOURCE\=Entrez+Gene&ID\=%ID%
+proxy.server=
+exportTextAsShape=true
+render.edgeLabelThreshold=120
+cytoscape.version.number=2.8.0
+nodelinkouturl.iHOP.yeast=http\://www.ihop-net.org/UniPub/iHOP/?search\=%ID%&field\=all&ncbi_tax_id\=4932
+nodelinkouturl.Ensembl\ Gene\ View.human=http\://www.ensembl.org/Homo_sapiens/geneview?gene\=%ID%
+nodelinkouturl.Other\ Biological\ DB.InterPro=http\://www.ebi.ac.uk/interpro/IEntry?ac\=%ID%
+nodelinkouturl.BindingDB.BindingDB\ (canonical\ name)=http\://www.bindingdb.org/bind/searchby_tw.jsp?constrain\=0&target1\=%biopax.entity.NAME%&submit\=Search
+render.nodeLabelThreshold=100
+nodelinkouturl.Entrez.Pubmed=http\://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd\=Search&db\=PubMed&term\=%ID%&doptcmdl\=Abstract
+nodelinkouturl.Array\ Express.human=http\://www.ebi.ac.uk/microarray-as/aew/DW?queryFor\=gene&gene_query\=%ID%&species\=Homo+sapiens&displayInsitu\=on&exp_query\=
+defaultSpeciesName=Saccharomyces cerevisiae
+nodelinkouturl.Model\ Organism\ DB.HGNC\ (human)=http\://www.genenames.org/data/hgnc_data.php?hgnc_id\=%ID%
+nodelinkouturl.KEGG.All\ Species\ (use\ KEGG\ ID)=http\://www.kegg.jp/dbget-bin/www_bget?%ID%
+nodelinkouturl.Reactome.UniProt=http\://www.reactome.org/cgi-bin/link?SOURCE\=UNIPROT&ID\=%ID%
+secondaryViewThreshold=30000
+cytoscape.debug=false
+nodelinkouturl.iHOP.human=http\://www.ihop-net.org/UniPub/iHOP/?search\=%ID%&field\=all&ncbi_tax_id\=9606
+nodelinkouturl.Other\ Biological\ DB.Pfam=http\://www.sanger.ac.uk/cgi-bin/Pfam/getacc?%ID%
+nodelinkouturl.Model\ Organism\ DB.FlyBase\ (fly)=http\://flybase.bio.indiana.edu/.bin/fbidq.html?%ID%
+render.coarseDetailThreshold=2000
+nestedNetwork.imageScaleFactor=1.0
+nodelinkouturl.Interaction\ Databases.BioGRID=http\://www.thebiogrid.org/search.php?keywords\=%ID%&searchbutton\=GO&organismid\=0
+nodelinkouturl.EBI\ Tools.PRIDE\ (PRoteomics\ IDEntifications\ database)=http\://www.ebi.ac.uk/pride/simpleSearch.do?simpleSearchValue\=%ID%
+nodelinkouturl.Entrez.Gene=http\://www.ncbi.nlm.nih.gov/entrez/query.fcgi?db\=gene&cmd\=Search&term\=%ID%
+nodelinkouturl.Ensembl\ Gene\ View.worm=http\://www.ensembl.org/Caenorhabditis_elegans/geneview?gene\=%ID%
+nodelinkouturl.EBI\ Tools.Dasty2\ (Visualize\ protein\ sequence\ feature\ information)=http\://www.ebi.ac.uk/dasty/display.html?q\=%ID%&label\=BIOSAPIENS&t\=3
+nodelinkouturl.Reactome.RefSeq=http\://www.reactome.org/cgi-bin/link?SOURCE\=RefSeq&ID\=%ID%
+viewThreshold=10000
+nodelinkouturl.Entrez.Protein=http\://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd\=Search&db\=Protein&term\=%ID%&doptcmdl\=GenPept
+nodelinkouturl.Entrez.OMIM=http\://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd\=Search&db\=omim&term\=%ID%&doptcmdl\=Synopsis
+moduleNetworkViewCreationThreshold=5
+edgelinkouturl.Network\ Database.BioGRID=http\://www.thebiogrid.org/SearchResults/summary/%ID%
+nodelinkouturl.Interaction\ Databases.IntAct=http\://www.ebi.ac.uk/intact/search/do/search?searchString\=%ID%&filter\=ac
+nodelinkouturl.Ensembl\ Gene\ View.fly=http\://www.ensembl.org/Drosophila_melanogaster/geneview?gene\=%ID%
+nodelinkouturl.UniProt.PIR=http\://www.pir.uniprot.org/cgi-bin/upEntry?id\=%ID%
+nodelinkouturl.UniProt.KB\ Beta=http\://beta.uniprot.org/uniprot/%ID%
+proxy.server.port=
+nodelinkouturl.KEGG.mouse\ (use\ NCBI\ GeneID)=http\://www.genome.jp/dbget-bin/www_bget?mmu\:%ID%
+nodelinkouturl.Ontology.Gene\ Ontology\ (QuickGO\ by\ name)=http\://www.ebi.ac.uk/ego/GSearch?query\=%ID%&mode\=name&ontology\=all_ont
+nestedNetworkSnapshotSize=400
+nodelinkouturl.Entrez.Nucleotide=http\://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd\=Search&db\=nucleotide&term\=%ID%&doptcmdl\=GenBank
+vizmapper.cntMapperUpperLimit=2000
+edgelinkouturl.iHop.yeast=http\://www.ihop-net.org/UniPub/iHOP/in?syns_1\=%ID1%&ncbi_tax_id_1\=4932&syns_2\=%ID2%&ncbi_tax_id_2\=4932
+preferredLayoutAlgorithm=force-directed
+edgelinkouturl.Ontology.Molecular\ Interaction\ (PSI-MI)=http\://www.ebi.ac.uk/ontology-lookup/browse.do?ontName\=MI&termId\=MI%3A%ID%
+undo.limit=10
+nodelinkouturl.BindingDB.BindingDB\ (UniProt)=http\://www.bindingdb.org/uniprot/%biopax.xref.UNIPROT%
+render.edgeArrowThreshold=300
+logger.console=false
+nodelinkouturl.Model\ Organism\ DB.SGD\ (yeast)=http\://db.yeastgenome.org/cgi-bin/locus.pl?locus\=%ID%
+defaultPluginDownloadUrl=http\://cytoscape.org/plugins/plugins.xml
+defaultVisualStyle=default
+nodelinkouturl.Reactome.SGD=http\://www.reactome.org/cgi-bin/link?SOURCE\=SGD&ID\=%ID%&FOCUS_SPECIES\=Saccharomyces+cerevisiae
+canonicalizeNames=true
+nodelinkouturl.Search\ Engines.Google=http\://www.google.com/search?hl\=en&q\=%ID%&btnG\=Google+Search
+nodelinkouturl.Other\ Biological\ DB.GeneCards=http\://www.genecards.org/cgi-bin/carddisp.pl?gene\=%ID%&alias\=yes
+nodelinkouturl.Search\ Engines.Ask=http\://www.ask.com/web?q\=%ID%&qsrc\=0&o\=0
+proxy.server.type=
+nodelinkouturl.EBI\ Tools.All\ the\ EBI\ (Global\ search\ by\ free\ keyword)=http\://www.ebi.ac.uk/ebisearch/search.ebi?query\=%ID%&db\=allebi
+nodelinkouturl.Ontology.Gene\ Ontology\ (QuickGO\ by\ ID)=http\://www.ebi.ac.uk/ego/DisplayGoTerm?id\=%ID%
+edgelinkouturl.iHop.human=http\://www.ihop-net.org/UniPub/iHOP/in?syns_1\=%ID1%&ncbi_tax_id_1\=9606&syns_2\=%ID2%&ncbi_tax_id_2\=9606
+nodelinkouturl.Model\ Organism\ DB.MGI\ (mouse)=http\://www.informatics.jax.org/javawi2/servlet/WIFetch?page\=searchTool&query\=%ID%&selectedQuery\=Genes+and+Markers

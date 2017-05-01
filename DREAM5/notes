@@ -1,0 +1,15 @@
+To launch GeneNetWeaver
+http://gnw.sourceforge.net/
+
+
+
+-----------------------------------------------------------------------
+Experiment in paper 
+STRUCTURE LEARNING IN GRAPHICAL MODELING 
+MATHIAS DRTON AND MARLOES H. MAATHUIS
+
+
+data E. coli 
+original data/Ecoli/ecoli_data.tsv
+-p=4297 variables (i.e. genes)
+-n=805 samples (i.e. experiments) 

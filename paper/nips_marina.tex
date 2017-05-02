@@ -132,30 +132,24 @@
 \section{Introduction}
 
 
-Why learning GGM, then latent GGM to learn models with more interpretability and more efficient inference if sparse. An interesting idea is to add sparsity to latent components. Theory on decomposition, more difficult if sparse latent components. 
+Why learning GGM, then latent GGM to learn models with more interpretability and more efficient inference if sparse. With no a priori on the number of latent variables.
+An interesting idea is to add sparsity to latent components. Theory on decomposition, more difficult if sparse latent components. 
+
+figure latent graphical model
+
+\subsection*{Examples}
 
 
 \section{Optimization problem}
 \label{optimization}
 
-All headings should be lower case (except for first word and proper
-nouns), flush left, and bold.
+We consider a quadratic loss regularized by a structured sparsity atomic norm.
 
-First-level headings should be in 12-point type.
+\subsection{Atomic norm}
 
-\subsection{Headings: second level}
+Cardinality function penalizing large latent components.
+If gaussian signal..vector case..
 
-Second-level headings should be in 10-point type.
-
-\subsubsection{Headings: third level}
-
-Third-level headings should be in 10-point type.
-
-\paragraph{Paragraphs}
-
-There is also a \verb+\paragraph+ command available, which sets the
-heading in bold, flush left, and inline with the text, with the
-heading followed by 1\,em of space.
 
 \section{Exact decomposition}
 \label{others}
@@ -168,15 +162,6 @@ These instructions apply to everyone.
 \subsection{Convergence theorem}
 
 Following Chandrasekaran ...
-
-
-
-\subsection{Tables}
-
-All tables must be centered, neat, clean and legible.  The table
-number and title always appear before the table.  See
-Table~\ref{sample-table}.
-
 
 
 \section{Experiments}

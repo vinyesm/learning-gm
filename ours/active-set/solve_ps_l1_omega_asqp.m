@@ -94,7 +94,7 @@ while cont
         
         [alph,Jset,npiv]=asqp2(Hall+0*1e-12*eye(length(fall)),-fall,alpha0,param_as,new_atom_added,idx_added);
         %         fprintf('out asqp norm(grad)=%f\n',ng);
-        
+%         keyboard;
         
         fusioned_atoms=false;
         
@@ -355,6 +355,7 @@ while cont
             end
             if debug
                 fprintf('\n adding omega atom\n');
+%                 keyboard;
             end
             
             if ActiveSet.atom_count>0

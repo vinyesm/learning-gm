@@ -1,8 +1,9 @@
-function [new_i,new_val,maxval]=get_new_atom_spca(H,ActiveSet,param )
-
+function [new_i,new_val,val]=get_new_atom_spca(H,ActiveSet,param )
+% keyboard;
 %
 % H = gradient(Z,inputData,param);
 maxval=-inf;
+val=-inf;
 new_i=[];
 new_val=[];
 
@@ -23,10 +24,9 @@ for i=1:length(ActiveSet.I)
     d=real(d);
     if d/cf>maxval
         maxval=d/cf;
+        val=d;
         new_i=S;
         new_val=v/sqrt(cf);
-%         maxatom=zeros(p,1);
-%         maxatom(S)=v;
     end
 end
 % fprintf('\n%f',maxval);

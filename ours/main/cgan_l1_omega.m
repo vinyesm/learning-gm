@@ -83,7 +83,8 @@ hist.time=toc;
 epsStop=param.epsStop;
 
 
-for q=5:-1:0
+% for q=5:-1:0
+for q=0
     param.epsStop=2^q*epsStop;
     c = 1;
     i = 0;
@@ -140,6 +141,7 @@ for q=5:-1:0
         
         if val<param.lambda*(1+param.epsStop)
             %%      few proximal steps for postprcessing
+%             keyboard;
             if pm
                 fprintf('No new atom found, prox steps for cleaning after PS.. \n');
                 S=inputData.X1*inputData.X1;
@@ -224,7 +226,7 @@ for q=5:-1:0
             %ActiveSet.Z = [ActiveSet.Z, zeros(param.k,param.k)];
             %ActiveSet.tracenorm = [ ActiveSet.tracenorm , 0];
             ActiveSet.k = [ActiveSet.k , kBest];
-            ActiveSet.fronorm = [ ActiveSet.fronorm , 0];
+            %ActiveSet.fronorm = [ ActiveSet.fronorm , 0];
         else
             %c = 0;
         end

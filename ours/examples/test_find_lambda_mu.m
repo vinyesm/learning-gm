@@ -34,10 +34,20 @@ inputData.Y=-eye(po);
 % param.cardfun(k)=1;
 param.cardfun(p)=1;
 beta=.5;
-param.cardfun=((1:p).^beta)/p^.5;c=1;param.lambda=0.25*c;param.mu=0.2*c;
-% param.cardfun=((1:p).^beta);
-% param.cardfun=param.cardfun./sum(param.cardfun);
+param.cardfun=((1:p).^beta)/p^.5;
 param.cardfun(1)=inf;
+param.lambda=.3;
+param.mu=.1;
+
+
+cf=inf*ones(1,length(ks));
+for j=1:length(ks)
+    cf(j)=min(param.cardfun(ks(j):end));
+end
+
+ActiveSet.atoms=bsxfun(@rdivide,ActiveSet.atoms(:,1:ActiveSet.atom_count),sqrt(cf));
+ActiveSet.alpha=ActiveSet.alpha.*cf';
+
 
 startingZ.Z1=-Doo;
 startingZ.Z2=Dol*Dol';

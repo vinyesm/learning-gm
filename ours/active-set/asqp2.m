@@ -31,11 +31,11 @@ function [c,A,nbpivot,ng]=asqp2(Q,b,c0,param,new_atom_added,idx_atom)
 % Marina Vinyes and Guillaume Obozinski, 2016
 % %%%%%%%%%%%%
 
-
+MAX_NB_FULL_STEPS=100;
 max_iter=param.max_iter;
 epsilon=param.epsilon;
 debug_mode=param.debug_mode;
-debug_mode=0;
+debug_mode=1;
 
 tol=1e-12;
 t=size(c0,1);
@@ -107,9 +107,9 @@ while(iter<=max_iter)
         g=Q*c-b;
         nb_full_steps=nb_full_steps+1;
 %         fprintf('+')
-        if param.ws && nb_full_steps>10,
+        if param.ws && nb_full_steps>MAX_NB_FULL_STEPS,
             if debug_mode
-            fprintf('  nb_full_steps>10\n');
+            fprintf('  nb_full_steps>%d\n',MAX_NB_FULL_STEPS);
             end
             break;
         end
@@ -146,13 +146,13 @@ nbpivot=nb_full_steps+nb_drop_steps;
 ng=norm(g(J));
 %fprintf('\n');
 
-if 0 && debug_mode,
+if debug_mode %&& 0,
     hist.obj=hist.obj(1:min(iter,max_iter)-1);
     hist.norm_g=hist.norm_g(1:min(iter,max_iter));
     if any(diff(hist.obj)>tol),
         display('objective increases in asqp');
     end
-    if iter>max_iter || nb_full_steps>100,
+    if iter>max_iter || nb_full_steps>MAX_NB_FULL_STEPS,
         figure(15);
         plot(hist.obj);
         keyboard;

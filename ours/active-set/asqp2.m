@@ -122,7 +122,6 @@ while(iter<=max_iter)
         hist.obj(iter)=0.5*c'*Q*c-c'*b;
         if hist.obj(iter)>obj_old+tol,
             display('obj increases in asqp2');
-%             keyboard;
         end
     end
     %% Test to increase active set

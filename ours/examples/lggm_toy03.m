@@ -7,19 +7,19 @@
 
 %% add paths
 clc
-clc; clear all; close all;
-addpath('../main');
-addpath('../active-set');
-addpath('../atom-selection');
-addpath('../utils');
-addpath('../other');
-addpath('../prox');
-addpath('../TPower_1.0');
-addpath('../TPower_1.0/algorithms/TPower/');
-addpath('../TPower_1.0/misc/');
-
-% %% data
-run('../../toy-data/toy03.m');%k=15;
+% clc; clear all; close all;
+% addpath('../main');
+% addpath('../active-set');
+% addpath('../atom-selection');
+% addpath('../utils');
+% addpath('../other');
+% addpath('../prox');
+% addpath('../TPower_1.0');
+% addpath('../TPower_1.0/algorithms/TPower/');
+% addpath('../TPower_1.0/misc/');
+% 
+% % %% data
+% run('../../toy-data/toy03.m');%k=15;
 
 %% our norm psd with decomposition S-M sparse_omega_lgm
 p=po;
@@ -33,11 +33,12 @@ inputData.Y=-eye(po);
 % param.cardfun=inf*ones(1,p);
 % param.cardfun(k)=1;
 param.cardfun(p)=1;
-beta=.5;
-param.cardfun=((1:p).^beta)/p^.5;c=1;param.lambda=0.25*c;param.mu=0.2*c;
-% param.cardfun=((1:p).^beta);
-% param.cardfun=param.cardfun./sum(param.cardfun);
+beta=.3;
+param.cardfun=((1:p).^beta)/p^beta;
 param.cardfun(1)=inf;
+%c=1;param.lambda=0.25*c;param.mu=0.2*c;
+param.lambda=.5;
+param.mu=.1;
 
 %%% n=5000
 % c=.5;
@@ -51,8 +52,8 @@ param.cardfun(1)=inf;
 obj_l1_om=hist.obj(end);
 
 %% tr+l1
-param.lambda=.3; %lamda ~ 2/k*mu
-param.mu=0.2;
+param.lambda=.6; %lamda ~ 2/k*mu
+param.mu=0.1;
 param.max_nb_main_loop=2;
 param.niterPS=10000;
 param.cardfun=inf*ones(1,p);

@@ -14,7 +14,7 @@ for row=1:p
             i2=(col-1)*p+row;
             idx_l1 = find((l1_atoms(i1, :) == sa) & (l1_atoms(i2, :) == sa));
             I=[I idx_l1];
-            beta=[beta ; val];
+            beta=[beta ; abs(val)];
         end
     end
 end

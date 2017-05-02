@@ -79,7 +79,7 @@ ActiveSet.atoms=ActiveSet.atoms(:,1:ActiveSet.atom_count);
 if debug
     figure(10);clf;
     plot(obj);
-    keyboard;
+%     keyboard;
 end
 
 

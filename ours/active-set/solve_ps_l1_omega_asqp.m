@@ -253,7 +253,7 @@ while cont
                 valmax_om=0;
             end
             valmax_l1=-inf;
-            for at=length(ActiveSet.I_l1)
+            for at=1:length(ActiveSet.I_l1)
                 atom=atoms_l1_sym(:,ActiveSet.I_l1(at));
                 val=-dot(H(:),atom);
                 %                 if abs(sum(aom))>1
@@ -268,20 +268,11 @@ while cont
                 fprintf('Sanity check :  |maxIJ-mu|=%f<%f  |maxvart-lambda|=%f<%f \n',valmax_l1,param.epsStop,valmax_om,param.epsStop);
                 %                 keyboard;
             end
-            % end of sanity check (output of active set
-            
-            % Stopping criterion
-%             if maxvar < param.lambda*(1+param.epsStop) && maxIJ < param.mu*(1+param.epsStop) && cond<epscond %&& dualgap/param.PSdualityEpsilon<1
-%                 cont=false;
-%             end
+
             if cond<epscond %&& dualgap/param.PSdualityEpsilon<1
                 cont=false;
             end
             fprintf('maxIJ/mu=%4.2f<1     varmax/cf*lambda=%4.2f<1   dg/eps=%4.2f<1  cond=%4.2f<%4.2f\n',maxIJ/param.mu,maxvar/(cf*param.lambda),dualgap/param.PSdualityEpsilon,cond,epscond);
-%             if debug
-%                 fprintf('  maxIJ/mu=%4.2f < 1     varmax/(cf*lambda)=%4.2f < 1 continue=%d  count=%d\n',maxIJ/param.mu,maxvar/(cf*param.lambda),cont && count< param.niterPS,count);
-%                 %                     keyboard;
-%             end
             
             cont=cont && count< param.niterPS;
         end
@@ -414,6 +405,7 @@ while cont
             end
             if debug
                 fprintf('\n adding l1 atom row=%d col=%d\n', new_row, new_col);
+%                 keyboard;
             end
             if ~isempty(ActiveSet.I_l1) && sum(ActiveSet.I_l1==idx_l1)
                 new_atom_added=false;

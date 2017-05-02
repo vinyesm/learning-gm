@@ -33,8 +33,8 @@ inputData.Y=-eye(po);
 beta=.5;
 param.cardfun=((1:p).^beta)/p^beta;
 param.cardfun(1)=inf;
-param.lambda=.4;
-param.mu=.2;
+param.lambda=.1;
+param.mu=.1;
 
 %% Starting solution
 

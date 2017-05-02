@@ -1,0 +1,264 @@
+\documentclass{article}
+
+% if you need to pass options to natbib, use, e.g.:
+% \PassOptionsToPackage{numbers, compress}{natbib}
+% before loading nips_2017
+%
+% to avoid loading the natbib package, add option nonatbib:
+% \usepackage[nonatbib]{nips_2017}
+
+\usepackage{nips_2017}
+
+% to compile a camera-ready version, add the [final] option, e.g.:
+% \usepackage[final]{nips_2017}
+
+\usepackage[utf8]{inputenc} % allow utf-8 input
+\usepackage[T1]{fontenc}    % use 8-bit T1 fonts
+\usepackage{hyperref}       % hyperlinks
+\usepackage{url}            % simple URL typesetting
+\usepackage{booktabs}       % professional-quality tables
+\usepackage{amsfonts}       % blackboard math symbols
+\usepackage{nicefrac}       % compact symbols for 1/2, etc.
+\usepackage{microtype}      % microtypography
+\usepackage[utf8]{inputenc} % allow utf-8 input
+\usepackage[T1]{fontenc}    % use 8-bit T1 fonts
+\usepackage{hyperref}       % hyperlinks
+\usepackage{url}            % simple URL typesetting
+\usepackage{booktabs}       % professional-quality tables
+\usepackage{amsfonts,amsthm}       % blackboard math symbols
+\usepackage{nicefrac}       % compact symbols for 1/2, etc.
+\usepackage{microtype}      % microtypography
+\usepackage{MnSymbol}
+\usepackage{color}
+\usepackage{graphicx} % more modern
+\usepackage{subfigure} 
+\usepackage{natbib}
+\usepackage{algorithm}
+\usepackage{algpseudocode}
+\usepackage{lineno}
+\usepackage{thmtools,thm-restate}
+\usepackage{xr}
+
+%\linenumbers
+
+
+
+\def\A{\mathcal{A}}
+\def\ga{\gamma_\mathcal{A}}
+\def\Co{C^{\circ}}
+\def\Coa{C^{\circ}_{\!\!\mathcal{A}}}
+\def\Ca{C_{\!\mathcal{A}}}
+\def\go{\gamma^{\circ}}
+\def\goa{\gamma^{\circ}_{\A}}
+\newcommand{\dt}[2]{\langle#1,#2\rangle}
+\def\Olasso{\Omega_{\rm Lasso}} % Lasso norm
+\def\Ogl{\Omega_{\rm GL}} % group Lasso norm
+\def\Olgl{\Omega_{\rm LGL}} % latent group Lasso norm
+\def\tr{\rm tr}
+\newcommand\itgset[1]{[\!\![#1]\!\!]}
+\def\RR{\mathbb{R}}
+\def\EE{\mathbb{E}}
+\newcommand{\tblue}[1]{\textcolor{blue}{#1}}
+\newcommand{\tred}[1]{\textcolor{red}{#1}}
+\newcommand\TODO[1]{\tblue{TODO: \texttt{#1}}}
+%\newcommand\TODO[1]{}
+\newcommand\OLD[1]{\tblue{#1}}
+\newcommand\NEW[1]{\tred{#1}}
+\def\st{\text{s.t.}}
+
+\newtheorem{thm}{Theorem}
+\newtheorem{prop}{Proposition}
+\newtheorem{fact}{Fact}
+\newtheorem{lemm}{Lemma}
+\newtheorem{coro}{Corollary}
+
+\title{Learning Latent Gaussian Graphical models with structure}
+
+% The \author macro works with any number of authors. There are two
+% commands used to separate the names and addresses of multiple
+% authors: \And and \AND.
+%
+% Using \And between authors leaves it to LaTeX to determine where to
+% break the lines. Using \AND forces a line break at that point. So,
+% if LaTeX puts 3 of 4 authors names on the first line, and the last
+% on the second line, try using \AND instead of \And before the third
+% author name.
+
+\author{
+  David S.~Hippocampus\thanks{Use footnote for providing further
+    information about author (webpage, alternative
+    address)---\emph{not} for acknowledging funding agencies.} \\
+  Department of Computer Science\\
+  Cranberry-Lemon University\\
+  Pittsburgh, PA 15213 \\
+  \texttt{hippo@cs.cranberry-lemon.edu} \\
+  %% examples of more authors
+  %% \And
+  %% Coauthor \\
+  %% Affiliation \\
+  %% Address \\
+  %% \texttt{email} \\
+  %% \AND
+  %% Coauthor \\
+  %% Affiliation \\
+  %% Address \\
+  %% \texttt{email} \\
+  %% \And
+  %% Coauthor \\
+  %% Affiliation \\
+  %% Address \\
+  %% \texttt{email} \\
+  %% \And
+  %% Coauthor \\
+  %% Affiliation \\
+  %% Address \\
+  %% \texttt{email} \\
+}
+
+\begin{document}
+% \nipsfinalcopy is no longer used
+
+\maketitle
+
+\begin{abstract}
+  The abstract paragraph should be indented \nicefrac{1}{2}~inch
+  (3~picas) on both the left- and right-hand margins. Use 10~point
+  type, with a vertical spacing (leading) of 11~points.  The word
+  \textbf{Abstract} must be centered, bold, and in point size 12. Two
+  line spaces precede the abstract. The abstract must be limited to
+  one paragraph.
+\end{abstract}
+
+\section{Introduction}
+
+
+Why learning GGM, then latent GGM to learn models with more interpretability and more efficient inference if sparse. An interesting idea is to add sparsity to latent components. Theory on decomposition, more difficult if sparse latent components. 
+
+
+\section{Optimization problem}
+\label{optimization}
+
+All headings should be lower case (except for first word and proper
+nouns), flush left, and bold.
+
+First-level headings should be in 12-point type.
+
+\subsection{Headings: second level}
+
+Second-level headings should be in 10-point type.
+
+\subsubsection{Headings: third level}
+
+Third-level headings should be in 10-point type.
+
+\paragraph{Paragraphs}
+
+There is also a \verb+\paragraph+ command available, which sets the
+heading in bold, flush left, and inline with the text, with the
+heading followed by 1\,em of space.
+
+\section{Exact decomposition}
+\label{others}
+
+These instructions apply to everyone.
+
+\subsection{Tangent spaces and incoherence}
+
+
+\subsection{Convergence theorem}
+
+Following Chandrasekaran ...
+
+
+
+\subsection{Tables}
+
+All tables must be centered, neat, clean and legible.  The table
+number and title always appear before the table.  See
+Table~\ref{sample-table}.
+
+
+
+\section{Experiments}
+
+Do not change any aspects of the formatting parameters in the style
+files.  In particular, do not modify the width or length of the
+rectangle the text should fit into, and do not change font sizes
+(except perhaps in the \textbf{References} section; see below). Please
+note that pages should be numbered.
+
+\section{Simulated data}
+
+
+\subsection{Microarray dataset}
+
+This package was used to typeset Table~\ref{sample-table}.
+
+\begin{table}[t]
+  \caption{Sample table title}
+  \label{sample-table}
+  \centering
+  \begin{tabular}{lll}
+    \toprule
+    \multicolumn{2}{c}{Part}                   \\
+    \cmidrule{1-2}
+    Name     & Description     & Size ($\mu$m) \\
+    \midrule
+    Dendrite & Input terminal  & $\sim$100     \\
+    Axon     & Output terminal & $\sim$10      \\
+    Soma     & Cell body       & up to $10^6$  \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+Most of the margin problems come from figures positioned by hand using
+\verb+\special+ or other commands. We suggest using the command
+\verb+\includegraphics+ from the \verb+graphicx+ package. Always
+specify the figure width as a multiple of the line width as in the
+example below:
+\begin{verbatim}
+   \usepackage[pdftex]{graphicx} ...
+   \includegraphics[width=0.8\linewidth]{myfile.pdf}
+\end{verbatim}
+See Section 4.4 in the graphics bundle documentation
+(\url{http://mirrors.ctan.org/macros/latex/required/graphics/grfguide.pdf})
+
+A number of width problems arise when \LaTeX{} cannot properly
+hyphenate a line. Please give LaTeX hyphenation hints using the
+\verb+\-+ command when necessary.
+
+\subsubsection*{Conclusion}
+
+\subsubsection*{Acknowledgments}
+
+Use unnumbered third level headings for the acknowledgments. All
+acknowledgments go at the end of the paper. Do not include
+acknowledgments in the anonymized submission, only in the final paper.
+
+\section*{References}
+
+References follow the acknowledgments. Use unnumbered first-level
+heading for the references. Any choice of citation style is acceptable
+as long as you are consistent. It is permissible to reduce the font
+size to \verb+small+ (9 point) when listing the references. {\bf
+  Remember that you can go over 8 pages as long as the subsequent ones contain
+  \emph{only} cited references.}
+\medskip
+
+\small
+
+[1] Alexander, J.A.\ \& Mozer, M.C.\ (1995) Template-based algorithms
+for connectionist rule extraction. In G.\ Tesauro, D.S.\ Touretzky and
+T.K.\ Leen (eds.), {\it Advances in Neural Information Processing
+  Systems 7}, pp.\ 609--616. Cambridge, MA: MIT Press.
+
+[2] Bower, J.M.\ \& Beeman, D.\ (1995) {\it The Book of GENESIS:
+  Exploring Realistic Neural Models with the GEneral NEural SImulation
+  System.}  New York: TELOS/Springer--Verlag.
+
+[3] Hasselmo, M.E., Schnell, E.\ \& Barkai, E.\ (1995) Dynamics of
+learning and recall at excitatory recurrent synapses and cholinergic
+modulation in rat hippocampal region CA3. {\it Journal of
+  Neuroscience} {\bf 15}(7):5249-5262.
+
+\end{document}

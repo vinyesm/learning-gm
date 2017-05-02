@@ -88,22 +88,6 @@ ActiveSet.I={};
 ActiveSet.alpha= [];
 ActiveSet.atoms=pl;
 ActiveSet.atom_count = pl;
-% ActiveSet.beta=[];
-% ActiveSet.I_l1=[];
-% p=size(S,1);
-% pairs=fullfact([p p]);
-% ii=pairs(:,1)>=pairs(:,2);
-% pairs=[pairs(ii,1) pairs(ii,2)];
-% count=1;
-% for j=1:length(pairs);
-%     if pairs(j,1)==pairs(j,2)
-%         ActiveSet.I_l1=[ActiveSet.I_l1 count];
-%         ActiveSet.beta=[ActiveSet.beta corr(pairs(j,1),pairs(j,2))];
-%     end
-%     count=count+1;
-% end
-% ActiveSet.beta=ActiveSet.beta';
-% ActiveSet.I_l1=ActiveSet.I_l1+length(pairs);
 [ Q,q,atoms_l1_sym ] = build_atoms_hessian_l1_sym(Doo,0);
 [ActiveSet.I_l1, ActiveSet.beta]=mat2l1index(-Doo,atoms_l1_sym);
 ActiveSet.k=mat2cell(ks,1,ones(1,length(ks)));

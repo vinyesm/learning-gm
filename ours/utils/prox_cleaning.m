@@ -1,7 +1,9 @@
 function  [Z2,ActiveSet]=prox_cleaning(Z1,Z2,S,ActiveSet,param,T,debug)
 
 lam=param.lambda;
-% debug=0;
+debug=0;
+
+
 
 if debug
     obj=[];
@@ -68,7 +70,9 @@ for t=1:T
         ActiveSet.block{i}=U*diag(ds)*U';
         ActiveSet.alpha=[ActiveSet.alpha;ds(ds>0)];
         ActiveSet.atoms(:,na:na+nai-1)=0;
-        ActiveSet.atoms(supp,na:na+nai-1)=sparse(Us);
+        for ii=1:nai
+            ActiveSet.atoms(:,na+ii-1)=sparse(supp,ones(length(supp),1),Us(:,ii),p,1);
+        end
         ActiveSet.atom_count=na+nai-1;
         na=na+nai;
         Z(supp,supp)=Zi+ActiveSet.block{i};

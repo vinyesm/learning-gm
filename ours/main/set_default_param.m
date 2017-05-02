@@ -11,7 +11,7 @@ end
 
 
 if ~isfield(param,'PSD')
-    param.PSD = false;
+    param.PSD = true;
 end
 
 if ~isfield(param,'nbMainLoop')

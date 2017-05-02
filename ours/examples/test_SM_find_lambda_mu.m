@@ -7,52 +7,78 @@
 
 %% add paths
 clc
-% clc; clear all; close all;
-% addpath('../main');
-% addpath('../active-set');
-% addpath('../atom-selection');
-% addpath('../utils');
-% addpath('../other');
-% addpath('../prox');
-% addpath('../TPower_1.0');
-% addpath('../TPower_1.0/algorithms/TPower/');
-% addpath('../TPower_1.0/misc/');
-% 
-% % %% data
-% run('../../toy-data/toy03.m');%k=15;
+clc; clear all; close all;
+addpath('../main');
+addpath('../active-set');
+addpath('../atom-selection');
+addpath('../utils');
+addpath('../other');
+addpath('../prox');
+addpath('../TPower_1.0');
+addpath('../TPower_1.0/algorithms/TPower/');
+addpath('../TPower_1.0/misc/');
+
+% %% data
+run('../../toy-data/toy03.m');%k=15;
 
 %% our norm psd with decomposition S-M sparse_omega_lgm
 p=po;
-param.max_nb_main_loop=100;%2;%1000
-%%
-% param.f=4;
-% param.verbose=1;
-% inputData.X1=S^.5;
-% inputData.X2=S^.5;
-%%  -10.465008038343603
 param.f=5;
+param.PSD=true;
+param.max_nb_main_loop=100;%2;%1000
 param.verbose=1;
 inputData.X=S;
-%%
 inputData.Y=-eye(po);
-param.cardfun(p)=1;
+
 beta=.5;
 param.cardfun=((1:p).^beta)/p^beta;
 param.cardfun(1)=inf;
 param.lambda=.4;
 param.mu=.2;
 
+%% Starting solution
+
+ActiveSet.max_atom_count_reached=0;
+ActiveSet.I={};
+ActiveSet.alpha= [];
+ActiveSet.atoms=pl;
+ActiveSet.atom_count = pl;
+[ Q,q,atoms_l1_sym ] = build_atoms_hessian_l1_sym(Doo,0);
+[ActiveSet.I_l1, ActiveSet.beta]=mat2l1index(-Doo,atoms_l1_sym);
+ActiveSet.k=mat2cell(ks,1,ones(1,length(ks)));
+ActiveSet.alpha=sum(Dol.^2)';
+ActiveSet.atoms=sparse(bsxfun(@rdivide, Dol, sqrt(sum(Dol.^2))));
+for i=1:pl
+    ActiveSet.I{i}=find(Dol(:,i));
+end
+
+cf=inf*ones(1,length(ks));
+for j=1:length(ks)
+    cf(j)=min(param.cardfun(ks(j):end));
+end
+
+ActiveSet.atoms=bsxfun(@rdivide,ActiveSet.atoms(:,1:ActiveSet.atom_count),sqrt(cf));
+ActiveSet.alpha=ActiveSet.alpha.*cf';
+
+
+startingZ.Z1=-Doo;
+startingZ.Z2=Dol*Dol';
+%init active set alpha, beta, atoms
+
+
 %% blocks
-[Z Z1 Z2 ActiveSet hist param flag output] = cgan_l1_omega(inputData,param);
+
+[Z Z1 Z2 ActiveSet hist param flag output] = cgan_l1_omega(inputData,param,startingZ,ActiveSet);
 obj_l1_om=hist.obj(end);
 
 %% tr+l1
-param.lambda=.6; %lamda ~ 2/k*mu
-param.mu=0.1;
+param.lambda=.3; %lamda ~ 2/k*mu
+param.mu=0.2;
 param.max_nb_main_loop=2;
 param.niterPS=10000;
 param.cardfun=inf*ones(1,p);
 param.cardfun(p)=1;
+
 [Z_tr Z1_tr Z2_tr ActiveSet_tr hist_tr param_tr flag_tr output_tr] = cgan_l1_omega(inputData,param);
 
 %% LOAD HERE lggm.mat
@@ -204,5 +230,10 @@ colorbar
 % % 'Z', 'Z1', 'Z2', 'ActiveSet', 'hist' ,'param', 'flag' ,'output',...
 % % 'Z_tr', 'Z1_tr', 'Z2_tr', 'ActiveSet_tr', 'hist_tr', 'param_tr', 'flag_tr', 'output_tr');
 % 
-obj_l1_om
-hist_tr.obj(end)
+[obj_l1_om hist_tr.obj(end)]
+
+% 6.392641515324717   6.461510852619827
+% 6.392641437575417   6.461510852619827
+% 6.392641437610876   6.461510852619828
+% 6.392641437604441   6.461510852619828
+% 6.392641410456947   6.461510852620222

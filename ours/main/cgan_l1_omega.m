@@ -34,7 +34,7 @@ if nargin < 3
     cardVal=[];
     U=[];
 else
-%     Z = startingZ;
+    %     Z = startingZ;
     Z1 = startingZ.Z1;
     Z2 = startingZ.Z2;
     Z = Z1+Z2;
@@ -64,6 +64,7 @@ D=zeros(p,1);
 output.time=0;
 
 fprintf('\n \n CGAN L1 OMEGA\n');
+
 if param.f==4
     fprintf('Warning : change build_atoms_hessian_l1_sym when loss is not .5*|S^.5*X*S.^5-I|\n');
     [ Q,q,atoms_l1_sym ] = build_atoms_hessian_l1_sym(inputData.X1*inputData.X1,param.mu);
@@ -75,7 +76,7 @@ if nargin > 2
     if param.f==4
         [Hall,fall] = build_Hessian_l1_sym(inputData,param,atoms_l1_sym(:,ActiveSet.I_l1),ActiveSet.atoms);
     elseif param.f==5
-        [Hall,fall] = build_Hessian_l1_sym(inputData,param,atoms_l1_sym(:,ActiveSet.I_l1),ActiveSet.atoms);
+        [Hall,fall] = build_Hessian_l1_SM(inputData,param,atoms_l1_sym(:,ActiveSet.I_l1),ActiveSet.atoms);
     end
 end
 
@@ -107,9 +108,9 @@ for q=0
             end
             
             param.epsStop=2^(q-1)*epsStop;
-%             keyboard;
+            %             keyboard;
             [Z, Z1, Z2,Hall,fall, ActiveSet, hist_ps] = solve_ps_l1_omega_asqp(Z,Z1,Z2, ActiveSet,param,inputData,atoms_l1_sym,Hall,fall);
-%             keyboard;
+            %             keyboard;
             param.epsStop=2^q*epsStop;
             
             if ~isempty(ActiveSet.alpha) && param.debug==1
@@ -147,19 +148,27 @@ for q=0
         
         if val<param.lambda*(1+param.epsStop)
             %%      few proximal steps for postprcessing
-%             keyboard;
-            if pm
+            %             keyboard;
+            if pm && ActiveSet.atom_count>0
                 fprintf('No new atom found, prox steps for cleaning after PS.. \n');
-                S=inputData.X1*inputData.X1;
+                if param.f==4
+                    S=inputData.X1*inputData.X1;
+                elseif param.f==5
+                    S=inputData.X;
+                end
                 [Z2,ActiveSet]=prox_cleaning(Z1,Z2,S,ActiveSet,param,10,0);
                 Z=Z1+Z2;
-                [Hall,fall] = build_Hessian_l1_sym(inputData,param,atoms_l1_sym(:,ActiveSet.I_l1),ActiveSet.atoms);
+                if param.f==4
+                    [Hall,fall] = build_Hessian_l1_sym(inputData,param,atoms_l1_sym(:,ActiveSet.I_l1),ActiveSet.atoms);
+                elseif param.f==5
+                    [Hall,fall] = build_Hessian_l1_SM(inputData,param,atoms_l1_sym(:,ActiveSet.I_l1),ActiveSet.atoms);
+                end
                 H = gradient(Z,inputData,param);
                 val_old=val;
                 [u, kBest,val] = lmo_spsd_TPower(-H,param);
                 cf=min(param.cardfun(kBest:end));
                 %             fprintf('old val=%f new val=%f < %f.. \n',val_old,val, param.lambda*cf);
-%                             keyboard;
+                %                             keyboard;
             end
         end
         
@@ -171,7 +180,7 @@ for q=0
             param.k=kBest;
             currI = find(u);
         end
-%         keyboard;
+        %         keyboard;
         
         %% verbose
         if param.verbose==1
@@ -237,7 +246,7 @@ for q=0
             %c = 0;
         end
         c = i<max_nb_main_loop & c;
-%         keyboard
+        %         keyboard
     end
 end
 
@@ -277,7 +286,11 @@ end
 if pp==1
     if ~isempty(ActiveSet.atoms)
         fprintf('Postprocessing.. \n');
-        S=inputData.X1*inputData.X1;
+        if param.f==4
+            S=inputData.X1*inputData.X1;
+        elseif param.f==5
+            S=inputData.X;
+        end
         [Z2,ActiveSet]=prox_cleaning(Z1,Z2,S,ActiveSet,param,100,1);
         Z=Z1+Z2;
     end

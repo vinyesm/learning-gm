@@ -2,6 +2,7 @@ function [Hall,fall] = build_Hessian_l1_SM(inputData,param,al1,aom)
 %score matching
 debug=0;
 
+
 S=inputData.X;
 p=size(S,1);
 mu=param.mu;
@@ -19,10 +20,10 @@ for i=1:nb_atoms_l1
     Ei=reshape(al1(:,i),p,p);
     if sum(al1(:,i)==2),
 %         fall(i)=-trace(S*Ei)+mu*2; %(*) because loss .5*|S^.5(Z1+Z2)S^.5+I|^2
-        fall(i)=-trace(Ei)+mu*2;
+        fall(i)=trace(Ei)+mu*2;
     else
 %         fall(i)=-trace(S*Ei)+mu; %(*)
-        fall(i)=-trace(Ei)+mu;
+        fall(i)=trace(Ei)+mu;
     end
     for j=1:i
         Ej=reshape(al1(:,j),p,p);
@@ -33,8 +34,9 @@ end
 
 for i=1:nb_atoms_om
     Ui=aom(:,i)*aom(:,i)';
-%     fall(nb_atoms_l1+i)=-trace(S*Ui)+lambda; %(*)
-    fall(nb_atoms_l1+i)=-trace(Ui)+lambda;
+    suppi=sum(abs(aom(:,i))>0);
+    cf=min(param.cardfun(suppi:end));
+    fall(nb_atoms_l1+i)=trace(Ui)+cf*lambda;
     for j=1:i
         Uj=aom(:,j)*aom(:,j)';
         Hall(nb_atoms_l1+i,nb_atoms_l1+j)=trace(Ui*S*Uj);

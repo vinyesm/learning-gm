@@ -28,10 +28,10 @@ if atom_added==1
         Ei=reshape(al1(:,i),p,p);
         if sum(al1(:,i)==2),
             %         fall(i)=-trace(S*Ei)+mu*2; %(*) because loss .5*|S^.5(Z1+Z2)S^.5+I|^2
-            fall(nb_atoms)=-trace(Ei)+mu*2;
+            fall(nb_atoms)=trace(Ei)+mu*2;
         else
             %         fall(i)=-trace(S*Ei)+mu; %(*)
-            fall(nb_atoms)=-trace(Ei)+mu;
+            fall(nb_atoms)=trace(Ei)+mu;
         end
         Hall(nb_atoms,nb_atoms)=trace(Ei*S*Ei);
         for j=1:(i-1)
@@ -56,7 +56,7 @@ if atom_added==2,
         suppi=sum(abs(aom(:,i))>0);
         cf=min(param.cardfun(suppi:end));
         %     fall(nb_atoms_l1+i)=-trace(S*Ui)+lambda; %(*)
-        fall(nb_atoms)=-trace(Ui)+lambda*cf;
+        fall(nb_atoms)=trace(Ui)+lambda*cf;
         for j=1:i
             Uj=aom(:,j)*aom(:,j)';
             Hall(nb_atoms,nb_atoms_l1+j)=trace(Ui*S*Uj);

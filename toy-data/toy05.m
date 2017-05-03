@@ -79,20 +79,6 @@ X=Xfull((pl+1):pt,:);
 S=cov(X');
 % S=inv(Dmargo);
 
-%% active set
-ActiveSet.max_atom_count_reached=0;
-ActiveSet.I={};
-ActiveSet.alpha= [];
-ActiveSet.atoms=pl;
-ActiveSet.atom_count = pl;
-[ Q,q,atoms_l1_sym ] = build_atoms_hessian_l1_sym(Doo,0);
-[ActiveSet.I_l1, ActiveSet.beta]=mat2l1index(-Doo,atoms_l1_sym);
-ActiveSet.k=mat2cell(ks,1,ones(1,length(ks)));
-ActiveSet.alpha=sum(Dol.^2)';
-ActiveSet.atoms=sparse(bsxfun(@rdivide, Dol, sqrt(sum(Dol.^2))));
-for i=1:pl
-    ActiveSet.I{i}=find(Dol(:,i));
-end
 
 %% plotting
 

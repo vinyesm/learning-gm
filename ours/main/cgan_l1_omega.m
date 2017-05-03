@@ -82,6 +82,8 @@ if nargin > 2
     end
 end
 
+% keyboard;
+
 tic
 
 max_nb_atoms = param.max_nb_atoms;

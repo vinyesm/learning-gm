@@ -42,8 +42,8 @@ param.cardfun=inf*ones(1,p);
 param.cardfun(k)=1;
 
 %%% n=5000
-param.lambda=.3; %lamda ~ 2/k*mu
-param.mu=.1;
+param.lambda=.1; %lamda ~ 2/k*mu
+param.mu=.2;
 
 %%
 %% Starting solution
@@ -53,7 +53,11 @@ ActiveSet.I={};
 ActiveSet.alpha= [];
 ActiveSet.atoms=pl;
 ActiveSet.atom_count = pl;
-[ Q,q,atoms_l1_sym ] = build_atoms_hessian_l1_sym(Doo,0);
+if param.f==4
+%     [ Q,q,atoms_l1_sym ] = build_atoms_hessian_l1_sym(Doo,0);
+elseif param.f==5
+    [ Q,q,atoms_l1_sym ] = build_atoms_hessian_l1_SM(Doo,0);
+end
 [ActiveSet.I_l1, ActiveSet.beta]=mat2l1index(-Doo,atoms_l1_sym);
 ActiveSet.k=mat2cell(ks,1,ones(1,length(ks)));
 ActiveSet.alpha=sum(Dol.^2)';
@@ -74,9 +78,26 @@ ActiveSet.alpha=ActiveSet.alpha.*cf';
 startingZ.Z1=-Doo;
 startingZ.Z2=Dol*Dol';
 
+
+
+Z1=zeros(p);
+nz=find(ActiveSet.beta>1e-15);
+for j=nz'
+    Z1=Z1+ActiveSet.beta(j)*reshape(atoms_l1_sym(:,ActiveSet.I_l1(j)),p,p);
+end
+Z2=zeros(p);
+nz=find(ActiveSet.alpha>1e-15);
+for j=nz'
+    u=ActiveSet.atoms(:,j);
+    Z2=Z2+ActiveSet.alpha(j)*(u*u');
+end
+Z=Z1+Z2;
+
+
 %% blocks
 [Z Z1 Z2 ActiveSet hist param flag output] = cgan_l1_omega(inputData,param,startingZ,ActiveSet);
 obj_l1_om=hist.obj(end);
+keyboard;
 
 %% tr+l1
 param.lambda=.3; %lamda ~ 2/k*mu

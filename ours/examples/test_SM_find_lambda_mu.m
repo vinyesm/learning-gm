@@ -67,7 +67,6 @@ startingZ.Z1=-Doo;
 startingZ.Z2=Dol*Dol';
 %init active set alpha, beta, atoms
 
-
 %% blocks
 
 [Z Z1 Z2 ActiveSet hist param flag output] = cgan_l1_omega(inputData,param,startingZ,ActiveSet);

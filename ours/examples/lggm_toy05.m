@@ -27,10 +27,10 @@ param.max_nb_main_loop=100;%2;%1000
 param.verbose=1;
 inputData.Y=-eye(po);
 
-%%
-param.f=4;
-inputData.X1=S^.5;
-inputData.X2=S^.5;
+% %%
+% param.f=4;
+% inputData.X1=S^.5;
+% inputData.X2=S^.5;
 %%
 param.f=5;
 param.verbose=1;

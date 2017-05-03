@@ -33,11 +33,13 @@ if nargin < 3
     fall=[];
     cardVal=[];
     U=[];
+    qs=5:-1:0;
 else
     %     Z = startingZ;
     Z1 = startingZ.Z1;
     Z2 = startingZ.Z2;
     Z = Z1+Z2;
+    qs=0;
 end
 
 if param.Sfixed
@@ -88,8 +90,9 @@ hist.time=toc;
 epsStop=param.epsStop;
 
 
+
 % for q=5:-1:0
-for q=0
+for q=qs
     param.epsStop=2^q*epsStop;
     c = 1;
     i = 0;
@@ -156,7 +159,7 @@ for q=0
                 elseif param.f==5
                     S=inputData.X;
                 end
-                [Z2,ActiveSet]=prox_cleaning(Z1,Z2,S,ActiveSet,param,10,0);
+                [Z2,ActiveSet]=prox_cleaning(Z1,Z2,S,ActiveSet,param,5,0);
                 Z=Z1+Z2;
                 if param.f==4
                     [Hall,fall] = build_Hessian_l1_sym(inputData,param,atoms_l1_sym(:,ActiveSet.I_l1),ActiveSet.atoms);

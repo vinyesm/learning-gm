@@ -33,8 +33,10 @@ inputData.Y=-eye(po);
 beta=.5;
 param.cardfun=((1:p).^beta)/p^beta;
 param.cardfun(1)=inf;
-param.lambda=.1;
-param.mu=.1;
+lam=.5;
+gam=.4;
+param.lambda=lam;
+param.mu=lam*gam;
 
 %% Starting solution
 
@@ -70,6 +72,7 @@ startingZ.Z2=Dol*Dol';
 
 [Z Z1 Z2 ActiveSet hist param flag output] = cgan_l1_omega(inputData,param,startingZ,ActiveSet);
 obj_l1_om=hist.obj(end);
+keyboard;
 
 %% tr+l1
 param.lambda=.3; %lamda ~ 2/k*mu

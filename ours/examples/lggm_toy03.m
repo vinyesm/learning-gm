@@ -29,18 +29,21 @@ param.max_nb_main_loop=100;%2;%1000
 % param.verbose=1;
 % inputData.X1=S^.5;
 % inputData.X2=S^.5;
-%%  -10.465008038343603
+%%  tS -10.437185321471132 0S -10.437184814320133
 param.f=5;
 param.verbose=1;
 inputData.X=S;
 %%
 inputData.Y=-eye(po);
-param.cardfun(p)=1;
+
+%% reg param
 beta=.5;
 param.cardfun=((1:p).^beta)/p^beta;
 param.cardfun(1)=inf;
-param.lambda=.1;
-param.mu=.1;
+lam=.5;
+gam=.4;
+param.lambda=lam;
+param.mu=lam*gam;
 
 %% blocks
 [Z Z1 Z2 ActiveSet hist param flag output] = cgan_l1_omega(inputData,param);

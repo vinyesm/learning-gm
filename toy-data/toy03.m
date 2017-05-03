@@ -3,7 +3,7 @@
 % S is a chain 
 
 clear all; clc;
-
+addpath('../ours/utils');
 
 ks=[20 10 5];
 pl=length(ks);
@@ -36,7 +36,7 @@ for i=1:pl
     end
     i2=i1+ks(i)-1;
 %     Uall((pl+i1):(pl+i2),i)=-.5*ones(ks(i),1);
-    corr_all(i1:i2,i)=randn(ks(i),1)*clo(i);
+    corr_all(i1:i2,i)=ones(ks(i),1)*clo(i);
     corr_all(i,i1:i2)=corr_all(i1:i2,i)';
 end
 

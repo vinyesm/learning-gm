@@ -68,10 +68,10 @@ for t=1:T
         %update
         nai=sum(ds>0);
         ActiveSet.block{i}=U*diag(ds)*U';
-        ActiveSet.alpha=[ActiveSet.alpha;ds(ds>0)];
+        ActiveSet.alpha=[ActiveSet.alpha;cf*ds(ds>0)];
         ActiveSet.atoms(:,na:na+nai-1)=0;
         for ii=1:nai
-            ActiveSet.atoms(:,na+ii-1)=sparse(supp,ones(length(supp),1),Us(:,ii),p,1);
+            ActiveSet.atoms(:,na+ii-1)=sparse(supp,ones(length(supp),1),Us(:,ii)./sqrt(cf),p,1);
         end
         ActiveSet.atom_count=na+nai-1;
         na=na+nai;
@@ -83,7 +83,7 @@ ActiveSet.atoms=ActiveSet.atoms(:,1:ActiveSet.atom_count);
 if debug
     figure(10);clf;
     plot(obj);
-%     keyboard;
+    keyboard;
 end
 
 

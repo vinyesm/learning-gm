@@ -23,19 +23,26 @@ run('../../toy-data/toy05.m');k=30;
 
 %% our norm psd with decomposition S-M sparse_omega_lgm
 p=po;
-param.f=4;
-param.PSD=true;
 param.max_nb_main_loop=100;%2;%1000
 param.verbose=1;
+inputData.Y=-eye(po);
+
+%%
+param.f=4;
 inputData.X1=S^.5;
 inputData.X2=S^.5;
+%%
+param.f=5;
+param.verbose=1;
+inputData.X=S;
+%%
 inputData.Y=-eye(po);
 param.cardfun=inf*ones(1,p);
 param.cardfun(k)=1;
 
 %%% n=5000
-param.lambda=0.1; %lamda ~ 2/k*mu
-param.mu=0.1;
+param.lambda=.5; %lamda ~ 2/k*mu
+param.mu=.5;
 
 
 

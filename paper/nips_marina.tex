@@ -129,91 +129,17 @@
   one paragraph.
 \end{abstract}
 
-\section{Introduction}
-
-In many applications as genetics, finance...learning structure of graphical models. with more interpretability and more efficient inference if sparse. (cf drton for application examples). Speciffically, if the number of variables is very large compared to the number of samples
-We focus on learning undirected gaussian graphical models. A well studied problem is model selection where the inverse of the covariance, also called concentration matrix, is sparse. The nonzeros of the concentration matrix correspond to the edges of the graphical model. Graphical Lasso is the method of choice.
-Here model selection problem with latent variables. In applications where latent variables are missing, this may create non sparsity for some components on the graph, fully connecting all the observed variables connected to the latent variable, see Figure. 
-Why learning GGM, then latent GGM to learn models with more interpretability and more efficient inference if sparse. With no a priori on the number of latent variables.
-An interesting idea is to add sparsity to latent components. Theory on decomposition, more difficult if sparse latent components. 
-
-figure latent graphical model
-
-\subsection*{Examples}
 
 
-\section{Optimization problem}
-\label{optimization}
+\input{intro}
 
-We consider a quadratic loss regularized by a structured sparsity atomic norm.
+\input{related}
 
-\subsection{Atomic norm}
-
-Cardinality function penalizing large latent components.
-If gaussian signal..vector case..
+\input{setup}
 
 \input{identifiability}
 
-\section{Exact decomposition}
-\label{others}
-
-These instructions apply to everyone.
-
-\subsection{Tangent spaces and incoherence}
-
-
-\subsection{Convergence theorem}
-
-Following Chandrasekaran ...
-
-
-\section{Experiments}
-
-Do not change any aspects of the formatting parameters in the style
-files.  In particular, do not modify the width or length of the
-rectangle the text should fit into, and do not change font sizes
-(except perhaps in the \textbf{References} section; see below). Please
-note that pages should be numbered.
-
-\subsection{Simulated data}
-
-
-\subsection{Microarray dataset}
-
-This package was used to typeset Table~\ref{sample-table}.
-
-\begin{table}[t]
-  \caption{Sample table title}
-  \label{sample-table}
-  \centering
-  \begin{tabular}{lll}
-    \toprule
-    \multicolumn{2}{c}{Part}                   \\
-    \cmidrule{1-2}
-    Name     & Description     & Size ($\mu$m) \\
-    \midrule
-    Dendrite & Input terminal  & $\sim$100     \\
-    Axon     & Output terminal & $\sim$10      \\
-    Soma     & Cell body       & up to $10^6$  \\
-    \bottomrule
-  \end{tabular}
-\end{table}
-
-Most of the margin problems come from figures positioned by hand using
-\verb+\special+ or other commands. We suggest using the command
-\verb+\includegraphics+ from the \verb+graphicx+ package. Always
-specify the figure width as a multiple of the line width as in the
-example below:
-\begin{verbatim}
-   \usepackage[pdftex]{graphicx} ...
-   \includegraphics[width=0.8\linewidth]{myfile.pdf}
-\end{verbatim}
-See Section 4.4 in the graphics bundle documentation
-(\url{http://mirrors.ctan.org/macros/latex/required/graphics/grfguide.pdf})
-
-A number of width problems arise when \LaTeX{} cannot properly
-hyphenate a line. Please give LaTeX hyphenation hints using the
-\verb+\-+ command when necessary.
+\input{experiments}
 
 \subsubsection{Conclusion}
 
@@ -225,28 +151,5 @@ acknowledgments in the anonymized submission, only in the final paper.
 
 \section*{References}
 
-References follow the acknowledgments. Use unnumbered first-level
-heading for the references. Any choice of citation style is acceptable
-as long as you are consistent. It is permissible to reduce the font
-size to \verb+small+ (9 point) when listing the references. {\bf
-  Remember that you can go over 8 pages as long as the subsequent ones contain
-  \emph{only} cited references.}
-\medskip
-
-\small
-
-[1] Alexander, J.A.\ \& Mozer, M.C.\ (1995) Template-based algorithms
-for connectionist rule extraction. In G.\ Tesauro, D.S.\ Touretzky and
-T.K.\ Leen (eds.), {\it Advances in Neural Information Processing
-  Systems 7}, pp.\ 609--616. Cambridge, MA: MIT Press.
-
-[2] Bower, J.M.\ \& Beeman, D.\ (1995) {\it The Book of GENESIS:
-  Exploring Realistic Neural Models with the GEneral NEural SImulation
-  System.}  New York: TELOS/Springer--Verlag.
-
-[3] Hasselmo, M.E., Schnell, E.\ \& Barkai, E.\ (1995) Dynamics of
-learning and recall at excitatory recurrent synapses and cholinergic
-modulation in rat hippocampal region CA3. {\it Journal of
-  Neuroscience} {\bf 15}(7):5249-5262.
 
 \end{document}

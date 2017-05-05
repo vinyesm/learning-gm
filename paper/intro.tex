@@ -10,11 +10,15 @@ In the context of Gaussian graphical models the central problem is often to esti
 LVGGM
 Here model selection problem with latent variables. In applications where latent variables are missing, this may create non sparsity for some components on the graph, fully connecting all the observed variables connected to the latent variable, see Figure. 
 Why learning GGM, then latent GGM to learn models with more interpretability and more efficient inference if sparse. With no a priori on the number of latent variables.
+
 The resulting marginal precision matrix of the LVGGM has a sparse plus low-rank structure. In Chandrasekaran et al. (2012) they consider a regularized Maximum Likelihood approach, using $\ell_1$-norm for the sparse component and trace norm for the low-rank component. With the obtained decomposition one identifies the structure of the conditional graphical model on the observed variables and the subspace of latent variables. However the decomposition lacks to identify the effect of each latent variable separately since the subspace of latent variables does not have a unique decomposition. Choosing the orthogonal decomposition (SVD) gives us one choice.. In our setup we want to impose some additional structure to the low-rank component in order to be able to identify the complete LVGGM structure.  
 
 In Richard et al they introduce a new norm that used as a regularizer yields to  estimates for low-rank matrices with multiple sparse factors that are provably more efficient statistically than the $\ell_1$ and trace norms.
 
 In this work, we propose to impose more structure to the low rank matrix $L$ using a generalization of the trace norm introduced in Richard et al as a regularizer. This decomposition yields to a better interpretability of the Graphical model structure. We propose a convex formulation with a quadratic loss function that can be optimised efficiently throught the algorithm proposed in Vinyes et al.  Finally we study the identifiability of such decomposition. 
+
+\subsection*{Notations}
+$\itgset{p}$ denotes the set ${1,...,p}$. $|I|$ denotes the cardinality of a set $I$. If $M\in\RR^{n\times p}$ is a matrix, $I\itgset{n}$ and $J\itgset{p}$, $M_{I,J}\in\RR^{|I|\times |J|}$ is the submatrix obtained by selecting the rows indexed by $I$ and the columns indexed by $J$ in $M$.
 
 %In many applications as genetics, finance...learning structure of graphical models. with more interpretability and more efficient inference if sparse. (cf drton for application examples). Speciffically, if the number of variables is very large compared to the number of samples
 %We focus on learning undirected gaussian graphical models. A well studied problem is model selection where the inverse of the covariance, also called concentration matrix, is sparse. The nonzeros of the concentration matrix correspond to the edges of the graphical model. Graphical Lasso is the method of choice.

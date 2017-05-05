@@ -2,12 +2,39 @@
 \label{setup}
 
 \subsection{Latent Variable GGM}
+We consider the problem of Latent-Variable Gausian Graphical Model (LVGGM) selection. Let $O$ and $H$ be the set of indexes of observed variables and latent variables respectively. Let $p$ be the number of observed variables, $|O|=p$, and  $h$ the number of latent variables $|H|=h$. We denote $\Sigma\in\RR^{(p+h)\times(p+h)}$ the complete covariance matrix and $K=\Sigma^{-1}$ the complete concentration matrix. $\hat{\Sigma}\in\RR^{(p+h)\times(p+h)}$ denotes the empirical covariance matrix. We only have access to the empirical marginal covariance matrix $\hat{\Sigma}_{OO}$. Schur complement of $K$ with respect to block $K_{HH}$ gives 
 
-$K=K_{OO}-K_{OL}K_{LL}^{-1}K_{LO}$
+\begin{align}
+\Sigma_{OO}^{-1} = K_{OO}-K_{OH}K_{HH}^{-1}K_{HO}.
+\end{align}
 
-\subsection{(k-k)-rank and its relaxation}
+$K_{OO}$ specifies conditional dependency of observed variables given the latent variables. If we assume latent variables independent, i.e. $K_{HH}$ diagonal, and the decomposition unique (see section on identifiability), $K_{OH}$ specifies the effects of latent variables on observed variables. Unicity of $K_{OH}$ is achieved imposing more structure on the sparse component, which we discuss in the next paragraph, and under some identifiability conditions (see section) also allows us to retrieve the structure of the full LVGGM. Not that Sparse+Low rank decomposition only allows to retrive latent variable subspace but not its structure.
+
+\begin{align}
+FIGURE
+\end{align}
+
+\subsection{$k$-rank and its relaxation}
+Definition k-rank for symmetric p.s.d. matrices
 
 \subsection{Optimization problem}
+Let $(x_1,..,x_n)$ be $n$ samples of dimension $p$ and   $\hat{\Sigma}$ the empirical covariance. A natural way to approximate a given sample covariance matrix by a model which the concentration matrix decomposes into a sparse and $k$-low-rank matrix is a regularized using $\ell_1$ norm for recovering sparse component and the convex relaxation of $k$-rank for recovering the $k$-low-rank component. Hence we consider the following convex optimization problem
+\begin{align}
+\label{opt}
+\min_{S,L} f(S-L)+\mu\|S\|_{1}+\lambda\Omega_k(L) \quad s.t. \quad S-L \succeq 0 \quad L \succeq 0,
+\end{align}
+where  $f$ represents the loss function. Typically,in Graphical model seletion $f$ is the log-likelihood, as proposed in Chandrasekaran. However \textit{logdet} is not Lipschitz preventing us from applying efficient algorithms of the family of conditional gradient, for which there is not convergence results for this setting.  Two other natural losses, which have the advantage of being quadratic, are the second order taylor expansion of the log-likelihood $f_{T}$ and the score matching loss $f_{SM}$, introduced by Hyvarinen (2005)
+\begin{align}
+f_{SM}(K)&:=\frac{1}{2}\tr(K^2 \hat{\Sigma})-\tr(K) \\
+f_{T}(K)&:=\frac{1}{2}\|\hat{\Sigma}^{1/2}K\hat{\Sigma}^{1/2}-I\|_2^2.
+\end{align}
+
+Since the norm $\Omega_k$ only provides symmetric p.s.d matrices (as a sum of p.s.d rank-one matrices), the nonnegative constraint on $L$ is useless in problem \ref{opt}. \TODO{What about $S-L \succeq 0$}
+We choose to consider quadratic losses in this paper, this allowing us to use an efficient algorithm for optimization.
+
 
 \subsection{Algorithm}
- 
+Main idea of the algorithm, selection of the new atom ny truncation power iteration.
+
+Problem \ref{opt} is a minimization of a quadratic funtion regularized by an atomic norm $\gamma$  defined as the infimal convolution of $\mu\|.\|_{1}$ and $\lambda\Omega_k(.)$, $\gamma(M)=\inf\{\mu\|A\|_{1}+\lambda\Omega_k(B)|M=A+B\}$
+

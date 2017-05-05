@@ -7,9 +7,9 @@ Regularization, structure, graphical lasso.
 
 In the context of Gaussian graphical models the central problem is often to estimate the inverse covariance matrix, also known as the concentration matrix. The sparsity pattern of the concentration matrix in such models correspond to the structure of the graph, i.e. the nonzeros of the concentration matrix correspond to the edges of the graphical model.. \\
 
-LVGGM
+\TODO{LVGGM
 Here model selection problem with latent variables. In applications where latent variables are missing, this may create non sparsity for some components on the graph, fully connecting all the observed variables connected to the latent variable, see Figure. 
-Why learning GGM, then latent GGM to learn models with more interpretability and more efficient inference if sparse. With no a priori on the number of latent variables.
+Why learning GGM, then latent GGM to learn models with more interpretability and more efficient inference if sparse. With no a priori on the number of latent variables.}
 
 The resulting marginal precision matrix of the LVGGM has a sparse plus low-rank structure. In Chandrasekaran et al. (2012) they consider a regularized Maximum Likelihood approach, using $\ell_1$-norm for the sparse component and trace norm for the low-rank component. With the obtained decomposition one identifies the structure of the conditional graphical model on the observed variables and the subspace of latent variables. However the decomposition lacks to identify the effect of each latent variable separately since the subspace of latent variables does not have a unique decomposition. Choosing the orthogonal decomposition (SVD) gives us one choice.. In our setup we want to impose some additional structure to the low-rank component in order to be able to identify the complete LVGGM structure.  
 

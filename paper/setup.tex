@@ -15,7 +15,17 @@ FIGURE
 \end{align}
 
 \subsection{$k$-rank and its relaxation}
+$(k, q)$-rank of a matrix as the minimum number of left and right factors, having respectively $k$ and $q$ nonzeros, required to reconstruct a matrix. 
+
 Definition k-rank for symmetric p.s.d. matrices
+\mydef
+($k$-rank) For a matrix $Z\in\RR^{p\times p}$ , we define its $k$-rank as the optimal
+value of the optimization problem:
+\begin{align}
+min \|c\|_0 \quad \text{s.t.} \quad Z=\sum_{i} c_i u_i{\top}u_i, \quad (c_i,u_i)\in \RR^{+}\times\mathcal{A}_k
+\end{align}
+where for any  $\mathcal{A}_k:=\{u\in\RR^p \quad : \quad  \|u\|_0 \leq k, \|u\|_2 = 1\}$ , that is $\mathcal{A}_k$ is the set of $p$-dimensional unit vectors with at most j non-zero components.
+
 
 \subsection{Optimization problem}
 Let $(x_1,..,x_n)$ be $n$ samples of dimension $p$ and   $\hat{\Sigma}$ the empirical covariance. A natural way to approximate a given sample covariance matrix by a model which the concentration matrix decomposes into a sparse and $k$-low-rank matrix is a regularized using $\ell_1$ norm for recovering sparse component and the convex relaxation of $k$-rank for recovering the $k$-low-rank component. Hence we consider the following convex optimization problem

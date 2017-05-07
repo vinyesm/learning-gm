@@ -37,7 +37,7 @@ inputData.Y=-eye(po);
 beta=.5;
 param.cardfun=((1:p).^beta)/p^beta;
 param.cardfun(1)=inf;
-param.cardfun(100:end)=inf;
+param.cardfun(100:end);
 lam=.5;
 gam=.4;
 param.lambda=lam;
@@ -46,6 +46,8 @@ param.mu=lam*gam;
 %% blocks
 [Z Z1 Z2 ActiveSet hist param flag output] = cgan_l1_omega(inputData,param);
 obj_l1_om=hist.obj(end);
+save('dream5_net1','k','p','n','inputData','Dfull','Dmargo', ...
+'Z', 'Z1', 'Z2', 'ActiveSet', 'hist' ,'param', 'flag' ,'output');
 
 %% tr+l1
 param.lambda=.6; %lamda ~ 2/k*mu
@@ -84,126 +86,84 @@ else
     Dfin_tr=Z1_tr;
 end
 
-%%
-descr_gen = {'Formulation Z1+Z2 where ';
-    'with sparse + Omega symmetric regularization';
-    'solved with our algorithm';
-    'unique atomic norm';
-    'no psd constraint Z1+Z2';
-    ['number of samples n=' num2str(n)];
-    };
-
-descr_par = {['\lambda = ' num2str(param.lambda) '  (omega reg)'];
-    ['\mu = ' num2str(param.mu) '  (l_1 reg)'];};
-
-%%
-figure(3);clf;
-subplot(3,2,1)
-axis off;
-text(0,.5,descr_gen)
-pbaspect([1 1 1]);
-subplot(3,2,2)
-axis off;
-text(0,.5,descr_par)
-pbaspect([1 1 1]);
-subplot(3,2,3)
-imagesc(abs(Dfull));
-pbaspect([1 1 1]);
-title('true complete conc. mat.');
-colorbar
-subplot(3,2,4)
-imagesc(abs(Dfin));
-pbaspect([1 1 1]);
-title('estimated complete conc. mat.');
-colorbar
-subplot(3,2,5)
-imagesc(abs(Dfull)>1e-15);
-pbaspect([1 1 1]);
-title('true support');
-colorbar
-subplot(3,2,6)
-imagesc(abs(Dfin)>1e-15);
-pbaspect([1 1 1]);
-title('estimated support');
-colorbar
 % %%
+% descr_gen = {'Formulation Z1+Z2 where ';
+%     'with sparse + Omega symmetric regularization';
+%     'solved with our algorithm';
+%     'unique atomic norm';
+%     'no psd constraint Z1+Z2';
+%     ['number of samples n=' num2str(n)];
+%     };
 % 
-% figure(4);clf;
-% subplot(2,2,1);
-% imagesc(abs(Dmargo));
+% descr_par = {['\lambda = ' num2str(param.lambda) '  (omega reg)'];
+%     ['\mu = ' num2str(param.mu) '  (l_1 reg)'];};
+% 
+% %%
+% figure(3);clf;
+% subplot(3,2,1)
+% axis off;
+% text(0,.5,descr_gen)
 % pbaspect([1 1 1]);
-% title('true marginal conc. mat.');
-% colorbar
-% subplot(2,2,2);
-% imagesc(abs(Z1+Z2));
+% subplot(3,2,2)
+% axis off;
+% text(0,.5,descr_par)
 % pbaspect([1 1 1]);
-% title('observed conc. mat.');
+% subplot(3,2,3)
+% imagesc(abs(Dfull));
+% pbaspect([1 1 1]);
+% title('true complete conc. mat.');
 % colorbar
-% subplot(2,2,3)
-% imagesc(abs(Dmargo)>1e-15);
+% subplot(3,2,4)
+% imagesc(abs(Dfin));
+% pbaspect([1 1 1]);
+% title('estimated complete conc. mat.');
+% colorbar
+% subplot(3,2,5)
+% imagesc(abs(Dfull)>1e-15);
 % pbaspect([1 1 1]);
 % title('true support');
 % colorbar
-% subplot(2,2,4)
-% imagesc(abs(Z1+Z2)>1e-15);
+% subplot(3,2,6)
+% imagesc(abs(Dfin)>1e-15);
 % pbaspect([1 1 1]);
 % title('estimated support');
 % colorbar
 % 
-% figure(5);clf
-% loglog(hist.time,hist.dg,'-','LineWidth',2,'Color',[1 0 0],'DisplayName','dg');hold on;
-% loglog(hist.time_sup,hist.dg_sup,'-','LineWidth',2,'Color',[0 0 0],'DisplayName','dg sup');hold on;
-% legend('show','Location','southwest');
-% grid on
-% hold off
-% 
-figure(6);clf;
-subplot(3,2,1)
-imagesc(abs(Dfull));
-pbaspect([1 1 1]);
-title('true complete conc. mat.');
-colorbar
-subplot(3,2,2)
-imagesc(abs(Dfull)>1e-15);
-pbaspect([1 1 1]);
-title('true support');
-colorbar
-subplot(3,2,3)
-imagesc(abs(Dfin));
-pbaspect([1 1 1]);
-title('estimated complete conc. mat.');
-colorbar
-subplot(3,2,4)
-imagesc(abs(Dfin)>1e-15);
-pbaspect([1 1 1]);
-title('estimated support');
-colorbar
-subplot(3,2,5)
-imagesc(abs(Dfin_tr));
-pbaspect([1 1 1]);
-title('estimated complete conc. mat.');
-colorbar
-subplot(3,2,6)
-imagesc(abs(Dfin_tr)>1e-15);
-pbaspect([1 1 1]);
-title('estimated support');
-colorbar
-% 
-% 
-% %% saving
-% % %filename = ['lggm2_' datestr(datetime('now'),'yyyymmddTHHMMSS') '.ps'];
-% % filename = ['lggm4_' datestr(clock) '.ps'];
-% % %print ( '-dpsc2', filename, '-f1' )
-% % print ( '-dpsc2', filename, '-append', '-f1' )
-% % print ( '-dpsc2', filename, '-append', '-f2' )
-% % print ( '-dpsc2', filename, '-append', '-f3' )
-% % print ( '-dpsc2', filename, '-append', '-f4' )
-% % print ( '-dpsc2', filename, '-append', '-f5' )
-% 
-% % % keyboard
-% % save('lggm4_03_16','k','p','n','inputData','Dfull','Dmargo', ...
-% % 'Z', 'Z1', 'Z2', 'ActiveSet', 'hist' ,'param', 'flag' ,'output',...
-% % 'Z_tr', 'Z1_tr', 'Z2_tr', 'ActiveSet_tr', 'hist_tr', 'param_tr', 'flag_tr', 'output_tr');
-% 
+% figure(6);clf;
+% subplot(3,2,1)
+% imagesc(abs(Dfull));
+% pbaspect([1 1 1]);
+% title('true complete conc. mat.');
+% colorbar
+% subplot(3,2,2)
+% imagesc(abs(Dfull)>1e-15);
+% pbaspect([1 1 1]);
+% title('true support');
+% colorbar
+% subplot(3,2,3)
+% imagesc(abs(Dfin));
+% pbaspect([1 1 1]);
+% title('estimated complete conc. mat.');
+% colorbar
+% subplot(3,2,4)
+% imagesc(abs(Dfin)>1e-15);
+% pbaspect([1 1 1]);
+% title('estimated support');
+% colorbar
+% subplot(3,2,5)
+% imagesc(abs(Dfin_tr));
+% pbaspect([1 1 1]);
+% title('estimated complete conc. mat.');
+% colorbar
+% subplot(3,2,6)
+% imagesc(abs(Dfin_tr)>1e-15);
+% pbaspect([1 1 1]);
+% title('estimated support');
+% colorbar
+
+save('dream5_net1','k','p','n','inputData','Dfull','Dmargo', ...
+'Z', 'Z1', 'Z2', 'ActiveSet', 'hist' ,'param', 'flag' ,'output',...
+'Z_tr', 'Z1_tr', 'Z2_tr', 'ActiveSet_tr', 'hist_tr', 'param_tr', 'flag_tr', 'output_tr');
+
 obj_l1_om
 hist_tr.obj(end)

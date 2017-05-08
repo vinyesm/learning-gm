@@ -5,8 +5,8 @@ addpath('../main');
 addpath('../active-set');
 addpath('../atom-selection');
 addpath('../utils');
-addpath('../other');
 addpath('../prox');
+addpath('../../glasso-matlab');
 addpath ../../DREAM5/Network-Inference/'training data'/'Network 1 - in silico'/
 
 F=importdata('net1_expression_data.tsv');
@@ -38,10 +38,18 @@ beta=.5;
 param.cardfun=((1:p).^beta)/p^beta;
 param.cardfun(1)=inf;
 param.cardfun(100:end);
-lam=.5;
-gam=.4;
+lam=1;
+gam=1;
 param.lambda=lam;
 param.mu=lam*gam;
+
+%% init with graphical lasso
+rho=1;
+tol=1e-6;
+maxIt=10;
+keyboard;
+[Theta W] = graphicalLasso(S, rho, maxIt, tol);
+keyboard;
 
 %% blocks
 [Z Z1 Z2 ActiveSet hist param flag output] = cgan_l1_omega(inputData,param);

@@ -42,8 +42,12 @@ param.cardfun=inf*ones(1,p);
 param.cardfun(k)=1;
 
 %%% n=5000
-param.lambda=.3; %lamda ~ 2/k*mu
-param.mu=.1;
+% c=1;
+% param.lambda=c*.3; %lamda ~ 2/k*mu
+% param.mu=c*.1;
+c=1;
+param.lambda=c*.8; %lamda ~ 2/k*mu
+param.mu=c*.1;
 
 %%
 %% Starting solution
@@ -97,18 +101,13 @@ Z=Z1+Z2;
 %% blocks
 [Z Z1 Z2 ActiveSet hist param flag output] = cgan_l1_omega(inputData,param,startingZ,ActiveSet);
 obj_l1_om=hist.obj(end);
-keyboard;
-
-%% tr+l1
-param.lambda=.3; %lamda ~ 2/k*mu
-param.mu=0.1;
-param.max_nb_main_loop=2;
-param.niterPS=10000;
-param.cardfun=inf*ones(1,p);
-param.cardfun(p)=1;
-[Z_tr Z1_tr Z2_tr ActiveSet_tr hist_tr param_tr flag_tr output_tr] = cgan_l1_omega(inputData,param);
-
-%% LOAD HERE lggm.mat
+% nb good edges
+nnz0=sum(Doo(:)~=0);
+nnz=sum(Z1(:)~=0);
+tp=sum(sum((Doo.*Z1<0)));
+vv= (Doo==0 & Z1~=0) | (Doo.*Z1>0);
+fp=sum(sum(vv));
+prec=tp/(tp+fp);
 
 %% reconstruction l1+om
 if ~isempty(ActiveSet.alpha)
@@ -123,18 +122,7 @@ else
     Dfin=Z1;
 end
 
-%% reconstruction tr+l1
-if ~isempty(ActiveSet_tr.alpha)
-    Uso_tr=bsxfun(@times,sqrt(ActiveSet_tr.alpha)',ActiveSet_tr.atoms);
-    nl_tr=size(ActiveSet_tr.atoms,2);
-    Dfin_tr=zeros(p+nl_tr);
-    Dfin_tr(1:nl_tr,1:nl_tr)=eye(nl_tr);
-    Dfin_tr((nl_tr+1):(nl_tr+p),(nl_tr+1):(nl_tr+p))=-Z1_tr;
-    Dfin_tr(1:nl_tr,(nl_tr+1):(nl_tr+p))=Uso_tr';
-    Dfin_tr((nl_tr+1):(nl_tr+p),1:nl_tr)=Uso_tr;
-else
-    Dfin_tr=Z1_tr;
-end
+keyboard;
 
 %%
 descr_gen = {'Formulation Z1+Z2 where ';
@@ -148,7 +136,7 @@ descr_gen = {'Formulation Z1+Z2 where ';
 descr_par = {['\lambda = ' num2str(param.lambda) '  (omega reg)'];
     ['\mu = ' num2str(param.mu) '  (l_1 reg)'];};
 
-%%
+
 figure(3);clf;
 subplot(3,2,1)
 axis off;
@@ -178,36 +166,35 @@ imagesc(abs(Dfin)>1e-15);
 pbaspect([1 1 1]);
 title('estimated support');
 colorbar
-% %%
-% 
-% figure(4);clf;
-% subplot(2,2,1);
-% imagesc(abs(Dmargo));
-% pbaspect([1 1 1]);
-% title('true marginal conc. mat.');
-% colorbar
-% subplot(2,2,2);
-% imagesc(abs(Z1+Z2));
-% pbaspect([1 1 1]);
-% title('observed conc. mat.');
-% colorbar
-% subplot(2,2,3)
-% imagesc(abs(Dmargo)>1e-15);
-% pbaspect([1 1 1]);
-% title('true support');
-% colorbar
-% subplot(2,2,4)
-% imagesc(abs(Z1+Z2)>1e-15);
-% pbaspect([1 1 1]);
-% title('estimated support');
-% colorbar
-% 
-% figure(5);clf
-% loglog(hist.time,hist.dg,'-','LineWidth',2,'Color',[1 0 0],'DisplayName','dg');hold on;
-% loglog(hist.time_sup,hist.dg_sup,'-','LineWidth',2,'Color',[0 0 0],'DisplayName','dg sup');hold on;
-% legend('show','Location','southwest');
-% grid on
-% hold off
+
+keyboard;
+
+%% tr+l1
+% param.lambda=.3; %lamda ~ 2/k*mu
+% param.mu=0.1;
+param.lambda=.5; %lamda ~ 2/k*mu
+param.mu=0.2;
+param.max_nb_main_loop=2;
+param.niterPS=10000;
+param.cardfun=inf*ones(1,p);
+param.cardfun(p)=1;
+[Z_tr Z1_tr Z2_tr ActiveSet_tr hist_tr param_tr flag_tr output_tr] = cgan_l1_omega(inputData,param);
+
+%% reconstruction tr+l1
+if ~isempty(ActiveSet_tr.alpha)
+    Uso_tr=bsxfun(@times,sqrt(ActiveSet_tr.alpha)',ActiveSet_tr.atoms);
+    nl_tr=size(ActiveSet_tr.atoms,2);
+    Dfin_tr=zeros(p+nl_tr);
+    Dfin_tr(1:nl_tr,1:nl_tr)=eye(nl_tr);
+    Dfin_tr((nl_tr+1):(nl_tr+p),(nl_tr+1):(nl_tr+p))=-Z1_tr;
+    Dfin_tr(1:nl_tr,(nl_tr+1):(nl_tr+p))=Uso_tr';
+    Dfin_tr((nl_tr+1):(nl_tr+p),1:nl_tr)=Uso_tr;
+else
+    Dfin_tr=Z1_tr;
+end
+
+%%
+
 % 
 figure(6);clf;
 subplot(3,2,1)
@@ -261,6 +248,8 @@ obj_l1_om
 hist_tr.obj(end)
 
 % nb good edges
-tp=sum(sum((Doo~=0 & Z1~=0)));
+nnz0=sum(Doo(:)~=0);
+nnz=sum(Z1(:)~=0);
+tp=sum(sum((Doo>0 & Z1<0)))+sum(sum((Doo<0 & Z1>0)));
 fp=sum(sum((Doo==0 & Z1~=0)));
 prec=tp/(tp+fp);

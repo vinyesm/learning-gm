@@ -9,7 +9,8 @@ lsupp=[1:30;21:50;41:70;61:90;81:110;101:130;121:150];
 pl=size(lsupp,1);
 ks=30*ones(1,pl);
 po=max(lsupp(:));
-n=100*po;
+%n=100*po;
+n=10*po;
 
 pt=pl+po;
 clo=.7./sqrt(ks);

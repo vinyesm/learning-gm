@@ -18,13 +18,14 @@ FIGURE
 $(k, q)$-rank of a matrix as the minimum number of left and right factors, having respectively $k$ and $q$ nonzeros, required to reconstruct a matrix. 
 
 Definition k-rank for symmetric p.s.d. matrices
-\mydef
+\begin{mydef}
 ($k$-rank) For a matrix $Z\in\RR^{p\times p}$ , we define its $k$-rank as the optimal
 value of the optimization problem:
 \begin{align}
-min \|c\|_0 \quad \text{s.t.} \quad Z=\sum_{i} c_i u_i{\top}u_i, \quad (c_i,u_i)\in \RR^{+}\times\mathcal{A}_k
+min \|c\|_0 \quad \text{s.t.} \quad Z=\sum_{i} c_i u_i^{\top}u_i, \quad (c_i,u_i)\in \RR^{+}\times\mathcal{A}_k
 \end{align}
 where for any  $\mathcal{A}_k:=\{u\in\RR^p \quad : \quad  \|u\|_0 \leq k, \|u\|_2 = 1\}$ , that is $\mathcal{A}_k$ is the set of $p$-dimensional unit vectors with at most j non-zero components.
+\end{mydef}
 
 
 \subsection{Optimization problem}
@@ -33,7 +34,7 @@ Let $(x_1,..,x_n)$ be $n$ samples of dimension $p$ and   $\hat{\Sigma}$ the empi
 \label{opt}
 \min_{S,L} f(S-L)+\mu\|S\|_{1}+\lambda\Omega_k(L) \quad s.t. \quad S-L \succeq 0 \quad L \succeq 0,
 \end{align}
-where  $f$ represents the loss function. Typically,in Graphical model seletion $f$ is the log-likelihood, as proposed in Chandrasekaran. However \textit{logdet} is not Lipschitz preventing us from applying efficient algorithms of the family of conditional gradient, for which there is not convergence results for this setting.  Two other natural losses, which have the advantage of being quadratic, are the second order taylor expansion of the log-likelihood $f_{T}$ and the score matching loss $f_{SM}$, introduced by Hyvarinen (2005)
+where  $f$ represents the loss function. Typically,in Graphical model seletion $f$ is the log-likelihood, as proposed in \citet{chandrasekaran2010}. However \textit{logdet} is not Lipschitz preventing us from applying efficient algorithms of the family of conditional gradient, for which there is not convergence results for this setting.  Two other natural losses, which have the advantage of being quadratic, are the second order taylor expansion of the log-likelihood $f_{T}$ and the score matching loss $f_{SM}$, introduced by \citet{hyvarinen2005estimation} and used for graphical model estimation in \citet{lin2016estimation}.
 \begin{align}
 f_{SM}(K)&:=\frac{1}{2}\tr(K^2 \hat{\Sigma})-\tr(K) \\
 f_{T}(K)&:=\frac{1}{2}\|\hat{\Sigma}^{1/2}K\hat{\Sigma}^{1/2}-I\|_2^2.

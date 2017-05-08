@@ -38,6 +38,7 @@ while i < maxIt,
     i = i+1;
     i
     for j = p:-1:1,
+        j
         jminus = setdiff(1:p,j);
         [V D] = eig(W(jminus,jminus));
         d = diag(D);

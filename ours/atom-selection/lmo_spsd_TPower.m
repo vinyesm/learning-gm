@@ -1,7 +1,10 @@
 function [uBest,kBest,lambdaBest] = lmo_spsd_TPower(A,param)
 
 B=0.5*(A+A');
-emin=eigs(B,1,'sa');
+
+% emin=eigs(B,1,'sa');
+emin=-norm(B,'fro')/2;
+
 if emin<0
     B=B-2*emin*eye(size(A,1));    
 end

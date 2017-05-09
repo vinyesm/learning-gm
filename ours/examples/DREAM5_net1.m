@@ -20,7 +20,7 @@ colormap bone;
 %% our norm psd with decomposition S-M sparse_omega_lgm
 po=size(S,1);
 p=po;
-param.max_nb_main_loop=100;%2;%1000
+param.max_nb_main_loop=2;%2;%1000
 %%
 % param.f=4;
 % param.verbose=1;
@@ -37,19 +37,19 @@ inputData.Y=-eye(po);
 beta=.5;
 param.cardfun=((1:p).^beta)/p^beta;
 param.cardfun(1)=inf;
-param.cardfun(100:end);
-lam=1;
-gam=1;
+param.cardfun(20:end);
+lam=.1;
+gam=.1;
 param.lambda=lam;
-param.mu=lam*gam;
+param.mu=gam;
 
 %% init with graphical lasso
-rho=1;
-tol=1e-6;
-maxIt=10;
-keyboard;
-[Theta W] = graphicalLasso(S, rho, maxIt, tol);
-keyboard;
+% rho=1;
+% tol=1e-6;
+% maxIt=10;
+% keyboard;
+% [Theta W] = graphicalLasso(S, rho, maxIt, tol);
+% keyboard;
 
 %% blocks
 [Z Z1 Z2 ActiveSet hist param flag output] = cgan_l1_omega(inputData,param);

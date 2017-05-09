@@ -161,7 +161,7 @@ for q=qs
                 elseif param.f==5
                     S=inputData.X;
                 end
-                [Z2,ActiveSet]=prox_cleaning(Z1,Z2,S,ActiveSet,param,10,0);
+                [Z2,ActiveSet]=prox_cleaning(Z1,Z2,S,ActiveSet,param,20,0);
                 Z=Z1+Z2;
                 if param.f==4
                     [Hall,fall] = build_Hessian_l1_sym(inputData,param,atoms_l1_sym(:,ActiveSet.I_l1),ActiveSet.atoms);

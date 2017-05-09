@@ -46,8 +46,8 @@ param.cardfun(k)=1;
 % param.lambda=c*.3; %lamda ~ 2/k*mu
 % param.mu=c*.1;
 c=1;
-param.lambda=c*.6; %lamda ~ 2/k*mu
-param.mu=c*.1;
+param.lambda=c*1; %lamda ~ 2/k*mu
+param.mu=c*.2;
 
 %%
 %% Starting solution
@@ -109,6 +109,8 @@ vv= (Doo==0 & Z1~=0) | (Doo.*Z1>0);
 fp=sum(sum(vv));
 prec=tp/(tp+fp);
 fb=found_blocs_gt(ActiveSet,lsupp);
+cblocs=(sum(fb)==ActiveSet.atom_count);
+fprintf('retrieved blocks (support)=%d and prec of sparse component=%f\n', cblocs, prec);
 
 %% reconstruction l1+om
 if ~isempty(ActiveSet.alpha)
@@ -122,6 +124,14 @@ if ~isempty(ActiveSet.alpha)
 else
     Dfin=Z1;
 end
+
+figure(10);clf;
+subplot(1,2,1);
+imagesc(abs(Uso)>0);
+pbaspect([1 ActiveSet.atom_count 1]);
+subplot(1,2,2);
+imagesc(~((Doo==0 & Z1~=0) | (Doo.*Z1>0)));
+pbaspect([1 1 1]);
 
 keyboard;
 

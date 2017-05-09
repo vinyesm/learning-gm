@@ -5,7 +5,7 @@ fus=false; %fusionning correlated atoms
 
 debug_update=0;
 debug=1;
-compute_dg=1;
+compute_dg=0;
 display('in solve_ps change S when changing loss fun\n');
 if param.f==4
     S=inputData.X1*inputData.X1;
@@ -217,9 +217,11 @@ while cont
                         keyboard;
                     end
                 end
+            else 
+                dualgap=inf;
             end
             i=i+1;
-            %% Verify sttopping criterion
+%             %% Verify sttopping criterion
             H = gradient(Z,inputData,param);
             [maxIJ,new_row, new_col] = dual_l1_spca(H);
             cf=1;
@@ -229,45 +231,56 @@ while cont
             else
                 maxvar=0;
             end
-            %% extra condition
-            omega=pen(i-1);
+%             %% extra condition
+            if compute_dg
+                omega=pen(i-1);
+            else
+                cfa=zeros(ActiveSet.atom_count,min(ActiveSet.atom_count,1));
+                card=sum(ActiveSet.atoms(:,1:ActiveSet.atom_count)~=0);
+                for i=1:ActiveSet.atom_count
+                    cfa(i)=min(param.cardfun(card(i):end));
+                end
+                if ~isempty(ActiveSet.alpha)
+                    omega = param.lambda*dot(cfa,ActiveSet.alpha)+param.mu*sum(ActiveSet.beta);
+                else
+                    omega = param.mu*sum(ActiveSet.beta);
+                end
+            end
             dotHZ=trace(-H*Z);
             dualomega=max(maxvar/(cf*param.lambda),maxIJ/param.mu);
             cond=omega*dualomega - dotHZ;
             epscond=param.epsStop;
-            %sanity check (output of active set)
-            if ~isempty(ActiveSet.I)
-                valmax_om=-inf;
-                atmax_om=-1;
-                for at=1:ActiveSet.atom_count
-                    atom=ActiveSet.atoms(:,at);
-                    supp=sum(abs(atom)>0);
-                    cf=min(param.cardfun(supp:end));
-                    val= abs(-atom'*H*atom/cf-param.lambda);
-                    if val>valmax_om
-                        valmax_om=val;
-                        atmax_om=at;
-                    end
-                end
-            else
-                valmax_om=0;
-            end
-            valmax_l1=-inf;
-            for at=1:length(ActiveSet.I_l1)
-                atom=atoms_l1_sym(:,ActiveSet.I_l1(at));
-                val=-dot(H(:),atom);
-                %                 if abs(sum(aom))>1
-                %                     val=val/2;
-                %                 end
-                val=abs(val-param.mu);
-                if val>valmax_l1
-                    valmax_l1=val;
-                end
-            end
-            if valmax_l1>param.epsStop/2 || valmax_om>param.epsStop/2
-                fprintf('Sanity check :  |maxIJ-mu|=%f<%f  |maxvart-lambda|=%f<%f \n',valmax_l1,param.epsStop,valmax_om,param.epsStop);
-                %                 keyboard;
-            end
+%             %sanity check (output of active set)
+%             if ~isempty(ActiveSet.I)
+%                 valmax_om=-inf;
+%                 atmax_om=-1;
+%                 for at=1:ActiveSet.atom_count
+%                     atom=ActiveSet.atoms(:,at);
+%                     supp=sum(abs(atom)>0);
+%                     cf=min(param.cardfun(supp:end));
+%                     val= abs(-atom'*H*atom/cf-param.lambda);
+%                     if val>valmax_om
+%                         valmax_om=val;
+%                         atmax_om=at;
+%                     end
+%                 end
+%             else
+%                 valmax_om=0;
+%             end
+%             valmax_l1=-inf;
+%             for at=1:length(ActiveSet.I_l1)
+%                 atom=atoms_l1_sym(:,ActiveSet.I_l1(at));
+%                 val=-dot(H(:),atom);
+%                 val=abs(val-param.mu);
+%                 if val>valmax_l1
+%                     valmax_l1=val;
+%                 end
+%             end
+%             
+%             if valmax_l1>param.epsStop/2 || valmax_om>param.epsStop/2
+%                 fprintf('Sanity check :  |maxIJ-mu|=%f<%f  |maxvart-lambda|=%f<%f \n',valmax_l1,param.epsStop,valmax_om,param.epsStop);
+%                 %                 keyboard;
+%             end
 
             if cond<epscond %&& dualgap/param.PSdualityEpsilon<1
                 cont=false;
@@ -287,7 +300,7 @@ while cont
         
         new_atom_l1=false;
         new_atom_om=false;
-        H = gradient(Z,inputData,param);
+%         H = gradient(Z,inputData,param);
         
         %% omega atom
         

@@ -4,7 +4,7 @@ function [ found_blocs ] = found_blocs_gt(ActiveSet,lsupp )
 nb=size(lsupp,1);
 found_blocs=false(1,nb);
 for i=1:nb
-    currI=lsupp(i,:);
+    currI=lsupp(i,:)';
     found_blocs(i)= isInCell(currI,ActiveSet.I,cell2mat(ActiveSet.k)) ;
 end
 

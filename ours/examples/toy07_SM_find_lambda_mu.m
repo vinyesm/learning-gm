@@ -46,7 +46,7 @@ param.cardfun(k)=1;
 % param.lambda=c*.3; %lamda ~ 2/k*mu
 % param.mu=c*.1;
 c=1;
-param.lambda=c*.8; %lamda ~ 2/k*mu
+param.lambda=c*.6; %lamda ~ 2/k*mu
 param.mu=c*.1;
 
 %%
@@ -108,6 +108,7 @@ tp=sum(sum((Doo.*Z1<0)));
 vv= (Doo==0 & Z1~=0) | (Doo.*Z1>0);
 fp=sum(sum(vv));
 prec=tp/(tp+fp);
+fb=found_blocs_gt(ActiveSet,lsupp);
 
 %% reconstruction l1+om
 if ~isempty(ActiveSet.alpha)

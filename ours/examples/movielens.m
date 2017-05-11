@@ -7,24 +7,17 @@ addpath('../atom-selection');
 addpath('../utils');
 addpath('../prox');
 addpath('../../glasso-matlab');
-addpath ../../ml-100k/
+addpath('../TPower_1.0');
+addpath('../TPower_1.0/algorithms/TPower/');
+addpath('../TPower_1.0/misc/');
 
-R=importdata('u.data');
-IT=importdata('u.item');
-GE=importdata('u.genre');
-
-keyboard;
-S=cov(F.data);
-
-figure(1);clf;
-imagesc(max(abs(S(:)))-abs(S));
-colormap bone;
-
+run('pp_movielens.m');
+k=20;
 %%
 %% our norm psd with decomposition S-M sparse_omega_lgm
 po=size(S,1);
 p=po;
-param.max_nb_main_loop=2;%2;%1000
+param.max_nb_main_loop=50;%2;%1000
 %%
 % param.f=4;
 % param.verbose=1;
@@ -38,11 +31,13 @@ inputData.X=S;
 inputData.Y=-eye(po);
 
 %% reg param
-beta=.5;
-param.cardfun=((1:p).^beta)/p^beta;
-param.cardfun(1)=inf;
-param.cardfun(20:end);
-lam=.5;
+% beta=.5;
+% param.cardfun=((1:p).^beta)/p^beta;
+% param.cardfun(1)=inf;
+% param.cardfun(20:end);
+param.cardfun=inf*ones(1,p);
+param.cardfun(k)=1;
+lam=.3;
 gam=.5;
 param.lambda=lam;
 param.mu=gam;
@@ -57,9 +52,10 @@ param.mu=gam;
 
 %% blocks
 [Z Z1 Z2 ActiveSet hist param flag output] = cgan_l1_omega(inputData,param);
-obj_l1_om=hist.obj(end);
-save('ml','k','p','n','inputData','Dfull','Dmargo', ...
-'Z', 'Z1', 'Z2', 'ActiveSet', 'hist' ,'param', 'flag' ,'output');
+%obj_l1_om=hist.obj(end);
+
+%save('ml','k','p','n','inputData','Dfull','Dmargo', ...
+%'Z', 'Z1', 'Z2', 'ActiveSet', 'hist' ,'param', 'flag' ,'output');
 
 %% reconstruction l1+om
 if ~isempty(ActiveSet.alpha)
@@ -74,6 +70,13 @@ else
     Dfin=Z1;
 end
 
+figure(2);clf;
+subplot(1,2,1)
+imagesc(abs(Dfin));
+pbaspect([1 1 1]);
+subplot(1,2,2)
+imagesc(abs(Dfin)>0);
+pbaspect([1 1 1]);
 keyboard;
 
 %% tr+l1

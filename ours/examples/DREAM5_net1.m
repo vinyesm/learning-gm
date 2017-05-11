@@ -38,8 +38,8 @@ beta=.5;
 param.cardfun=((1:p).^beta)/p^beta;
 param.cardfun(1)=inf;
 param.cardfun(20:end);
-lam=.1;
-gam=.1;
+lam=.5;
+gam=.5;
 param.lambda=lam;
 param.mu=gam;
 

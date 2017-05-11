@@ -9,7 +9,7 @@
 % a LVGGM with three latent variables.  Each user’s rating vector is 
 % treated as an i.i.d. sample from the LVGGM. Since the true covariance 
 % matrix is unknown, we use the sample covariance matrix
-% as a proxy (as n p). Each covariance element is weighted by the actual number
+% as a proxy (as n>>p). Each covariance element is weighted by the actual number
 % of observations to compensate for the missingness in the data.
 
 

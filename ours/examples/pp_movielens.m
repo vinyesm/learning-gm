@@ -14,6 +14,7 @@
 
 
 addpath ../../ml-100k/
+addpath ../utils/
 
 %%
 %19 genres
@@ -68,7 +69,14 @@ idmovies=im;
 %%
 Rs=sparse(R(:,1),R(:,2),R(:,3));
 X=Rs(idusers,idmovies);
-S=full(cov(X));
+
+%% weigths (nb of observations)
+w=sum(X>0,1);
+S=weightedcov(X', w');
+keyboard;
+
+
+%%S=full(cov(X));
 
 figure(1);clf;
 imagesc(max(abs(S(:)))-abs(S));

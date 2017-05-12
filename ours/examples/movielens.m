@@ -37,8 +37,8 @@ inputData.Y=-eye(po);
 % param.cardfun(20:end);
 param.cardfun=inf*ones(1,p);
 param.cardfun(k)=1;
-lam=.3;
-gam=.5;
+lam=1;
+gam=.1;
 param.lambda=lam;
 param.mu=gam;
 
@@ -71,11 +71,14 @@ else
 end
 
 figure(2);clf;
-subplot(1,2,1)
+subplot(1,3,1)
 imagesc(abs(Dfin));
 pbaspect([1 1 1]);
-subplot(1,2,2)
+subplot(1,3,2)
 imagesc(abs(Dfin)>0);
+pbaspect([1 1 1]);
+subplot(1,3,3)
+imagesc(abs(Z));
 pbaspect([1 1 1]);
 keyboard;
 

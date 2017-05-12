@@ -71,13 +71,12 @@ Rs=sparse(R(:,1),R(:,2),R(:,3));
 X=Rs(idusers,idmovies);
 
 %% weigths (nb of observations)
-w=sum(X>0,1);
-S=weightedcov(X', w');
-keyboard;
-
-
+w=sum(X>0,2);
+S=weightedcov(X, w);
+S=full(S);
 %%S=full(cov(X));
 
 figure(1);clf;
 imagesc(max(abs(S(:)))-abs(S));
-colormap bone;
+colormap parula
+%colormap bone;

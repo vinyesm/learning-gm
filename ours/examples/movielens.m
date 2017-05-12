@@ -37,7 +37,7 @@ inputData.Y=-eye(po);
 % param.cardfun(20:end);
 param.cardfun=inf*ones(1,p);
 param.cardfun(k)=1;
-lam=1;
+lam=1.5;
 gam=.1;
 param.lambda=lam;
 param.mu=gam;
@@ -71,14 +71,17 @@ else
 end
 
 figure(2);clf;
-subplot(1,3,1)
+subplot(1,4,1)
 imagesc(abs(Dfin));
 pbaspect([1 1 1]);
-subplot(1,3,2)
+subplot(1,4,2)
 imagesc(abs(Dfin)>0);
 pbaspect([1 1 1]);
-subplot(1,3,3)
+subplot(1,4,3)
 imagesc(abs(Z));
+pbaspect([1 1 1]);
+subplot(1,4,4)
+imagesc(abs(Z2));
 pbaspect([1 1 1]);
 keyboard;
 
@@ -104,11 +107,24 @@ else
     Dfin_tr=Z1_tr;
 end
 
+figure(3);clf;
+subplot(1,4,1)
+imagesc(abs(Dfin_tr));
+pbaspect([1 1 1]);
+subplot(1,4,2)
+imagesc(abs(Dfin_tr)>0);
+pbaspect([1 1 1]);
+subplot(1,4,3)
+imagesc(abs(Z_tr));
+pbaspect([1 1 1]);
+subplot(1,4,3)
+imagesc(abs(Z2_tr));
+pbaspect([1 1 1]);
 
 
-save('ml','k','p','n','inputData','Dfull','Dmargo', ...
-'Z', 'Z1', 'Z2', 'ActiveSet', 'hist' ,'param', 'flag' ,'output',...
-'Z_tr', 'Z1_tr', 'Z2_tr', 'ActiveSet_tr', 'hist_tr', 'param_tr', 'flag_tr', 'output_tr');
+% save('ml','k','p','n','inputData','Dfull','Dmargo', ...
+% 'Z', 'Z1', 'Z2', 'ActiveSet', 'hist' ,'param', 'flag' ,'output',...
+% 'Z_tr', 'Z1_tr', 'Z2_tr', 'ActiveSet_tr', 'hist_tr', 'param_tr', 'flag_tr', 'output_tr');
 
 obj_l1_om
 hist_tr.obj(end)

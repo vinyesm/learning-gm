@@ -74,9 +74,17 @@ X=Rs(idusers,idmovies);
 w=sum(X>0,2);
 S=weightedcov(X, w);
 S=full(S);
+D=inv(S);
 %%S=full(cov(X));
 
 figure(1);clf;
+subplot(1,2,1)
 imagesc(max(abs(S(:)))-abs(S));
+pbaspect([1 1 1]);
+title('covariance');
+subplot(1,2,2)
+imagesc(max(abs(D(:)))-abs(D));
+pbaspect([1 1 1]);
+title('inverse covariance');
 colormap parula
 %colormap bone;

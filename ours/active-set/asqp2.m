@@ -154,7 +154,7 @@ if debug_mode %&& 0,
     if iter>max_iter || nb_full_steps>MAX_NB_FULL_STEPS,
 %         figure(15);
 %         plot(hist.obj);
-        %keyboard;
+%         keyboard;
     end
 end
 

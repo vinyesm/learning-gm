@@ -12,6 +12,7 @@
 % as a proxy (as n>>p). Each covariance element is weighted by the actual number
 % of observations to compensate for the missingness in the data.
 
+clc; clear all
 
 addpath ../../ml-100k/
 addpath ../utils/
@@ -31,6 +32,9 @@ item=importdata('u.item','|');
 genres=item.data;
 GE=importdata('u.genre');
 
+%% all rating mat
+Rs=sparse(R(:,1),R(:,2),R(:,3));
+
 %% 600 most active users
 idusers=1:nu;
 activity=zeros(nu,1);
@@ -43,48 +47,127 @@ idusers=idusers(1:600);
 
 
 %% selection of movies 
-%% highest rated   20 movies from genres
-
-idx=[2,5,12]; %2:action 5:children 12:horror
+%% highest rated  20 movies from genres
 idmovies=1:nm;
-%select = (sum(genres(:,idx),2)>0);
-%select=idmovies(select);
-activity=zeros(nm,3);
+idx=[2,5,12]; %2:action 5:children 12:horror
+
+rates=zeros(nm,3);
 for j=1:3
-    select=(genres(:,idx(j))==1);
+%     select=(genres(:,idx(j))==1 & sum(Rs(idusers,:)>2)'>0);
+    select=(genres(:,idx(j))==1 & sum(Rs(idusers,:)>2)'>2);
+    select= select & ~(idmovies'==183);
     select=idmovies(select);
     for i=select
-        activity(i,j)=sum(R(:,2)==i);
+        rates(i,j)=sum(Rs(idusers,i))/sum(Rs(idusers,i)>0);
     end
 end
 
 im=[];
 for i=1:3
-    [id,aa]=sort(activity(:,i),'descend');
-    res=idmovies(aa);
+    [aa,id]=sort(rates(:,i),'descend');
+    res=idmovies(id);
     im=[im res(1:20)];
 end
 idmovies=im;
+msubset=item.textdata(idmovies,1:3);
+
 
 %%
-Rs=sparse(R(:,1),R(:,2),R(:,3));
-X=Rs(idusers,idmovies);
+X=full(Rs(idusers,idmovies));
 
-%% weigths (nb of observations)
-w=sum(X>0,2);
-S=weightedcov(X, w);
-S=full(S);
+% figure(1);clf;
+% imagesc(X');
+% 
+% figure(3);clf;
+% imagesc(cov(X));
+% 
+% 
+% 
+% figure(3);clf;
+% plot(sum(X>0,2));
+
+
+%%
+X2=X;
+% X2(:,42)=[];
+
+% %% weigths (nb of observations)
+% w=full(sum(X2>0,2));
+% %w=1./(w.^2);
+% w=1./w;
+% S=weightedcov(X2, w);
+% S=full(S);
+% D=inv(S);
+
+%% Build covariance
+
+S=zeros(60);
+
+X3=X2;
+mu=sum(X2)./sum(X2>0);
+X3=X2;
+X3(X2==0)=-inf;
+X3=bsxfun(@minus,X3,mu);
+X3(X3==-inf)=0;
+inter=real(X3>0)'*real(X3>0);
+inter=max(inter,1);
+S=(X3'*X3);
+S=S./inter; %then not PSD
+S=.5*(S+S');
+% keyboard;
+[U,Ds] = eig(S);
+S=U*(Ds.*(Ds>0))*U';
+S=.5*(S+S')+1e-14*eye(60);
+% keyboard;
+
+% w=full(sum(X2>0,2));
+% w=1./(w.^2);
+% w=1./w;
+% S=weightedcov(X2, w);
+
+% w=full(sum(X2>0,2));
+% S = X3' * (X3 .* repmat(w, 1, 60));                                                  % Weighted Covariance Matrix
+% S = 0.5 * (S + S'); 
+
+% w=1./sum(X2>0,2);
+% W=diag(w);
+% S=(X3'*W*X3)/sum(w);
+% S = 0.5 * (S + S'); 
+
+% Xnan=X;
+% X(X==0)=nan;
+% S=nancov(X);
+
 D=inv(S);
-%%S=full(cov(X));
 
-figure(1);clf;
+figure(3);clf;
 subplot(1,2,1)
-imagesc(max(abs(S(:)))-abs(S));
+imagesc(S);
 pbaspect([1 1 1]);
 title('covariance');
 subplot(1,2,2)
-imagesc(max(abs(D(:)))-abs(D));
+imagesc(D);
 pbaspect([1 1 1]);
 title('inverse covariance');
 colormap parula
-%colormap bone;
+
+
+% %%
+% %C=full(cov(X));
+% C=cov(X2);
+% 
+% figure(4);clf;
+% subplot(1,2,1)
+% imagesc(C);
+% pbaspect([1 1 1]);
+% title('covariance');
+% subplot(1,2,2)
+% imagesc(inv(C));
+% pbaspect([1 1 1]);
+% title('inverse covariance');
+% colormap parula
+% 
+if eigs(S,1,'sa')<0
+    fprintf('Covariance not PSD\n');
+end
+

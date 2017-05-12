@@ -3,7 +3,7 @@ function [Z Z1 Z2 ActiveSet hist param flag output] = cgan_l1_omega(inputData,pa
 pm=1; %postprocessing after PS if no new atom found
 pp=1; %postprocessing
 pt=0; %postprocessing thresh
-MAX_NB_ATOMS=50;
+MAX_NB_ATOMS=500;
 param.max_nb_atoms=MAX_NB_ATOMS;
 
 
@@ -33,7 +33,7 @@ if nargin < 3
     fall=[];
     cardVal=[];
     U=[];
-    qs=5:-1:0;
+    qs=3:-1:0;
 else
     %     Z = startingZ;
     Z1 = startingZ.Z1;

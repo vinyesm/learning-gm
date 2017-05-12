@@ -77,4 +77,9 @@ if debug
     colorbar;
 end
 
+if eigs(Hall,1,'sa')<-1e-6
+    fprintf('Hessian not PSD\n');
+    keyboard;
+end
+
 end

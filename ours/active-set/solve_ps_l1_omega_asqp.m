@@ -42,7 +42,7 @@ i=1;
 count=1;
 cont=true;
 
-H = gradient(Z,inputData,param);
+H = real(gradient(Z,inputData,param));
 maxIJ=max(abs(H(:)));
 maxvar=inf;
 res_corr=0; % remove too correlated atoms
@@ -222,7 +222,7 @@ while cont
             end
             i=i+1;
 %             %% Verify sttopping criterion
-            H = gradient(Z,inputData,param);
+            H = real(gradient(Z,inputData,param));
             [maxIJ,new_row, new_col] = dual_l1_spca(H);
             cf=1;
             if ~isempty(ActiveSet.I)
@@ -460,6 +460,7 @@ while cont
                     end
                 else
                     if param.f==4
+%                         keyboard;
                         [Hall_new,fall_new] = update_Hessian_l1_sym(S,param,Hall, fall,atoms_l1_sym(:,ActiveSet.I_l1),aom,1);
                     elseif param.f==5
                         [Hall_new,fall_new] = update_Hessian_l1_SM(S,param,Hall, fall,atoms_l1_sym(:,ActiveSet.I_l1),aom,1);

@@ -31,7 +31,7 @@ function [c,A,nbpivot,ng]=asqp2(Q,b,c0,param,new_atom_added,idx_atom)
 % Marina Vinyes and Guillaume Obozinski, 2016
 % %%%%%%%%%%%%
 
-MAX_NB_FULL_STEPS=50;
+MAX_NB_FULL_STEPS=200;
 max_iter=param.max_iter;
 epsilon=param.epsilon;
 debug_mode=param.debug_mode;

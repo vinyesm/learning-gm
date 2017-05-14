@@ -14,26 +14,25 @@
 
 clc; clear all
 
-addpath ../../ml-100k/
+addpath ../../ml-latest-small/
 addpath ../utils/
 
 %%
-%19 genres
-%1682 movies
-%943 users
-ng=19;
-nm=1682;
-nu=943;
+ratings=importdata('ratings.csv');
+R=ratings.data;
+movies=importdata('movies.csv','|');
+movies=movies(2:end);
+idmovies=cellfun(@getid,movies);
 
 %%
-info=importdata('u.info');
-R=importdata('u.data');
-item=importdata('u.item','|');
-genres=item.data;
-GE=importdata('u.genre');
+nu=max(R(:,1));
+nm=max(idmovies);
+idxmovie=1:length(idmovies);
+
+mapping_movies=sparse(idmovies,ones(1,length(idmovies)),idxmovie);
 
 %% all rating mat
-Rs=sparse(R(:,1),R(:,2),R(:,3));
+Rs=sparse(R(:,1),R(:,2),R(:,3),nu,nm);
 
 %% 600 most active users
 idusers=1:nu;
@@ -48,48 +47,45 @@ idusers=idusers(1:600);
 
 %% selection of movies 
 %% highest rated  20 movies from genres
-idmovies=1:nm;
-idx=[2,5,12]; %2:action 5:children 12:horror
+genre={'Action','Children','Horror'};
 
-rates=zeros(nm,3);
+rates=sparse(nm,3);
 for j=1:3
-%     select=(genres(:,idx(j))==1 & sum(Rs(idusers,:)>2)'>0); %rated more than 2 at least 1 times
-%     select=(genres(:,idx(j))==1 & sum(Rs(idusers,:)>2)'>5); %rated more than 2 at least 6 times
-    select=(genres(:,idx(j))==1 & sum(Rs(idusers,:)>2)'>0); %rated at least once
-    select= select & ~(idmovies'==183);
-    select= select & ~(idmovies'==234);
+%     select=(genres(:,idx(j))==1 & sum(Rs(idusers,:)>2)'>0);
+    select=~cellfun(@isempty,strfind(movies,genre{j}));
+    select=(select & sum(Rs(idusers,idmovies)>2)'>5);
+    select= select & ~(idmovies==70);
+%     keyboard;
     select=idmovies(select);
+%     keyboard;
     for i=select
-%         rates(i,j)=sum(Rs(idusers,i))/sum(Rs(idusers,i)>0); % most highly rated
-        rates(i,j)=sum(Rs(idusers,i)>0); %most rated
+        rates(i,j)=sum(Rs(idusers,i))/sum(Rs(idusers,i)>0);
     end
 end
 
 im=[];
+msubset=[];
 for i=1:3
     [aa,id]=sort(rates(:,i),'descend');
-    res=idmovies(id);
-    im=[im res(1:20)];
+%     res=idmovies(id);
+    im=[im id(1:20)];
+    msubset=[msubset mapping_movies(im(:,i))];
 end
-idmovies=im;
-msubset=item.textdata(idmovies,1:3);
+msubset=full(msubset);
+msubset_stack=msubset(:);
+im_stack=im(:);
 
-% keyboard;
+%movies(msubset_stack(43))
 
 %%
-X=full(Rs(idusers,idmovies));
+X=full(Rs(idusers,im_stack));
 
 % figure(1);clf;
-% imagesc(X');
-% 
+% imagesc(X'); 
 % figure(3);clf;
 % imagesc(cov(X));
-% 
-% 
-% 
 % figure(3);clf;
 % plot(sum(X>0,2));
-
 
 %%
 X2=X;

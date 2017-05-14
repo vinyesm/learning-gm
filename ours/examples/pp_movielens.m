@@ -55,13 +55,13 @@ rates=zeros(nm,3);
 for j=1:3
 %     select=(genres(:,idx(j))==1 & sum(Rs(idusers,:)>2)'>0); %rated more than 2 at least 1 times
 %     select=(genres(:,idx(j))==1 & sum(Rs(idusers,:)>2)'>5); %rated more than 2 at least 6 times
-    select=(genres(:,idx(j))==1 & sum(Rs(idusers,:)>2)'>0); %rated at least once
+    select=(genres(:,idx(j))==1 & sum(Rs(idusers,:)>2)'>10); %rated at least once
     select= select & ~(idmovies'==183);
     select= select & ~(idmovies'==234);
     select=idmovies(select);
     for i=select
-%         rates(i,j)=sum(Rs(idusers,i))/sum(Rs(idusers,i)>0); % most highly rated
-        rates(i,j)=sum(Rs(idusers,i)>0); %most rated
+        rates(i,j)=sum(Rs(idusers,i))/sum(Rs(idusers,i)>0); % most highly rated
+%         rates(i,j)=sum(Rs(idusers,i)>0); %most rated
     end
 end
 

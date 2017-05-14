@@ -131,7 +131,7 @@ Z=Z1+Z2;
 %% reg param
 % lam .4 mu .1 f==4
 
-lam=.4;
+lam=.5;
 gam=.1;
 % lam=.5;
 % gam=.1;

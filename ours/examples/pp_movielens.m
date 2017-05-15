@@ -53,15 +53,16 @@ idx=[2,5,12]; %2:action 5:children 12:horror
 
 rates=zeros(nm,3);
 for j=1:3
-%     select=(genres(:,idx(j))==1 & sum(Rs(idusers,:)>0)'>10); %rated more than 2 at least 1 times
+    select=(genres(:,idx(j))==1 & sum(Rs(idusers,:)>0)'>1); %rated more than 2 at least 1 times
 %     select=(genres(:,idx(j))==1 & sum(Rs(idusers,:)>2)'>5); %rated more than 2 at least 6 times
-    select=(genres(:,idx(j))==1 & sum(Rs(idusers,:)>2)'>10); %(works best)
+%     select=(genres(:,idx(j))==1 & sum(Rs(idusers,:)>2)'>10); %(works best)
     select= select & ~(idmovies'==183);
     select= select & ~(idmovies'==234);
     select=idmovies(select);
     for i=select
-        rates(i,j)=sum(Rs(idusers,i))/sum(Rs(idusers,i)>0); % most highly rated
-%         rates(i,j)=sum(Rs(idusers,i)>0); %most rated
+%         rates(i,j)=sum(Rs(idusers,i))/sum(Rs(idusers,i)>0); %(works best)
+%         rates(i,j)=sum(Rs(idusers,i)); %(works best)
+        rates(i,j)=sum(Rs(idusers,i)>0); %most rated
     end
 end
 
@@ -113,16 +114,18 @@ X3=X2;
 X3(X2==0)=-inf;
 X3=bsxfun(@minus,X3,mu);
 X3(X3==-inf)=0;
-inter=real(X3~=0)'*real(X3~=0);
-inter=max(inter,1);
+% inter=real(X3~=0)'*real(X3~=0);
+% inter=max(inter,1);
+inter=ones(60);
 S=(X3'*X3);
 S=S./inter; %then not PSD
 S=.5*(S+S');
 S=real(S);
+S0=S;
 % keyboard;
-[U,Ds] = eig(S);
-S=U*(Ds.*(Ds>0))*U';
-S=.5*(S+S');
+% [U,Ds] = eig(S);
+% S=U*(Ds.*(Ds>0))*U';
+% S=.5*(S+S');
 % keyboard;
 
 % w=full(sum(X2>0,2));
@@ -143,7 +146,7 @@ D=inv(S);
 
 figure(3);clf;
 subplot(1,2,1)
-imagesc(S);
+imagesc(S-diag(diag(S)));
 pbaspect([1 1 1]);
 title('covariance');
 subplot(1,2,2)
@@ -152,6 +155,18 @@ pbaspect([1 1 1]);
 title('inverse covariance');
 colormap parula
 
+%%
+[U,Ds] = eig(S);
+ds=diag(Ds);
+U3=U(:,1:3);
+d3=ds(1:3);
+L3=U3*diag(d3)*U3';
+L3=.5*(L3+L3');
+figure(4);clf;
+subplot(1,1,1)
+imagesc(L3);
+pbaspect([1 1 1]);
+colormap parula
 
 % %%
 %C=full(cov(X));

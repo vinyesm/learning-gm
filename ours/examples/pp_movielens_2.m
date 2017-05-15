@@ -114,7 +114,7 @@ S=(X3'*X3);
 S=S./inter; %then not PSD
 S=.5*(S+S');
 S=real(S);
-% keyboard;
+keyboard;
 [U,Ds] = eig(S);
 S=U*(Ds.*(Ds>0))*U';
 S=.5*(S+S');

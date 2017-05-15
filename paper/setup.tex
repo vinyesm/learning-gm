@@ -11,22 +11,41 @@ We consider the problem of Latent-Variable Gausian Graphical Model (LVGGM) selec
 $K_{OO}$ specifies conditional dependency of observed variables given the latent variables. If we assume latent variables independent, i.e. $K_{HH}$ diagonal, and the decomposition unique (see section on identifiability), $K_{OH}$ specifies the effects of latent variables on observed variables. Unicity of $K_{OH}$ is achieved imposing more structure on the sparse component, which we discuss in the next paragraph, and under some identifiability conditions (see section) also allows us to retrieve the structure of the full LVGGM. Not that Sparse+Low rank decomposition only allows to retrive latent variable subspace but not its structure.
 
 \begin{align}
-FIGURE
+FIGURE ?
 \end{align}
 
 \subsection{$k$-rank and its relaxation}
-$(k, q)$-rank of a matrix as the minimum number of left and right factors, having respectively $k$ and $q$ nonzeros, required to reconstruct a matrix. 
+%$(k, q)$-rank of a matrix as the minimum number of left and right factors, having respectively $k$ and $q$ nonzeros, required to reconstruct a matrix. 
 
-Definition k-rank for symmetric p.s.d. matrices
+Definition k-rank for positive semidefinite (p.s.d.) matrices
 \begin{mydef}
-($k$-rank) For a matrix $Z\in\RR^{p\times p}$ , we define its $k$-rank as the optimal
+($k,\succeq$-rank) For a p.s.d  matrix $Z\in\RR^{p\times p}$ \TODO{assuming that the decomposition is possible} we define its $k,\succeq$-rank as the optimal
 value of the optimization problem:
 \begin{align}
-min \|c\|_0 \quad \text{s.t.} \quad Z=\sum_{i} c_i u_i^{\top}u_i, \quad (c_i,u_i)\in \RR^{+}\times\mathcal{A}_k
+\min \|c\|_0 \quad \text{s.t.} \quad Z=\sum_{i} c_i Z_i, \quad (c_i,Z_i)\in \RR^{+}\times\mathcal{A}_{k,\succeq}
 \end{align}
-where for any  $\mathcal{A}_k:=\{u\in\RR^p \quad : \quad  \|u\|_0 \leq k, \|u\|_2 = 1\}$ , that is $\mathcal{A}_k$ is the set of $p$-dimensional unit vectors with at most j non-zero components.
+where  $\mathcal{A}_{k,\succeq}:=\{u u^\top \in\RR^p  :   \|u\|_0 \leq k, \|u\|_2 = 1\}$ , that is $\mathcal{A}_k$ is the set of $p$-dimensional unit vectors with at most $k$ non-zero components.
 \end{mydef}
 
+The convex relaxation of the $k,\succeq$-rank, is the gauge $\Omega_{k,\succeq}$. 
+
+\begin{mydef}
+($\Omega_{k,\succeq}$) For a p.s.d  matrix $Z\in\RR^{p\times p}$ \TODO{assuming that the decomposition is possible} :
+\begin{align}
+\Omega_{k,\succeq}(Z):=\{\min \|c\|_1 \quad \text{s.t.} \quad Z=\sum_{i} c_i Z_i, \quad (c_i,Z_i)\in \RR^{+}\times\mathcal{A}_{k,\succeq}\}
+\end{align}
+Equivalently, 
+\begin{align}
+\Omega_{k,\succeq}(Z):=\{\min_{\mathcal{I}\in\mathcal{G}^p_k} \sum_{I\in\mathcal{I}}\tr(Z_I) \quad \text{s.t.} \quad Z_I\in\mathcal{A}_{I,\succeq}\}
+\end{align}
+where  $\mathcal{A}_{I,\succeq}:=\{Z_I\succeq 0 ,\supp(Z_I)=I\times I\}$.
+\end{mydef}
+
+\begin{lemm} The polar gauge of $\Omega_{k,\succeq}$ of a smatrix $Y\RR^{p\times p}$ is
+\begin{align}
+\Omega_{k,\succeq}^{\circ}(Y):= \max_{I\in\mathcal{G}^p_k}\lambda_{max}(Y_{II})
+\end{align}
+\end{lemm}
 
 \subsection{Optimization problem}
 Let $(x_1,..,x_n)$ be $n$ samples of dimension $p$ and   $\hat{\Sigma}$ the empirical covariance. A natural way to approximate a given sample covariance matrix by a model which the concentration matrix decomposes into a sparse and $k$-low-rank matrix is a regularized using $\ell_1$ norm for recovering sparse component and the convex relaxation of $k$-rank for recovering the $k$-low-rank component. Hence we consider the following convex optimization problem
@@ -43,11 +62,18 @@ f_{T}(K)&:=\frac{1}{2}\|\hat{\Sigma}^{1/2}K\hat{\Sigma}^{1/2}-I\|_2^2.
 Since the norm $\Omega_k$ only provides symmetric p.s.d matrices (as a sum of p.s.d rank-one matrices), the nonnegative constraint on $L$ is useless in problem \ref{opt}. \TODO{What about $S-L \succeq 0$}
 We choose to consider quadratic losses in this paper, this allowing us to use an efficient algorithm for optimization.
 
+Problem \ref{opt} is a minimization of a quadratic funtion $f$ regularized by an atomic norm $\gamma$  defined as the infimal convolution of $\mu\|.\|_{1}$ and $\lambda\Omega_k(.)$, $\gamma(M)=\inf\{\mu\|A\|_{1}+\lambda\Omega_k(B)|M=A+B\}$
+\begin{align}
+\label{opt_quad}
+\min_{K} f(K)+ \gamma(K)
+\end{align}
+
 
 \subsection{Algorithm}
-Main idea of the algorithm, selection of the new atom ny truncation power iteration.
+We use algorithm for optimizing problems regularized by atomic norms from \citet{vinyes2017}
+LMO is the polar gauge,  we use truncation power iteration of \citet{yuan2013truncated}, after adding the frobenius norm of the matrix.
 
-Problem \ref{opt} is a minimization of a quadratic funtion regularized by an atomic norm $\gamma$  defined as the infimal convolution of $\mu\|.\|_{1}$ and $\lambda\Omega_k(.)$, $\gamma(M)=\inf\{\mu\|A\|_{1}+\lambda\Omega_k(B)|M=A+B\}$
 
-Optimality conditions
+
+
 

@@ -147,9 +147,11 @@ param.mu=gam;
 % keyboard;
 
 %% blocks
-% [Z Z1 Z2 ActiveSet hist param flag output] = cgan_l1_omega(inputData,param);
-[Z Z1 Z2 ActiveSet hist param flag output] = cgan_l1_omega(inputData,param,startingZ, ActiveSet);
+[Z Z1 Z2 ActiveSet hist param flag output] = cgan_l1_omega(inputData,param);
+% [Z Z1 Z2 ActiveSet hist param flag output] = cgan_l1_omega(inputData,param,startingZ, ActiveSet);
 % obj_l1_om=hist.obj(end);
+% init : obj=18.5609
+% no init : obj=18.5282
 
 save(['ml_' num2str(param.f) '_' num2str(param.mu) '_' num2str(param.lambda) ],'param', ...
 'Z', 'Z1', 'Z2', 'ActiveSet', 'hist' ,'param', 'flag' ,'output');

@@ -5,7 +5,7 @@ fus=false; %fusionning correlated atoms
 
 debug_update=0;
 debug=1;
-compute_dg=0;
+compute_dg=1;
 display('in solve_ps change S when changing loss fun\n');
 if param.f==4
     S=inputData.X1*inputData.X1;

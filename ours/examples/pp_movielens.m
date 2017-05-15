@@ -53,9 +53,9 @@ idx=[2,5,12]; %2:action 5:children 12:horror
 
 rates=zeros(nm,3);
 for j=1:3
-%     select=(genres(:,idx(j))==1 & sum(Rs(idusers,:)>2)'>0); %rated more than 2 at least 1 times
+%     select=(genres(:,idx(j))==1 & sum(Rs(idusers,:)>0)'>10); %rated more than 2 at least 1 times
 %     select=(genres(:,idx(j))==1 & sum(Rs(idusers,:)>2)'>5); %rated more than 2 at least 6 times
-    select=(genres(:,idx(j))==1 & sum(Rs(idusers,:)>2)'>10); %rated at least once
+    select=(genres(:,idx(j))==1 & sum(Rs(idusers,:)>2)'>10); %(works best)
     select= select & ~(idmovies'==183);
     select= select & ~(idmovies'==234);
     select=idmovies(select);
@@ -73,6 +73,7 @@ for i=1:3
 end
 idmovies=im;
 msubset=item.textdata(idmovies,1:3);
+length(unique(im))
 
 % keyboard;
 
@@ -153,8 +154,9 @@ colormap parula
 
 
 % %%
-% %C=full(cov(X));
+%C=full(cov(X));
 % C=cov(X2);
+% % % S=C;
 % 
 % figure(4);clf;
 % subplot(1,2,1)

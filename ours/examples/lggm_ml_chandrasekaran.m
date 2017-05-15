@@ -16,8 +16,8 @@ addpath('../TPower_1.0');
 addpath('../TPower_1.0/algorithms/TPower/');
 addpath('../TPower_1.0/misc/');
 
-HOME = '/Users/marina/Documents/learning-gm/code-from-Kim-Chuan/LogdetPPA-0'; %if my  mac
-%HOME = '/home/marina/Marina/learning-gm/code-from-Kim-Chuan/LogdetPPA-0';%if lab pc
+% HOME = '/Users/marina/Documents/learning-gm/code-from-Kim-Chuan/LogdetPPA-0'; %if my  mac
+HOME = '/home/marina/Marina/learning-gm/code-from-Kim-Chuan/LogdetPPA-0';%if lab pc
 addpath(strcat(HOME,'/solver/'))
 addpath(strcat(HOME,'/solver/mexfun'))
 addpath(strcat(HOME,'/util/'))
@@ -31,8 +31,8 @@ ttime  = clock;
 %% data
 run('pp_movielens.m');
 % run('pp_movielens_2.m');
-lambda=1.5;
-mu=.3;
+lambda=2;
+mu=.25;
 
 %% LVGGM Chandrasekaran S-L, (Sparse-Low Rank)
 
@@ -75,7 +75,7 @@ if (runPPA)
     OPTIONS.smoothing  = 1;
     OPTIONS.scale_data = 0; %% or 2;
     OPTIONS.plotyes    = 0;
-    OPTIONS.tol        = 1e-10;
+    OPTIONS.tol        = 1e-12;
     mu = [1; 0; 0];
     [obj,X,y,Z,info,runhist] = logdetPPA(blk,At,C,b,mu,OPTIONS);
     obj = sum(sum(Sigma.*X{1}))-sum(log(eig(X{1})))+rho*sum(sum(abs(X{1})));

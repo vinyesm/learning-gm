@@ -8,13 +8,53 @@ addpath('../utils');
 addpath('../prox');
 addpath('../../glasso-matlab');
 addpath ../../DREAM5/Network-Inference/'training data'/'Network 1 - in silico'/
+addpath ../../DREAM5/Network-Inference/'training data'/'Network 3 - E. coli'/
 
-F=importdata('net1_expression_data.tsv');
-S=cov(F.data);
+
+% F=importdata('net1_expression_data.tsv');
+F=importdata('net3_expression_data.tsv');
+F=F.data;
+Fm=mean(F);
+F2=bsxfun(@rdivide,F,Fm);
+F2=log(F2);
+S=cov(F2);
 
 figure(1);clf;
-imagesc(max(abs(S(:)))-abs(S));
-colormap bone;
+hist(F(:), sqrt(length(F(:))));
+
+figure(2);clf;
+hist(F2(:), sqrt(length(F2(:))));
+keyboard;
+
+V=std(F2,[],1);
+I=find(V.^2>0);
+S=cov(F2(:,I));
+
+F3=F2(:,I);
+V3=std(F3,[],1);
+F3=bsxfun(@minus, F3, mean(F3));
+F3=bsxfun(@rdivide, F3, V3);
+[U,D,V]=svd(F3);
+R=D*V';
+R=R(1:2,:);
+
+idx=kmeans(F3', 160);
+[res,order]=sort(idx);
+
+% Z = linkage(F3');
+% A = sparse(Z(:,1),Z(:,2), ones(size(Z,1)));
+% [H,T,OUTPERM] = dendrogram(Z) ;
+
+figure(3);clf;
+plot(R(1,:),R(2,:), '.');
+axis('square');
+S3=cov(F3);
+
+figure(4);clf;
+% imagesc(max(abs(S(:)))-abs(S));
+imagesc(S3(order,order));
+colormap parula;
+keyboard;
 
 %%
 %% our norm psd with decomposition S-M sparse_omega_lgm

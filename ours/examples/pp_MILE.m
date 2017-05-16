@@ -52,6 +52,8 @@ S=cov(X4);
 figure(3);
 % imagesc(S(OUTPERM,OUTPERM));
 imagesc(S);
+colormap default
 
 figure(4)
 imagesc(C(I,:));
+colormap default

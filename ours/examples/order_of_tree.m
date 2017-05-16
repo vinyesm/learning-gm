@@ -9,9 +9,9 @@ for i=(n-1):-1:1
     C(s2,1:k)=C(n+i,1:k);
     C(s1,k+1)=-1;
     C(s2,k+1)=1;
-    C2=C;
-    C2(isnan(C2))=0;
-    imagesc(C2);
+%     C2=C;
+%     C2(isnan(C2))=0;
+%     imagesc(C2);
 %     pause();
 end
 

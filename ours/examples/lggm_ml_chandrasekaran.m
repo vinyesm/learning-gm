@@ -30,10 +30,11 @@ ttime  = clock;
 
 %% data
 % run('pp_movielens.m');
-run('pp_MILE.m');
+% run('pp_MILE.m');
+run('pp_MILE_bis.m');
 % run('pp_movielens_2.m');
-lambda=.05;
-mu=.005;
+lambda=.5;
+mu=.05;
 
 %% LVGGM Chandrasekaran S-L, (Sparse-Low Rank)
 

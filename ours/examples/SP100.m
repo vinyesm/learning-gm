@@ -56,8 +56,8 @@ param.mu=.2;
 param.cardfun=inf*ones(1,p);
 param.cardfun(p)=1;
 
-param.lambda=.0008; %lamda ~ 2/k*mu
-param.mu=.0003;
+param.lambda=.008; %lamda ~ 2/k*mu
+param.mu=.003;
 param.max_nb_main_loop=2;
 param.niterPS=10000;
 [Z_tr Z1_tr Z2_tr ActiveSet_tr hist_tr param_tr flag_tr output_tr] = cgan_l1_omega(inputData,param);

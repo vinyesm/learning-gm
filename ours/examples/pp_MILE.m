@@ -56,15 +56,15 @@ X2=X;
 %%
 S=cov(X2);
 [res ord]=sort(diag(S),'descend');
-X3=X(:,ord(1:200));
+X3=X(:,ord(1:500));
 
-% idx=kmeans(X3', 50);
+% idx=kmeans(X3', 10);
 % [res,order]=sort(idx);
 % X4=X3(:,order);
 
 Z = linkage(X3','ward');
 % [H,T,OUTPERM] = dendrogram(Z) ;
-[C,I]=order_of_tree(Z);
+[Cres,I]=order_of_tree(Z);
 X4=X3(:,I);
 
 S=cov(X4);
@@ -74,6 +74,6 @@ figure(3);
 imagesc(S);
 colormap default
 
-figure(4)
-imagesc(C(I,:));
-colormap default
+% figure(4)
+% imagesc(Cres(I,:));
+% colormap default

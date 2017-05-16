@@ -29,10 +29,11 @@ addpath(strcat(HOME,'/util/'))
 ttime  = clock;
 
 %% data
-run('pp_movielens.m');
+% run('pp_movielens.m');
+run('pp_MILE.m');
 % run('pp_movielens_2.m');
-lambda=2;
-mu=.25;
+lambda=.05;
+mu=.005;
 
 %% LVGGM Chandrasekaran S-L, (Sparse-Low Rank)
 
@@ -105,15 +106,22 @@ Dsl((nl+1):(nl+p),1:nl)=Usl;
 
 
 figure(3);clf;
-subplot(1,3,1);
-imagesc(abs(Dsl));
-pbaspect([1 1 1]);
-subplot(1,3,2);
-imagesc(abs(Dsl)>1e-6);
-pbaspect([1 1 1]);
-subplot(1,3,3);
+subplot(1,4,1);
+imagesc(min(abs(Dsl),1));
+title('Complete');
+axis square
+subplot(1,4,2);
+imagesc(abs(Dsl)>1e-10);
+title('support Complete');
+axis square
+subplot(1,4,3);
+imagesc(abs(Ssl));
+title('S');
+axis square
+subplot(1,4,4);
 imagesc(abs(Lsl));
-pbaspect([1 1 1]);
+title('L');
+axis square
 
 
 

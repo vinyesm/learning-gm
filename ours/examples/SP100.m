@@ -13,7 +13,7 @@ addpath('../TPower_1.0/misc/');
 
 run('pp_SP100.m');
 % run('pp_movielens_2.m');
-k=20;
+% k=20;
 %%
 %% our norm psd with decomposition S-M sparse_omega_lgm
 po=size(S,1);
@@ -34,10 +34,14 @@ inputData.Y=-eye(po);
 
 %% reg param
 
-param.cardfun=inf*ones(1,p);
-param.cardfun(k)=1;
-param.lambda=.001;
-param.mu=.001;
+% param.cardfun=inf*ones(1,p);
+% param.cardfun(k)=1;
+beta=.5;
+param.cardfun=((1:p).^beta)/p^beta;
+param.cardfun(1)=inf;
+param.cardfun(50:end)=inf;
+param.lambda=.2;
+param.mu=.2;
 
 
 %% blocks

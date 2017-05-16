@@ -16,8 +16,8 @@ addpath('../TPower_1.0');
 addpath('../TPower_1.0/algorithms/TPower/');
 addpath('../TPower_1.0/misc/');
 
-HOME = '/Users/marina/Documents/learning-gm/code-from-Kim-Chuan/LogdetPPA-0'; %if my  mac
-% HOME = '/home/marina/Marina/learning-gm/code-from-Kim-Chuan/LogdetPPA-0';%if lab pc
+% HOME = '/Users/marina/Documents/learning-gm/code-from-Kim-Chuan/LogdetPPA-0'; %if my  mac
+HOME = '/home/marina/Marina/learning-gm/code-from-Kim-Chuan/LogdetPPA-0';%if lab pc
 addpath(strcat(HOME,'/solver/'))
 addpath(strcat(HOME,'/solver/mexfun'))
 addpath(strcat(HOME,'/util/'))
@@ -26,7 +26,7 @@ addpath(strcat(HOME,'/util/'))
 % addpath LogdetPPA-0/solver/;
 % addpath LogdetPPA-0/solver/mexfun/;
 % addpath LogdetPPA-0/util/;
-ttime  = clock;
+
 
 %% data
 % run('pp_movielens.m');
@@ -92,8 +92,8 @@ Lsl=X2;
 %Usl=chol(Lsl);
 [VV DD]=eig(Lsl);
 dd=diag(DD);
-VV=VV(:,dd>1e-15);
-dd=dd(dd>1e-15);
+VV=VV(:,dd>1e-8);
+dd=dd(dd>1e-8);
 Usl=VV*diag(sqrt(dd));
 
 p=n;
@@ -125,9 +125,58 @@ imagesc(abs(Lsl));colormap hot
 title('L');
 axis square
 
+save('Lsl',Lsl, Ssl);
 
 
 %%%___________________________
+%%
+p=size(Lsl,1);
+param.f=5;
+param.verbose=1;
+inputData.X=inv(2*eigs(Lsl,1, 'la')*eye(p)-Lsl);
+inputData.Y=-eye(p);
+
+% reg param
+beta=.5;
+param.cardfun=((1:p).^beta)/p^beta;
+param.cardfun(1)=inf;
+param.cardfun(50:end)=inf;
+lam=.01;
+gam=.01;
+param.lambda=lam;
+param.mu=gam;
+param.max_nb_main_loop=100;
+
+%% blocks
+[Z Z1 Z2 ActiveSet hist param flag output] = cgan_l1_omega(inputData,param);
 
 
+%% reconstruction l1+om
+if ~isempty(ActiveSet.alpha)
+    Uso=bsxfun(@times,sqrt(ActiveSet.alpha)',ActiveSet.atoms);
+    nl=size(ActiveSet.atoms,2);
+    Dfin=zeros(p+nl);
+    Dfin(1:nl,1:nl)=eye(nl);
+    Dfin((nl+1):(nl+p),(nl+1):(nl+p))=-Z1;
+    Dfin(1:nl,(nl+1):(nl+p))=Uso';
+    Dfin((nl+1):(nl+p),1:nl)=Uso;
+else
+    Dfin=Z1;
+end
+
+figure(1);clf;
+subplot(1,4,1);
+imagesc(abs(Dfin)>1e-10);
+axis square;
+subplot(1,4,2);
+imagesc(abs(Dfin));
+axis square;
+subplot(1,4,3);
+imagesc(abs(Z1));
+title('S')
+axis square;
+subplot(1,4,4);
+imagesc(abs(Z2));
+title('L')
+axis square;
 

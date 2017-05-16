@@ -63,6 +63,7 @@ X3=X(:,ord(1:500));
 % X4=X3(:,order);
 
 Z = linkage(X3','ward');
+% keyboard;
 % [H,T,OUTPERM] = dendrogram(Z) ;
 [Cres,I]=order_of_tree(Z);
 X4=X3(:,I);
@@ -71,8 +72,8 @@ S=cov(X4);
 
 figure(3);
 % imagesc(S(OUTPERM,OUTPERM));
-imagesc(S);
-colormap default
+imagesc(abs(S));
+colormap jet
 
 % figure(4)
 % imagesc(Cres(I,:));

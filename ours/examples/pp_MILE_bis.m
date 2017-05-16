@@ -40,18 +40,30 @@ for i=1:length(classes_names)
     classes=[classes i*ones(1,length(class))];
 end
 
-X=X0(:,order);
+X=X0(:,classes==10)';
 
-S=cov(X);
+% keyboard;
+Z = linkage(X','ward');
+% [H,T,OUTPERM] = dendrogram(Z) ;
+[Cres,I]=order_of_tree(Z);
+X4=X(:,I);
+
+%S=cov(X');
+S=cov(X4);
 
 figure(3);clf
 % imagesc(S(OUTPERM,OUTPERM));
-subplot(1,2,1)
-imagesc(S);colormap jet;
+imagesc(abs(S));colormap jet;
 axis square
-subplot(1,2,2)
-imagesc(classes');%colormap colorcube;
-axis square
+
+% figure(3);clf
+% % imagesc(S(OUTPERM,OUTPERM));
+% subplot(1,2,1)
+% imagesc(S);colormap jet;
+% axis square
+% subplot(1,2,2)
+% imagesc(classes');%colormap colorcube;
+% axis square
 
 
 

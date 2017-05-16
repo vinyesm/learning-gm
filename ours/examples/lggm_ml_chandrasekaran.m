@@ -16,8 +16,8 @@ addpath('../TPower_1.0');
 addpath('../TPower_1.0/algorithms/TPower/');
 addpath('../TPower_1.0/misc/');
 
-% HOME = '/Users/marina/Documents/learning-gm/code-from-Kim-Chuan/LogdetPPA-0'; %if my  mac
-HOME = '/home/marina/Marina/learning-gm/code-from-Kim-Chuan/LogdetPPA-0';%if lab pc
+HOME = '/Users/marina/Documents/learning-gm/code-from-Kim-Chuan/LogdetPPA-0'; %if my  mac
+% HOME = '/home/marina/Marina/learning-gm/code-from-Kim-Chuan/LogdetPPA-0';%if lab pc
 addpath(strcat(HOME,'/solver/'))
 addpath(strcat(HOME,'/solver/mexfun'))
 addpath(strcat(HOME,'/util/'))
@@ -30,11 +30,11 @@ ttime  = clock;
 
 %% data
 % run('pp_movielens.m');
-% run('pp_MILE.m');
-run('pp_MILE_bis.m');
+run('pp_MILE.m');
+% run('pp_MILE_bis.m');
 % run('pp_movielens_2.m');
-lambda=.5;
-mu=.05;
+lambda=2.5;
+mu=.02;
 
 %% LVGGM Chandrasekaran S-L, (Sparse-Low Rank)
 
@@ -110,9 +110,10 @@ figure(3);clf;
 subplot(1,4,1);
 imagesc(min(abs(Dsl),1));
 title('Complete');
+colormap hot
 axis square
 subplot(1,4,2);
-imagesc(abs(Dsl)>1e-10);
+imagesc(abs(Dsl)>1e-3);
 title('support Complete');
 axis square
 subplot(1,4,3);
@@ -120,7 +121,7 @@ imagesc(abs(Ssl));
 title('S');
 axis square
 subplot(1,4,4);
-imagesc(abs(Lsl));
+imagesc(abs(Lsl));colormap hot
 title('L');
 axis square
 

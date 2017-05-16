@@ -11,7 +11,7 @@ addpath('../TPower_1.0/algorithms/TPower/');
 addpath('../TPower_1.0/misc/');
 addpath('../../glasso-matlab');
 
-run('pp_MILE.m');
+?run('pp_MILE.m');
 
 %%
 %% our norm psd with decomposition S-M sparse_omega_lgm

@@ -27,6 +27,9 @@ for lam=las
             param.cardfun=((1:p).^beta)/p^beta;
             param.cardfun(1)=inf;
             param.cardfun(200:end)=inf;
+        else
+            param.cardfun=inf*ones(1,p);
+            param.cardfun(k)=1;
         end
         param.lambda=lam;
         param.mu=.01;

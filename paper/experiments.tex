@@ -1,7 +1,14 @@
 \section{Experiments}
 \label{experiments}
 
-\subsection{Simulated data}
+\subsection{Synthetic data}
+
+We consider three differents latent-variable Gaussian graphical models.
+
+The first model consists of $p=90$ observed variables and $h=3$ latent variables, we split observed variables in three groups of size $30$ and connect each group to a single latent variable. The second model is formed by $p=30+15+5=50$ observed variables and $h=3$ latents variables we split observed variables in three groups of different sizes ($30,15$ and $5$) and connect each group to a single latent variable. The third model consists of $p=$ observed variables and $h=5$, we select $5$ overlapping groups of observed variables, with an overlap of $ $, and connect each one of them to a different latent variable.
+
+For all three models the conditional graphical model structure of the observed variables is a tree with the edge partial correlation coefficients equal to 0.25. 
+
 k-3-blocs+tree structure\\
 
 different size blocs\\

@@ -8,7 +8,8 @@ td=data.textdata;
 % data=importdata('GSE13204_family.soft');
 % data=tdfread('GSE13204-GPL7473_series_matrix.txt');
 
-genes=data.textdata(67:1522,1);
+genes=data.textdata(66:1522,1);
+ngen=length(genes);
 exp=strsplit(data.textdata{32});
 exp=exp(2:end);
 nexp=length(exp);
@@ -16,27 +17,46 @@ X=data.data;
 X=X';
 
 %%
-figure(1);clf;
-hist(X(:), 250);
+% figure(1);clf;
+% hist(X(:), 250);
 
-g1=X(1,:);
-g1=sort(X);
+gg=sort(X);
 figure(2);clf
-plot(g1);
+plot(gg);
 
-%%
-% X2=log(X);
-% 
-% figure(2);clf;
-% hist(X2(:),250);
+
+[ee,idee]=sort(X');
+figure(3);clf
+plot(ee);
+
+[res,perminv]=sort(idee);
+q_exp=repmat((1:ngen)'/(ngen+1),1,nexp); %same size as ee
+X=q_exp(perminv)';
+
+% keyboard;
+
+[ee,idee]=sort(X');
+figure(4);clf
+plot(ee);
+
+
+X2=norminv(X,0,1);
+
+gg=sort(X2);
+figure(5);clf
+plot(gg);
+
+% keyboard;
+
+X2=X;
 
 %% select genes
 [truefalse, index] = ismember('"GSM332884"', exp) ;
 
 %%
-S=cov(X);
+S=cov(X2);
 [res ord]=sort(diag(S),'descend');
-X3=X(:,ord(1:500));
+X3=X(:,ord(1:200));
 
 % idx=kmeans(X3', 50);
 % [res,order]=sort(idx);

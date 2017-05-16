@@ -34,9 +34,9 @@ inputData.Y=-eye(po);
 beta=.5;
 param.cardfun=((1:p).^beta)/p^beta;
 param.cardfun(1)=inf;
-param.cardfun(20:end)=inf;
+param.cardfun(50:end)=inf;
 lam=1;
-gam=.4;
+gam=.2;
 param.lambda=lam;
 param.mu=gam;
 
@@ -82,6 +82,7 @@ imagesc(abs(Z2));
 title('L')
 axis square;
 
+keyboard;
 save('mile','Dfin', ...
 'Z', 'Z1', 'Z2', 'ActiveSet', 'hist' ,'param', 'flag' ,'output');
 

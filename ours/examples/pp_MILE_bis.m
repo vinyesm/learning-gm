@@ -1,7 +1,11 @@
 %% from https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE13204
+
+
+
 clear all; clc;
 addpath ../../MILE/
 
+LAB=false; % if pc lab
 
 data=importdata('GSE13204-GPL7473_series_matrix.txt');
 td=data.textdata;
@@ -19,7 +23,12 @@ X0=data.data;
 
 %%
 % cf article for classes http://ascopubs.org/doi/pdfdirect/10.1200/JCO.2009.23.4732
-leuk_class=strsplit(data.textdata{41},'\t');
+if LAB
+    leuk_class=strsplit(data.textdata{41},'\t'); % if PC lab
+else
+    leuk_class=strsplit(data.textdata{40},'\t'); % if PC lab
+end
+
 leuk_class=leuk_class(2:end);
 classes_names=unique(leuk_class);
 

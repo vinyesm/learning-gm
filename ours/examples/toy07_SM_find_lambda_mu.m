@@ -20,7 +20,8 @@ addpath('../TPower_1.0/algorithms/TPower/');
 addpath('../TPower_1.0/misc/');
 
 % %% data
-run('../../toy-data/toy07.m');k=30;
+% run('../../toy-data/toy07.m');k=30;
+run('../../toy-data/toy07_bis.m');k=30;
 
 %% our norm psd with decomposition S-M sparse_omega_lgm
 p=po;
@@ -47,7 +48,7 @@ param.cardfun(k)=1;
 % param.mu=c*.1;
 c=1;
 param.lambda=c*1; %lamda ~ 2/k*mu
-param.mu=c*.2;
+param.mu=c*.15%c*.2;
 
 %%
 %% Starting solution
@@ -183,8 +184,8 @@ keyboard;
 %% tr+l1
 % param.lambda=.3; %lamda ~ 2/k*mu
 % param.mu=0.1;
-param.lambda=.5; %lamda ~ 2/k*mu
-param.mu=0.2;
+param.lambda=.9; %lamda ~ 2/k*mu
+param.mu=0.1;
 param.max_nb_main_loop=2;
 param.niterPS=10000;
 param.cardfun=inf*ones(1,p);

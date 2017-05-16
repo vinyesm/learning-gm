@@ -35,8 +35,8 @@ beta=.5;
 param.cardfun=((1:p).^beta)/p^beta;
 param.cardfun(1)=inf;
 param.cardfun(20:end)=inf;
-lam=2;
-gam=.5;
+lam=1;
+gam=.4;
 param.lambda=lam;
 param.mu=gam;
 
@@ -52,19 +52,6 @@ param.mu=gam;
 [Z Z1 Z2 ActiveSet hist param flag output] = cgan_l1_omega(inputData,param);
 obj_l1_om=hist.obj(end);
 keyboard;
-save('mile','k','p','n','inputData','Dfull','Dmargo', ...
-'Z', 'Z1', 'Z2', 'ActiveSet', 'hist' ,'param', 'flag' ,'output');
-
-%% tr+l1
-param.lambda=.6; %lamda ~ 2/k*mu
-param.mu=0.1;
-param.max_nb_main_loop=2;
-param.niterPS=10000;
-param.cardfun=inf*ones(1,p);
-param.cardfun(p)=1;
-[Z_tr Z1_tr Z2_tr ActiveSet_tr hist_tr param_tr flag_tr output_tr] = cgan_l1_omega(inputData,param);
-
-%% LOAD HERE lggm.mat
 
 %% reconstruction l1+om
 if ~isempty(ActiveSet.alpha)
@@ -78,6 +65,37 @@ if ~isempty(ActiveSet.alpha)
 else
     Dfin=Z1;
 end
+
+figure(1);clf;
+subplot(1,4,1);
+imagesc(abs(Dfin)>1e-10);
+axis square;
+subplot(1,4,2);
+imagesc(abs(Dfin));
+axis square;
+subplot(1,4,3);
+imagesc(abs(Z1));
+title('S')
+axis square;
+subplot(1,4,4);
+imagesc(abs(Z2));
+title('L')
+axis square;
+
+save('mile','Dfin', ...
+'Z', 'Z1', 'Z2', 'ActiveSet', 'hist' ,'param', 'flag' ,'output');
+
+%% tr+l1
+param.lambda=.6; %lamda ~ 2/k*mu
+param.mu=0.1;
+param.max_nb_main_loop=2;
+param.niterPS=10000;
+param.cardfun=inf*ones(1,p);
+param.cardfun(p)=1;
+[Z_tr Z1_tr Z2_tr ActiveSet_tr hist_tr param_tr flag_tr output_tr] = cgan_l1_omega(inputData,param);
+
+
+
 
 %% reconstruction tr+l1
 if ~isempty(ActiveSet_tr.alpha)

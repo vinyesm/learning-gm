@@ -6,7 +6,7 @@ fus=false; %fusionning correlated atoms
 debug_update=0;
 debug=1;
 compute_dg=0;
-display('in solve_ps change S when changing loss fun\n');
+% display('    in solve_ps change S when changing loss fun\n');
 if param.f==4
     S=inputData.X1*inputData.X1;
 elseif param.f==5
@@ -228,6 +228,9 @@ while cont
             if ~isempty(ActiveSet.I)
                 [new_i,new_val,maxvar]=get_new_atom_spca(H,ActiveSet,param);
                 cf=min(param.cardfun(length(new_i):end));
+                %% marina
+                maxvar=maxvar*cf;
+%                 keyboard;
             else
                 maxvar=0;
             end
@@ -287,7 +290,7 @@ while cont
             end
             
             if debug
-                fprintf('maxIJ/mu=%4.2f<1     varmax/cf*lambda=%4.2f<1   dg/eps=%4.2f<1  cond=%4.2f<%4.2f\n',maxIJ/param.mu,maxvar/(cf*param.lambda),dualgap/param.PSdualityEpsilon,cond,epscond);
+                fprintf('   maxIJ/mu=%4.2f<1     varmax/cf*lambda=%4.2f<1   dg/eps=%4.2f<1  cond=%4.2f<%4.2f\n',maxIJ/param.mu,maxvar/(cf*param.lambda),dualgap/param.PSdualityEpsilon,cond,epscond);
             end
             
             cont=cont && count< param.niterPS;
@@ -310,10 +313,15 @@ while cont
         cf=1;
         if ~isempty(ActiveSet.I)
             [new_i, new_val, maxval_om0]=get_new_atom_spca(H,ActiveSet,param);
+            %% marina
+            maxval_om0=maxval_om0*cf;
+            %%
+%             keyboard;
             anew=sparse(new_i,ones(length(new_i),1),new_val,p,1);
             cf=min(param.cardfun(length(new_i):end));
 %             if maxval_om0>param.lambda*(1+param.epsStop)
             if maxval_om0-cf*param.lambda>param.epsStop/10
+%             if maxval_om0-param.lambda>param.epsStop/10
                 maxval_om=maxval_om0;
             else
                 maxval_om=-inf; 
@@ -342,8 +350,8 @@ while cont
         
         %%
         if debug
-            fprintf('  maxval_l1=%f < %f     maxval_om=%f < %f\n',maxval_l1,param.mu,maxval_om,param.lambda*cf);
-            fprintf('maxval_l1/mu = %f maxval_om/(cf*lambda) = %f\n',maxval_l1/param.mu,maxval_om/(cf*param.lambda));
+            fprintf('   maxval_l1=%f < %f     maxval_om=%f < %f\n',maxval_l1,param.mu,maxval_om,param.lambda*cf);
+            fprintf('   maxval_l1/mu = %f maxval_om/(cf*lambda) = %f\n',maxval_l1/param.mu,maxval_om/(cf*param.lambda));
         end
         
         %% no atoms added, break

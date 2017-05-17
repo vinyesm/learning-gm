@@ -156,16 +156,22 @@ for q=qs
         if val<param.lambda*(1+param.epsStop)
             %%      few proximal steps for postprcessing
             %             keyboard;
-            if pm && ActiveSet.atom_count>0 && param.f~=1
-                fprintf('No new atom found, prox steps for cleaning after PS.. \n');
-                if param.f==4
-                    S=inputData.X1*inputData.X1;
-                elseif param.f==5
-                    S=inputData.X;
+            if pm && ActiveSet.atom_count>0 
+                fprintf(' ...No new atom found, prox steps for cleaning after PS.. \n');
+                if param.f==1
+                    [Z2,ActiveSet]=prox_cleaning_prox(Z1,Z2,inputData.Y,ActiveSet,param,20,0);
+                else
+                    if param.f==4
+                        S=inputData.X1*inputData.X1;
+                    elseif param.f==5
+                        S=inputData.X;
+                    end
+                    [Z2,ActiveSet]=prox_cleaning(Z1,Z2,S,ActiveSet,param,20,0);
                 end
-                [Z2,ActiveSet]=prox_cleaning(Z1,Z2,S,ActiveSet,param,20,0);
                 Z=Z1+Z2;
-                if param.f==4
+                if param.f==1
+                    [Hall,fall] = build_Hessian_prox(inputData,param,atoms_l1_sym(:,ActiveSet.I_l1),ActiveSet.atoms);
+                elseif param.f==4
                     [Hall,fall] = build_Hessian_l1_sym(inputData,param,atoms_l1_sym(:,ActiveSet.I_l1),ActiveSet.atoms);
                 elseif param.f==5
                     [Hall,fall] = build_Hessian_l1_SM(inputData,param,atoms_l1_sym(:,ActiveSet.I_l1),ActiveSet.atoms);
@@ -175,7 +181,7 @@ for q=qs
                 [u, kBest,val] = lmo_spsd_TPower(-H,param);
                 cf=min(param.cardfun(kBest:end));
                 %             fprintf('old val=%f new val=%f < %f.. \n',val_old,val, param.lambda*cf);
-                %                             keyboard;
+%                 keyboard;
             end
         end
         
@@ -220,8 +226,9 @@ for q=qs
         flag.var=varIJ;
         
         if param.verbose==1
-            fprintf('   maxIJ = %2.4e, thresh = %2.4e\n',maxIJ, param.mu*(1+param.epsStop));
-            fprintf('   varIJ = %2.4e, thresh = %2.4e, length(currI)=%d\n',varIJ, param.lambda*(1+param.epsStop / kBest)* param.cardfun(kBest), length(currI));
+            fprintf(' maxIJ = %2.4e, thresh = %2.4e\n',maxIJ, param.mu*(1+param.epsStop));
+            fprintf(' varIJ = %2.4e, thresh = %2.4e\n',varIJ, param.lambda*(1+param.epsStop / kBest)* param.cardfun(kBest));
+            fprintf(' length(currI)=%d\n', length(currI));
             rho=p/2;
             if ~isempty(pen)
                 dg1=abs(trace(H*Z)+pen(end));
@@ -229,7 +236,7 @@ for q=qs
                 dg1=abs(trace(H*Z));
             end
             dg2=max(maxIJ-param.mu, varIJ-param.lambda)*rho;
-            fprintf('   dg1 = %2.4e dg2 = %2.4e  dg =  %2.4e\n',dg1,dg2,dg1+dg2);
+%             fprintf('   dg1 = %2.4e dg2 = %2.4e  dg =  %2.4e\n',dg1,dg2,dg1+dg2);
         end
         
         
@@ -239,7 +246,7 @@ for q=qs
             %         keyboard;
             c=0;
         elseif takenI
-            fprintf('This support has already been added. Stopping\n');
+            fprintf(' This support has already been added. Stopping\n');
             %c=0;
         elseif varIJ > param.lambda*cf*(1+param.epsStop)
             ActiveSet.I = [ActiveSet.I, currI];
@@ -290,19 +297,23 @@ end
 
 %% postprocessing to blocks
 
-if param.f~=1
+
 if pp==1
     if ~isempty(ActiveSet.atoms)
-        fprintf('Postprocessing.. \n');
-        if param.f==4
-            S=inputData.X1*inputData.X1;
-        elseif param.f==5
-            S=inputData.X;
+        fprintf('Cleaning.. \n');
+        if param.f==1
+            [Z2,ActiveSet]=prox_cleaning_prox(Z1,Z2,inputData.Y,ActiveSet,param,100,1);
+            Z=Z1+Z2;
+        else
+            if param.f==4
+                S=inputData.X1*inputData.X1;
+            elseif param.f==5
+                S=inputData.X;
+            end
+            [Z2,ActiveSet]=prox_cleaning(Z1,Z2,S,ActiveSet,param,100,1);
+            Z=Z1+Z2;
         end
-        [Z2,ActiveSet]=prox_cleaning(Z1,Z2,S,ActiveSet,param,100,1);
-        Z=Z1+Z2;
     end
-end
 end
 
 if pt==1

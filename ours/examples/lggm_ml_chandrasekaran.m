@@ -131,76 +131,121 @@ imagesc(abs(Lsl));colormap hot
 title('L');
 axis square
 
-keyboard;
-
 save('Lsl','Lsl', 'Ssl');
 
 
 %%%___________________________
 %%
-S2=inv(2*eigs(Lsl,1, 'la')*eye(p)-Lsl);
+% S2=inv(2*eigs(Lsl,1, 'la')*eye(p)-Lsl);
 p=size(Lsl,1);
 param.verbose=1;
-%%
+%
 param.f=1; %prox
 param.verbose=1;
 inputData.Y=eye(p)+Lsl;
 
-%%
+%
 % param.f=4;
 % param.verbose=1;
 % inputData.X1=S2^.5;
 % inputData.X2=S2^.5;
 % inputData.Y=-eye(p);
 
-%%
+%
 % param.f=5;
 % inputData.X=S;
 % inputData.Y=-eye(p);
 
-%%
+%
 % reg param
 % beta=.5;
 % param.cardfun=((1:p).^beta)/p^beta;
-% param.cardfun(1)=inf;
+% param.cardfun(1:5)=inf;
+% param.cardfun(150:end)=inf;
 param.cardfun=inf*ones(1,p);
 param.cardfun(100)=1;
-lam=1.5;
-gam=10;
+lam=10;
+% lam=12;
+gam=100;
 param.lambda=lam;
 param.mu=gam;
-param.max_nb_main_loop=4;
+param.max_nb_main_loop=100;
 
 %% blocks
 [Z Z1 Z2 ActiveSet hist param flag output] = cgan_l1_omega(inputData,param);
 
 
-%% reconstruction l1+om
+%% 
 if ~isempty(ActiveSet.alpha)
     Uso=bsxfun(@times,sqrt(ActiveSet.alpha)',ActiveSet.atoms);
-    nl=size(ActiveSet.atoms,2);
-    Dfin=zeros(p+nl);
-    Dfin(1:nl,1:nl)=eye(nl);
-    Dfin((nl+1):(nl+p),(nl+1):(nl+p))=-Z1;
-    Dfin(1:nl,(nl+1):(nl+p))=Uso';
-    Dfin((nl+1):(nl+p),1:nl)=Uso;
 else
+    Uso=zeros(p,1);
     Dfin=Z1;
 end
 
+%% reorder
+
+[I]=grayorder(Uso~=0);
+
+% Z = linkage(full(Uso),'ward');
+% [Cres,I]=order_of_tree(Z);
+% 
+genesI0=genesI;
+genesI=genesI(I);
+UsoI=Uso(I,:);
+Z2II=Z2(I,I);
+imp_idxII=imp_idxI(I);
+%%
+
 figure(1);clf;
-subplot(1,4,1);
-imagesc(abs(Dfin)>1e-10);
+subplot(2,3,1);
+imagesc(abs(Uso)>1e-10);
 axis square;
-subplot(1,4,2);
-imagesc(abs(Dfin));
-axis square;
-subplot(1,4,3);
-imagesc(abs(Z1));
-title('S')
-axis square;
-subplot(1,4,4);
+subplot(2,3,2);
 imagesc(abs(Z2));
 title('L')
 axis square;
+subplot(2,3,3);
+imagesc(imp_idxI');
+axis square;
+subplot(2,3,4);
+imagesc(abs(UsoI)>1e-10);
+axis square;
+subplot(2,3,5);
+imagesc(abs(Z2II));
+title('L')
+axis square;
+subplot(2,3,6);
+imagesc(imp_idxII');
+colormap hot
+axis square;
+
+figure(4);clf;
+subplot(2,3,1);
+imagesc(abs(Ssl)>1e-3);
+title('S');
+axis square
+subplot(2,3,2);
+imagesc(abs(Lsl));colormap hot
+title('L');
+axis square
+subplot(2,3,3);
+imagesc(imp_idxI');
+axis square;
+subplot(2,3,4);
+imagesc(abs(Ssl(I,I))>1e-3);
+title('S');
+axis square
+subplot(2,3,5);
+imagesc(abs(Lsl(I,I)));colormap hot
+title('L');
+axis square
+subplot(2,3,6);
+imagesc(imp_idxII');
+colormap hot
+axis square;
+
+
+
+
 

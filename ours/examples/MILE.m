@@ -11,47 +11,35 @@ addpath('../TPower_1.0/algorithms/TPower/');
 addpath('../TPower_1.0/misc/');
 addpath('../../glasso-matlab');
 
-?run('pp_MILE.m');
+run('pp_MILE.m');
+
+p=size(S,1);
 
 %%
-%% our norm psd with decomposition S-M sparse_omega_lgm
-po=size(S,1);
-p=po;
-param.max_nb_main_loop=2;%2;%1000
-%%
-% param.f=4;
-% param.verbose=1;
-% inputData.X1=S^.5;
-% inputData.X2=S^.5;
-%%  
-param.f=5;
+param.f=4;
 param.verbose=1;
-inputData.X=S;
-%%
-inputData.Y=-eye(po);
+inputData.X1=S^.5;
+inputData.X2=S^.5;
+%%  
+% param.f=5;
+% param.verbose=1;
+% inputData.X=S;
+% %%
 
-%% reg param
-beta=.5;
-param.cardfun=((1:p).^beta)/p^beta;
-param.cardfun(1)=inf;
-param.cardfun(50:end)=inf;
-lam=1;
-gam=.2;
+%% our norm psd with decomposition S-M sparse_omega_lgm
+inputData.Y=-eye(p);
+param.cardfun=inf*ones(1,p);
+param.cardfun(100)=1;
+lam=.1;
+gam=.001;
 param.lambda=lam;
 param.mu=gam;
+param.max_nb_main_loop=100;
 
-%% init with graphical lasso
-% rho=1;
-% tol=1e-6;
-% maxIt=10;
-% keyboard;
-% [Theta W] = graphicalLasso(S, rho, maxIt, tol);
-% keyboard;
 
 %% blocks
 [Z Z1 Z2 ActiveSet hist param flag output] = cgan_l1_omega(inputData,param);
-obj_l1_om=hist.obj(end);
-keyboard;
+
 
 %% reconstruction l1+om
 if ~isempty(ActiveSet.alpha)
@@ -66,7 +54,7 @@ else
     Dfin=Z1;
 end
 
-figure(1);clf;
+figure(10);clf;
 subplot(1,4,1);
 imagesc(abs(Dfin)>1e-10);
 axis square;
@@ -81,35 +69,35 @@ subplot(1,4,4);
 imagesc(abs(Z2));
 title('L')
 axis square;
+colormap hot;
 
-keyboard;
 save('mile','Dfin', ...
 'Z', 'Z1', 'Z2', 'ActiveSet', 'hist' ,'param', 'flag' ,'output');
 
-%% tr+l1
-param.lambda=.6; %lamda ~ 2/k*mu
-param.mu=0.1;
-param.max_nb_main_loop=2;
-param.niterPS=10000;
-param.cardfun=inf*ones(1,p);
-param.cardfun(p)=1;
-[Z_tr Z1_tr Z2_tr ActiveSet_tr hist_tr param_tr flag_tr output_tr] = cgan_l1_omega(inputData,param);
-
-
-
-
-%% reconstruction tr+l1
-if ~isempty(ActiveSet_tr.alpha)
-    Uso_tr=bsxfun(@times,sqrt(ActiveSet_tr.alpha)',ActiveSet_tr.atoms);
-    nl_tr=size(ActiveSet_tr.atoms,2);
-    Dfin_tr=zeros(p+nl_tr);
-    Dfin_tr(1:nl_tr,1:nl_tr)=eye(nl_tr);
-    Dfin_tr((nl_tr+1):(nl_tr+p),(nl_tr+1):(nl_tr+p))=-Z1_tr;
-    Dfin_tr(1:nl_tr,(nl_tr+1):(nl_tr+p))=Uso_tr';
-    Dfin_tr((nl_tr+1):(nl_tr+p),1:nl_tr)=Uso_tr;
-else
-    Dfin_tr=Z1_tr;
-end
-
-obj_l1_om
-hist_tr.obj(end)
+% %% tr+l1
+% param.lambda=.6; %lamda ~ 2/k*mu
+% param.mu=0.1;
+% param.max_nb_main_loop=2;
+% param.niterPS=10000;
+% param.cardfun=inf*ones(1,p);
+% param.cardfun(p)=1;
+% [Z_tr Z1_tr Z2_tr ActiveSet_tr hist_tr param_tr flag_tr output_tr] = cgan_l1_omega(inputData,param);
+% 
+% 
+% 
+% 
+% %% reconstruction tr+l1
+% if ~isempty(ActiveSet_tr.alpha)
+%     Uso_tr=bsxfun(@times,sqrt(ActiveSet_tr.alpha)',ActiveSet_tr.atoms);
+%     nl_tr=size(ActiveSet_tr.atoms,2);
+%     Dfin_tr=zeros(p+nl_tr);
+%     Dfin_tr(1:nl_tr,1:nl_tr)=eye(nl_tr);
+%     Dfin_tr((nl_tr+1):(nl_tr+p),(nl_tr+1):(nl_tr+p))=-Z1_tr;
+%     Dfin_tr(1:nl_tr,(nl_tr+1):(nl_tr+p))=Uso_tr';
+%     Dfin_tr((nl_tr+1):(nl_tr+p),1:nl_tr)=Uso_tr;
+% else
+%     Dfin_tr=Z1_tr;
+% end
+% 
+% obj_l1_om
+% hist_tr.obj(end)

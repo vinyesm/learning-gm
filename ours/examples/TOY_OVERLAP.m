@@ -42,8 +42,8 @@ param.cardfun=inf*ones(1,p);
 param.cardfun(k)=1;
 
 %%% n=5000
-param.lambda=.5; %lamda ~ 2/k*mu
-param.mu=.12;
+param.lambda=.3; %lamda ~ 2/k*mu
+param.mu=.1;
 
 %%
 %% Starting solution
@@ -100,8 +100,8 @@ Z=Z1+Z2;
 % keyboard;
 
 %% tr+l1
-param.lambda=.35; %lamda ~ 2/k*mu
-param.mu=0.1;
+param.lambda=.3; %lamda ~ 2/k*mu
+param.mu=0.12;
 param.max_nb_main_loop=2;
 param.niterPS=10000;
 param.cardfun=inf*ones(1,p);
@@ -179,7 +179,7 @@ pbaspect([1 1 1]);
 title('estimated support');
 colorbar
 
-THRESH=1e-4;
+THRESH=1e-3;
 
 figure(6);clf;
 subplot(3,2,1)
@@ -228,7 +228,7 @@ rec1=1-sum(sum(sign(Doo)+sign(Z1T)))/p^2;
 rec1_tr=1-sum(sum(sign(Doo)+sign(Z1trT)))/p^2;
 fprintf('rec1=%f  rec1_tr=%f\n',rec1,rec1_tr);
 
-save('TOY_OVERLAP', 'Dmargo', 'Doo', 'Dfull', 'S', ...
+save('TOY_OVERLAP2', 'Dmargo', 'Doo', 'Dfull', 'S', ...
                      'Z', 'Z1', 'Z2', 'ActiveSet', 'hist', 'param', 'flag', 'output', 'Dfin', ...
                      'Z_tr', 'Z1_tr', 'Z2_tr', 'ActiveSet_tr', 'hist_tr', 'param_tr', 'flag_tr', 'output_tr', 'Dfin_tr', ...
                      'THRESH');

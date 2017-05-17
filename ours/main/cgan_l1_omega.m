@@ -67,8 +67,10 @@ output.time=0;
 
 fprintf('\n \n CGAN L1 OMEGA\n');
 
-if param.f==4
-    fprintf('Warning : change build_atoms_hessian_l1_sym when loss is not .5*|S^.5*X*S.^5-I|\n');
+if param.f==1
+    [ Q,q,atoms_l1_sym ] = build_atoms_hessian_prox(inputData.Y,param.mu);
+elseif param.f==4
+%     fprintf('Warning : change build_atoms_hessian_l1_sym when loss is not .5*|S^.5*X*S.^5-I|\n');
     [ Q,q,atoms_l1_sym ] = build_atoms_hessian_l1_sym(inputData.X1*inputData.X1,param.mu);
 elseif param.f==5
     [ Q,q,atoms_l1_sym ] = build_atoms_hessian_l1_SM(inputData.X,param.mu); %score matching
@@ -154,7 +156,7 @@ for q=qs
         if val<param.lambda*(1+param.epsStop)
             %%      few proximal steps for postprcessing
             %             keyboard;
-            if pm && ActiveSet.atom_count>0
+            if pm && ActiveSet.atom_count>0 && param.f~=1
                 fprintf('No new atom found, prox steps for cleaning after PS.. \n');
                 if param.f==4
                     S=inputData.X1*inputData.X1;
@@ -288,6 +290,7 @@ end
 
 %% postprocessing to blocks
 
+if param.f~=1
 if pp==1
     if ~isempty(ActiveSet.atoms)
         fprintf('Postprocessing.. \n');
@@ -299,6 +302,7 @@ if pp==1
         [Z2,ActiveSet]=prox_cleaning(Z1,Z2,S,ActiveSet,param,100,1);
         Z=Z1+Z2;
     end
+end
 end
 
 if pt==1

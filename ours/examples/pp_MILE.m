@@ -68,6 +68,9 @@ Z = linkage(X3','ward');
 [Cres,I]=order_of_tree(Z);
 X4=X3(:,I);
 
+%% seubseet of 250 genes
+X4=X4(:,1:200);
+
 S=cov(X4);
 
 figure(3);

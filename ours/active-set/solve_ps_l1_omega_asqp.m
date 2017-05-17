@@ -373,7 +373,7 @@ while cont
             if debug_update
                 if param.f==4
                     [Hall_new0,fall_new0] = build_Hessian_l1_sym(inputData,param,atoms_l1_sym(:,ActiveSet.I_l1),aom);
-                    [Hall_new,fall_new] = update_Hessian_l1_sym(S,param,Hall, fall,atoms_l1_sym(:,ActiveSet.I_l1),aom,2);
+                    [Hall_new,fall_new] = update_Hessian_l1_sym(S,inputData,param,Hall, fall,atoms_l1_sym(:,ActiveSet.I_l1),aom,2);
                 elseif param.f==5
                     [Hall_new0,fall_new0] = build_Hessian_l1_SM(inputData,param,atoms_l1_sym(:,ActiveSet.I_l1),aom);
                     [Hall_new,fall_new] = update_Hessian_l1_SM(S,param,Hall, fall,atoms_l1_sym(:,ActiveSet.I_l1),aom,2);
@@ -392,7 +392,9 @@ while cont
                     error('the update is not correct\n');
                 end
             else
-                if param.f==4
+                if param.f==1
+                    [Hall_new,fall_new] = update_Hessian_prox(inputData.Y,param,Hall, fall,atoms_l1_sym(:,ActiveSet.I_l1),aom,2);
+                elseif param.f==4
                     [Hall_new,fall_new] = update_Hessian_l1_sym(S,param,Hall, fall,atoms_l1_sym(:,ActiveSet.I_l1),aom,2);
                 elseif param.f==5
                     [Hall_new,fall_new] = update_Hessian_l1_SM(S,param,Hall, fall,atoms_l1_sym(:,ActiveSet.I_l1),aom,2);
@@ -459,7 +461,9 @@ while cont
                         error('the update is not correct\n');
                     end
                 else
-                    if param.f==4
+                    if param.f==1
+                        [Hall_new,fall_new] = update_Hessian_prox(inputData.Y,param,Hall, fall,atoms_l1_sym(:,ActiveSet.I_l1),aom,1);
+                    elseif param.f==4
 %                         keyboard;
                         [Hall_new,fall_new] = update_Hessian_l1_sym(S,param,Hall, fall,atoms_l1_sym(:,ActiveSet.I_l1),aom,1);
                     elseif param.f==5

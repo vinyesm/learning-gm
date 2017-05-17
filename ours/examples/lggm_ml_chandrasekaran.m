@@ -33,7 +33,13 @@ addpath(strcat(HOME,'/util/'))
 run('pp_MILE.m');
 % run('pp_MILE_bis.m');
 % run('pp_movielens_2.m');
-lambda=2.5;
+
+% WHEN 500 genes
+% lambda=2.5;
+% mu=.02;
+
+% WHEN 200 genes
+lambda=1;
 mu=.02;
 
 %% LVGGM Chandrasekaran S-L, (Sparse-Low Rank)
@@ -125,27 +131,45 @@ imagesc(abs(Lsl));colormap hot
 title('L');
 axis square
 
-save('Lsl',Lsl, Ssl);
+keyboard;
+
+save('Lsl','Lsl', 'Ssl');
 
 
 %%%___________________________
 %%
+S2=inv(2*eigs(Lsl,1, 'la')*eye(p)-Lsl);
 p=size(Lsl,1);
-param.f=5;
 param.verbose=1;
-inputData.X=inv(2*eigs(Lsl,1, 'la')*eye(p)-Lsl);
-inputData.Y=-eye(p);
+%%
+param.f=1; %prox
+param.verbose=1;
+inputData.Y=eye(p)+Lsl;
 
+%%
+% param.f=4;
+% param.verbose=1;
+% inputData.X1=S2^.5;
+% inputData.X2=S2^.5;
+% inputData.Y=-eye(p);
+
+%%
+% param.f=5;
+% inputData.X=S;
+% inputData.Y=-eye(p);
+
+%%
 % reg param
-beta=.5;
-param.cardfun=((1:p).^beta)/p^beta;
-param.cardfun(1)=inf;
-param.cardfun(50:end)=inf;
-lam=.01;
-gam=.01;
+% beta=.5;
+% param.cardfun=((1:p).^beta)/p^beta;
+% param.cardfun(1)=inf;
+param.cardfun=inf*ones(1,p);
+param.cardfun(100)=1;
+lam=1.5;
+gam=10;
 param.lambda=lam;
 param.mu=gam;
-param.max_nb_main_loop=100;
+param.max_nb_main_loop=4;
 
 %% blocks
 [Z Z1 Z2 ActiveSet hist param flag output] = cgan_l1_omega(inputData,param);

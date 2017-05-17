@@ -7,20 +7,20 @@
 % We assume latept variables ndependept
 
 %% add paths
-% clc
-% clc; clear all; close all;
-% addpath('../main');
-% addpath('../active-set');
-% addpath('../atom-selection');
-% addpath('../utils');
-% addpath('../other');
-% addpath('../prox');
-% addpath('../TPower_1.0');
-% addpath('../TPower_1.0/algorithms/TPower/');
-% addpath('../TPower_1.0/misc/');
-% 
-% % %% data
-% run('../../toy-data/toy_disjoint.m');k=20;
+clc
+clc; clear all; close all;
+addpath('../main');
+addpath('../active-set');
+addpath('../atom-selection');
+addpath('../utils');
+addpath('../other');
+addpath('../prox');
+addpath('../TPower_1.0');
+addpath('../TPower_1.0/algorithms/TPower/');
+addpath('../TPower_1.0/misc/');
+
+% %% data
+run('../../toy-data/toy_overlap.m');k=15;
 
 %% our norm psd with decomposition S-M sparse_omega_lgm
 p=po;
@@ -42,8 +42,8 @@ param.cardfun=inf*ones(1,p);
 param.cardfun(k)=1;
 
 %%% n=5000
-param.lambda=.2; %lamda ~ 2/k*mu
-param.mu=.1;
+param.lambda=.5; %lamda ~ 2/k*mu
+param.mu=.15;
 
 %%
 %% Starting solution
@@ -228,7 +228,7 @@ rec1=1-sum(sum(sign(Doo)+sign(Z1T)))/p^2;
 rec1_tr=1-sum(sum(sign(Doo)+sign(Z1trT)))/p^2;
 fprintf('rec1=%f  rec1_tr=%f\n',rec1,rec1_tr);
 
-save('TOY_DISJOINT', 'Dmargo', 'Doo', 'Dfull', 'S', ...
+save('TOY_OVERLAP', 'Dmargo', 'Doo', 'Dfull', 'S', ...
                      'Z', 'Z1', 'Z2', 'ActiveSet', 'hist', 'param', 'flag', 'output', 'Dfin', ...
                      'Z_tr', 'Z1_tr', 'Z2_tr', 'ActiveSet_tr', 'hist_tr', 'param_tr', 'flag_tr', 'output_tr', 'Dfin_tr', ...
                      'THRESH');

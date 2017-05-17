@@ -1,16 +1,18 @@
 %% TOY EXAMPLE WITH TREE STRUCTURE ON OBSERVED VARIABLES
+%% AND OVERLAPPING BLOCKS
+%%
 clear all; clc;
 addpath ../ours/utils/
 
 %%
-
-ks=[20 20 20];
-pl=length(ks);
-po=sum(ks);
+lsupp=[1:15;11:25;21:35;31:45];
+pl=size(lsupp,1);
+ks=15*ones(1,pl);
+po=max(lsupp(:));
 n=50*po;
 
 pt=pl+po;
-clo=.7./sqrt(ks);
+clo=.8./sqrt(ks);
 % clo=.5./(ones(1,pl));
 corr=zeros(po);
 
@@ -27,14 +29,8 @@ corr_all(pl+1:end,pl+1:end)=Tree;
 
 %% observed-latent
 for i=1:pl
-    if i>1
-        i1=sum(ks(1:(i-1)))+1+pl;
-    else
-        i1=1+pl;
-    end
-    i2=i1+ks(i)-1;
-    corr_all(i1:i2,i)=ones(ks(i),1)*clo(i);
-    corr_all(i,i1:i2)=ones(ks(i),1)'*clo(i);
+    corr_all(pl+lsupp(i,:),i)=ones(ks(i),1)*clo(i);
+    corr_all(i,pl+lsupp(i,:))=ones(ks(i),1)'*clo(i);
 end
 
 
@@ -60,7 +56,7 @@ axis off;
 text(0,.5,descr)
 pbaspect([1 1 1]);
 subplot(1,2,2)
-imagesc(abs(Dfull));
+imagesc(max(abs(Dfull(:)))-abs(Dfull));
 colorbar;
 pbaspect([1 1 1]);
 title('true complete conc. mat.');

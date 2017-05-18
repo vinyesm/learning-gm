@@ -1,15 +1,23 @@
 \section{Related Work}
 \label{related}
+Two works, learning the structure on the observed variables and discovering latent variables and the structure of the complete latent gaussian graphical model
 GGM l1\\
-. Yuan and Lin (2007) and Banerjee et al. (2008) proposed the graphical lasso (glasso) estimator
-A conditional independence graph is sometimes expected to have particular structure, such as ‘hub’ nodes with many neighbors. This motivated Defazio and Caetano (2012) to consider
-regularization with a sorted ?1 norm.
+\citet{yuan2007model}] and \citet{banerjee2008model} proposed the graphical lasso estimator to impose sparsity on the concentration matrix.
+A conditional independence graph is sometimes expected to have particular structure, such as ‘hub’ nodes with many neighbors. This motivated Defazio and Caetano (2012) to consider regularization with a sorted $\ell_1$ norm.
 GGM with other regularizations\\
 LGGM\\
-\citet{hosseini2016learning}
-\citet{chandrasekaran2010}
+\citet{chandrasekaran2010} propose a convex formulation to learn the structure on the observed variables and identifying the number of latent variables. \\
+\citet{xu2017speeding}  In order to speed
+up the estimation of the sparse plus low-rank components, we propose a sparsity constrained maximum likelihood estimator based on matrix factorization, and an efficient alternating gradient descent algorithm with hard thresholding to solve it.\\
+
+\citet{hosseini2016learning}  present a framework to jointly learn both a network among observed variables and densely connected groups and overlaping groups of variables. revealing the existence of potential latent variables. Not convex, alternate.
+
 
 ref in hosseini
-\citet{tan2015cluster}
-\citet{marlin2009sparse}
+\citet{marlin2009sparse} MAP estimation with a prior that prefers sparse graphs. In this paper, we use the stochastic block model as a prior
+\citet{tan2015cluster} linkage on the variables
+
 \citet{celik2014efficient}
+
+Ambroise et al., 2009) uses an Expectation-
+Maximization approach for variational estimation of the latent structure while inferring the network among the entire variable

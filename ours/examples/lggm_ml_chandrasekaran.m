@@ -245,17 +245,16 @@ imagesc(imp_idxII');
 colormap hot
 axis square;
 
-keyboard
+% keyboard
 %%
 %  starting solution  init sparse matrix
+RUN_OM=1;
 
 if RUN_OM
 
-
-RUN_OM=1;
 p=size(S,1);
 param.lambda=.1;
-param.mu=.005;
+param.mu=.006;
 param.f=4;
 param.verbose=1;
 inputData.X1=S^.5;
@@ -265,20 +264,24 @@ param.cardfun=inf*ones(1,p);
 param.cardfun(100)=1;
 param.max_nb_main_loop=100;
 
+%init
+Doo=Ssl;
+Doo(abs(Doo)<1e-3)=0;
 ActiveSet.max_atom_count_reached=0;
 ActiveSet.I={};
+ActiveSet.k={};
 ActiveSet.alpha= [];
 ActiveSet.atoms=[];
 ActiveSet.atom_count = 0;
 if param.f==4
-    [ Q,q,atoms_l1_sym ] = build_atoms_hessian_l1_sym(Ssl,0);
+    [ Q,q,atoms_l1_sym ] = build_atoms_hessian_l1_sym(Doo,0);
 elseif param.f==5
-    [ Q,q,atoms_l1_sym ] = build_atoms_hessian_l1_SM(Ssl,0);
+    [ Q,q,atoms_l1_sym ] = build_atoms_hessian_l1_SM(Doo,0);
 end
-[ActiveSet.I_l1, ActiveSet.beta]=mat2l1index(-Ssl,atoms_l1_sym);
+[ActiveSet.I_l1, ActiveSet.beta]=mat2l1index(-Doo,atoms_l1_sym);
 
 
-startingZ.Z1=-Ssl;
+startingZ.Z1=-Doo;
 startingZ.Z2= zeros(p);
 
 Z1=zeros(p);
@@ -290,6 +293,6 @@ Z2=zeros(p);
 Z=Z1+Z2;
 
 [Z Z1 Z2 ActiveSet hist param flag output] = cgan_l1_omega(inputData,param,startingZ,ActiveSet);
-save(['MILE_100_lam_' num2str(lam) '_mu_' num2str(mu) '_rank_' num2str(ActiveSet.atom_count)], 'Z','Z1','Z2','ActiveSet','param');
+save(['MILE_100_lam_' num2str(param.lambda) '_mu_' num2str(param.mu) '_rank_' num2str(ActiveSet.atom_count) '_2'], 'Ssl', 'Lsl','Z','Z1','Z2','ActiveSet','param');
 
 end

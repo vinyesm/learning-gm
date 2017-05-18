@@ -49,7 +49,7 @@ axis square;
 
 figure(4);clf;
 subplot(2,3,1);
-imagesc(abs(-Z1)>1e-6);
+imagesc(abs(-Z1)>1e-3);
 title('S');
 axis square
 subplot(2,3,2);
@@ -60,12 +60,38 @@ subplot(2,3,3);
 imagesc(imp_idxI');
 axis square;
 subplot(2,3,4);
-imagesc(abs(-Z1(I,I))>1e-6);
+imagesc(abs(-Z1(I,I))>1e-3);
 title('S');
 axis square
 subplot(2,3,5);
 imagesc(abs(Z2(I,I)));colormap hot
 title('L');
+axis square
+subplot(2,3,6);
+imagesc(imp_idxII');
+colormap hot
+axis square;
+
+
+figure(5);clf;
+subplot(2,3,1);
+imagesc(abs(Ssl)>1e-3);
+title('Ssl');
+axis square
+subplot(2,3,2);
+imagesc(abs(Lsl));colormap hot
+title('Lsl');
+axis square
+subplot(2,3,3);
+imagesc(imp_idxI');
+axis square;
+subplot(2,3,4);
+imagesc(abs(Ssl(I,I))>1e-3);
+title('Ssl');
+axis square
+subplot(2,3,5);
+imagesc(abs(Lsl(I,I)));colormap hot
+title('Lsl');
 axis square
 subplot(2,3,6);
 imagesc(imp_idxII');

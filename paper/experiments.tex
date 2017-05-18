@@ -3,17 +3,12 @@
 
 \subsection{Synthetic data}
 
-We consider three differents latent-variable Gaussian graphical models.
+We consider three differents LVGGM with $p=45$ observed variables, with the structure on observed variables is a tree :\\
+- \textit{model 1}: consists of $h=3$ latent variables, we split observed variables in three groups of size $15$ and connect each group to a single latent variable.\\
+- \textit{model 2}: consists of $h=3$ latents variables we split observed variables in three groups of different sizes ($20,15$ and $10$) and connect each group to a single latent variable.\\
+- \textit{model 3}: consists of of $h=4$ latent variables. We select $4$ overlapping groups of size $15$ of observed variables, with a $0.26$ overlap, and connect each one of them to a different latent variable.\\
 
-The first model consists of $p=90$ observed variables and $h=3$ latent variables, we split observed variables in three groups of size $30$ and connect each group to a single latent variable. The second model is formed by $p=30+15+5=50$ observed variables and $h=3$ latents variables we split observed variables in three groups of different sizes ($30,15$ and $5$) and connect each group to a single latent variable. The third model consists of $p=$ observed variables and $h=5$, we select $5$ overlapping groups of observed variables, with an overlap of $ $, and connect each one of them to a different latent variable.
-
-For all three models the conditional graphical model structure of the observed variables is a tree with the edge partial correlation coefficients equal to 0.25. 
-
-k-3-blocs+tree structure\\
-
-different size blocs\\
-
-overlapping blocs\\
+We generate $50\times p$ samples for each model. Figure \ref{fig:synth} shows the estimated complete concentration matrix obtained for our formulation with the score matching loss compared to a regularization $\ell_1+\tr$, as in \citet{chandrasekaran2010}. For  the $\ell_1+\tr$ regularization we perform an SVD on the obtained low rank matrix to visualize the effect of latent variables. For the first two models the size of the blocks is fixed and for the third model we use an extention of the introduced matrix norm $\Omega_{k,\succeq}$ where the blocks can have different sizes and each size $k$ is penalized by $w_{k}=\sqrt{k}$, see section \ref{subsec:norm}. The regularization parameters are chosen so to recover sparsity pattern on $S$ and sparsity pattern of $L$ for our method and the rank for $\ell_1+\tr$ regularization.  The decomposition of the low rank component for $\ell_1+\tr$ regularization is not unique so this method cannot recover the effect of latent variables. Both methods recover the sparsity pattern of $S$ and only our methods recovers the structure of the effects of latent variables.
 
 %\begin{figure}[h]
 %  \begin{minipage}[ccc]{\linewidth}
@@ -60,22 +55,27 @@ overlapping blocs\\
 %\end{figure}
 
 \begin{figure}
+\label{fig:synth}
 \center
 \hfill
-\subfigure[Title A]{\includegraphics[width=2.2cm]{fig/disjoint_om}}
+\subfigure[ours]{\includegraphics[width=2.2cm]{fig/disjoint_om}}
 \hfill
-\subfigure[Title B]{\includegraphics[width=2.2cm]{fig/disjoint_tr}}
+\subfigure[$\ell_1+\tr$]{\includegraphics[width=2.2cm]{fig/disjoint_tr}}
 \hfill
-\subfigure[Title C]{\includegraphics[width=2.2cm]{fig/diff_om}}
+\subfigure[ours]{\includegraphics[width=2.2cm]{fig/diff_om}}
 \hfill
-\subfigure[Title A]{\includegraphics[width=2.2cm]{fig/diff_tr}}
+\subfigure[$\ell_1+\tr$]{\includegraphics[width=2.2cm]{fig/diff_tr}}
 \hfill
-\subfigure[Title B]{\includegraphics[width=2.2cm]{fig/overlap_om}}
+\subfigure[ours]{\includegraphics[width=2.2cm]{fig/overlap_om}}
 \hfill
-\subfigure[Title C]{\includegraphics[width=2.2cm]{fig/overlap_tr}}
+\subfigure[$\ell_1+\tr$]{\includegraphics[width=2.2cm]{fig/overlap_tr}}
 \hfill
-\caption{Title for both}
+\caption{Estimated complete concentration matrices: for \textit{model 1} in (a) ours and (b) $\ell_1+\tr$ regularization; for \textit{model 2} in (c) ours and (d) $\ell_1+\tr$ regularization; for \textit{model 3} in (e) ours and (f) $\ell_1+\tr$ regularization }
 \end{figure}
 
 
-\subsection{dataset}
+
+
+\subsection{Microarray dataset}
+
+We consider the MILE data \citep{haferlach2010clinical} that measure the mRNA expression levels of 16,853 genes in 541 patients with acute myeloid leukemia (AML), an aggressive blood cancer. We selected 250 genes with higth variance and  also genes highly associated with AML: FLT3, NPM1, CEBPA, KIT, N-RAS, MLL, WT1. We fix the size of the blocks to $k=100$ for our method. 

@@ -245,7 +245,51 @@ imagesc(imp_idxII');
 colormap hot
 axis square;
 
+keyboard
+%%
+%  starting solution  init sparse matrix
+
+if RUN_OM
 
 
+RUN_OM=1;
+p=size(S,1);
+param.lambda=.1;
+param.mu=.005;
+param.f=4;
+param.verbose=1;
+inputData.X1=S^.5;
+inputData.X2=S^.5;
+inputData.Y=-eye(p);
+param.cardfun=inf*ones(1,p);
+param.cardfun(100)=1;
+param.max_nb_main_loop=100;
+
+ActiveSet.max_atom_count_reached=0;
+ActiveSet.I={};
+ActiveSet.alpha= [];
+ActiveSet.atoms=[];
+ActiveSet.atom_count = 0;
+if param.f==4
+    [ Q,q,atoms_l1_sym ] = build_atoms_hessian_l1_sym(Ssl,0);
+elseif param.f==5
+    [ Q,q,atoms_l1_sym ] = build_atoms_hessian_l1_SM(Ssl,0);
+end
+[ActiveSet.I_l1, ActiveSet.beta]=mat2l1index(-Ssl,atoms_l1_sym);
 
 
+startingZ.Z1=-Ssl;
+startingZ.Z2= zeros(p);
+
+Z1=zeros(p);
+nz=find(ActiveSet.beta>1e-15);
+for j=nz'
+    Z1=Z1+ActiveSet.beta(j)*reshape(atoms_l1_sym(:,ActiveSet.I_l1(j)),p,p);
+end
+Z2=zeros(p);
+Z=Z1+Z2;
+
+[Z Z1 Z2 ActiveSet hist param flag output] = cgan_l1_omega(inputData,param,startingZ,ActiveSet);
+save(['MILE_100_lam_' num2str(lam) '_mu_' num2str(mu) '_rank_' num2str(ActiveSet.atom_count)], 'Z','Z1','Z2','ActiveSet','param');
+
+end

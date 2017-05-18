@@ -17,8 +17,8 @@ p=size(S,1);
 
 
 
-las=[1 .1 .05];
-mus=[.01 .05 .01];
+las=[.1 .05];
+mus=[.001 .005 .0001];
 
 for lam=las
     for mu=mus
@@ -37,6 +37,6 @@ for lam=las
         param.mu=mu;
         param.max_nb_main_loop=100;
         [Z Z1 Z2 ActiveSet hist param flag output] = cgan_l1_omega(inputData,param);
-        save(['MILE_100_lam_' num2str(lam) '_rank_' num2str(ActiveSet.atom_count)], 'Z','Z1','Z2','ActiveSet','param');
+        save(['MILE_100_lam_' num2str(lam) '_mu_' num2str(mu) '_rank_' num2str(ActiveSet.atom_count)], 'Z','Z1','Z2','ActiveSet','param');
     end
 end

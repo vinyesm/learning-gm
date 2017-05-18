@@ -33,3 +33,28 @@ pbaspect([1 1 1]);
 title('estimated support');
 colorbar
 colormap jet
+
+
+figure(2);clf;
+imagesc(-min(abs(Dfin).*(abs(Dfin)>THRESH),.1));
+pbaspect([1 1 1]);
+% title('estimated complete conc. mat.');
+colormap pink
+mkdir('fig');
+print('fig/disjoint_om','-depsc')
+
+figure(3);clf;
+imagesc(-min(abs(Dfin_tr).*(abs(Dfin_tr)>THRESH),.1));
+pbaspect([1 1 1]);
+% title('estimated complete conc. mat.');
+colormap pink
+mkdir('fig');
+print('fig/disjoint_tr','-depsc')
+
+figure(4);clf
+h = colorbar([0.1 0.1  0.8  0.7],...
+  'location','Southoutside',...
+  'XTick',[-1 -0.5 0 0.5 1]);
+colormap pink
+axis off
+set(h,'OuterPosition',[0.1 0.1 0.8 0.8]);

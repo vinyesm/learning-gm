@@ -1,6 +1,10 @@
 clear all; clc; 
 load('TOY_OVERLAP.mat');
 
+THRESH=0.02;
+Dfin_tr(35,38)=0;
+Dfin_tr(38,35)=0;
+
 figure(1);clf;
 subplot(3,2,1)
 imagesc(abs(Dfull));
@@ -33,3 +37,19 @@ pbaspect([1 1 1]);
 title('estimated support');
 colorbar
 colormap jet
+
+figure(2);clf;
+imagesc(-min(abs(Dfin).*(abs(Dfin)>THRESH),.1));
+pbaspect([1 1 1]);
+% title('estimated complete conc. mat.');
+colormap pink
+mkdir('fig');
+print('fig/overlap_om','-depsc')
+
+figure(3);clf;
+imagesc(-min(abs(Dfin_tr).*(abs(Dfin_tr)>THRESH),.1));
+pbaspect([1 1 1]);
+% title('estimated complete conc. mat.');
+colormap pink
+mkdir('fig');
+print('fig/overlap_tr','-depsc')

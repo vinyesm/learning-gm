@@ -53,7 +53,7 @@ print('fig/disjoint_tr','-depsc')
 
 
 
-%%
+%% only if recent version of matlab
 A=ones(size(Dfull,1));
 A(Dfull==0)=0;
 G = graph(A,'OmitSelfLoops');

@@ -253,8 +253,8 @@ RUN_OM=1;
 if RUN_OM
 
 p=size(S,1);
-param.lambda=.1;
-param.mu=.006;
+param.lambda=.15;
+param.mu=.01;
 param.f=4;
 param.verbose=1;
 inputData.X1=S^.5;

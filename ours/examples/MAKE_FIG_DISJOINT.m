@@ -51,10 +51,7 @@ colormap pink
 mkdir('fig');
 print('fig/disjoint_tr','-depsc')
 
-figure(4);clf
-h = colorbar([0.1 0.1  0.8  0.7],...
-  'location','Southoutside',...
-  'XTick',[-1 -0.5 0 0.5 1]);
-colormap pink
-axis off
-set(h,'OuterPosition',[0.1 0.1 0.8 0.8]);
+A=ones(size(Dfull,1));
+A(Dfull==0)=0;
+G = graph(A);
+

@@ -2,6 +2,7 @@
 \label{setup}
 
 \subsection{Latent Variable GGM}
+\label{sec:ggm}
 We consider the problem of Latent-Variable Gaussian Graphical Model (LVGGM) selection. Let $O$ and $H$ be the set of indexes of observed variables and latent variables respectively. Let $p$ be the number of observed variables, $|O|=p$, and  $h$ the number of latent variables $|H|=h$. We denote $\Sigma\in\RR^{(p+h)\times(p+h)}$ the complete covariance matrix and $K=\Sigma^{-1}$ the complete concentration matrix. $\hat{\Sigma}\in\RR^{(p+h)\times(p+h)}$ denotes the empirical covariance matrix. We only have access to the empirical marginal covariance matrix $\hat{\Sigma}_{OO}$. The Schur complement of $K$ with respect to block $K_{HH}$ gives 
 
 \begin{align}
@@ -38,15 +39,15 @@ If we assume that the latent variables are independent, i.e. $K_{HH}$ diagonal, 
 %and three losses ML and the two quadratic\\
 
 %$UU$ decomposition with sparsity on columns... Transition, in order to obtain convex formulation..\\
-
-\begin{align}
-FIGURE ?
-\end{align}
+%
+%\begin{align}
+%FIGURE ?
+%\end{align}
 
 \subsection{$k,\succeq$-rank and its relaxation}
 \label{subsec:norm}
 
-\citet{richard2014tight} propose a new matrix norm that yield to estimates for low-rank matrices with multiple sparse factors. Based on the same ideas we define a norm \footnote{In fact it is a gauge. For more on gauges see \citet{chandrasekaran2010convex} and references therein.}  that yields to estimates with sparse and p.s.d factors. We assume that the sparsity of the factors is known and fixed and discuss a generalization for factors of different sparsity levels at the end of the section.
+\citet{richard2014tight} propose a new matrix atomic norm that yield to estimates for low-rank matrices with multiple sparse factors. Based on the same ideas we define a norm \footnote{In fact it is a gauge. For more on gauges see \citet{chandrasekaran2010convex} and references therein.}  that yields to estimates with sparse and p.s.d factors. We assume that the sparsity of the factors is known and fixed and discuss a generalization for factors of different sparsity levels at the end of the section.
 
 The following definition generalizes the notion of rank for p.s.d matrices.
 \begin{mydef}
@@ -96,21 +97,46 @@ where $w_{k}$ is an increasing cardinality function that penalises each sparsity
 %f_{T}(K)&:=\frac{1}{2}\|\hat{\Sigma}^{1/2}K\hat{\Sigma}^{1/2}-I\|_2^2.
 %\end{align}
 
-Since the norm $\Omega_k$ only provides symmetric p.s.d matrices (as a sum of p.s.d rank-one matrices), the nonnegative constraint on $L$ is useless in problem \ref{opt}. \TODO{What about $S-L \succeq 0$}
-We choose to consider quadratic losses in this paper, this allowing us to use an efficient algorithm for optimization.
-
-Problem \ref{opt} is a minimization of a quadratic funtion $f$ regularized by an atomic norm $\gamma$  defined as the infimal convolution of $\mu\|.\|_{1}$ and $\lambda\Omega_k(.)$, $\gamma(M)=\inf\{\mu\|A\|_{1}+\lambda\Omega_k(B)|M=A+B\}$
+We use $\Omega_{k,\succeq}$ to impose structure to the low rank component and consider the following convex optimization problem,
 \begin{align}
-\label{opt_quad}
-\min_{K} f(K)+ \gamma(K)
+\label{opt}
+\min_{S,L} f(S-L)+\mu\|S\|_{1}+\lambda\Omega_k(L) \quad s.t. \quad S-L \succeq 0 \quad L \succeq 0.
 \end{align}
+Since the norm $\Omega_k$ only provides symmetric p.s.d matrices, as a sum of p.s.d rank-one matrices, the nonnegativity constraint on $L$ can be dropped. The regularization $\mu\|S\|_{1}+\lambda\Omega_k(L)$ defines an atomic norm itself as shown in the following lemma
 
+\begin{lemm} $\gamma(M):=\inf\{\mu\|A\|_{1}+\lambda\Omega_k(B)|M=A+B\}$ is an atomic norm
+\end{lemm}
+Thus our problem is rewritten as
+\begin{align}
+\label{opt_at}
+\min_{K} f(K)+ \gamma(K) \quad s.t. \quad K \succeq 0,
+\end{align}
+and $K$ writes as a sum of atoms of $\ell_1$ and atoms of $\Omega_k$. Therefore we can recover a sparse component and a low-rank component with multiple sparse factors.\\
 
 \subsection{Algorithm}
-We use algorithm for optimizing problems regularized by atomic norms from \citet{vinyes2017}
-LMO is the polar gauge,  we use truncated power iteration of \citet{yuan2013truncated}, after adding the frobenius norm of the matrix.\\
+We choose to consider quadratic losses $f_{T}$ and $f_{T}$, introduced in section \ref{sec:ggm}, this allowing us to use an efficient algorithm for optimization. Optimization problem \ref{opt_at} is a minimization of a quadratic funtion regularized by an atomic norm.\TODO{What about $S-L \succeq 0$} We use algorithm for optimizing problems regularized by atomic norms from \citet{vinyes2017} LMO is the polar gauge,  we use truncated power iteration of \citet{yuan2013truncated}, after adding the frobenius norm of the matrix.\\
 
 explain three loops, first we add support, then atoms on support, then as 
+
+ \begin{algorithm}
+   \caption{Column generation}
+\label{alg:colgen}
+\begin{algorithmic}[1]
+\State\textbf{Require: } $f$ convex differentiable, tolerance $\epsilon$ 
+\State\textbf{Initialization: } $x^0=0$, $A^0=\varnothing$, $k_0=0$, $t=1$
+\Repeat
+\State $a_{t}\gets \arg\max_{a \in \A} \dt{-\nabla f(x^{t-1})}{a}$ %\Comment New atom selection : using oracle for $\A$
+\State $A^t \gets [A^{t-1},a_{t}]$
+\State $c^t\gets \arg\min_{c \geq 0} f \big (A^{t} c \big ) + \|c\|_1$ %\Comment Relaxed primal : solved with active-set procedure
+\State $I\gets \{i \mid c_i^t>0\}$,
+%\State $k_t \gets |I|$ 
+\State $c^t \gets c^t_{I}$
+\State $A^t \gets A^t_{\cdot,I}$
+\State $x^t\gets A^{t}c^t$
+\State $t \gets t+1$
+\Until $\max_{a \in \A} \dt{-\nabla f(x^{t-1})}{a}\leq \epsilon$
+\end{algorithmic}
+  \end{algorithm}
 
 
 

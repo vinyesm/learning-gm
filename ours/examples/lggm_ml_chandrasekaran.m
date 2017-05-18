@@ -248,13 +248,14 @@ axis square;
 % keyboard
 %%
 %  starting solution  init sparse matrix
+keyboard;
 RUN_OM=1;
 
 if RUN_OM
 
 p=size(S,1);
-param.lambda=.15;
-param.mu=.01;
+param.lambda=.1;
+param.mu=.005;
 param.f=4;
 param.verbose=1;
 inputData.X1=S^.5;
@@ -268,11 +269,11 @@ param.max_nb_main_loop=100;
 Doo=Ssl;
 Doo(abs(Doo)<1e-3)=0;
 ActiveSet.max_atom_count_reached=0;
-ActiveSet.I={};
-ActiveSet.k={};
-ActiveSet.alpha= [];
-ActiveSet.atoms=[];
-ActiveSet.atom_count = 0;
+% ActiveSet.I={};
+% ActiveSet.k={};
+% ActiveSet.alpha= [];
+% ActiveSet.atoms=[];
+% ActiveSet.atom_count = 0;
 if param.f==4
     [ Q,q,atoms_l1_sym ] = build_atoms_hessian_l1_sym(Doo,0);
 elseif param.f==5
@@ -293,6 +294,6 @@ Z2=zeros(p);
 Z=Z1+Z2;
 
 [Z Z1 Z2 ActiveSet hist param flag output] = cgan_l1_omega(inputData,param,startingZ,ActiveSet);
-save(['MILE_100_lam_' num2str(param.lambda) '_mu_' num2str(param.mu) '_rank_' num2str(ActiveSet.atom_count) '_2'], 'Ssl', 'Lsl','Z','Z1','Z2','ActiveSet','param');
+save(['MILE_100_lam_' num2str(param.lambda) '_mu_' num2str(param.mu) '_rank_' num2str(ActiveSet.atom_count) '_3.mat'], 'Ssl', 'Lsl','Z','Z1','Z2','ActiveSet','param');
 
 end

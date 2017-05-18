@@ -51,6 +51,13 @@ colormap pink
 mkdir('fig');
 print('fig/disjoint_tr','-depsc')
 
+figure(4);clf;
+imagesc(-((abs(Dfin))>THRESH));
+pbaspect([1 1 1]);
+% title('estimated complete conc. mat.');
+mkdir('fig');
+print('fig/disjoint_true','-depsc')
+
 
 
 %% only if recent version of matlab

@@ -58,6 +58,14 @@ colormap pink
 colorbar
 print('fig/cb','-depsc')
 
+figure(5);clf;
+imagesc(-((abs(Dfin))>THRESH));
+pbaspect([1 1 1]);
+% title('estimated complete conc. mat.');
+mkdir('fig');
+print('fig/diff_true','-depsc')
+
+
 %% only if recent version of matlab
 
 A=ones(size(Dfull,1));

@@ -11,7 +11,9 @@ else
 end
 
 %% reorder
-
+% Uso=Uso(:,size(Uso,2):-1:1);
+Uso=Uso(:,[1 5 6 7]);
+Z2=Uso*Uso';
 [I]=grayorder(Uso~=0);
 
 % Z = linkage(full(Uso),'ward');
@@ -96,4 +98,48 @@ axis square
 subplot(2,3,6);
 imagesc(imp_idxII');
 colormap hot
+axis square
+
+figure(10);clf;
+imagesc(-(abs(-Z1(I,I)+eye(p))>1e-3));
+colormap hot
 axis square;
+mkdir('fig');
+print('fig/MILE_Som','-depsc')
+
+figure(12);clf;
+imagesc(-min(abs(Z2II),.1));
+colormap hot
+axis square;
+mkdir('fig');
+print('fig/MILE_Lom','-depsc')
+
+figure(13);clf;
+imagesc(-(abs(UsoI)>1e-10));
+colormap hot
+axis square;
+% axis off
+pbaspect([1 4 1]);
+mkdir('fig');
+print('fig/MILE_blocks','-depsc')
+
+figure(15);clf;
+imagesc(-abs(Lsl));
+colormap hot
+axis square;
+mkdir('fig');
+print('fig/MILE_Lsl_not_ordered','-depsc')
+
+figure(14);clf;
+imagesc(-abs(Lsl(I,I)));
+colormap hot
+axis square;
+mkdir('fig');
+print('fig/MILE_Lsl_ordered','-depsc')
+
+figure(17);clf;
+imagesc(-(abs(Ssl(I,I))>1e-3));
+colormap hot
+axis square;
+mkdir('fig');
+print('fig/MILE_Ssl_ordered','-depsc')

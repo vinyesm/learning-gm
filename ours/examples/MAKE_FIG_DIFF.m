@@ -57,3 +57,14 @@ pbaspect([1 1 1]);
 colormap pink
 colorbar
 print('fig/cb','-depsc')
+
+%%
+A=ones(size(Dfull,1));
+A(Dfull==0)=0;
+G = graph(A,'OmitSelfLoops');
+figure(4);clf;
+plot(G,'Layout', 'circle')
+axis equal;
+axis off;
+mkdir('fig');
+print('fig/diff_graph','-depsc')

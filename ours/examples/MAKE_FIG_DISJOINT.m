@@ -51,7 +51,16 @@ colormap pink
 mkdir('fig');
 print('fig/disjoint_tr','-depsc')
 
+
+
+%%
 A=ones(size(Dfull,1));
 A(Dfull==0)=0;
-G = graph(A);
+G = graph(A,'OmitSelfLoops');
+figure(4);clf;
+plot(G,'Layout', 'circle')
+axis equal;
+axis off;
+mkdir('fig');
+print('fig/disjoint_graph','-depsc')
 

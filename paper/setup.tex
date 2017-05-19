@@ -3,34 +3,34 @@
 
 \subsection{Latent Variable GGM}
 \label{sec:ggm}
-We consider the problem of Latent-Variable Gaussian Graphical Model (LVGGM) selection. Let $O$ and $H$ be the set of indexes of observed variables and latent variables respectively. Let $p$ be the number of observed variables, $|O|=p$, and  $h$ the number of latent variables $|H|=h$. We denote $\Sigma\in\RR^{(p+h)\times(p+h)}$ the complete covariance matrix and $K=\Sigma^{-1}$ the complete concentration matrix. $\hat{\Sigma}\in\RR^{(p+h)\times(p+h)}$ denotes the empirical covariance matrix. We only have access to the empirical marginal covariance matrix $\hat{\Sigma}_{OO}$. The Schur complement of $K$ with respect to block $K_{HH}$ gives 
+We consider a multivariate Gaussian variable $(X_{O},X_{H})\in\RR^{p+h}$ where $O$ and $H$ are the set of indexes of observed variables, $p=|O|$, and latent variables,$h=|H|$ respectively. We denote $\Sigma\in\RR^{(p+h)\times(p+h)}$ the complete covariance matrix and $K=\Sigma^{-1}$ the complete concentration matrix. Let $\hat{\Sigma}\in\RR^{(p+h)\times(p+h)}$ denote the empirical covariance matrix. We only have access to the empirical marginal covariance matrix $\hat{\Sigma}_{OO}$. It is well known that the marginal concentration matrix on the observed variables can be computed from the full concentration matrix as
 
 \begin{align}
 \Sigma_{OO}^{-1} = K_{OO}-K_{OH}K_{HH}^{-1}K_{HO}.
 \end{align}
 
-$K_{OO}$ specifies conditional dependency of observed variables given the latent variables and $K_{OH}$ specifies the effects of latent variables on observed variables. Assuming the model is sparse and has a small number of latent variables, $K_{OO}$ is a sparse matrix and $K_{OH}K_{HH}^{-1}K_{HO}$ is low rank. \citet{chandrasekaran2010} suggest to approximate $\hat{\Sigma}$  by $S-L$ where $S$ is sparse and $L$ is low rank, and propose a convex relaxation
+We assume that the original graphical model is sparse. Since for GGM the nonzeros of the concentration matrix correspond to the edges of the graphical model we have that $K$ is sparse. Then, $K_{OO}$ should be a sparse matrix and assuming has a small number of latent variables is low rank. \citet{chandrasekaran2010} suggest to approximate $\hat{\Sigma}$  by $S-L$ where $S$ is sparse and $L$ is low rank, and propose a convex relaxation
 
 \begin{align}
 \label{opt_tr}
 \min_{S,L} f(S-L)+\mu\|S\|_{1}+\lambda \tr(L) \quad s.t. \quad S-L \succeq 0 \quad L \succeq 0,
 \end{align}
 
-where the function $f$ is the loss function. Typically,in graphical model seletion $f$ is the log-likelihood
+where the function $f$ is the loss function. Typically, in GGM seletion $f$ is the minus log-likelihood
 
 \begin{align}
-f_{ML}(K)&:=\log\det(K) - \tr(K\hat{\Sigma})
+f_{ML}(K)&:=-\left(\log\det(K) - \tr(K\hat{\Sigma})\right)
 \end{align}
 
-However $\textit{logdet}$ is not Lipschitz preventing us from applying efficient algorithms of the family of conditional gradient, for which there is not convergence results for this setting.  Two other natural losses, which have the advantage of being quadratic, are the second order Taylor expansion arount the identity matrix of the log-likelihood $f_{T}$ and the score matching loss $f_{SM}$, introduced by \citet{hyvarinen2005estimation} and used for graphical model estimation in \citet{lin2016estimation},
+However $\textit{logdet}$ is not Lipschitz preventing us from applying efficient algorithms from the family of conditional gradient, for which there is not convergence results for this setting.  Two other natural losses, that have the advantage of being quadratic, are the second order Taylor expansion arount the identity matrix of the log-likelihood $f_{T}$ and the score matching loss $f_{SM}$, introduced by \citet{hyvarinen2005estimation} and used for GGM estimation in \citet{lin2016estimation},
 \begin{align}
 f_{T}(K)&:=\frac{1}{2}\|\hat{\Sigma}^{1/2}K\hat{\Sigma}^{1/2}-I\|_2^2\\
 f_{SM}(K)&:=\frac{1}{2}\tr(K^2 \hat{\Sigma})-\tr(K).
 \end{align}
 
-\citet{chandrasekaran2010} show that the regularized maximum log-likelihood formulation \ref{opt_tr} provides estimates  that have the same sparsity pattern and rank than $K_{OO}$ and $K_{OH}K_{HH}^{-1}K_{HO}$. The low rank component of the estimate only retrieves latent variable subspace but not its structure.\\
+\citet{chandrasekaran2010} show that under appropriate tecnical conditions, the regularized maximum log-likelihood formulation (\ref{opt_tr}) provides estimates  that have the same sparsity pattern and rank than $K_{OO}$ and $K_{OH}K_{HH}^{-1}K_{HO}$. The obtained low rank component of the estimates retrieves the latent variable subspace. However it does not recover its structure, in particular the connectivity between the variables $(X_{O}$ and $X_{H}$ cannot be recoverd since ther is not a unique decomposition of the low rank component.\\
 
-The low rank component writes $UU^{\top}$, where $U\in\RR^{p\times h}$. If we assume that the latent variables are independent, i.e. $K_{HH}$ diagonal,  unicity of the decomposition $UU^{\top}$ can be achieved by imposing more structure on the low rank component, which we discuss in the next paragraph \ref{subsec:norm}. Under appropriate identifiability conditions, discussed in section \ref{sec:id}), it allows us to retrieve the structure of the full LVGGM. In order to obtain a convex formulation we introduce a norm for low rank \textit{positive semidefinite} (p.s.d.) matrices with multiple sparse factors. 
+The low rank component writes $UU^{\top}$, where $U\in\RR^{p\times h}$. If we assume that the latent variables are independent, i.e. $K_{HH}$ diagonal,  unicity of the decomposition $UU^{\top}$ can be achieved by imposing more structure on the low rank component, which we discuss in the next paragraph \ref{subsec:norm}. Under appropriate identifiability conditions, discussed in section \ref{sec:id}, it allows us to retrieve the structure of the full LVGGM. In order to obtain a convex formulation we introduce a norm for low rank \textit{positive semidefinite} (p.s.d.) matrices with multiple sparse factors. 
 
 %and that the decomposition is unique (see section \ref{sec:id} on identifiability).  Unicity of $K_{OH}$ is achieved imposing more structure on the low rank component, which we discuss in the next paragraph.
  
@@ -47,9 +47,9 @@ The low rank component writes $UU^{\top}$, where $U\in\RR^{p\times h}$. If we as
 \subsection{$k,\succeq$-rank and its relaxation}
 \label{subsec:norm}
 
-\citet{richard2014tight} propose a new matrix atomic norm that yield to estimates for low-rank matrices with multiple sparse factors. Based on the same ideas we define a norm \footnote{In fact it is a gauge. For more on gauges see \citet{chandrasekaran2010convex} and references therein.}  that yields to estimates with sparse and p.s.d factors. We assume that the sparsity of the factors is known and fixed and discuss a generalization for factors of different sparsity levels at the end of the section.
+\citet{richard2014tight} propose a new matrix atomic norm that yields to estimates for low-rank matrices with multiple sparse factors. In particular they define a norm for p.s.d. matrices \footnote{In fact it is a gauge. For more on gauges see \citet{chandrasekaran2010convex} and references therein.}  that yields to estimates with sparse and p.s.d factors. We assume that the sparsity of the factors is known and fixed and discuss a generalization for factors of different sparsity levels at the end of the section.
 
-The following definition generalizes the notion of rank for p.s.d matrices.
+The following definition generalizes the notion of rank for p.s.d matrices,
 \begin{mydef}
 ($k,\succeq$-rank) For a p.s.d  matrix $Z\in\RR^{p\times p}$ we define its $k,\succeq$-rank as the optimal
 value of the optimization problem:
@@ -57,7 +57,8 @@ value of the optimization problem:
 \min \|c\|_0 \quad \text{s.t.} \quad Z=\sum_{i} c_i u_i u_{i}^\top, \quad c_i\in \RR^{+} \quad u_{i}\in\RR^p  :   \|u_{i}\|_0 \leq k, \|u_{i}\|_2 = 1.
 \end{align}
 \end{mydef}
-Note that not all p.s.d matrices can have such a decomposition, so $k,\succeq$-rank can be infinite. We can derive a convex relaxation of the $k,\succeq$-rank, is the gauge $\Omega_{k,\succeq}$ \footnote{$\Omega_{k,\succeq}$ is not a norm but only a gauge because the set $\{u u^\top \in\RR^p  :   \|u\|_0 \leq k, \|u\|_2 = 1\}$  is not centrally symmetric} . 
+Note that not all p.s.d matrices can have such a decomposition, so the $k,\succeq$-rank can be infinite. We can derive a convex relaxation of the $k,\succeq$-rank, the convex function $\Omega_{k,\succeq}$, defined as follows :
+%the atomic norm%\footnote{$\Omega_{k,\succeq}$ is not a norm but only a gauge because the set $\{u u^\top \in\RR^p  :   \|u\|_0 \leq k, \|u\|_2 = 1\}$  is not centrally symmetric} $\Omega_{k,\succeq}$. The next lemma provides an explicit formulation of the dual norm
 \begin{mydef}
 ($\Omega_{k,\succeq}$) For a p.s.d  matrix $Z\in\RR^{p\times p}$ 
 \begin{align}
@@ -70,11 +71,11 @@ Equivalently, as shown in \citet{richard2014tight},
 %where  $\mathcal{A}_{I,\succeq}:=\{Z_I\succeq 0 ,\supp(Z_I)=I\times I\}$.
 \end{mydef}
 
-We can have $\Omega_{k,\succeq}(Z)=+\infty$ even if $Z$ is p.s.d., if $Z$ cannot be decomposed in $k$-sparse,  rank-1 p.s.d. factors.
+We can have $\Omega_{k,\succeq}(Z)=+\infty$ even if $Z$ is p.s.d., if $Z$ cannot be decomposed in $k$-sparse,  rank-1 p.s.d. factors. See \citet{richard2014tight} for examples. In the next lemma we give the Linear Minimization Oracle (LMO) for $\Omega_{k,\succeq}$ :
 
-\begin{lemm} The polar gauge of $\Omega_{k,\succeq}$ of a symmetric $Y\RR^{p\times p}$ is
+\begin{lemm} Let $Y\in\RR^{p\times p}$ be a symmetric matrix. The \rm{LMO} of $\Omega_{k,\succeq}$ writes
 \begin{align}
-\Omega_{k,\succeq}^{\circ}(Y):= \max_{I\in\mathcal{G}^p_k}\lambda^{+}_{max}(Y_{II})
+\rm{LMO}_{\Omega_{k,\succeq}}(Y)= \max_{I\in\mathcal{G}^p_k}\lambda^{+}_{max}(Y_{II})
 \end{align}
 \end{lemm}
 
@@ -97,32 +98,39 @@ where $w_{k}$ is an increasing cardinality function that penalizes each sparsity
 %f_{T}(K)&:=\frac{1}{2}\|\hat{\Sigma}^{1/2}K\hat{\Sigma}^{1/2}-I\|_2^2.
 %\end{align}
 
-We use $\Omega_{k,\succeq}$ to impose structure to the low rank component and consider the following convex optimization problem,
+We use $\Omega_{k,\succeq}$ to impose structure on the low rank component and consider the following convex optimization problem,
 \begin{align}
 \label{opt}
-\min_{S,L} f(S-L)+\mu\|S\|_{1}+\lambda\Omega_k(L) \quad s.t. \quad S-L \succeq 0 \quad L \succeq 0.
+\min_{S,L} f(S-L)+\lambda\big(\gamma\|S\|_{1}+\Omega_k(L)\big) \quad s.t. \quad S-L \succeq 0 \quad L \succeq 0.
 \end{align}
-Since the norm $\Omega_k$ only provides symmetric p.s.d matrices, as a sum of p.s.d rank-one matrices, the nonnegativity constraint on $L$ can be dropped. The regularization $\mu\|S\|_{1}+\lambda\Omega_k(L)$ defines an atomic norm on matrices as shown in the following lemma
-\begin{lemm} $\gamma(M):=\inf\{\mu\|A\|_{1}+\lambda\Omega_k(B)|M=A+B\}$ is an atomic norm and its dual is 
+Since the norm $\Omega_k$ only provides symmetric p.s.d matrices, as a sum of p.s.d rank-one matrices, the nonnegativity constraint on $L$ can be dropped. The regularization $\gamma\|S\|_{1}+\Omega_k(L)$ defines an atomic norm on matrices as shown in the following lemma
+\begin{lemm} $\bar{\Omega}(M):=\inf\{\gamma\|A\|_{1}+\Omega_k(B)\mid M=A+B\}$ is an atomic norm and its \rm{LMO}
 \begin{align*}
-\gamma^{\circ}(Y)=\max\left(\frac{\|Y\|_{\infty}}{\mu},\frac{\Omega_{k,\succeq}^{\circ}(Y)}{\lambda}\right)
+\rm{LMO}_{\bar{\Omega}}(Y)=\max\left(\frac{\|Y\|_{\infty}}{\gamma},\Omega_{k,\succeq}^{\circ}(Y)\right)
 \end{align*}
 \end{lemm}
-Thus our problem is rewritten as
+In order to rewrite our problem as a simple convex regularized by $\bar{\Omega}$, we drop the nonegativity constraint on $S-L$. Thus our problem is rewritten as
 \begin{align}
 \label{opt_at}
-\min_{K} f(K)+ \gamma(K) \quad s.t. \quad K \succeq 0,
+\min_{K} f(K)+ \bar{\Omega}(K) \quad s.t. \quad K \succeq 0,
 \end{align}
 and $K$ writes as a sum of atoms of $\ell_1$ and atoms of $\Omega_k$. Therefore we can recover a sparse component and a low-rank component with multiple sparse factors.\\
 
 \subsection{Algorithm}
-We choose to consider quadratic losses $f_{T}$ and $f_{SM}$, introduced in section \ref{sec:ggm}, this allowing us to use an efficient algorithm for optimization. We propose to solve problem (\ref{opt_at}) using a working set algorithm which solves a sequence
+We choose to consider quadratic losses $f_{T}$ and $f_{SM}$, introduced in section \ref{sec:ggm}, so that we can apply an efficient algorithm recently proposed by \citet{vinyes2017}(\texttt{FCG}). The algorithm consists of applying a Fully Corrective Frank Wolfe \citep{LacosteFCFW}, for which we need to compute the LMO at each iteration. However  the $\rm{LMO}_{\Omega_{k,\succeq}}$ consits of a generalization to asymmetric matrices of the rank-one sparse PCA problem for p.s.d matrices $XX^{\top}$,
+\begin{align*}
+\min u^{\top}XX^{\top}u \quad s.t.  \|u\|_0 \leq k,\quad \|u\|_2 = 1
+\end{align*}
+which is known to be an NP-hard problem \citep{moghaddam2008sparse}. We propose to use a Truncated Power Iteration (TPI) heuristic introduced by \citet{yuan2013truncated} to approximate the oracle. In order to apply the TPI to general symmetric matrices, we add the frobenius norm of the matrix before applying it. \\
+
+
+In practice, and in order to reduce the number of calls to TPI we propose to solve problem (\ref{opt_at}) using a working set algorithm which solves a sequence
 of problems of the form 
 \begin{align}
 \label{opt_ps}
-\min_{K} f(K)+ \gamma_{\mathcal{A}^{t}}(K) \quad s.t. \quad K \succeq 0,
+\min_{K} f(K)+ \bar{\Omega}_{\mathcal{A}^{t}}(K) \quad s.t. \quad K \succeq 0,
 \end{align}
-where $\gamma_{\mathcal{A}^{t}}$ is the atomic norm on a growing sequence of atomic sets $\mathcal{A}^{1}\subset \mathcal{A}^{2} \subset ... \subset \mathcal{A}^{t}$. We start with the atomic set of $\ell_1$-norm, $\mathcal{A}^{1}=\mathcal{A}_{\ell_{1}}$\footnote{$\mathcal{A}_{\ell_{1}}=\{\pm e_i e_j^{\top}\}$ where $e_i$ is the canonical basis of $\RR^p$}, and conider the sequence $\mathcal{A}^{t}=\mathcal{A}_{\ell_{1}}\cup \big\{uu^{\top} \quad \text{s.t.} \quad \supp(u)\subset \mathcal{S}, \|u\|_{2}=1 \big\}$ for a growing sequence of working sets $\mathcal{S}$. We use algorithm of \citet{vinyes2017} (\texttt{FCG}) to solve each problem (\ref{opt_ps})\footnote{Where we dropped the constraint $K  \succeq 0$}. This algorithm is a generalized version of conditional gradient which uses Linear Minimization Oracle (LMO), or equivalently  he polar gauge, to add an  atom at each iteration and then perform a fully correction of the weights on the atoms with an active set procedure. The method allows us to recover all the active atoms and its weights. in particular we recover the sparse component $S$ and the low-rank sparse component $UU^{\top}$.  In order to build the  sequence of working sets $\mathcal{S}$ we use Truncated Power Iteration(\texttt{TPower}) of \citet{yuan2013truncated} for p;s.d matrices. In order to apply to general symmetric matrices, we add the frobenius norm of the matrix before applying (\texttt{TPower}). The procedure is explained in algorithm \ref{alg:colgen_ggm} and consists on three loops: first we increase the atomic set $\mathcal{A}^{t}$ by adding a new support for $k$-rank sparse, then we solve the subproblem (\ref{opt_ps}) with \texttt{FCG} that internally uses an active-set procedure.
+where $\bar{\Omega}_{\mathcal{A}^{t}}$ is the atomic norm on a growing sequence of atomic sets $\mathcal{A}^{1}\subset \mathcal{A}^{2} \subset ... \subset \mathcal{A}^{t}$. We start with the atomic set of $\ell_1$-norm, $\mathcal{A}^{1}=\mathcal{A}_{\ell_{1}}$\footnote{$\mathcal{A}_{\ell_{1}}=\{\pm e_i e_j^{\top}\}$ where $e_i$ is the canonical basis of $\RR^p$}, and conider the sequence $\mathcal{A}^{t}=\mathcal{A}_{\ell_{1}}\cup \big\{uu^{\top} \quad \text{s.t.} \quad \supp(u)\subset \mathcal{S}, \|u\|_{2}=1 \big\}$ for a growing sequence of working sets $\mathcal{S}$. We use algorithm of \texttt{FCG} to solve each problem (\ref{opt_ps}). The method allows us to recover all the active atoms and its weights. in particular we recover the sparse component $S$ and the low-rank sparse component $UU^{\top}$.  In order to build the  sequence of working sets $\mathcal{S}$ we use TPI for p.s.d matrices.  The procedure is explained in algorithm \ref{alg:colgen_ggm} and consists on three loops: first we augment the atomic set $\mathcal{A}^{t}$ for atoms of  $\Omega_{k,\succeq}$, then we solve the subproblem (\ref{opt_ps}) with \texttt{FCG} that internally uses an active-set procedure.
 
 %explain three loops, first we add support, then atoms on support, then as 
 
@@ -135,7 +143,7 @@ where $\gamma_{\mathcal{A}^{t}}$ is the atomic norm on a growing sequence of ato
 \While{c=\texttt{true}}
 \State Compute $K^{t},S^{t},U^{t}$ applying \texttt{FCG} on problem (\ref{opt_ps}) restricted to atomic set $\mathcal{A}_{\ell_{1}} \cup \mathcal{A}_{\Omega}^{t}$ with warm start solution
 \State $G^{t}\gets -\nabla(K^t)$
-\State $I \gets \texttt{TPower}(G^{t})$
+\State $I \gets \texttt{TPI}(G^{t})$
 \If { $\lambda^{+}_{max}(G^{t}_{II})>\lambda(1+\epsilon)$}
 \State $\mathcal{A}_{\Omega}^{t+1}\gets \mathcal{A}_{\Omega}^{t}
  \cup \big\{uu^{\top} \quad \text{s.t.} \quad \supp(u)=I, \|u\|_{2}=1 \big\} $

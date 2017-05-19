@@ -95,23 +95,28 @@ We generate $50\times p$ samples for each model. Figure \ref{fig:synth} shows th
   &   \includegraphics[width=3.5cm]{fig/diff_tr}
    \\    (d)  \textit{model 1}, $\ell_1+\tr$ & (e)  \textit{model 2}, $\ell_1+\tr$  & (f)  \textit{model 3}, $\ell_1+\tr$  \\[6pt]
 \end{tabular}
-\caption{Estimated complete concentration matrices: for \textit{model 1} in (a) ours and (d) $\ell_1+\tr$ regularization; for \textit{model 2} in (b) ours and (e) $\ell_1+\tr$ regularization; for \textit{model 3} in (c) ours and (f) $\ell_1+\tr$ regularization }
+\caption{Estimated $|K_{ij}|$, for $K$ the complete concentration matrices where the three (resp. four) first rows and columns correspond to the latent variables of \textit{model 1} and \textit{model 3} (resp. \textit{model 2}) : for \textit{model 1} in (a) ours and (d) $\ell_1+\tr$ regularization; for \textit{model 2} in (b) ours and (e) $\ell_1+\tr$ regularization; for \textit{model 3} in (c) ours and (f) $\ell_1+\tr$ regularization }
 \end{figure}
 
 
 \subsection{Microarray dataset}
 
-We consider the MILE data \citep{haferlach2010clinical} that measure the mRNA expression levels of 16,853 genes in 541 patients with acute myeloid leukemia (AML), an aggressive blood cancer. We selected 250 genes in total, the ones with higher variance and  also genes highly associated with AML: FLT3, NPM1, CEBPA, KIT, N-RAS, MLL, WT1. We fix the size of the blocks to $k=100$ for our method and compare with the regularized maximum log-likelihood. Parameters are chosen so that the two methods recover similar sparse components. Figure \ref{fig:gen} shows qualitative results. (a) shows the low rank sparse component $UU^{\top}$ recovered by our method and (b) is the support of $U$. For a better visualization of the blocks we have reorered the lines of $U$ using Gray code. (c) shows the low rank component estimated by the the regularized maximum log-likelihood and (d) shows this same component reordered according to the blocks found by our method. Both methods seem to recover similar block of genes but our method provides more interpretability.
+We consider the MILE data \citep{haferlach2010clinical} that measure the mRNA expression levels of 16,853 genes in 541 patients with acute myeloid leukemia (AML), an aggressive blood cancer. The activity of genes is coupled by the activation of biological pathways. This motivates to search for a graphical model with latent variables connected to blocks of genes.
+
+We selected 250 genes with higher variance. We fix the size of the blocks to $k=100$ for our method and compare with the regularized maximum log-likelihood formulation of \citet{chandrasekaran2010}. The obtained empirical covariance matrix has very concentrate eigenvalues and the two first eigenvectors capture most of the covariance. Thus we select parameters for \citet{chandrasekaran2010} such as to recover a low rank component $\hat{L}_{tr}$ of rank two and sparse comonent $\hat{S}_{tr}$  . We then select the parameters of our method such as : to recover a sparse component with comparable level of sparsity as $\hat{S}_{tr}$ (cf. appendix), and a sparse low rank component  $\hat{L}_ours$. Figure \ref{fig:gen} shows qualitative results. (a) shows $\hat{S}_{tr}$; (b) shows the low rank sparse component $UU^{\top}$ recovered by our method. For a better visualization of the blocks we have reorered the lines of $U$ such that we group the genes belonging to the same groups. (c) shows $\hat{L}_{ours}$ and (d) shows $\hat{L}_{tr}$ with same order. \citet{chandrasekaran2010} does not recover the block structure while our method provides dense blocks.
+%Both methods recover similar block of genes but our method provides more
+%and  also genes highly associated with AML: FLT3, NPM1, CEBPA, KIT, N-RAS, MLL, WT1. We fix the size of the blocks to $k=100$ for our method and compare with the regularized maximum log-likelihood. Parameters are chosen so that the two methods recover similar sparse components. Figure \ref{fig:gen} shows qualitative results. (a) shows the low rank sparse component $UU^{\top}$ recovered by our method and (b) is the support of $U$. For a better visualization of the blocks we have reorered the lines of $U$ using Gray code. (c) shows the low rank component estimated by the the regularized maximum log-likelihood and (d) shows this same component reordered according to the blocks found by our method. Both methods seem to recover similar block of genes but our method provides more interpretability.
 
 \begin{figure}
 \label{fig:gen}
 \center
-\begin{tabular}{cccc}
-      \includegraphics[width=4cm]{fig/MILE_Lom}
+\begin{tabular}{ccccc}
+      \includegraphics[width=4cm]{fig/MILE_Lsl_not_ordered}
   &   \includegraphics[height=3.8cm]{fig/MILE_blocks}
-  &   \includegraphics[width=4cm]{fig/MILE_Lsl_not_ordered} 
+  &   \includegraphics[width=4cm]{fig/MILE_Lom} 
   &   \includegraphics[width=4cm]{fig/MILE_Lsl_ordered} 
-   \\   (a)  $\hat{L}$ ours  & (b) blocks &(c) $\hat{L}$ for $\ell_1+\tr$ &(d) $\hat{L}$ for $\ell_1+\tr$ ordered  
+  &   \includegraphics[height=3.8cm]{fig/colorbar} 
+   \\   (a)  $\hat{L}_{tr}$  & (b) blocks &(c) $\hat{L}_{ours}$ &(d) $\hat{L}_{tr}$ ordered  
 \end{tabular}
-\caption{Estimated low rank component for our method (a) and the support of the 4 rank-one 100-sparse components $uu^{\top}$  (b).  Estimated low rank component for maximum log-likelihood regularized by $\ell_1+\tr$ (d) and the same estimated where reordered (same order as the one in (a), revealed by the block structure) }
+\caption{Estimated low rank component $\hat{L}_{tr}$ for \citet{chandrasekaran2010} (a);  the support of the 4 rank-one 100-sparse components $uu^{\top}$ for our estimated low rank component  (b);  our estimated low rank component (d); and $\hat{L}_{tr}$  with the same order as ours }
 \end{figure}

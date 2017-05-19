@@ -112,7 +112,9 @@ imagesc(-min(abs(Z2II),.1));
 colormap hot
 axis square;
 mkdir('fig');
+set(gca, 'CLim', [-.18, 0]);
 print('fig/MILE_Lom','-depsc')
+
 
 figure(13);clf;
 imagesc(-(abs(UsoI)>1e-10));

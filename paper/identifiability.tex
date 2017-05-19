@@ -2,7 +2,9 @@
 \label{sec:id}
 %It is beyond the scope of this paper to provide in this a proof comparable to that of \citet{chandrasekaran2010} which would show that for . 
 
-In this section, we prove a first result towards showing that the optimisation problem (\ref{opt_at}) recovers the support of $S^*$ and the correct rank for each block under technical assumptions. Namely, we show that if  $M^{\ast}$ is a matrix that writes as  $M^{\ast}= S^{\ast}-L^{\ast}$, with $S^{\ast}$ an unknown sparse matrix and an unknown  low $k,\succeq$-rank matrix, that writes  $L^{\ast}=\sum_{I\in\mathcal{I}L^{I}}$. We want to know, given $M^{\ast}$, ther exist a unique decomposition $\left(S,(L^{I})_{I\in\mathcal{I}}\right)$ satisfying this conditions. We consider the case where the sets $I\in\mathcal{I}$ do not overlap.  \\
+In this section, we prove a first result towards showing that the optimisation problem (\ref{opt_at}) recovers the support of $S^*$ and the correct rank for each block under technical assumptions. We however do not show exactly that result, which would be beyond the scope of this work. 
+
+Following the work of~\citet{chandrasekaran2011rank}, we show that if  $M^{\ast}$ is a matrix that writes as  $M^{\ast}= S^{\ast}-L^{\ast}$, with $S^{\ast}$ an unknown sparse matrix and an unknown  low $k,\succeq$-rank matrix, which is itself a sum $L^{\ast}=\sum_{I\in\mathcal{I}L^{I}}$ of matrices $L^{I}$ each supported on $I \times I$ and with decomposition . We want to know, given $M^{\ast}$, ther exist a unique decomposition $\left(S,(L^{I})_{I\in\mathcal{I}}\right)$ satisfying this conditions. We consider the case where the sets $I\in\mathcal{I}$ do not overlap.  \\
 
 More formally we want to know under which conditions the following optimization problem 
 \begin{align}

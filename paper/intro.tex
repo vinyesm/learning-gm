@@ -12,6 +12,8 @@ In some applications, some effects can affect the data, that is, some of the rel
 
 In this work, we propose to impose more structure to the low rank matrix using a generalization of the trace norm introduced in Richard et al as a regularizer. This decomposition yields to a better interpretability of the graphical model structure recovering the structure of the complete graphical model. We propose a convex formulation with a quadratic loss function that can be optimized efficiently with the algorithm proposed in \citet{vinyes2017}.  Finally we study the identifiability of such decomposition. 
 
+The paper is structured as follows. In Section \ref{related} we review the relevant prior literature. In Section 3 we formulate the LVGGM estimation problem as a regularized convex problem that imposes a sparsity structure on the latent variables, we also propose a tractable algorithm. In Section 4 we study identifiability conditions. Experimental results are shown in Section 5.
+
 \subsection*{Notations}
 $\itgset{p}$ denotes the set ${1,...,p}$ and $\mathcal{G}^p_k$ denotes the
 set of subsets of $k$ elements in $\itgset{p}$. $|I|$ denotes the cardinality of a set $I$. If $v\in\RR^{p}$ is a vector, $\supp(v)$ denotes its support. If $M\in\RR^{p\times p}$ is a matrix, $I\subset\itgset{n}$ , $M_{II}\in\RR^{|I|\times |I|}$ is the submatrix obtained by selecting the rows and columns indexed by $I$ in $M$. For a symmetric matrix $M$, $\lambda_{\max}^+(M)$ is the largest positive eigenvalue and zero if they are all negative.

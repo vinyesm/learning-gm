@@ -101,7 +101,7 @@ We generate $50\times p$ samples for each model. Figure \ref{fig:synth} shows th
 
 \subsection{Microarray dataset}
 
-We consider the MILE data \citep{haferlach2010clinical} that measure the mRNA expression levels of 16,853 genes in 541 patients with acute myeloid leukemia (AML), an aggressive blood cancer. We selected 250 genes in total, the ones with higher variance and  also genes highly associated with AML: FLT3, NPM1, CEBPA, KIT, N-RAS, MLL, WT1. We fix the size of the blocks to $k=100$ for our method. Figure \ref{fig:gen} shows qualitative results. 
+We consider the MILE data \citep{haferlach2010clinical} that measure the mRNA expression levels of 16,853 genes in 541 patients with acute myeloid leukemia (AML), an aggressive blood cancer. We selected 250 genes in total, the ones with higher variance and  also genes highly associated with AML: FLT3, NPM1, CEBPA, KIT, N-RAS, MLL, WT1. We fix the size of the blocks to $k=100$ for our method and compare with the regularized maximum log-likelihood. Parameters are chosen so that the two methods recover similar sparse components. Figure \ref{fig:gen} shows qualitative results. (a) shows the low rank sparse component $UU^{\top}$ recovered by our method and (b) is the support of $U$. For a better visualization of the blocks we have reorered the lines of $U$ using Gray code. (c) shows the low rank component estimated by the the regularized maximum log-likelihood and (d) shows this same component reordered according to the blocks found by our method. Both methods seem to recover similar block of genes but our method provides more interpretability.
 
 \begin{figure}
 \label{fig:gen}

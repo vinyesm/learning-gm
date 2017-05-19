@@ -85,12 +85,37 @@
 \end{align}
 \end{lemm}
 
+\begin{proof}
+\begin{align}
+\Omega_{k,\succeq}^{\circ}(Y) 
+&=\max_{\Omega_{k,\succeq}(X)\leq 1} \tr{Y^{\top}X}\\
+&=\max_{c_i\geq 0, u_{i}, \|u_{i}\|_0=k, \|u_{i}\|_ 2=1 } \sum c_i u_{i}^{\top}Yu_{i} \quad s.t.  \sum c_i\leq 1\\
+&=\max_{\|u\|_0=k, \|u\|_ 2=1 } u^{\top}Yu \\
+&=\max_{I\in\mathcal{G}^p_k}\lambda^{+}_{max}(Y_{II})
+\end{align}
+\end{proof}
+
 \begin{lemm} $\gamma(M):=\inf\{\mu\|A\|_{1}+\lambda\Omega_k(B)|M=A+B\}$ is an atomic norm and its dual is 
 \begin{align*}
 \gamma^{\circ}(Y)=\max\left(\frac{\|Y\|_{\infty}}{\mu},\frac{\Omega_{k,\succeq}^{\circ}(Y)}{\lambda}\right)
 \end{align*}
 \end{lemm}
 
+\begin{proof}
+$\ell_1$ is an atomic norm with atomic set $\mathcal{A}_{\ell_{1}}=\{\pm e_i e_j^{\top}\}$ where $e_i$ is the canonical basis of $\RR^p$. $\Omega_{k,\succeq}$  is an atomic norm with atomic set $\mathcal{A}_{k,\succeq}=\{uu^{\top}  :  u\in\RR^{p} \quad \|u\|_0 \leq k, \|u\|_2 = 1\}$. We can write,
+$$
+\gamma(M)= \inf \big\{\|a\|_1+\|b\|_1 \quad s.t. \quad M=\sum_{j} b_j B_{j} + \sum_{i} a_i A_{i}, \quad c_i\in \RR^{+}\quad B_j\in\frac{1}{\mu}\mathcal{A}_{\ell_{1}} \quad A_i\in\frac{1}{\lambda}\mathcal{A}_{k,\succeq} \big\}
+$$
+so $\gamma$ is an atomic norm with atomic set $\frac{1}{\mu}\mathcal{A}_{\ell_{1}}\cup\frac{1}{\lambda}\mathcal{A}_{k,\succeq}$. The dual norm writes
+\begin{align}
+\gamma^{\circ}(Y)
+& = \max_{X\in\frac{1}{\mu}\mathcal{A}_{\ell_{1}}\cup\frac{1}{\lambda}\mathcal{A}_{k,\succeq}} \tr{Y^{\top}X}\\
+& =\max\left(\max_{B\in\frac{1}{\mu}\mathcal{A}_{\ell_{1}}}\tr{Y^{\top}B}, \max_{A\in\frac{1}{\lambda}\mathcal{A}_{k,\succeq}}\tr{Y^{\top}A}\right)\\
+& =\max\left(\frac{1}{\mu}\max_{\tilde{B}\in\mathcal{A}_{\ell_{1}}}\tr{Y^{\top}\tilde{B}}, \frac{1}{\lambda}\max_{\tilde{A}\in\mathcal{A}_{k,\succeq}}\tr{Y^{\top}\tilde{A}}\right)\\
+& =\max\left(\frac{\|Y\|_{\infty}}{\mu},\frac{\Omega_{k,\succeq}^{\circ}(Y)}{\lambda}\right)
+\end{align}
+
+\end{proof}
 \section{Experiments}
 
 \begin{figure}
@@ -109,18 +134,6 @@
 \end{tabular}
 \caption{ Structures of graphical models for the synthetic experiments}
 \end{figure}
-
-%The graphs associated to the figures
-%\begin{figure}
-%\hfill
-%\subfigure[\textit{Model 1}]{\includegraphics[width=8cm]{fig/disjoint_graph}}
-%\hfill
-%\\
-%\subfigure[\textit{Model 1}]{\includegraphics[width=8cm]{fig/diff_graph}}
-%\hfill
-%\subfigure[\textit{Model 1}]{\includegraphics[width=8cm]{fig/over_graph}}
-%\caption{Graphical model structures of synthetic experiments}
-%\end{figure}
 
 \begin{figure}
 \center

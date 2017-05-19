@@ -145,3 +145,8 @@ colormap hot
 axis square;
 mkdir('fig');
 print('fig/MILE_Ssl_ordered','-depsc')
+
+figure(18);
+set(gca, 'CLim', [0 .2]);
+colormap hot;
+colorbar

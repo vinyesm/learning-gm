@@ -67,6 +67,37 @@
 \def\st{\text{s.t.}}
 \def\supp{\text{supp}}
 
+\def\BIT{\begin{itemize}}
+\def\EIT{\end{itemize}}
+\def\BET{\begin{enumerate}}
+\def\EET{\end{enumerate}}
+\def\ra{$\:\rightarrow\:$}
+\def\y{\mathbf{y}}
+\def\x{\mathbf{x}}
+\def\v{\mathbf{v}}
+\def\u{\mathbf{u}}
+\def\w{\mathbf{w}}
+\def\s{\mathbf{s}}
+\def\g{\mathbf{g}}
+\def\h{\mathbf{h}}
+\def\X{\mathbf{X}}
+\def\RR{\mathbb{R}}
+\def\ei{\varepsilon_i}
+\def\ej{\varepsilon_j}
+\def\T{\mathcal{T}}
+\def\I{\mathcal{I}}
+
+\def\op{{\rm op}}
+\def\supp{{\rm Supp}}
+\def\st{\text{s.t.}}
+\newcommand\normop[1]{|||#1|||_{\infty}}
+\newcommand\normbop[1]{|\!|\!|#1|\!|\!|_{\infty,2}}
+\newcommand\normopop[1]{|\!|\!|#1|\!|\!|_{\rm op,\rm op}}
+\newcommand\ve[1]{\varepsilon^{{\scriptscriptstyle#1}}}
+\newcommand\sss[1]{{\scriptscriptstyle#1}}
+\def\uI{U^{\sss{I}}}
+\def\xxi{\zeta}
+
 \newtheorem{thm}{Theorem}
 \newtheorem{prop}{Proposition}
 \newtheorem{fact}{Fact}
@@ -139,7 +170,7 @@ Gaussian graphical models (GGM) have been widely used in many high-dimensional a
 \input{experiments}
 
 \subsection*{Conclusion}
-We consider a family of latent variable Gaussian graphical model whose concentration matrix has a sparse plus low-rank structure. We introduce a norm to impose more structure on the low rank component, as a sum of multiple low-rank and $k$-sparse factors, and derive a regularized convex formulation.  Futurework includes extending the framework to multiple levels of sparsity and generalizing identifiability conditions for our convex formulation.
+We consider a family of latent variable Gaussian graphical model whose concentration matrix has a sparse plus low-rank structure. We introduce a regularization to impose more structure on the low rank component, as a sum of multiple low-rank and $k$-sparse factors, and derive a convex formulation. We propose an efficient algorithm to optimize this problem and show promising results for recovering the structure of the complete GGM in the experiments. We provide a first result for identifiability condition. Futurework includes extending the framework to multiple levels of sparsity and generalizing identifiability conditions for recovery guarantees on our optimisation problem .
 
 
 %\section*{References}

@@ -73,11 +73,15 @@ Equivalently, as shown in \citet{richard2014tight},
 
 We can have $\Omega_{k,\succeq}(Z)=+\infty$ even if $Z$ is p.s.d., if $Z$ cannot be decomposed in $k$-sparse,  rank-1 p.s.d. factors. See \citet{richard2014tight} for examples. In the next lemma we give the Linear Minimization Oracle (LMO) for $\Omega_{k,\succeq}$ :
 
-\begin{lemm} Let $Y\in\RR^{p\times p}$ be a symmetric matrix. The \rm{LMO} of $\Omega_{k,\succeq}$ writes
+\begin{lemm}
+\label{lem:LMO}
+Let $Y\in\RR^{p\times p}$ be a symmetric matrix. The \rm{LMO} of $\Omega_{k,\succeq}$ writes
 \begin{align}
 \rm{LMO}_{\Omega_{k,\succeq}}(Y)= \max_{I\in\mathcal{G}^p_k}\lambda^{+}_{max}(Y_{II})
 \end{align}
 \end{lemm}
+
+In fact $\Omega_{k,\succeq}$ is an atomic gauge\footnote{$\Omega_{k,\succeq}$ is not a norm but only a gauge because the set $\{u u^\top \in\RR^p  :   \|u\|_0 \leq k, \|u\|_2 = 1\}$  is not centrally symmetric} associated to the atomic set $\{uu^{\top}  : \|u_{i}\|_0 \leq k, \|u_{i}\|_2 = 1\}$ and the LMO in lemma \ref{lem:LMO} is the polar gauge $\Omega^{\circ}_{k,\succeq}$.
 
 $\Omega_{k,\succeq}$ can be generalised for different sparsity levels as
 \begin{align}
@@ -85,7 +89,6 @@ $\Omega_{k,\succeq}$ can be generalised for different sparsity levels as
 \end{align}
 where $w_{k}$ is an increasing cardinality function that penalizes each sparsity level $k$ by $w_{k}$. We illustrate this generalization in the experiments.\\
 
-In fact $\Omega_{k,\succeq}$ is an atomic gauge\footnote{$\Omega_{k,\succeq}$ is not a norm but only a gauge because the set $\{u u^\top \in\RR^p  :   \|u\|_0 \leq k, \|u\|_2 = 1\}$  is not centrally symmetric} associated to the atomic set $\{uu^{\top}  : \|u_{i}\|_0 \leq k, \|u_{i}\|_2 = 1\}$
 
 \subsection{Convex formulation}
 %Let $(x_1,..,x_n)$ be $n$ samples of dimension $p$ and   $\hat{\Sigma}$ the empirical covariance. A natural way to approximate a given sample covariance matrix by a model which the concentration matrix decomposes into a sparse and $k$-low-rank matrix is a regularized using $\ell_1$ norm for recovering sparse component and the convex relaxation of $k$-rank for recovering the $k$-low-rank component. Hence we consider the following convex optimization problem
@@ -103,7 +106,7 @@ In fact $\Omega_{k,\succeq}$ is an atomic gauge\footnote{$\Omega_{k,\succeq}$ is
 We use $\Omega_{k,\succeq}$ to impose structure on the low rank component and consider the following convex optimization problem,
 \begin{align}
 \label{opt}
-\min_{S,L} f(S-L)+\lambda\big(\gamma\|S\|_{1}+\Omega_k(L)\big) \quad s.t. \quad S-L \succeq 0 \quad L \succeq 0.
+\min_{S,L} f(S-L)+\lambda\big(\gamma\|S\|_{1}+\Omega_{k,\succeq}(L)\big) \quad s.t. \quad S-L \succeq 0 \quad L \succeq 0.
 \end{align}
 Since the norm $\Omega_k$ only provides symmetric p.s.d matrices, as a sum of p.s.d rank-one matrices, the nonnegativity constraint on $L$ can be dropped. The regularization $\gamma\|S\|_{1}+\Omega_k(L)$ defines an atomic norm on matrices as shown in the following lemma
 \begin{lemm} $\bar{\Omega}(M):=\inf\{\gamma\|A\|_{1}+\Omega_k(B)\mid M=A+B\}$ is an atomic norm and its \rm{LMO} is given by 

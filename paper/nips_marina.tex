@@ -123,10 +123,7 @@
 \maketitle
 
 \begin{abstract}
-Learnin GGM with latent variables with effect of latent variables. Recover the structure of the complete model\\
-Introduce a norm psd, sum of low rank sparse components\\
-Propose a tractable convex algorithm \\
-Study identifiability conditions\\
+Gaussian graphical models (GGM) have been widely used in many high-dimensional applications. Some effects can affect the data, that is, some of the relevant variables may be latent. In this paper, we focus on a family of Latent Variable Gaussian graphical models (LVGGM), where the model is conditionally sparse given latent variables, but marginally non-sparse. In order to identify the effect of each latent variable and recover the structure of the complete model, we introduce a convex formulation with a new regularization imposing more structure on latent factors.  We propose a tractable convex algorithm and study identifiability conditions. We show promising results on synthetic and real datasets.\\
 \end{abstract}
 
 
@@ -142,6 +139,7 @@ Study identifiability conditions\\
 \input{experiments}
 
 \subsection*{Conclusion}
+We consider a family of latent variable Gaussian graphical model whose concentration matrix has a sparse plus low-rank structure. We introduce a norm to impose more structure on the low rank component, as a sum of multiple low-rank and $k$-sparse factors, and derive a regularized convex formulation.  Futurework includes extending the framework to multiple levels of sparsity and generalizing identifiability conditions for our convex formulation.
 
 
 %\section*{References}

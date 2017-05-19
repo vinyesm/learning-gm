@@ -1,6 +1,8 @@
 \section{Identifiability}
 \label{sec:id}
-It is beyond the scope of thispaper to provide in this a proof comparable to that of \citet{chandrasekaran2010} which would show that for optimisation problem (\ref{opt_at}) the support of $S^*$ and the correct rank for each block is recovered. However, we prove a first result towards this goal namely that if  $M^{\ast}$ is a matrix that writes as  $M^{\ast}= S^{\ast}-L^{\ast}$, with $S^{\ast}$ an unknown sparse matrix and an unknown  low $k,\succeq$-rank matrix, that writes  $L^{\ast}=\sum_{I\in\mathcal{I}L^{I}}$. We want to know, given $M^{\ast}$, ther exist a unique decomposition $\left(S,(L^{I})_{I\in\mathcal{I}}\right)$ satisfying this conditions. We consider the case where the sets $I\in\mathcal{I}$ do not overlap.  \\
+%It is beyond the scope of this paper to provide in this a proof comparable to that of \citet{chandrasekaran2010} which would show that for . 
+
+In this section, we prove a first result towards showing that the optimisation problem (\ref{opt_at}) recovers the support of $S^*$ and the correct rank for each block under technical assumptions. Namely, we show that if  $M^{\ast}$ is a matrix that writes as  $M^{\ast}= S^{\ast}-L^{\ast}$, with $S^{\ast}$ an unknown sparse matrix and an unknown  low $k,\succeq$-rank matrix, that writes  $L^{\ast}=\sum_{I\in\mathcal{I}L^{I}}$. We want to know, given $M^{\ast}$, ther exist a unique decomposition $\left(S,(L^{I})_{I\in\mathcal{I}}\right)$ satisfying this conditions. We consider the case where the sets $I\in\mathcal{I}$ do not overlap.  \\
 
 More formally we want to know under which conditions the following optimization problem 
 \begin{align}
@@ -19,8 +21,8 @@ For any p.s.d. matrix $UU^{\top}\in\RR^{p\times p}$  the tangent space $\T(U)$ a
 $$
 \T(U):=\{M \in \: M=UX^\top+XU^\top,\: X \in \RR^{\text{rank}(U) \times p} \}.
 $$
-In our setting we need to consider the tangent subspace for a matrix $UU^{\top}\in\RR^{p\times p}$ with fixed support $I$. This subspace is
-We consider several types of subspaces
+In our setting we need to consider the tangent subspace for a matrix $UU^{\top}\in\RR^{p\times p}$ with fixed support $I$.
+We consider several subspaces
 $$\T_I(U):=\{M \in \bar{\T}_I\mid \: M=UX^\top+XU^\top,\: X \in \RR^{\text{rank}(U) \times p} \},$$
 where 
 $$
@@ -41,16 +43,17 @@ The following quantities define incoherence between subspaces
 
 \begin{thm}
 \label{theo:two}
-If $M^*=S^*-L^*$ with $L^*=\sum_{I \in \mathcal{I}} L^{\sss{I}}$, $\supp(L^{\sss{I}}) \subset I \times I$ for $\I \subset \mathcal{G}^p_k$ %(where $\mathcal{G}^p_k$ is the collection of all subsets of size $k$ of $[\![p]\!]$)
+If $M^*=S^*-L^*$ with $$L^*=\sum_{I \in \mathcal{I}} L^{\sss{I}},  \quad \supp(L^{\sss{I}}) \subset I \times I$$ for $\I \subset \mathcal{G}^p_k$ %(where $\mathcal{G}^p_k$ is the collection of all subsets of size $k$ of $[\![p]\!]$)
 and $L^{\sss{I}}=U^{\sss{I}} D^{\sss{I}} {U^{\sss{I}}}^\top$ the eigenvalue decomposition of $L^{\sss{I}}$.
-Let $\mu'_I=\xxi(\T_I(U),\T_s(S))$, $\xi'_I :=\xxi(\T_s(S),\T_I(U))$, $\mu_I:=\mu_I(\T_s(S))$, $\xi_I:=\xi(\T_I(U))$,
+
+Let $$\mu'_I=\xxi(\T_I(U),\T_s(S)), \quad  \xi'_I :=\xxi(\T_s(S),\T_I(U)), \quad \mu_I:=\mu_I(\T_s(S)) , \quad \xi_I:=\xi(\T_I(U)),$$
+and 
 $$\alpha_I:=\frac{1-\mu'_I\xi'_I}{1+\max(\gamma \mu'_I,\frac{1}{\gamma} \xi'_I)} \qquad \text{and} \qquad \epsilon_I :=\max \big (\|\mathcal{P}_{\T_I(\uI)}(\gamma \text{sign}(S^*))\|_{\op}, \gamma^{-1}\|\uI {\uI}^\top\|_{\infty} \big ).$$
 
 Assume that for all $(I,I') \in \I \times \I, I \cap I'=\varnothing$. If $$\displaystyle\max_{I \in \I} \max(\mu_I,\xi_I) (1+\frac{\epsilon_I}{\alpha_I})<1, \quad \displaystyle \max_{J \in \mathcal{G}^p_k} \lambda_{\max}^+\big (S^*_{\bar{I}^c \cap (J \times J)} \big ) <1$$ %\quad 
 %\text{and}  \quad \max_{J \in \mathcal{G}^p_k, J \neq I}\lambda_{\max}^+(\uI_J{\uI_J}^\top)<1,$$
 with $\displaystyle \bar{I}=\bigcup_{I \in \I} I \times I$,
-then the solution of the optimization problem $$\displaystyle \min \gamma \|S\|_1+\Omega_{k,\succeq}(L) \quad \text{\st} \quad M=S+L$$
- the decomposition given by $\big (S^*,(D^{\sss{I}} \big)_{I \in \I},(\uI)_{I \in \I} \big ) as a solution.$ 
+then the  decomposition given by $\big (S^*,(D^{\sss{I}} \big)_{I \in \I},(\uI)_{I \in \I} \big )$ is solution to the optimization problem $$\displaystyle \min \gamma \|S\|_1+\Omega_{k,\succeq}(L) \quad \text{\st} \quad M=S+L.$$
 \end{thm}
 
 The proof can be found in the appendix. We follow the general proof scheme of \citet{chandrasekaran2011rank}. The optimization problem admits the unique announced solution if it satisfies first order gradient condition.

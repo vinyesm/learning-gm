@@ -1,6 +1,10 @@
 clear all; clc; 
 load('TOY_DISJOINT.mat');
 
+p=size(Dfin,1);
+order = [3 2 1 4:p];
+Dfin=Dfin(order,order);
+
 figure(1);clf;
 subplot(3,2,1)
 imagesc(abs(Dfull));

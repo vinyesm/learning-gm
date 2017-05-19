@@ -1,6 +1,10 @@
 clear all; clc; 
 load('TOY_DIFF.mat');
 
+p=size(Dfin,1);
+order = [2 3 1 4:p];
+Dfin=Dfin(order,order);
+
 figure(1);clf;
 subplot(3,2,1)
 imagesc(abs(Dfull));
@@ -68,12 +72,12 @@ print('fig/diff_true','-depsc')
 
 %% only if recent version of matlab
 
-A=ones(size(Dfull,1));
-A(Dfull==0)=0;
-G = graph(A,'OmitSelfLoops');
-figure(4);clf;
-plot(G,'Layout', 'circle')
-axis equal;
-axis off;
-mkdir('fig');
-print('fig/diff_graph','-depsc')
+% A=ones(size(Dfull,1));
+% A(Dfull==0)=0;
+% G = graph(A,'OmitSelfLoops');
+% figure(4);clf;
+% plot(G,'Layout', 'circle')
+% axis equal;
+% axis off;
+% mkdir('fig');
+% print('fig/diff_graph','-depsc')

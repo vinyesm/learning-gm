@@ -5,6 +5,10 @@ THRESH=0.02;
 Dfin_tr(35,38)=0;
 Dfin_tr(38,35)=0;
 
+p=size(Dfin,1);
+order = [4 1 2 3 5:p];
+Dfin=Dfin(order,order);
+
 figure(1);clf;
 subplot(3,2,1)
 imagesc(abs(Dfull));
@@ -54,14 +58,22 @@ colormap pink
 mkdir('fig');
 print('fig/overlap_tr','-depsc')
 
-%% only if recent version of matlab
-
-A=ones(size(Dfull,1));
-A(Dfull==0)=0;
-G = graph(A,'OmitSelfLoops');
 figure(4);clf;
-plot(G,'Layout', 'circle')
-axis equal;
-axis off;
+imagesc(-(abs(Dfin)>THRESH));
+pbaspect([1 1 1]);
+% title('estimated complete conc. mat.');
 mkdir('fig');
-print('fig/over_graph','-depsc')
+print('fig/overlap_true','-depsc')
+
+
+%% only if recent version of matlab
+% 
+% A=ones(size(Dfull,1));
+% A(Dfull==0)=0;
+% G = graph(A,'OmitSelfLoops');
+% figure(4);clf;
+% plot(G,'Layout', 'circle')
+% axis equal;
+% axis off;
+% mkdir('fig');
+% print('fig/over_graph','-depsc')

@@ -77,20 +77,50 @@
 
 \begin{document}
 
+\section{Proofs of section 3}
+
+\begin{lemm} The polar gauge of $\Omega_{k,\succeq}$ of a symmetric $Y\RR^{p\times p}$ is
+\begin{align}
+\Omega_{k,\succeq}^{\circ}(Y):= \max_{I\in\mathcal{G}^p_k}\lambda^{+}_{max}(Y_{II})
+\end{align}
+\end{lemm}
+
+\begin{lemm} $\gamma(M):=\inf\{\mu\|A\|_{1}+\lambda\Omega_k(B)|M=A+B\}$ is an atomic norm and its dual is 
+\begin{align*}
+\gamma^{\circ}(Y)=\max\left(\frac{\|Y\|_{\infty}}{\mu},\frac{\Omega_{k,\succeq}^{\circ}(Y)}{\lambda}\right)
+\end{align*}
+\end{lemm}
+
 \section{Experiments}
 
-The graphs associated to the figures
 \begin{figure}
-\hfill
+\label{fig:synth}
 \center
-\subfigure[\textit{Model 1}]{\includegraphics[width=8cm]{fig/disjoint_graph}}
-\hfill
-\center
-\subfigure[\textit{Model 1}]{\includegraphics[width=8cm]{fig/diff_graph}}
-\hfill
-\subfigure[\textit{Model 1}]{\includegraphics[width=8cm]{fig/over_graph}}
-\caption{Graphical model structures of synthetic experiments}
+\begin{tabular}{cc}
+      \includegraphics[width=6cm]{fig/disjoint_graph} 
+  &   \includegraphics[width=3.5cm]{fig/disjoint_true}
+   \\    (a) \textit{model 1} & (b)  structure of concentration matrix for \textit{model 1} \\
+      \includegraphics[width=6cm]{fig/over_graph} 
+  &   \includegraphics[width=3.5cm]{fig/overlap_true}
+   \\    (c) \textit{model 2} & (d)  structure of concentration matrix for \textit{model 2} \\
+      \includegraphics[width=6cm]{fig/diff_graph} 
+  &   \includegraphics[width=3.5cm]{fig/diff_true}
+   \\    (e) \textit{model 3} & (f)  structure of concentration matrix for \textit{model 3}
+\end{tabular}
+\caption{ Structures of graphical models for the synthetic experiments}
 \end{figure}
+
+%The graphs associated to the figures
+%\begin{figure}
+%\hfill
+%\subfigure[\textit{Model 1}]{\includegraphics[width=8cm]{fig/disjoint_graph}}
+%\hfill
+%\\
+%\subfigure[\textit{Model 1}]{\includegraphics[width=8cm]{fig/diff_graph}}
+%\hfill
+%\subfigure[\textit{Model 1}]{\includegraphics[width=8cm]{fig/over_graph}}
+%\caption{Graphical model structures of synthetic experiments}
+%\end{figure}
 
 \begin{figure}
 \center

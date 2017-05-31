@@ -13,7 +13,9 @@ for i=1:length(ActiveSet.I)
     cf=min(param.cardfun(length(S):end));
     Hs=H(S,S);
     Hs=0.5*(Hs+Hs');
-    [v,d,flag]=eigs(-Hs,1,'la');
+    emin=norm(Hs, 'fro');
+%     [v,d,flag]=eigs(-Hs,1,'la');
+    [v,d,flag]=eigs(-Hs+emin*speye(length(S)),1,'lm');
     if flag
         fprintf('in get_new_atom_spca eigs has not converged.\n');
 %         d=-v'*Hs*v;
@@ -22,6 +24,7 @@ for i=1:length(ActiveSet.I)
     end
     v=real(v);
     d=real(d);
+    d=d-emin;
     if d/cf>maxval
         maxval=d/cf;
         val=d;

@@ -71,8 +71,8 @@ title('L')
 axis square;
 colormap hot;
 
-save('mile','Dfin', ...
-'Z', 'Z1', 'Z2', 'ActiveSet', 'hist' ,'param', 'flag' ,'output');
+% save('mile','Dfin', ...
+% 'Z', 'Z1', 'Z2', 'ActiveSet', 'hist' ,'param', 'flag' ,'output');
 
 % %% tr+l1
 % param.lambda=.6; %lamda ~ 2/k*mu

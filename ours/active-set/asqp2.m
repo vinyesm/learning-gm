@@ -127,7 +127,7 @@ while(iter<=max_iter)
         end
     end
     %% Test to increase active set
-    if any(A & c==0 & g>=0)
+    if any(A & c==0 & g>=tol)
         error('wrong feature');
     end
     if debug_mode,

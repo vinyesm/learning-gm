@@ -37,7 +37,7 @@ nb_atoms=size(atoms_l1_sym,2);
 Q=[];
 q=[];
 if 0
-    Q=zeros(nb_atoms);
+    Q=sparse(nb_atoms);
     q=zeros(nb_atoms,1);
     for i=1:nb_atoms
         Ei=reshape(atoms_l1_sym(:,i),p,p);

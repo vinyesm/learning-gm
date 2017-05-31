@@ -31,6 +31,8 @@ function [c,A,nbpivot,ng]=asqp2(Q,b,c0,param,new_atom_added,idx_atom)
 % Marina Vinyes and Guillaume Obozinski, 2016
 % %%%%%%%%%%%%
 
+% keyboard
+
 MAX_NB_FULL_STEPS=200;
 max_iter=param.max_iter;
 epsilon=param.epsilon;
@@ -80,7 +82,7 @@ while(iter<=max_iter)
         hist.norm_g(iter)=norm(g(A));
     end
     d=zeros(t,1);
-    if debug_mode && (rcond(Q(A,A))<1e-12),
+    if debug_mode && (condest(Q(A,A))<1e-12),
         display('asqp : Warning, Hessian badly conditioned\n');
 %         keyboard;
     end

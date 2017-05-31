@@ -13,8 +13,8 @@ nb_atoms_om=size(aom,2);
 nb_atoms=nb_atoms_l1+nb_atoms_om;
 
 %% building the Hessian
-Hall=zeros(nb_atoms,nb_atoms);
-fall=zeros(nb_atoms,1);
+Hall=sparse(nb_atoms,nb_atoms);
+fall=sparse(nb_atoms,1);
 
 for i=1:nb_atoms_l1
     Ei=reshape(al1(:,i),p,p);

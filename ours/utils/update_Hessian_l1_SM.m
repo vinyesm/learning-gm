@@ -14,8 +14,8 @@ nb_atoms_om=size(aom,2);
 nb_atoms=nb_atoms_l1+nb_atoms_om;
 
 %% building the Hessian
-Hall=zeros(nb_atoms,nb_atoms);
-fall=zeros(nb_atoms,1);
+Hall=sparse(nb_atoms,nb_atoms);
+fall=sparse(nb_atoms,1);
 
 if nb_atoms>1
     Hall(1:(nb_atoms-1),1:(nb_atoms-1))=Hold;
@@ -64,7 +64,7 @@ if atom_added==2,
         end
         for j=1:nb_atoms_l1
             Ej=reshape(al1(:,j),p,p);
-            Hall(nb_atoms,j)=trace(Ui*S*Ej);
+            Hall(nb_atoms,j)=trace(Ui*(S*Ej));
             Hall(j,nb_atoms)=Hall(nb_atoms,j);
         end
     end
@@ -77,9 +77,9 @@ if debug
     colorbar;
 end
 
-if eigs(Hall,1,'sa')<-1e-6
-    fprintf('Hessian not PSD\n');
-    keyboard;
-end
+% if eigs(Hall,1,'sa')<-1e-6
+%     fprintf('Hessian not PSD\n');
+%     keyboard;
+% end
 
 end

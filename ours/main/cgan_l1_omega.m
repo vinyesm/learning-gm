@@ -68,12 +68,12 @@ output.time=0;
 fprintf('\n \n CGAN L1 OMEGA\n');
 
 if param.f==1
-    [ Q,q,atoms_l1_sym ] = build_atoms_hessian_prox(inputData.Y,param.mu);
+    [ Q,q,atoms_l1_sym ] = build_atoms_hessian_prox(sparse(inputData.Y),param.mu);
 elseif param.f==4
 %     fprintf('Warning : change build_atoms_hessian_l1_sym when loss is not .5*|S^.5*X*S.^5-I|\n');
-    [ Q,q,atoms_l1_sym ] = build_atoms_hessian_l1_sym(inputData.X1*inputData.X1,param.mu);
+    [ Q,q,atoms_l1_sym ] = build_atoms_hessian_l1_sym(sparse(inputData.X1*inputData.X1),param.mu);
 elseif param.f==5
-    [ Q,q,atoms_l1_sym ] = build_atoms_hessian_l1_SM(inputData.X,param.mu); %score matching
+    [ Q,q,atoms_l1_sym ] = build_atoms_hessian_l1_SM(sparse(inputData.X),param.mu); %score matching
 end
 
 if nargin > 2

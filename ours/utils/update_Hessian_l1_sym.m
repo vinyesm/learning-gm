@@ -15,8 +15,8 @@ nb_atoms=nb_atoms_l1+nb_atoms_om;
 
 
 %% building the Hessian
-Hall=zeros(nb_atoms,nb_atoms);
-fall=zeros(nb_atoms,1);
+Hall=sparse(nb_atoms,nb_atoms);
+fall=sparse(nb_atoms,1);
 
 if nb_atoms>1
     Hall(1:(nb_atoms-1),1:(nb_atoms-1))=Hold;
@@ -34,7 +34,7 @@ if atom_added==1
             %         fall(i)=-trace(S*Ei)+mu; %(*)
             fall(nb_atoms)=+trace(S*Ei)+mu;
         end
-        Hall(nb_atoms,nb_atoms)=trace(S*Ei*S*Ei);
+        Hall(nb_atoms,nb_atoms)=trace(S*(Ei*(S*Ei)));
         for j=1:(i-1)
             Ej=reshape(al1(:,j),p,p);
             Hall(nb_atoms,j)=trace(S*Ei*S*Ej);
@@ -42,7 +42,7 @@ if atom_added==1
         end
         for j=1:nb_atoms_om
             Uj=aom(:,j)*aom(:,j)';
-            Hall(nb_atoms_l1-1+j,nb_atoms)=trace(S*Uj*S*Ei);
+            Hall(nb_atoms_l1-1+j,nb_atoms)=trace(S*(Uj*(S*Ei)));
             Hall(nb_atoms,nb_atoms_l1-1+j)=Hall(nb_atoms_l1-1+j,nb_atoms);
         end
     end

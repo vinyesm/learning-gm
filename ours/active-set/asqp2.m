@@ -40,6 +40,7 @@ debug_mode=param.debug_mode;
 debug_mode=1;
 
 tol=1e-12;
+epsilon=tol*10;
 t=size(c0,1);
 c=full(c0);
 g=Q*c-b;
@@ -82,10 +83,10 @@ while(iter<=max_iter)
         hist.norm_g(iter)=norm(g(A));
     end
     d=zeros(t,1);
-    if debug_mode && (condest(Q(A,A))<1e-12),
-        display('asqp : Warning, Hessian badly conditioned\n');
-%         keyboard;
-    end
+%     if debug_mode && (condest(Q(A,A))<1e-12),
+%         display('asqp : Warning, Hessian badly conditioned\n');
+% %         keyboard;
+%     end
     d(A)=Q(A,A)\b(A);
     %% Progress until active set reduces
     if (~all(d(A)>=0)), % Drop step
@@ -109,6 +110,9 @@ while(iter<=max_iter)
         g=Q*c-b;
         nb_full_steps=nb_full_steps+1;
 %         fprintf('+')
+        if nb_full_steps==MAX_NB_FULL_STEPS-1
+            keyboard;
+        end
         if param.ws && nb_full_steps>MAX_NB_FULL_STEPS,
             if debug_mode
             fprintf('  nb_full_steps>%d\n',MAX_NB_FULL_STEPS);
@@ -154,9 +158,9 @@ if debug_mode %&& 0,
         display('objective increases in asqp');
     end
     if iter>max_iter || nb_full_steps>MAX_NB_FULL_STEPS,
-%         figure(15);
-%         plot(hist.obj);
-%         keyboard;
+        figure(15);
+        plot(hist.obj);
+        keyboard;
     end
 end
 

@@ -110,9 +110,9 @@ while(iter<=max_iter)
         g=Q*c-b;
         nb_full_steps=nb_full_steps+1;
 %         fprintf('+')
-        if nb_full_steps==MAX_NB_FULL_STEPS-1
-            keyboard;
-        end
+%         if nb_full_steps==MAX_NB_FULL_STEPS-1
+%             keyboard;
+%         end
         if param.ws && nb_full_steps>MAX_NB_FULL_STEPS,
             if debug_mode
             fprintf('  nb_full_steps>%d\n',MAX_NB_FULL_STEPS);

@@ -26,24 +26,45 @@ end
 if atom_added==1
     order=[(1:(nb_atoms_l1-1)) nb_atoms ((nb_atoms_l1):(nb_atoms_l1-1+nb_atoms_om))];
     for i=nb_atoms_l1
-        Ei=reshape(al1(:,i),p,p);
+%         Ei=reshape(al1(:,i),p,p);
+        indx=find(al1(:,i));
+        ci=length(indx);
+        indx=indx(1);
+        ei=sparse(mod(indx,p),1,al1(indx,i),p,1);
+        ej=sparse(ceil(indx/p),1,1,p,1);
+%         keyboard;
         if sum(al1(:,i)==2),
-            %         fall(i)=-trace(S*Ei)+mu*2; %(*) because loss .5*|S^.5(Z1+Z2)S^.5+I|^2
-            fall(nb_atoms)=+trace(S*Ei)+mu*2;
+%             fall(nb_atoms)=+trace(S*Ei)+mu*2;
+            fall(nb_atoms)=+ci*(ei'*S*ej)+mu*2;
         else
-            %         fall(i)=-trace(S*Ei)+mu; %(*)
-            fall(nb_atoms)=+trace(S*Ei)+mu;
+%             fall(nb_atoms)=+trace(S*Ei)+mu;
+            fall(nb_atoms)=+ci*(ei'*S*ej)+mu;
         end
-        Hall(nb_atoms,nb_atoms)=trace(S*(Ei*(S*Ei)));
+%         Hall(nb_atoms,nb_atoms)=trace(S*(Ei*(S*Ei)));
+        Hall(nb_atoms,nb_atoms)=ci^2/2*((ei'*S*ej)^2+(ei'*S*ei)*(ej'*S*ej));
+%         if ci==1
+%             Hall(nb_atoms,nb_atoms)=(ei'*S*ej)^2;
+%         else
+%             Hall(nb_atoms,nb_atoms)=2*((ei'*S*ej)^2+(ei'*S*ei)*(ej'*S*ej));
+%         end
         for j=1:(i-1)
-            Ej=reshape(al1(:,j),p,p);
-            Hall(nb_atoms,j)=trace(S*Ei*S*Ej);
+%             Ej=reshape(al1(:,j),p,p);
+            indx=find(al1(:,j));
+            cj=length(indx);
+            indx=indx(1);
+            ek=sparse(mod(indx,p),1,al1(indx,j),p,1);
+            el=sparse(ceil(indx/p),1,1,p,1);
+%             Hall(nb_atoms,j)=trace(S*Ei*S*Ej); 
+            Hall(nb_atoms,j)=(ci*cj)/2*((ei'*S*el)*(ej'*S*ek)+(ei'*S*ek)*(ej'*S*el));
             Hall(j,nb_atoms)=Hall(nb_atoms,j);
         end
         for j=1:nb_atoms_om
-            Uj=aom(:,j)*aom(:,j)';
-            Hall(nb_atoms_l1-1+j,nb_atoms)=trace(S*(Uj*(S*Ei)));
+%             Uj=aom(:,j)*aom(:,j)';
+            uj=aom(:,j);
+%             Hall(nb_atoms_l1-1+j,nb_atoms)=trace(S*(Uj*(S*Ei)));
+            Hall(nb_atoms_l1-1+j,nb_atoms)=ci*(uj'*S*ei)*(uj'*S*ej);
             Hall(nb_atoms,nb_atoms_l1-1+j)=Hall(nb_atoms_l1-1+j,nb_atoms);
+%              keyboard;
         end
     end
     Hall=Hall(order,order);
@@ -53,23 +74,34 @@ end
 if atom_added==2,
 %     keyboard;
     for i=nb_atoms_om
-        Ui=aom(:,i)*aom(:,i)';
+%         Ui=aom(:,i)*aom(:,i)';
+        ui=aom(:,i);
         suppi=sum(abs(aom(:,i))>0);
         cf=min(param.cardfun(suppi:end));
         %     fall(nb_atoms_l1+i)=-trace(S*Ui)+lambda; %(*)
         if param.Sfixed
-            fall(nb_atoms)=+trace(S*Ui)+trace(S*param.Sstar*S*Ui)+lambda*cf;
+%             fall(nb_atoms)=+trace(S*Ui)+trace(S*param.Sstar*S*Ui)+lambda*cf;
+            fall(nb_atoms)=+(ui'*S*ui)+trace(S*param.Sstar*S*Ui)+lambda*cf;
         else
-            fall(nb_atoms)=+trace(S*Ui)+lambda*cf;
+%             fall(nb_atoms)=+trace(S*Ui)+lambda*cf;
+            fall(nb_atoms)=+(ui'*S*ui)+lambda*cf;
         end
         for j=1:i
-            Uj=aom(:,j)*aom(:,j)';
-            Hall(nb_atoms,nb_atoms_l1+j)=trace(S*Ui*S*Uj);
+%             Uj=aom(:,j)*aom(:,j)';
+            uj=aom(:,j);
+%             Hall(nb_atoms,nb_atoms_l1+j)=trace(S*Ui*S*Uj);
+            Hall(nb_atoms,nb_atoms_l1+j)=(ui'*S*uj)^2;
             Hall(nb_atoms_l1+j,nb_atoms)=Hall(nb_atoms,nb_atoms_l1+j);
         end
         for j=1:nb_atoms_l1
             Ej=reshape(al1(:,j),p,p);
-            Hall(nb_atoms,j)=trace(S*Ui*S*Ej);
+            indx=find(al1(:,j));
+            ci=length(indx);
+            indx=indx(1);
+            ei=sparse(mod(indx,p),1,al1(indx,i),p,1);
+            ej=sparse(ceil(indx/p),1,1,p,1);
+%             Hall(nb_atoms,j)=trace(S*Ui*S*Ej);
+            Hall(nb_atoms,j)=cj*(ui'*S*ei)*(ui'*S*ej);
             Hall(j,nb_atoms)=Hall(nb_atoms,j);
         end
     end

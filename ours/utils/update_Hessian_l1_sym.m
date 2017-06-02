@@ -101,7 +101,7 @@ if atom_added==2,
             ei=sparse(mod(indx,p),1,al1(indx,i),p,1);
             ej=sparse(ceil(indx/p),1,1,p,1);
 %             Hall(nb_atoms,j)=trace(S*Ui*S*Ej);
-            Hall(nb_atoms,j)=cj*(ui'*S*ei)*(ui'*S*ej);
+            Hall(nb_atoms,j)=ci*(ui'*S*ei)*(ui'*S*ej);
             Hall(j,nb_atoms)=Hall(nb_atoms,j);
         end
     end

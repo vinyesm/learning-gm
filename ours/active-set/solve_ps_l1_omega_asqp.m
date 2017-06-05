@@ -2,7 +2,7 @@ function [ Z,Z1,Z2,Hall,fall, ActiveSet, hist] = solve_ps_l1_omega_asqp( Z,Z1,Z2
 %Using Active Set to solve (PS) problem
 
 debug=1;
-debug_update=1;
+debug_update=0;
 compute_dg=0;
 if param.f==4
     S=sparse(inputData.X1*inputData.X1);

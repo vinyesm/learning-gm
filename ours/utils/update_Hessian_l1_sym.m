@@ -30,9 +30,10 @@ if atom_added==1
         indx=find(al1(:,i));
         ci=length(indx);
         indx=indx(1);
-        ei=sparse(mod(indx,p),1,al1(indx,i),p,1);
-        ej=sparse(ceil(indx/p),1,1,p,1);
-%         keyboard;
+        [indi,indj]=ind2sub([p p],indx);
+        ei=sparse(indi,1,al1(indx,i),p,1);
+        ej=sparse(indj,1,1,p,1);
+        %         keyboard;
         if sum(al1(:,i)==2),
 %             fall(nb_atoms)=+trace(S*Ei)+mu*2;
             fall(nb_atoms)=+ci*(ei'*S*ej)+mu*2;
@@ -52,8 +53,9 @@ if atom_added==1
             indx=find(al1(:,j));
             cj=length(indx);
             indx=indx(1);
-            ek=sparse(mod(indx,p),1,al1(indx,j),p,1);
-            el=sparse(ceil(indx/p),1,1,p,1);
+            [indk,indl]=ind2sub([p p],indx);
+            ek=sparse(indk,1,al1(indx,j),p,1);
+            el=sparse(indl,1,1,p,1);
 %             Hall(nb_atoms,j)=trace(S*Ei*S*Ej); 
             Hall(nb_atoms,j)=(ci*cj)/2*((ei'*S*el)*(ej'*S*ek)+(ei'*S*ek)*(ej'*S*el));
             Hall(j,nb_atoms)=Hall(nb_atoms,j);
@@ -72,7 +74,6 @@ if atom_added==1
 end
 
 if atom_added==2,
-%     keyboard;
     for i=nb_atoms_om
 %         Ui=aom(:,i)*aom(:,i)';
         ui=aom(:,i);
@@ -94,15 +95,21 @@ if atom_added==2,
             Hall(nb_atoms_l1+j,nb_atoms)=Hall(nb_atoms,nb_atoms_l1+j);
         end
         for j=1:nb_atoms_l1
-            Ej=reshape(al1(:,j),p,p);
+%             Ej=reshape(al1(:,j),p,p);
             indx=find(al1(:,j));
             ci=length(indx);
             indx=indx(1);
-            ei=sparse(mod(indx,p),1,al1(indx,i),p,1);
-            ej=sparse(ceil(indx/p),1,1,p,1);
+            [indi,indj]=ind2sub([p p],indx);
+            ei=sparse(indi,1,al1(indx,j),p,1);
+            ej=sparse(indj,1,1,p,1);
 %             Hall(nb_atoms,j)=trace(S*Ui*S*Ej);
             Hall(nb_atoms,j)=ci*(ui'*S*ei)*(ui'*S*ej);
             Hall(j,nb_atoms)=Hall(nb_atoms,j);
+%             keyboard;
+%             if norm(trace(S*Ui*S*Ej)-ci*(ui'*S*ei)*(ui'*S*ej),'fro')^2>1e-15
+%                 fprintf('wrong update\n');
+%                 keyboard;
+%             end
         end
     end
 end

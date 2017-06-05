@@ -30,8 +30,8 @@ inputData.X2=S^.5;
 inputData.Y=-eye(p);
 param.cardfun=inf*ones(1,p);
 param.cardfun(100)=1;
-lam=.1;
-gam=.01;
+lam=.11;
+gam=.005;
 param.lambda=lam;
 param.mu=gam;
 param.max_nb_main_loop=100;
@@ -39,6 +39,7 @@ param.max_nb_main_loop=100;
 
 %% blocks
 [Z Z1 Z2 ActiveSet hist param flag output] = cgan_l1_omega(inputData,param);
+
 
 
 %% reconstruction l1+om
@@ -53,6 +54,9 @@ if ~isempty(ActiveSet.alpha)
 else
     Dfin=Z1;
 end
+
+
+%%
 
 figure(10);clf;
 subplot(1,4,1);
@@ -70,6 +74,39 @@ imagesc(abs(Z2));
 title('L')
 axis square;
 colormap hot;
+
+%%
+%% reorder
+
+[I]=grayorder(Uso~=0);
+UsoI=Uso(I,:);
+Z2II=Z2(I,I);
+Z1II=Z1(I,I);
+
+
+figure(11);clf;
+subplot(2,3,1);
+imagesc(abs(UsoI));
+axis square;
+subplot(2,3,2);
+imagesc(abs(Z1II));
+title('L')
+axis square;
+subplot(2,3,3);
+imagesc(abs(Z2II));
+axis square;
+subplot(2,3,4);
+imagesc(abs(UsoI)>1e-10);
+axis square;
+subplot(2,3,5);
+imagesc(abs(Z1II)>1e-10);
+title('L')
+axis square;
+subplot(2,3,6);
+imagesc(abs(Z2II)>1e-10);
+colormap hot
+axis square;
+
 
 % save('mile','Dfin', ...
 % 'Z', 'Z1', 'Z2', 'ActiveSet', 'hist' ,'param', 'flag' ,'output');

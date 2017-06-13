@@ -16,11 +16,11 @@ if nargin < 3
     Z2 = Z;
     ActiveSet = {};
     ActiveSet.I = {};
-    ActiveSet.U = {};
-    ActiveSet.Sigma = {};
-    ActiveSet.Z = {};
-    ActiveSet.tracenorm = {};
-    ActiveSet.fronorm = {};
+%     ActiveSet.U = {};
+%     ActiveSet.Sigma = {};
+%     ActiveSet.Z = {};
+%     ActiveSet.tracenorm = {};
+%     ActiveSet.fronorm = {};
     ActiveSet.k = {};
     ActiveSet.atomsSupport = {};
     ActiveSet.alpha= [];

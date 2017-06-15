@@ -136,7 +136,9 @@ for q=qs
             param.epsStop=2^(q-1)*epsStop;
 
             % D diag update
+            D = update_diag(param,L,S,D);
             % S sparse update
+            S = update_sparse(param,L,S,D);
             % Z2=D+S
             [Z, L, Z2,Hall,fall, ActiveSet, hist_ps] = solve_ps_l1_omega_asqp(Z,L,S+D, ActiveSet,param,inputData,atoms_l1_sym,Hall,fall);
 

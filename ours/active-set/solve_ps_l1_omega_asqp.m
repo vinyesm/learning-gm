@@ -111,12 +111,13 @@ while cont
         fall=fall(Jset);
         
         %% Update ActiveSet and Z
-        
-        if ~param.Sfixed
-            Z1=zeros(p);
-            nz=find(ActiveSet.beta>1e-15);
-            for j=nz'
-                Z1=Z1+ActiveSet.beta(j)*reshape(atoms_l1_sym(:,ActiveSet.I_l1(j)),p,p);
+        if ~param.no_l1
+            if ~param.Sfixed
+                Z1=zeros(p);
+                nz=find(ActiveSet.beta>1e-15);
+                for j=nz'
+                    Z1=Z1+ActiveSet.beta(j)*reshape(atoms_l1_sym(:,ActiveSet.I_l1(j)),p,p);
+                end
             end
         end
         Z2=zeros(p);
@@ -151,8 +152,12 @@ while cont
             %% Verify sttopping criterion
             H = real(gradient(Z,inputData,param));
             %             [maxIJ,new_row, new_col] = dual_l1_spca(H);
-            [maxval_l1,new_row, new_col] = dual_l1_spca(H);
-            cf=1;
+            if param.no_l1
+                maxval_l1=-inf
+            else
+                [maxval_l1,new_row, new_col] = dual_l1_spca(H);
+                cf=1;
+            end
             if ~isempty(ActiveSet.I)
                 %                 [new_i,new_val,maxvar]=get_new_atom_spca(H,ActiveSet,param);
                 [new_i, new_val, maxval_om0]=get_new_atom_spca(H,ActiveSet,param);
@@ -192,7 +197,11 @@ while cont
             cont=cont && count< param.niterPS;
         end
     else % isempty(Hall)
-        [maxval_l1,new_row, new_col] = dual_l1_spca(H);
+        if param.no_l1
+            maxval_l1=-inf;
+        else
+            [maxval_l1,new_row, new_col] = dual_l1_spca(H);
+        end
         if ~isempty(ActiveSet.I)
             [new_i, new_val, maxval_om0]=get_new_atom_spca(H,ActiveSet,param);
         end
@@ -270,28 +279,28 @@ while cont
             else
                 aom=anew;
             end
-                        if debug_update
-                            if param.f==4
-                                [Hall_new0,fall_new0] = build_Hessian_l1_sym(inputData,param,atoms_l1_sym(:,ActiveSet.I_l1),aom);
-                                [Hall_new,fall_new] = update_Hessian_l1_sym(S,param,Hall, fall,atoms_l1_sym(:,ActiveSet.I_l1),aom,2);
-                            elseif param.f==5
-                                [Hall_new0,fall_new0] = build_Hessian_l1_SM(inputData,param,atoms_l1_sym(:,ActiveSet.I_l1),aom);
-                                [Hall_new,fall_new] = update_Hessian_l1_SM(S,param,Hall, fall,atoms_l1_sym(:,ActiveSet.I_l1),aom,2);
-                            end
-                            if norm(Hall_new-Hall_new0,'fro')^2 >1e-10 || norm(fall_new-fall_new0,'fro')^2 >1e-10
-                                figure(10);clf;
-                                subplot(1,3,1);
-                                imagesc(Hall);
-                                pbaspect([1 1 1]);
-                                subplot(1,3,2);
-                                imagesc(Hall_new0);
-                                pbaspect([1 1 1]);
-                                subplot(1,3,3);
-                                imagesc(Hall_new);
-                                pbaspect([1 1 1]);
-                                error('the update is not correct\n');
-                            end
-                        end
+            if debug_update
+                if param.f==4
+                    [Hall_new0,fall_new0] = build_Hessian_l1_sym(inputData,param,atoms_l1_sym(:,ActiveSet.I_l1),aom);
+                    [Hall_new,fall_new] = update_Hessian_l1_sym(S,param,Hall, fall,atoms_l1_sym(:,ActiveSet.I_l1),aom,2);
+                elseif param.f==5
+                    [Hall_new0,fall_new0] = build_Hessian_l1_SM(inputData,param,atoms_l1_sym(:,ActiveSet.I_l1),aom);
+                    [Hall_new,fall_new] = update_Hessian_l1_SM(S,param,Hall, fall,atoms_l1_sym(:,ActiveSet.I_l1),aom,2);
+                end
+                if norm(Hall_new-Hall_new0,'fro')^2 >1e-10 || norm(fall_new-fall_new0,'fro')^2 >1e-10
+                    figure(10);clf;
+                    subplot(1,3,1);
+                    imagesc(Hall);
+                    pbaspect([1 1 1]);
+                    subplot(1,3,2);
+                    imagesc(Hall_new0);
+                    pbaspect([1 1 1]);
+                    subplot(1,3,3);
+                    imagesc(Hall_new);
+                    pbaspect([1 1 1]);
+                    error('the update is not correct\n');
+                end
+            end
             %             else
             if param.f==1
                 [Hall_new,fall_new] = update_Hessian_prox(inputData.Y,param,Hall, fall,atoms_l1_sym(:,ActiveSet.I_l1),aom,2);
@@ -339,29 +348,29 @@ while cont
                     aom=[];
                 end
                 
-                                if debug_update
-                                    if param.f==4
-                                        [Hall_new0,fall_new0] = build_Hessian_l1_sym(inputData,param,atoms_l1_sym(:,ActiveSet.I_l1),aom);
-                                        [Hall_new,fall_new] = update_Hessian_l1_sym(S,param,Hall, fall,atoms_l1_sym(:,ActiveSet.I_l1),aom,1);
-                                    elseif param.f==5
-                                        [Hall_new0,fall_new0] = build_Hessian_l1_SM(inputData,param,atoms_l1_sym(:,ActiveSet.I_l1),aom);
-                                        [Hall_new,fall_new] = update_Hessian_l1_SM(S,param,Hall, fall,atoms_l1_sym(:,ActiveSet.I_l1),aom,1);
-                                    end
-                
-                                    if norm(Hall_new-Hall_new0,'fro')^2 >1e-10 || norm(fall_new-fall_new0,'fro')^2 >1e-10
-                                        figure(10);clf;
-                                        subplot(1,3,1);
-                                        imagesc(Hall);
-                                        pbaspect([1 1 1]);
-                                        subplot(1,3,2);
-                                        imagesc(Hall_new0);
-                                        pbaspect([1 1 1]);
-                                        subplot(1,3,3);
-                                        imagesc(Hall_new);
-                                        pbaspect([1 1 1]);
-                                        error('the update is not correct\n');
-                                    end
-                                end
+                if debug_update
+                    if param.f==4
+                        [Hall_new0,fall_new0] = build_Hessian_l1_sym(inputData,param,atoms_l1_sym(:,ActiveSet.I_l1),aom);
+                        [Hall_new,fall_new] = update_Hessian_l1_sym(S,param,Hall, fall,atoms_l1_sym(:,ActiveSet.I_l1),aom,1);
+                    elseif param.f==5
+                        [Hall_new0,fall_new0] = build_Hessian_l1_SM(inputData,param,atoms_l1_sym(:,ActiveSet.I_l1),aom);
+                        [Hall_new,fall_new] = update_Hessian_l1_SM(S,param,Hall, fall,atoms_l1_sym(:,ActiveSet.I_l1),aom,1);
+                    end
+                    
+                    if norm(Hall_new-Hall_new0,'fro')^2 >1e-10 || norm(fall_new-fall_new0,'fro')^2 >1e-10
+                        figure(10);clf;
+                        subplot(1,3,1);
+                        imagesc(Hall);
+                        pbaspect([1 1 1]);
+                        subplot(1,3,2);
+                        imagesc(Hall_new0);
+                        pbaspect([1 1 1]);
+                        subplot(1,3,3);
+                        imagesc(Hall_new);
+                        pbaspect([1 1 1]);
+                        error('the update is not correct\n');
+                    end
+                end
                 %                 else
                 if param.f==1
                     [Hall_new,fall_new] = update_Hessian_prox(inputData.Y,param,Hall, fall,atoms_l1_sym(:,ActiveSet.I_l1),aom,1);

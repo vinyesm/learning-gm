@@ -20,8 +20,9 @@ param = set_default_param(param);
 if nargin < 3
     startingZ = set_default_Z(inputData,param);
     Z = startingZ;
-    Z1 = Z;
-    Z2 = Z;
+    S = Z;
+    L = Z;
+    D = zeros(size(Z,1));
     ActiveSet = {};
     ActiveSet.I = {};
 %     ActiveSet.U = {};
@@ -44,15 +45,16 @@ if nargin < 3
     qs=3:-1:0;
 else
     %     Z = startingZ;
-    Z1 = startingZ.Z1;
-    Z2 = startingZ.Z2;
-    Z = Z1+Z2;
+    S = startingZ.Z1;
+    L = startingZ.Z2;
+    D = startingZ.D;
+    Z = S+L+D;
     qs=0;
 end
 
 if param.Sfixed
-    Z1 = param.Sstar;
-    Z = Z1;
+    S = param.Sstar;
+    Z = S;
 end
 
 
@@ -89,6 +91,8 @@ elseif param.f==4
 elseif param.f==5
     [ Q,q,atoms_l1_sym ] = build_atoms_hessian_l1_SM(sparse(inputData.X),param.mu); %score matching
 end
+else
+    atoms_l1_sym=[];
 end
 
 if nargin > 2
@@ -130,9 +134,12 @@ for q=qs
             end
             
             param.epsStop=2^(q-1)*epsStop;
-            %             keyboard;
-            [Z, Z1, Z2,Hall,fall, ActiveSet, hist_ps] = solve_ps_l1_omega_asqp(Z,Z1,Z2, ActiveSet,param,inputData,atoms_l1_sym,Hall,fall);
-            %             keyboard;
+
+            % D diag update
+            % S sparse update
+            % Z2=D+S
+            [Z, L, Z2,Hall,fall, ActiveSet, hist_ps] = solve_ps_l1_omega_asqp(Z,L,S+D, ActiveSet,param,inputData,atoms_l1_sym,Hall,fall);
+
             param.epsStop=2^q*epsStop;
             
             if ~isempty(ActiveSet.alpha) && param.debug==1

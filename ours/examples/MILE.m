@@ -38,8 +38,8 @@ param.max_nb_main_loop=100;
 
 
 %% blocks
-[Z Z1 Z2 ActiveSet hist param flag output] = cgan_l1_omega(inputData,param);
-
+% [Z Z1 Z2 ActiveSet hist param flag output] = cgan_l1_omega(inputData,param);
+[Z Z1 Z2 ActiveSet hist param flag output] = cgan_l1_omega_02(inputData,param);
 
 
 %% reconstruction l1+om

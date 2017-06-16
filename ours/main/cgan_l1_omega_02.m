@@ -1,4 +1,4 @@
-function [Z Z1 Z2 ActiveSet hist param flag output] = cgan_l1_omega_02(inputData,param,startingZ,ActiveSet)
+function [Z L S D Z2 ActiveSet hist param flag output] = cgan_l1_omega_02(inputData,param,startingZ,ActiveSet)
 
 %% f(S,L,D)
 % prox_l1 on S
@@ -57,7 +57,9 @@ if param.Sfixed
     Z = S;
 end
 
-
+obj0  = [];
+loss0 = [];
+pen0  = [];
 obj  = [];
 loss = [];
 pen  = [];
@@ -72,7 +74,6 @@ hist.varIJ=[];
 hist.nzalphas=[];
 hist.normalpha=[];
 p=size(Z,1);
-D=zeros(p,1);
 output.time=0;
 
 fprintf('\n \n CGAN L1 OMEGA\n');
@@ -112,7 +113,8 @@ max_nb_main_loop = param.max_nb_main_loop;
 hist.time=toc;
 epsStop=param.epsStop;
 
-
+[ob, lo, pe] = get_val_l1_omega_02(L,S,D,inputData,param,ActiveSet);
+obj0 = [obj0 ob];
 
 % for q=5:-1:0
 for q=qs
@@ -136,12 +138,25 @@ for q=qs
             param.epsStop=2^(q-1)*epsStop;
 
             % D diag update
-            D = update_diag(param,L,S,D);
+            D = update_diag(param,inputData,L,S,D);
+            [ob, lo, pe] = get_val_l1_omega_02(L,S,D,inputData,param,ActiveSet);
+            obj0 = [obj0 ob];
+            loss0 = [loss0 lo];
+            pen0 = [pen0 pe];
             % S sparse update
-            S = update_sparse(param,L,S,D);
+            S = update_sparse(param,inputData,L,S,D);
+            [ob, lo, pe] = get_val_l1_omega_02(L,S,D,inputData,param,ActiveSet);
+            obj0 = [obj0 ob];
+            loss0 = [loss0 lo];
+            pen0 = [pen0 pe];
             % Z2=D+S
             [Z, L, Z2,Hall,fall, ActiveSet, hist_ps] = solve_ps_l1_omega_asqp(Z,L,S+D, ActiveSet,param,inputData,atoms_l1_sym,Hall,fall);
-
+            [ob, lo, pe] = get_val_l1_omega_02(L,S,D,inputData,param,ActiveSet);
+            obj0 = [obj0 ob];
+            loss0 = [loss0 lo];
+            pen0 = [pen0 pe];
+%             keyboard;
+            
             param.epsStop=2^q*epsStop;
             
             if ~isempty(ActiveSet.alpha) && param.debug==1
@@ -309,6 +324,9 @@ hist.time_sup= time_sup;
 hist.obj_sup = obj_sup;
 hist.nb_pivot= nb_pivot;
 hist.active_var= active_var;
+hist.obj0=obj0;
+hist.loss0=loss0;
+hist.pen0=pen0;
 if ActiveSet.atom_count>0
     ActiveSet.atoms=ActiveSet.atoms(:,1:ActiveSet.atom_count);
 end

@@ -30,11 +30,11 @@ inputData.X2=S^.5;
 inputData.Y=-eye(p);
 param.cardfun=inf*ones(1,p);
 param.cardfun(100)=1;
-lam=.11;
-gam=.005;
+lam=1e-3;
+gam=1e-2;
 param.lambda=lam;
 param.mu=gam;
-param.max_nb_main_loop=100;
+param.max_nb_main_loop=2;
 
 
 %% blocks
@@ -42,6 +42,10 @@ param.max_nb_main_loop=100;
 [Z L S D Z2 ActiveSet hist param flag output] = cgan_l1_omega_02(inputData,param);
 Z1=S+D;
 Z2=L;
+
+%% objective
+figure(1);clf;
+plot(hist.obj0);
 
 %% reconstruction l1+om
 if ~isempty(ActiveSet.alpha)

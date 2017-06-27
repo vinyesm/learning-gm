@@ -190,7 +190,7 @@ for q=qs
         
         [u, kBest,val] = lmo_spsd_TPower(-H,param);
         cf=min(param.cardfun(kBest:end));
-        %     keyboard;
+        keyboard;
         
         if val<param.lambda*(1+param.epsStop)
             %%      few proximal steps for postprcessing

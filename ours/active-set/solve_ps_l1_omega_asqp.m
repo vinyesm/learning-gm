@@ -153,7 +153,7 @@ while cont
             H = real(gradient(Z,inputData,param));
             %             [maxIJ,new_row, new_col] = dual_l1_spca(H);
             if param.no_l1
-                maxval_l1=-inf
+                maxval_l1=-inf;
             else
                 [maxval_l1,new_row, new_col] = dual_l1_spca(H);
                 cf=1;
@@ -226,6 +226,7 @@ while cont
                 maxval_om=maxval_om0;
             else
                 maxval_om=-inf;
+                keyboard;
             end
         else
             maxval_om=-inf;

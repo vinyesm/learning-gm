@@ -18,7 +18,8 @@ switch param.f
 end
 
 %prox l1
-I=speye(p)==0;
+% I=speye(p)==0;
+I=true(p);
 S(I)=S(I)-1/Lip*grad_S(I);
 S= wthresh(S,'s',param.mu);
 
@@ -26,7 +27,7 @@ S= wthresh(S,'s',param.mu);
 
 if debug
     obj1=.5*norm((inputData.X1*(S+L+D)*inputData.X2 - inputData.Y),'fro')^2;
-    if obj0<=obj1
+    if obj0<obj1
         fprintf('error : objective does not decrease\n');
         keyboard;
     end

@@ -14,7 +14,7 @@ switch param.f
 %         H = inputData.X1'*(inputData.X1*Z*inputData.X2 - inputData.Y)*inputData.X2';
         C=inputData.X1*inputData.X1;
         C2=C.^2;
-        grad_D= C2*diag(D)+diag(C-C*(S+L)*C);
+        grad_D= C2*diag(D)+diag(C+C*(S+L)*C);
         Lip=norm(C2,'fro');
     case 5 % score matching 
 %         H = .5*(inputData.X*Z+Z*inputData.X)-inputData.Y;

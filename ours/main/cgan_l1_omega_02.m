@@ -1,4 +1,4 @@
-function [Z L S D Z2 ActiveSet hist param flag output] = cgan_l1_omega_02(inputData,param,startingZ,ActiveSet)
+function [Z L S D  ActiveSet hist param flag output] = cgan_l1_omega_02(inputData,param,startingZ,ActiveSet)
 
 %% f(S,L,D)
 % prox_l1 on S
@@ -137,25 +137,31 @@ for q=qs
             
             param.epsStop=2^(q-1)*epsStop;
 
-            % D diag update
+%             D diag update
             D = update_diag(param,inputData,L,S,D);
             [ob, lo, pe] = get_val_l1_omega_02(L,S,D,inputData,param,ActiveSet);
             obj0 = [obj0 ob];
             loss0 = [loss0 lo];
             pen0 = [pen0 pe];
-            % S sparse update
-            S = update_sparse(param,inputData,L,S,D);
-            [ob, lo, pe] = get_val_l1_omega_02(L,S,D,inputData,param,ActiveSet);
-            obj0 = [obj0 ob];
-            loss0 = [loss0 lo];
-            pen0 = [pen0 pe];
-            % Z2=D+S
-            [Z, L, Z2,Hall,fall, ActiveSet, hist_ps] = solve_ps_l1_omega_asqp(Z,L,S+D, ActiveSet,param,inputData,atoms_l1_sym,Hall,fall);
-            [ob, lo, pe] = get_val_l1_omega_02(L,S,D,inputData,param,ActiveSet);
-            obj0 = [obj0 ob];
-            loss0 = [loss0 lo];
-            pen0 = [pen0 pe];
+           
+%             C=inputData.X1;
 %             keyboard;
+            
+            
+            % S sparse update
+%             S = update_sparse(param,inputData,L,S,D);
+%             [ob, lo, pe] = get_val_l1_omega_02(L,S,D,inputData,param,ActiveSet);
+%             obj0 = [obj0 ob];
+%             loss0 = [loss0 lo];
+%             pen0 = [pen0 pe]; 
+            Z1=S+D;
+            % Z2=D+S
+            [Z, res, L, Hall,fall, ActiveSet, hist_ps] = solve_ps_l1_omega_asqp02(L+S+D,Z1,L, ActiveSet,param,inputData,atoms_l1_sym,Hall,fall);
+            [ob, lo, pe] = get_val_l1_omega_02(L,S,D,inputData,param,ActiveSet);
+            obj0 = [obj0 ob];
+            loss0 = [loss0 lo];
+            pen0 = [pen0 pe];
+           
             
             param.epsStop=2^q*epsStop;
             
@@ -189,8 +195,9 @@ for q=qs
         end
         
         [u, kBest,val] = lmo_spsd_TPower(-H,param);
+%         keyboard;
         cf=min(param.cardfun(kBest:end));
-        keyboard;
+%         keyboard;
         
         if val<param.lambda*(1+param.epsStop)
             %%      few proximal steps for postprcessing
@@ -205,9 +212,9 @@ for q=qs
                     elseif param.f==5
                         S=inputData.X;
                     end
-                    [Z2,ActiveSet]=prox_cleaning(Z1,Z2,S,ActiveSet,param,20,0);
+                    [Z2,ActiveSet]=prox_cleaning(Z1,L,S,ActiveSet,param,20,0);
                 end
-                Z=Z1+Z2;
+                Z=Z1+L;
                 if param.f==1
                     [Hall,fall] = build_Hessian_prox(inputData,param,atoms_l1_sym(:,ActiveSet.I_l1),ActiveSet.atoms);
                 elseif param.f==4
@@ -249,7 +256,9 @@ for q=qs
         end
         %%
         %maxIJ=max(abs(H(:)));
-        maxIJ = dual_l1_spca(H);
+        HM=H;
+        HM(speye(p)==1)=0;
+        maxIJ = dual_l1_spca(HM);
         if(isempty(currI))
             varIJ=-1;
             takenI=true;
@@ -300,8 +309,9 @@ for q=qs
         end
         c = i<max_nb_main_loop & c;
         %         keyboard
-    end
+    end  
 end
+
 
 if param.debug==1
     if i>=max_nb_main_loop
@@ -344,16 +354,16 @@ if pp==1
     if ~isempty(ActiveSet.atoms)
         fprintf('Cleaning.. \n');
         if param.f==1
-            [Z2,ActiveSet]=prox_cleaning_prox(Z1,Z2,inputData.Y,ActiveSet,param,100,1);
-            Z=Z1+Z2;
+            [L,ActiveSet]=prox_cleaning_prox(Z1,L,inputData.Y,ActiveSet,param,100,1);
+            Z=Z1+L;
         else
             if param.f==4
                 S=inputData.X1*inputData.X1;
             elseif param.f==5
                 S=inputData.X;
             end
-            [Z2,ActiveSet]=prox_cleaning(Z1,Z2,S,ActiveSet,param,100,1);
-            Z=Z1+Z2;
+            [L,ActiveSet]=prox_cleaning(Z1,L,S,ActiveSet,param,100,1);
+            Z=Z1+L;
         end
     end
 end

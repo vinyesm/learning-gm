@@ -30,16 +30,16 @@ inputData.X2=S^.5;
 inputData.Y=-eye(p);
 param.cardfun=inf*ones(1,p);
 param.cardfun(100)=1;
-lam=1e-3;
-gam=1e-2;
+lam=.11;
+gam=.005;
 param.lambda=lam;
 param.mu=gam;
-param.max_nb_main_loop=2;
+param.max_nb_main_loop=1;
 
 
 %% blocks
 % [Z Z1 Z2 ActiveSet hist param flag output] = cgan_l1_omega(inputData,param);
-[Z L S D Z2 ActiveSet hist param flag output] = cgan_l1_omega_02(inputData,param);
+[Z L S D ActiveSet hist param flag output] = cgan_l1_omega_02(inputData,param);
 Z1=S+D;
 Z2=L;
 

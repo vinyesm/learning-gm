@@ -114,11 +114,6 @@ if atom_added==2,
     end
 end
 
-if debug
-    figure(11);clf;
-    imagesc(abs(Hall));
-    pbaspect([1 1 1]);
-    colorbar;
-end
+% keyboard;
 
 end

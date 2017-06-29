@@ -8,7 +8,11 @@ for i=1:ActiveSet.atom_count
     cf(i)=min(param.cardfun(card(i):end));
 end
 
-pen = param.lambda*dot(cf,ActiveSet.alpha)+param.mu*(.5*sum(abs(S(:))));
+if ActiveSet.atom_count>0
+    pen = param.lambda*dot(cf,ActiveSet.alpha)+param.mu*(.5*sum(abs(S(:))));
+else
+    pen=param.mu*(.5*sum(abs(S(:))));
+end
 
 switch param.f
     case 1 % prox

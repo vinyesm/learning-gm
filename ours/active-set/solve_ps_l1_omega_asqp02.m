@@ -3,7 +3,7 @@ function [ Z,Z1,Z2,Hall,fall, ActiveSet, hist] = solve_ps_l1_omega_asqp02( Z,Z1,
 
 debug=1;
 debug_update=0;
-compute_dg=1;
+compute_dg=0;
 
 if param.f==4
 Y=inputData.X1*(inputData.X1*Z1*inputData.X1-inputData.Y)*inputData.X1;
@@ -202,7 +202,7 @@ while cont
             
             cont=cont && count< param.niterPS;
             
-            cont=count<10;
+%             cont=count<10;
             
             
         end
@@ -305,12 +305,12 @@ while cont
                 Hall_new(1:nat,1:nat)=Hall;
                 fall_new(1:nat,1)=fall;
                 for i=1:nat
-                    temp=sanew'*ActiveSet.atoms(:,i);
+                    temp=(sanew'*ActiveSet.atoms(:,i))^2;
                     Hall_new(nat+1,i)=temp;
                     Hall_new(i,nat+1)=temp;
                 end                
             end
-            Hall_new(nat+1,nat+1)=sanew'*anew;
+            Hall_new(nat+1,nat+1)=(sanew'*anew)^2;
             fall_new(nat+1) = anew'*Y*anew +param.lambda*cf;
         elseif param.f==5
             [Hall_new,fall_new] = update_Hessian_l1_SM(S,param,Hall, fall,atoms_l1_sym(:,ActiveSet.I_l1),aom,2);
@@ -430,7 +430,7 @@ if count>param.niterPS
 end
 
 
-if 1 %param.debug
+if param.debug
     figure(30);clf;
     plot(hist.obj);
     title('objective');

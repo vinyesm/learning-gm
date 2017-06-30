@@ -98,9 +98,9 @@ end
 
 if nargin > 2
     if param.f==4
-        [Hall,fall] = build_Hessian_l1_sym(inputData,param,atoms_l1_sym(:,ActiveSet.I_l1),ActiveSet.atoms);
+%         [Hall,fall] = build_Hessian_l1_sym(inputData,param,atoms_l1_sym(:,ActiveSet.I_l1),ActiveSet.atoms);
     elseif param.f==5
-        [Hall,fall] = build_Hessian_l1_SM(inputData,param,atoms_l1_sym(:,ActiveSet.I_l1),ActiveSet.atoms);
+%         [Hall,fall] = build_Hessian_l1_SM(inputData,param,atoms_l1_sym(:,ActiveSet.I_l1),ActiveSet.atoms);
     end
 end
 

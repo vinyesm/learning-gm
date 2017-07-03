@@ -1,0 +1,61 @@
+\section{Identifiability}
+\label{sec:id}
+%It is beyond the scope of this paper to provide in this a proof comparable to that of \citet{chandrasekaran2010} which would show that for . 
+
+In this section, we prove a first result towards showing that the optimisation problem (\ref{opt_at}) recovers the support of $S^*$ and the correct rank for each block under technical assumptions. We however do not show exactly that result, which would be beyond the scope of this work. 
+
+Following the work of~\citet{chandrasekaran2011rank}, we show that if  $M^{\ast}$ is a matrix that writes as  $M^{\ast}= S^{\ast}-L^{\ast}$, with $S^{\ast}$ an unknown sparse matrix and an unknown  low $k,\succeq$-rank matrix, which is itself a sum $L^{\ast}=\sum_{I\in\mathcal{I}L^{I}}$ of matrices $L^{I}$ each supported on $I \times I$ and with decomposition . We want to know, given $M^{\ast}$, ther exist a unique decomposition $\left(S,(L^{I})_{I\in\mathcal{I}}\right)$ satisfying this conditions. We consider the case where the sets $I\in\mathcal{I}$ do not overlap.  \\
+
+More formally we want to know under which conditions the following optimization problem 
+\begin{align}
+\min \gamma\|S\|_1+\Omega_{k,\succeq}(L) \quad s.t. \quad M=S+L
+\end{align}
+has a unique solution.\\
+
+In order to recover such a decompostion  $\left(S,(L^{I})_{I\in\mathcal{I}}\right)$, identifiability conditions are necessary, that is there is no ambiguity between the subspaces containing the different components.  \citet{chandrasekaran2011rank} introduce natural conditions formulated in terms of incoherence between tangent subspaces. We define the tangent spaces for sparse matrices and for our low-rank sparse components.
+
+For any matrix $A\in\RR^{p\times p}$, the tangent space $\T_s(A)$ at $A$ with respect to the variety of matrices with size of support less than the size of the support of $A$ is given by
+$$
+\T_s(A)=\{M \in \RR^{p \times p}\mid  \: M=M^\top, \: \supp(M)\subset \supp(A)\}
+$$
+
+For any p.s.d. matrix $UU^{\top}\in\RR^{p\times p}$  the tangent space $\T(U)$ at $UU^{top}$ with respect to the variety of matrices of fixed same rank given by
+$$
+\T(U):=\{M \in \: M=UX^\top+XU^\top,\: X \in \RR^{\text{rank}(U) \times p} \}.
+$$
+In our setting we need to consider the tangent subspace for a matrix $UU^{\top}\in\RR^{p\times p}$ with fixed support $I$.
+We consider several subspaces
+$$\T_I(U):=\{M \in \bar{\T}_I\mid \: M=UX^\top+XU^\top,\: X \in \RR^{\text{rank}(U) \times p} \},$$
+where 
+$$
+\bar{\T}_I:=\{M \in \RR^{p \times p}\mid  M=M^\top, \: \supp(M)\subset I \times I\}.
+$$
+
+Let $\T^c_I(U)$ denote the orthogonal complement\footnote{Note in particular that it is not the orthogonal complement in the entire space.} of $\T_I(U)$ in $\bar{\T}_I$. The projections on the corresponding subspaces are $\mathcal{P}_{\T_s(A)}(M)=M_S$ and $\mathcal{P}_{\T_I(U)}(M)=\mathcal{P}_{U}(M_{II})$ with $$\mathcal{P}_U(M):=M-(I-UU^\top)M(I-UU^\top).$$ 
+
+%possible we introduce a notion of incoherence between the subspaces containing the different components. Following ideas from , we extend identifiability conditions for our setting and show that  our assumptions yields results that are different than the one obtained in \citet{chandrasekaran2011rank}. 
+The following quantities define incoherence between subspaces
+\begin{eqnarray*}
+\xxi(\T_s(S),\T_J(V))&=&\max \{ {\|M_S\|_\infty} \mid M \in \T_J(V), \: \|M\|_{\op}\leq 1\}\\
+\xxi(\T_I(U),\T_s(S))&=&\max \{ {\|\mathcal{P}_{U}(M_{II})\|_{\op}} \mid M \in \T_s(S), \: \|M\|_{\infty}\leq 1\}\\
+\xxi(\T_I(U),\T_J(V))&=&\max \{ {\|\mathcal{P}_{U}(M_{II})\|_{\op}} \mid  M \in \T_J(V), \: \|M\|_{\op}\leq 1\}\\
+\xi(\T_J(V))&=&\max \{ {\|M\|_\infty} \mid M \in \T_J(V), \: \|M\|_{\op}\leq 1\}\\
+\mu_I(\T_s(S))&=&\max \{ {\|M_{II}\|_\op} \mid M \in \T_s(S), \: \|M\|_{\infty}\leq 1\}\\
+\end{eqnarray*}
+
+\begin{thm}
+\label{theo:two}
+If $M^*=S^*-L^*$ with $$L^*=\sum_{I \in \mathcal{I}} L^{\sss{I}},  \quad \supp(L^{\sss{I}}) \subset I \times I$$ for $\I \subset \mathcal{G}^p_k$ %(where $\mathcal{G}^p_k$ is the collection of all subsets of size $k$ of $[\![p]\!]$)
+and $L^{\sss{I}}=U^{\sss{I}} D^{\sss{I}} {U^{\sss{I}}}^\top$ the eigenvalue decomposition of $L^{\sss{I}}$.
+
+Let $$\mu'_I=\xxi(\T_I(U),\T_s(S)), \quad  \xi'_I :=\xxi(\T_s(S),\T_I(U)), \quad \mu_I:=\mu_I(\T_s(S)) , \quad \xi_I:=\xi(\T_I(U)),$$
+and 
+$$\alpha_I:=\frac{1-\mu'_I\xi'_I}{1+\max(\gamma \mu'_I,\frac{1}{\gamma} \xi'_I)} \qquad \text{and} \qquad \epsilon_I :=\max \big (\|\mathcal{P}_{\T_I(\uI)}(\gamma \text{sign}(S^*))\|_{\op}, \gamma^{-1}\|\uI {\uI}^\top\|_{\infty} \big ).$$
+
+Assume that for all $(I,I') \in \I \times \I, I \cap I'=\varnothing$. If $$\displaystyle\max_{I \in \I} \max(\mu_I,\xi_I) (1+\frac{\epsilon_I}{\alpha_I})<1, \quad \displaystyle \max_{J \in \mathcal{G}^p_k} \lambda_{\max}^+\big (S^*_{\bar{I}^c \cap (J \times J)} \big ) <1$$ %\quad 
+%\text{and}  \quad \max_{J \in \mathcal{G}^p_k, J \neq I}\lambda_{\max}^+(\uI_J{\uI_J}^\top)<1,$$
+with $\displaystyle \bar{I}=\bigcup_{I \in \I} I \times I$,
+then the  decomposition given by $\big (S^*,(D^{\sss{I}} \big)_{I \in \I},(\uI)_{I \in \I} \big )$ is solution to the optimization problem $$\displaystyle \min \gamma \|S\|_1+\Omega_{k,\succeq}(L) \quad \text{\st} \quad M=S+L.$$
+\end{thm}
+
+The proof can be found in the appendix. We follow the general proof scheme of \citet{chandrasekaran2011rank}. The optimization problem admits the unique announced solution if it satisfies first order gradient condition.

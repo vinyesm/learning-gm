@@ -34,7 +34,7 @@ lam=.11;
 gam=.005;
 param.lambda=lam;
 param.mu=gam;
-param.max_nb_main_loop=1;
+param.max_nb_main_loop=2;
 
 
 %% blocks
@@ -81,6 +81,20 @@ axis square;
 colormap hot;
 
 %%
+figure(11);clf;
+subplot(1,3,1);
+imagesc(abs(L));
+title('L')
+axis square;
+subplot(1,3,2);
+imagesc(abs(S));
+title('S')
+axis square;
+subplot(1,3,3);
+imagesc(abs(D));
+title('D')
+axis square;
+
 %% reorder
 
 [I]=grayorder(Uso~=0);
@@ -89,7 +103,7 @@ Z2II=Z2(I,I);
 Z1II=Z1(I,I);
 
 
-figure(11);clf;
+figure(12);clf;
 subplot(2,3,1);
 imagesc(abs(UsoI));
 axis square;

@@ -10,7 +10,7 @@ switch param.f
     case 4 % bilinear
         obj0=.5*norm((inputData.X1*Z*inputData.X2 - inputData.Y),'fro')^2;
         grad_S = inputData.X1'*(inputData.X1*Z*inputData.X2 - inputData.Y)*inputData.X2';
-        Lip=norm(inputData.X1,'fro')^2;
+        Lip=norm(inputData.X1,'fro')^4;
     case 5 % score matching
         %         H = .5*(inputData.X*Z+Z*inputData.X)-inputData.Y;
         %         H = .5*(inputData.X*Z+Z*inputData.X)-inputData.Y;
@@ -18,10 +18,12 @@ switch param.f
 end
 
 %prox l1
-% I=speye(p)==0;
-I=true(p);
-S(I)=S(I)-1/Lip*grad_S(I);
-S= wthresh(S,'s',param.mu);
+I=speye(p)==0;
+% I=true(p);
+Snew=sparse(p,p);
+Snew(I)=S(I)-1/Lip*grad_S(I);
+S= wthresh(Snew,'s',param.mu);
+% keyboard;
 
 % S((speye(p)>0))=0;
 

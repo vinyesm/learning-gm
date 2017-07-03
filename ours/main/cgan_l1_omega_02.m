@@ -149,11 +149,11 @@ for q=qs
             
             
             % S sparse update
-%             S = update_sparse(param,inputData,L,S,D);
-%             [ob, lo, pe] = get_val_l1_omega_02(L,S,D,inputData,param,ActiveSet);
-%             obj0 = [obj0 ob];
-%             loss0 = [loss0 lo];
-%             pen0 = [pen0 pe]; 
+            S = update_sparse(param,inputData,L,S,D);
+            [ob, lo, pe] = get_val_l1_omega_02(L,S,D,inputData,param,ActiveSet);
+            obj0 = [obj0 ob];
+            loss0 = [loss0 lo];
+            pen0 = [pen0 pe]; 
             Z1=S+D;
             % Z2=D+S
             [Z, res, L, Hall,fall, ActiveSet, hist_ps] = solve_ps_l1_omega_asqp02(L+S+D,Z1,L, ActiveSet,param,inputData,atoms_l1_sym,Hall,fall);

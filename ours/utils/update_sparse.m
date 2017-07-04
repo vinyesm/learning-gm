@@ -23,7 +23,7 @@ I=speye(p)==0;
 Snew=sparse(p,p);
 Snew(I)=S(I)-1/Lip*grad_S(I);
 S= wthresh(Snew,'s',param.mu);
-% keyboard;
+keyboard;
 
 % S((speye(p)>0))=0;
 

@@ -125,9 +125,11 @@ We use $\Omega_{k,\succeq}$ to impose structure on the low rank component and co
 \min_{S,L} f(S-L)+\lambda\big(\gamma\|S\|_{1}+\Omega_{k,\succeq}(L)\big) \quad s.t. \quad S-L \succeq 0 \quad L \succeq 0.
 \end{align}
 Since the norm $\Omega_k$ only provides symmetric p.s.d matrices, as a sum of p.s.d rank-one matrices, the nonnegativity constraint on $L$ can be dropped. The regularization $\gamma\|S\|_{1}+\Omega_k(L)$ defines an atomic norm on matrices as shown in the following lemma
-\begin{lemm} $\bar{\Omega}(M):=\inf\{\gamma\|A\|_{1}+\Omega_k(B)\mid M=A+B\}$ is an atomic norm and its \rm{LMO} is given by 
+
+\TODO{plus une remarque q'un lemme}
+\begin{lemm} $\bar{\Omega}(M):=\inf\{\gamma\|A\|_{1}+\Omega_k(B)\mid M=A+B\}$ is an atomic norm and its polar norm is given by 
 \begin{align*}
-\rm{LMO}_{\bar{\Omega}}(Y)=\max\left(\frac{\|Y\|_{\infty}}{\gamma},\Omega_{k,\succeq}^{\circ}(Y)\right).
+{\bar{\Omega}^{\circ}}(Y)=\max\left(\frac{\|Y\|_{\infty}}{\gamma},\Omega_{k,\succeq}^{\circ}(Y)\right).
 \end{align*}
 \end{lemm}
 In order to rewrite our problem as a simple convex regularized by $\bar{\Omega}$, we drop the nonegativity constraint on $S-L$. Thus our problem is rewritten as
@@ -138,12 +140,19 @@ In order to rewrite our problem as a simple convex regularized by $\bar{\Omega}$
 and $M$ writes as a sum of atoms of $\ell_1$ and atoms of $\Omega_k$. Therefore we can recover a sparse component and a low-rank component with multiple sparse factors.\\
 
 \subsection{Algorithm}
-We choose to consider quadratic losses $f_{T}$ and $f_{SM}$, introduced in section \ref{sec:ggm}, so that we can apply an efficient algorithm recently proposed by \citet{vinyes2017}(\texttt{FCG}). The algorithm consists of applying a Fully Corrective Frank Wolfe \citep{LacosteFCFW}, for which we need to compute the LMO at each iteration. 
-%However  the $\rm{LMO}_{\Omega_{k,\succeq}}$ consits of a generalization to asymmetric matrices of the rank-one sparse PCA problem for p.s.d matrices $XX^{\top}$,
-%\begin{align*}
-%\min u^{\top}XX^{\top}u \quad s.t.  \|u\|_0 \leq k,\quad \|u\|_2 = 1
-%\end{align*}
-%which is known to be an NP-hard problem \citep{moghaddam2008sparse}. 
+We start by reviewing Frank Wolfe (FW) algorithm \citep{frank1956algorithm,LacosteFCFW}. 
+FW algorithm, also known as conditional gradient, is particularly well suited for constrained quadratic optimization of the form
+\begin{align*}
+\min f(x) \quad s.t. \quad x\in \mathcal{C}
+\end{align*}
+where $\mathcal{C}$ is convex and bounded. In particular $\mathcal{C}$ can be the convex hull of a set of atoms $\A$  In each iteration FW needs to solve a linear minimization oracle (LMO) which solves the optimization problem
+\begin{align}
+\rm{{LMO}}_{\mathcal{C}}(y) := \arg\min_{z \in \mathcal{C}} \left\langle y,z \right\rangle.
+\end{align}
+At each iteration FW selects a new atom $a^t$ from $\mathcal{C}$ querying the LMO and computes the new iterate as a convex combination of $a^t$ and the old iterate $x^t$. The convex update can be done by line search. Another variant discussed in \citet{LacosteFCFW} consits of finding the convex combination of all previously selected atoms $(a^i)_{i<t}$
+ Generalization for regularized problems. We choose to consider quadratic losses $f_{T}$ and $f_{SM}$, introduced in section \ref{sec:ggm}, so that we can apply an efficient algorithm recently proposed by \citet{vinyes2017}(\texttt{FCG}). The algorithm consists of applying a Fully Corrective Frank Wolfe \citep{LacosteFCFW}, for which we need to compute the LMO at each iteration. 
+
+
 We propose to use a Truncated Power Iteration (TPI) heuristic introduced by \citet{yuan2013truncated} to approximate the oracle. In order to apply the TPI to general symmetric matrices, we add the frobenius norm of the matrix before applying it. \\
 
 

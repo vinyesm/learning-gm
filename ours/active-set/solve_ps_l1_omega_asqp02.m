@@ -202,7 +202,7 @@ while cont
             
             cont=cont && count< param.niterPS;
             
-%             cont=count<10;
+            cont=count<10;
             
             
         end

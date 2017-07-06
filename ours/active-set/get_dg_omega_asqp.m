@@ -32,9 +32,8 @@ kappa = shrink * (inputData.X1*Z*inputData.X2-inputData.Y);
 U=inputData.Y+kappa;
 dg1=.5*norm(inputData.X1*U*inputData.X2-inputData.Y,'fro')^2;
 dg2= pen + trace(Z,inputData.X1*kappa*inputData.X2);
-dualityGap = obj + sum(sum( inputData.Y .* kappa )) + 1 / 2 * sum(sum( kappa .* kappa ));
-gapLoss = loss + sum(sum( inputData.Y .* kappa )) + 1 / 2 * sum(sum( kappa .* kappa )) -sum(sum((inputData.X1*Z*inputData.X2).*kappa));
-gapPen = pen + sum(sum((inputData.X1*Z*inputData.X2).*kappa));
+dualityGap = dg1+dg2;
+keyboard;
 
 
 if dualityGap<0 && abs(dualityGap)>1e-10

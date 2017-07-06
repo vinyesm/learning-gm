@@ -3,7 +3,7 @@ function [ Z,Z1,Z2,Hall,fall, ActiveSet, hist] = solve_ps_l1_omega_asqp02( Z,Z1,
 
 debug=1;
 debug_update=0;
-compute_dg=0;
+compute_dg=1;
 
 if param.f==4
 Y=inputData.X1*(inputData.X1*Z1*inputData.X1-inputData.Y)*inputData.X1;
@@ -136,7 +136,7 @@ while cont
         %% Compute objective, loss, penalty and duality gap
         if (param.sloppy==0 || (param.sloppy~=0 && mod(count,100)==1)) %&& ~isempty(ActiveSet.alpha)
             if compute_dg
-                [loss(i),pen(i),obj(i),dg(i),time(i)]=get_val_l1_omega_asqp(Z,ActiveSet,inputData,param);
+                [loss(i),pen(i),obj(i),dg(i),time(i)]=get_val_omega_asqp(Z,ActiveSet,inputData,param);
                 nb_pivot(i)=npiv;
                 active_var(i)= sum(ActiveSet.alpha>0);
                 dualgap=dg(i);
@@ -202,7 +202,7 @@ while cont
             
             cont=cont && count< param.niterPS;
             
-            cont=count<10;
+            cont=dg(i-1)<epscond && count< param.niterPS;
             
             
         end

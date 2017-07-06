@@ -208,11 +208,11 @@ for q=qs
                     [Z2,ActiveSet]=prox_cleaning_prox(Z1,Z2,inputData.Y,ActiveSet,param,20,0);
                 else
                     if param.f==4
-                        S=inputData.X1*inputData.X1;
+                        Sigma=inputData.X1*inputData.X1;
                     elseif param.f==5
-                        S=inputData.X;
+                        Sigma=inputData.X;
                     end
-                    [Z2,ActiveSet]=prox_cleaning(Z1,L,S,ActiveSet,param,20,0);
+                    [Z2,ActiveSet]=prox_cleaning(Z1,L,Sigma,ActiveSet,param,20,0);
                 end
                 Z=Z1+L;
                 if param.f==1
@@ -358,11 +358,11 @@ if pp==1
             Z=Z1+L;
         else
             if param.f==4
-                S=inputData.X1*inputData.X1;
+                Sigma=inputData.X1*inputData.X1;
             elseif param.f==5
-                S=inputData.X;
+                Sigma=inputData.X;
             end
-            [L,ActiveSet]=prox_cleaning(Z1,L,S,ActiveSet,param,100,1);
+            [L,ActiveSet]=prox_cleaning(Z1,L,Sigma,ActiveSet,param,100,1);
             Z=Z1+L;
         end
     end

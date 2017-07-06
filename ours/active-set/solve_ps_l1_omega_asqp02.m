@@ -3,7 +3,7 @@ function [ Z,Z1,Z2,Hall,fall, ActiveSet, hist] = solve_ps_l1_omega_asqp02( Z,Z1,
 
 debug=1;
 debug_update=0;
-compute_dg=1;
+compute_dg=0;
 
 if param.f==4
 Y=inputData.X1*(inputData.X1*Z1*inputData.X1-inputData.Y)*inputData.X1;
@@ -33,7 +33,7 @@ p=size(Z,1);
 
 new_atom_added=false;
 idx_added=-1;
-i=1;
+ii=1;
 count=1;
 cont=true;
 
@@ -136,23 +136,24 @@ while cont
         %% Compute objective, loss, penalty and duality gap
         if (param.sloppy==0 || (param.sloppy~=0 && mod(count,100)==1)) %&& ~isempty(ActiveSet.alpha)
             if compute_dg
-                [loss(i),pen(i),obj(i),dg(i),time(i)]=get_val_omega_asqp(Z,ActiveSet,inputData,param);
-                nb_pivot(i)=npiv;
-                active_var(i)= sum(ActiveSet.alpha>0);
-                dualgap=dg(i);
+                [loss(ii),pen(ii),obj(ii),dg(ii),time(ii)]=get_val_omega_asqp(Z,Z1,Z2,ActiveSet,inputData,param);
+                nb_pivot(ii)=npiv;
+                active_var(ii)= sum(ActiveSet.alpha>0);
+                dualgap=dg(ii);
                 %cont = (dg(i)>param.PSdualityEpsilon) && count< param.niterPS;
                 
-                if debug && i>1
-                    fprintf(' PS info obj=%f  loss=%f  pen=%f penl1=%f pen_om=%f dg=%f  \n', obj(i),loss(i), pen(i), param.lambda*sum(ActiveSet.alpha),param.mu*sum(ActiveSet.beta), dg(i));
-                    if obj(i)>obj(i-1)+param.epsStop
+                if debug && ii>1
+                    fprintf(' PS info obj=%f  loss=%f  pen=%f penl1=%f pen_om=%f dg=%f  \n', obj(ii),loss(ii), pen(ii), param.lambda*sum(ActiveSet.alpha),param.mu*sum(ActiveSet.beta), dg(ii));
+                    if obj(ii)>obj(ii-1)+param.epsStop
                         fprintf('objective increasing\n');
-                        keyboard;
+%                         keyboard;
                     end
                 end
             else
                 dualgap=inf;
             end
-            i=i+1;
+            ii=ii+1;
+            ii
             
             %% Verify sttopping criterion
             H = real(gradient(Z,inputData,param));
@@ -173,7 +174,7 @@ while cont
             end
             %% extra condition
             if compute_dg
-                omega=pen(i-1);
+                omega=pen(ii-1);
             else
                 cfa=zeros(ActiveSet.atom_count,min(ActiveSet.atom_count,1));
                 card=sum(ActiveSet.atoms(:,1:ActiveSet.atom_count)~=0);
@@ -200,9 +201,12 @@ while cont
                 fprintf('   maxIJ/mu=%4.2f<1     varmax/cf*lambda=%4.2f<1   dg/eps=%4.2f<1  cond=%4.2f<%4.2f\n',maxval_l1/param.mu,maxvar/(cf*param.lambda),dualgap/param.PSdualityEpsilon,cond,epscond);
             end
             
-            cont=cont && count< param.niterPS;
+%             cont=cont && count< param.niterPS;
             
-            cont=dg(i-1)<epscond && count< param.niterPS;
+%             cont= count< 20;
+            cont= maxvar/(cf*param.lambda)>1+param.epsStop  && count< param.niterPS;
+
+%             cont=dg(i-1)<epscond && count< param.niterPS;
             
             
         end
@@ -413,17 +417,17 @@ while cont
 end
 
 %redimensioning arrays
-i=i-1;
-hist.obj = obj(1:i);
-hist.pen =  pen(1:i);
-hist.loss =  loss(1:i);
-hist.dg =  dg(1:i);
-hist.time = time(1:i);
+ii=ii-1;
+hist.obj = obj(1:ii);
+hist.pen =  pen(1:ii);
+hist.loss =  loss(1:ii);
+hist.dg =  dg(1:ii);
+hist.time = time(1:ii);
 hist.obj_sup=obj(1);
 hist.dg_sup=dg(1);
 hist.time_sup=time(1);
-hist.nb_pivot=nb_pivot(1:i);
-hist.active_var=active_var(1:i);
+hist.nb_pivot=nb_pivot(1:ii);
+hist.active_var=active_var(1:ii);
 
 if count>param.niterPS
     fprintf('maximum number of Ps iteration reached, duality gap=%f\n',hist.dg(end));

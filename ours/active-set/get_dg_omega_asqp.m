@@ -1,7 +1,8 @@
-function [dualityGap] = get_dg_omega_asqp(Z,param,ActiveSet,inputData,obj,loss,pen)
+function [dualityGap] = get_dg_omega_asqp(L,Z1,param,ActiveSet,inputData,obj,loss,pen)
 
-H = gradient(Z,inputData,param); % gradient
-temp_l1=max(abs(H(:)));
+H = gradient(L,inputData,param); % gradient
+Y=inputData.Y;
+inputData.Y=inputData.Y+inputData.X1*(-Z1)*inputData.X2;
 
 temp_om = -1;
 for i = 1:length(ActiveSet.I)
@@ -28,12 +29,18 @@ end
 
 %duality gap
 
-kappa = shrink * (inputData.X1*Z*inputData.X2-inputData.Y);
+kappa = shrink * (inputData.X1*L*inputData.X2-inputData.Y);
 U=inputData.Y+kappa;
-dg1=.5*norm(inputData.X1*U*inputData.X2-inputData.Y,'fro')^2;
-dg2= pen + trace(Z,inputData.X1*kappa*inputData.X2);
+dg1=.5*norm(U-inputData.Y,'fro')^2-trace(U*kappa);
+dg2= pen + trace(L*inputData.X1*kappa*inputData.X2);
+M=inputData.X1*kappa*inputData.X2;
+M=.5*(M+M');
+ll=eigs(M,1,'la');
+fprintf('dg1=%f  dg2=%f  omega_pol=%f  (<1)\n',dg1,dg2,ll)
 dualityGap = dg1+dg2;
-keyboard;
+% keyboard;
+
+inputData.Y=Y;
 
 
 if dualityGap<0 && abs(dualityGap)>1e-10

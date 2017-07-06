@@ -1,4 +1,4 @@
-function [loss,pen,obj,dualityGap,time]=get_val_omega_asqp(Z,ActiveSet,inputData,param)
+function [loss,pen,obj,dualityGap,time]=get_val_omega_asqp(Z,Z1,L,ActiveSet,inputData,param)
 
 cf=zeros(ActiveSet.atom_count,min(ActiveSet.atom_count,1));
 card=sum(ActiveSet.atoms(:,1:ActiveSet.atom_count)~=0);
@@ -15,7 +15,7 @@ if param.f==4
         pen = 0;
     end
     obj = currloss + pen ;
-    dualityGap = get_dg_omega_asqp(Z,param,ActiveSet,inputData,obj,loss,pen);
+    dualityGap = get_dg_omega_asqp(L,Z1,param,ActiveSet,inputData,obj,loss,pen);
     dualityGap= real(dualityGap);
     time=toc;
 elseif param.f==5

@@ -1,5 +1,6 @@
 function S = update_sparse(param,inputData,L,S,D)
 debug=1;
+Sold=S;
 Z=S+D+L;
 p=size(Z,1);
 
@@ -18,20 +19,30 @@ switch param.f
 end
 
 %prox l1
-I=speye(p)==0;
-% I=true(p);
-Snew=sparse(p,p);
-Snew(I)=S(I)-1/Lip*grad_S(I);
-S= wthresh(Snew,'s',param.mu);
-keyboard;
+I=speye(p)==1;
 
+%prox l1
+obj1=+inf;
+t=1/Lip;
+while obj0<obj1
+    I=speye(p)==1;
+    Snew=S-t*grad_S;
+    Snew(I)=0;
+    obj1=.5*norm((inputData.X1*(Snew+L+D)*inputData.X2 - inputData.Y),'fro')^2+param.mu*sum(abs(Snew(:)));
+    t=t/2;
+end
+% S=(Snew-param.mu*(ones(p)-eye(p))).*sign(Snew);
+S= wthresh(Snew,'s',param.mu);
+
+% keyboard;
+% 
 % S((speye(p)>0))=0;
 
 if debug
     obj1=.5*norm((inputData.X1*(S+L+D)*inputData.X2 - inputData.Y),'fro')^2;
     if obj0<obj1
         fprintf('error : objective does not decrease\n');
-        keyboard;
+%         keyboard;
     end
 %     keyboard; % [obj0 obj1]
 end

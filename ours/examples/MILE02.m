@@ -30,8 +30,8 @@ inputData.X2=S^.5;
 inputData.Y=-eye(p);
 param.cardfun=inf*ones(1,p);
 param.cardfun(100)=1;
-lam=.11;
-gam=.00005;
+lam=1;%.11;
+gam=.0001;
 param.lambda=lam;
 param.mu=gam;
 param.max_nb_main_loop=100;
@@ -46,6 +46,9 @@ Z2=L;
 %% objective
 figure(1);clf;
 plot(hist.obj0);
+
+figure(2);clf;
+semilogy(hist.dg);
 
 %% reconstruction l1+om
 if ~isempty(ActiveSet.alpha)
@@ -104,25 +107,32 @@ Z1II=Z1(I,I);
 
 
 figure(12);clf;
-subplot(2,3,1);
+subplot(2,4,1);
 imagesc(abs(UsoI));
 axis square;
-subplot(2,3,2);
+subplot(2,4,2);
 imagesc(abs(Z1II));
 title('L')
 axis square;
-subplot(2,3,3);
+subplot(2,4,3);
 imagesc(abs(Z2II));
 axis square;
-subplot(2,3,4);
+subplot(2,4,4);
+imagesc(abs(S(I,I)));
+axis square;
+subplot(2,4,5);
 imagesc(abs(UsoI)>1e-10);
 axis square;
-subplot(2,3,5);
+subplot(2,4,6);
 imagesc(abs(Z1II)>1e-10);
 title('L')
 axis square;
-subplot(2,3,6);
+subplot(2,4,7);
 imagesc(abs(Z2II)>1e-10);
+colormap hot
+axis square;
+subplot(2,4,8);
+imagesc(abs(S(I,I))>1e-10);
 colormap hot
 axis square;
 

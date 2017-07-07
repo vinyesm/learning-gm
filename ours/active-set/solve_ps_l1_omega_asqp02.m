@@ -3,7 +3,7 @@ function [ Z,Z1,Z2,Hall,fall, ActiveSet, hist] = solve_ps_l1_omega_asqp02( Z,Z1,
 
 debug=1;
 debug_update=0;
-compute_dg=0;
+compute_dg=1;
 
 if param.f==4
 Y=inputData.X1*(inputData.X1*Z1*inputData.X1-inputData.Y)*inputData.X1;
@@ -78,8 +78,8 @@ while cont
         [alph,Jset,npiv]=asqp2(Hall+0*1e-12*speye(length(fall)),-fall,alpha0,param_as,new_atom_added,idx_added);
         
         if debug
-            obj0=.5*alpha0'*Hall*alpha0+fall'*alpha0
-            obj1=.5*alph'*Hall*alph+fall'*alph
+            obj0=.5*alpha0'*Hall*alpha0+fall'*alpha0;
+            obj1=.5*alph'*Hall*alph+fall'*alph;
             if obj1>obj0
                 fprintf('objective increasing in asqp\n');
             end

@@ -1,6 +1,6 @@
 function [dualityGap] = get_dg_omega_asqp(L,Z1,param,ActiveSet,inputData,obj,loss,pen)
 
-H = gradient(L,inputData,param); % gradient
+H = gradient(L+Z1,inputData,param); % gradient
 Y=inputData.Y;
 inputData.Y=inputData.Y+inputData.X1*(-Z1)*inputData.X2;
 
@@ -14,6 +14,7 @@ for i = 1:length(ActiveSet.I)
     end
     
     currTemp = eigs(currS,1,'la');
+%     currTemp = currTemp/(param.cardfun(ActiveSet.k{i}));
     currTemp = currTemp/(param.cardfun(ActiveSet.k{i}));
     if currTemp>temp_om
         temp_om = currTemp;
@@ -30,14 +31,18 @@ end
 %duality gap
 
 kappa = shrink * (inputData.X1*L*inputData.X2-inputData.Y);
-U=inputData.Y+kappa;
-dg1=.5*norm(U-inputData.Y,'fro')^2-trace(U*kappa);
+% U=inputData.Y+kappa;
+% dg1=.5*norm(U-inputData.Y,'fro')^2-trace(U*kappa);
+% dg2= pen + trace(L*inputData.X1*kappa*inputData.X2);
+U=inputData.X1*L*inputData.X2;
+dg1=.5*norm(U - kappa -inputData.Y,'fro')^2;
 dg2= pen + trace(L*inputData.X1*kappa*inputData.X2);
-M=inputData.X1*kappa*inputData.X2;
-M=.5*(M+M');
-ll=eigs(M,1,'la');
-fprintf('dg1=%f  dg2=%f  omega_pol=%f  (<1)\n',dg1,dg2,ll)
+% M=inputData.X1*kappa*inputData.X2;
+% M=.5*(M+M');
+% ll=eigs(-M(ActiveSet.I{i}, ActiveSet.I{i})/param.lambda,1,'la');
+fprintf('dg1=%f  dg2=%f  omega_pol=%f  (<1)\n',dg1,dg2,temp_om*shrink)
 dualityGap = dg1+dg2;
+
 % keyboard;
 
 inputData.Y=Y;

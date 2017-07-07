@@ -149,7 +149,7 @@ where $\mathcal{C}$ is convex and bounded. In particular $\mathcal{C}$ can be th
 \begin{align}
 \rm{{LMO}}_{\mathcal{C}}(y) := \arg\min_{z \in \mathcal{C}} \left\langle y,z \right\rangle.
 \end{align}
-At each iteration FW selects a new atom $a^t$ from $\mathcal{C}$ querying the LMO and computes the new iterate as a convex combination of $a^t$ and the old iterate $x^t$. The convex update can be done by line search. Another variant discussed in \citet{LacosteFCFW} consits of finding the convex combination of all previously selected atoms $(a^i)_{i<t}$
+At each iteration FW selects a new atom $a^t$ from $\mathcal{C}$ querying the LMO and computes the new iterate as a convex combination of $a^t$ and the old iterate $x^t$. The convex update can be done by line search. Another variant, called the fully corrective FW (FCFW), is discussed in \citet{LacosteFCFW} consits of finding the convex combination of all previously selected atoms $(a^i)_{i<t}$. 
  Generalization for regularized problems. We choose to consider quadratic losses $f_{T}$ and $f_{SM}$, introduced in section \ref{sec:ggm}, so that we can apply an efficient algorithm recently proposed by \citet{vinyes2017}(\texttt{FCG}). The algorithm consists of applying a Fully Corrective Frank Wolfe \citep{LacosteFCFW}, for which we need to compute the LMO at each iteration. 
 
 

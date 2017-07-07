@@ -20,12 +20,10 @@ end
 
 %prox l1
 I=speye(p)==1;
-
-%prox l1
 obj1=+inf;
 t=1/Lip;
 while obj0<obj1
-    I=speye(p)==1;
+    
     Snew=S-t*grad_S;
     Snew(I)=0;
     obj1=.5*norm((inputData.X1*(Snew+L+D)*inputData.X2 - inputData.Y),'fro')^2+param.mu*sum(abs(Snew(:)));

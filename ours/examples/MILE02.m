@@ -31,10 +31,10 @@ inputData.Y=-eye(p);
 param.cardfun=inf*ones(1,p);
 param.cardfun(100)=1;
 lam=1;%.11;
-gam=.0001;
+gam=.00001;
 param.lambda=lam;
 param.mu=gam;
-param.max_nb_main_loop=100;
+param.max_nb_main_loop=2;
 
 
 %% blocks

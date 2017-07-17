@@ -13,7 +13,7 @@ We assume that the original graphical model is sparse and that there is a small 
 %In GGMs, the sparsity pattern of the concentration matrix  directly corresponds to the graphical model structure. 
 This implies that  $K_{OO}$ is a sparse matrix and that $K_{OH}K_{HH}^{-1}K_{HO}$ is a low-rank matrix, of rank at most $h$. Note that $\Sigma_{OO}^{-1}$ may not be sparse due to the addition of the term $K_{OH}K_{HH}^{-1}K_{HO}$.
 %Since $K$ is a concentration matrix, it is positive semidefinite (p.s.d.), which results in  $K_{OO}$ and $K_{OH}K_{HH}^{-1}K_{HO}$ being p.s.d.. $\Sigma_{OO}^{-1}$ is also p.s.d. as it is also a concentration matrix. 
-\citet{chandrasekaran2010} suggest to approximate $\hat{\Sigma}$  by $S-L$ where $S$ is sparse and $L$ is low rank, where $S-L$, $S$ and $L$ are p.s.d. in order to ensure the statistical interpretation of the different components. The authors propose propose a convex relaxation 
+\citet{chandrasekaran2010} suggest to approximate $\hat{\Sigma}$  by $S-L$ where $S$ is sparse and $L$ is low rank, with $S-L$, $S$ and $L$ p.s.d. matrices in order to ensure the statistical interpretation of the different components. The authors propose propose a convex relaxation 
 %Specifically, the nonzeros of the concentration matrix correspond to the edges of the graphical model. 
 %The sparsity of the complete GGM implies that $K$ is sparse. Then, $K_{OO}$ should be a sparse matrix and assuming has a small number of latent variables is low rank. \citet{chandrasekaran2010} suggest to approximate $\hat{\Sigma}$  by $S-L$ where $S$ is sparse and $L$ is low rank, and propose a convex relaxation
 
@@ -22,7 +22,7 @@ This implies that  $K_{OO}$ is a sparse matrix and that $K_{OH}K_{HH}^{-1}K_{HO}
 \min_{S,L} f(S-L)+\lambda\left(\gamma\|S\|_{1}+ \tr(L)\right) \quad s.t. \quad S-L \succeq 0 \quad L \succeq 0,
 \end{align}
 
-where the function $f$ is a loss function and the positivity constraint on $S$ has been dropped since it is implied by $S-L \succeq 0$ and $L \succeq 0$. Typically, in GGM seletion $f$ is the negative log-likelihood
+where the function $f$ is a loss function, $\lambda$ and $\gamma$ are the regularization parameters. The positivity constraint on $S$ has been dropped since it is implied by $S-L \succeq 0$ and $L \succeq 0$. Typically, in GGM seletion $f$ is the negative log-likelihood
 
 \begin{align}
 f_{ML}(M)&:=-\log\det(M) + \tr(M\hat{\Sigma}).
@@ -45,13 +45,15 @@ f_{SM}(M)&:=\frac{1}{2}\tr(M^2 \hat{\Sigma})-\tr(M).
 %The low rank component writes $UU^{\top}$, where $U\in\RR^{p\times h}$. If we assume that the latent variables are independent, i.e. $K_{HH}$ is  diagonal,  unicity of the decomposition $UU^{\top}$ can be achieved by imposing more structure on the low rank component, which we discuss in the next paragraph \ref{subsec:norm}. Under appropriate identifiability conditions, discussed in section \ref{sec:id}, it allows us to retrieve the structure of the full LVGGM. In order to obtain a convex formulation we introduce a norm for low rank \textit{positive semidefinite} (p.s.d.) matrices with multiple sparse factors. 
 
 
-\TODO{explain better: trying here}
+%\TODO{explain better: trying here}
 
-The obtained low rank component $L_{n}$ retrieves the latent variable subspace. However, in general, estimates for $K_{HH}$ and  $K_{OH}$ cannot be obtained from the low-rank estimate $L_{n}$. In particular the connectivity between the latent variables and the connectivity between latent and observed variables cannot be recovered from the sparse plus low-rank decomposition.
+The obtained low rank component $L_{n}$ retrieves the latent variable subspace. However, in general, estimates for $K_{HH}$ and  $K_{OH}$ cannot be obtained from estimate of $K_{OH}K_{HH}^{-1}K_{HO}$,         $L_{n}$. Therefore the connectivity between the latent variables and the connectivity between latent and observed variables cannot be recovered. 
 
-%The low rank component writes $UU^{\top}$, where $U\in\RR^{p\times h}$, and to recover the 
+%from the sparse plus low-rank decomposition.
 
-With the further assumption that the latent variables are independent,  i.e. $K_{HH}$ is  diagonal,  and writing the decomposition $S-UU^{\top}$, the structure of $U$, if unique,   gives the dependence structure  between the latent and the observed variables. In general unicity of $U$ is not \TODO{assuree}. If however we assume that the part of the graph $K_{OH}$ is also sparse, i.e. each latent variable is connected to a small number of observed variables, and provided that the sparsity patterns are not the same for each latent variable (for example sources connected to disjoint subsets of observed variables), we can ensure, under technical conditions discussed in \ref{sec:id}, that the dependency structure between latent and observed variables, i.e the sparsity pattern of.$K_{OH}$, is recovered. If $U$ is unique, we recover the dependence structure  between the latent and the observed variables. Consequently we recover the structure of the full model.
+%The low  rank component writes $UU^{\top}$, where $U\in\RR^{p\times h}$, and to recover the 
+
+With the further assumption that the latent variables are independent,  i.e. $K_{HH}$ is  diagonal,  and writing the decomposition $S-UU^{\top}$, the structure of $U$, if unique,   gives the dependence structure  between the latent and the observed variables. In general unicity of $U$ is not guaranteed. If however we assume that the part of the graph $K_{OH}$ is also sparse, i.e. each latent variable is connected to a small number of observed variables, and provided that the sparsity patterns are not the same for each latent variable (for example sources connected to disjoint subsets of observed variables), we can ensure, under technical conditions discussed in section \ref{sec:id}, that the dependency structure between latent and observed variables, i.e the sparsity pattern of.$K_{OH}$, is recovered. If $U$ is unique, we recover the dependence structure  between the latent and the observed variables. Consequently we recover the structure of the full model.
 
 %To impose sparsity in the low rank component..
 
@@ -59,7 +61,8 @@ With the further assumption that the latent variables are independent,  i.e. $K_
 
 %With the further assumption that the latent variables are independent,  i.e. $K_{HH}$ is  diagonal,  unicity of the decomposition $UU^{\top}$ can be achieved by imposing more structure on the low rank component, which we discuss in the next paragraph \ref{subsec:norm}. Under appropriate identifiability conditions, discussed in section \ref{sec:id}, it allows us to retrieve the structure of the full LVGGM.
 
-In the following section we ...
+Unicity of $U$ can be achieved by imposing more structure on the low rank component. More precisely we want $U$ sparse with a small number of columns so $UU^{\top}$ is low rank. For this purpose we regularize with a matrix norm  introduced by \citet{richard2014tight}, which we review in the following
+section.
 
 %and that the decomposition is unique (see section \ref{sec:id} on identifiability).  Unicity of $K_{OH}$ is achieved imposing more structure on the low rank component, which we discuss in the next paragraph.
  
@@ -73,12 +76,12 @@ In the following section we ...
 %FIGURE ?
 %\end{align}
 
-\TODO{transition}
+%\TODO{transition}
 
 \subsection{Positive-rank($k$) and its relaxation}
 \label{subsec:norm}
 
-\citet{richard2014tight} propose a new matrix norm that yields estimates for low-rank matrices with multiple sparse factors. In particular, these authors define a norm for p.s.d. matrices \footnote{In fact it is a gauge. For more on gauges see \citet{chandrasekaran2010convex} and references therein.}  that yields to estimates with sparse and p.s.d factors. In this sectionreview the concepts introduced by \citet{richard2014tight} and introduce the positive-rank($k$). We assume that the sparsity of the factors is known and fixed and discuss a generalization for factors of different sparsity levels at the end of the section.
+\citet{richard2014tight} propose a new matrix norm that yields estimates for low-rank matrices with multiple sparse factors. In particular, these authors define a norm for p.s.d. matrices \footnote{In fact it is a gauge. For more on gauges see \citet{chandrasekaran2010convex} and references therein.}  that yields to estimates with sparse and p.s.d factors. In this section we review the concepts introduced by \citet{richard2014tight} and introduce the positive-rank($k$). We assume that the sparsity of the factors is known and fixed and discuss a generalization for factors of different sparsity levels at the end of the section.
 
 The following definition generalizes the notion of rank for p.s.d matrices,
 \begin{mydef}
@@ -88,7 +91,7 @@ value of the optimization problem:
 \min \|c\|_0 \quad \text{s.t.} \quad Z=\sum_{i} c_i u_i u_{i}^\top, \quad c_i\in \RR^{+} \quad u_{i}\in\RR^p  :   \|u_{i}\|_0 \leq k, \|u_{i}\|_2 = 1.
 \end{align}
 \end{mydef}
-Note that not all p.s.d matrices can have such a decomposition, so the positive-rank($k$) can be infinite. This is in particular the case for low-rank non sparse matrices like $11^{\top}$. 
+Note that not all p.s.d. matrices can have such a decomposition, so the positive-rank($k$) can be infinite. This is in particular the case for low-rank non sparse matrices like $11^{\top}$. 
 
 We can derive a convex relaxation of the positive-rank($k$), the convex function $\Omega_{pos,k}$, defined as follows :
 %the atomic norm%\footnote{$\Omega_{k,\succeq}$ is not a norm but only a gauge because the set $\{u u^\top \in\RR^p  :   \|u\|_0 \leq k, \|u\|_2 = 1\}$  is not centrally symmetric} $\Omega_{k,\succeq}$. The next lemma provides an explicit formulation of the dual norm
@@ -97,14 +100,14 @@ We can derive a convex relaxation of the positive-rank($k$), the convex function
 \begin{align}
 \Omega_{pos,k}(Z):=\min \|c\|_1 \quad s.t. \quad Z=\sum_{i} c_i u_i u_{i}^\top, \quad c_i\in \RR^{+} \quad u_{i}\in\RR^p  :   \|u_{i}\|_0 \leq k, \|u_{i}\|_2 = 1
 \end{align}
-Equivalently, as shown in \citet{richard2014tight}\TODO{ref precise},
+Equivalently, as shown in the lemma 7 of \citet{richard2014tight},
 \begin{align}
 \Omega_{pos,k}(Z):=\inf_{Z^I, I\in\mathcal{G}^p_k} \sum_{I}\tr(Z^I) \quad \text{s.t.} \quad Z^I\succeq 0 ,\quad\supp(Z^I)\subset I\times I
 \end{align}
 %where  $\mathcal{A}_{I,\succeq}:=\{Z_I\succeq 0 ,\supp(Z_I)=I\times I\}$.
 \end{mydef}
 
-We can have $\Omega_{pos,k}(Z)=+\infty$ even if $Z$ is p.s.d., if $Z$ cannot be decomposed in $k$-sparse,  rank-1 p.s.d. factors, as it is the case for $11^{\top}$.  See \citet{richard2014tight} for more examples. In the next lemma we give the polar norm of  $\Omega_{pos,k}$ :
+We can have $\Omega_{pos,k}(Z)=+\infty$ even if $Z$ is p.s.d., if $Z$ cannot be decomposed in $k$-sparse,  rank-1 p.s.d. factors, as it is the case for $11^{\top}$. In the next lemma we give the polar norm of $\Omega_{pos,k}$ :
 
 \begin{lemm}
 \label{lem:LMO}
@@ -123,11 +126,28 @@ which is known to be an NP-hard problem \citep{moghaddam2008sparse}.
 %In fact $\Omega_{k,\succeq}$ is an atomic gauge\footnote{$\Omega_{k,\succeq}$ is not a norm but only a gauge because the set $\{u u^\top \in\RR^p  :   \|u\|_0 \leq k, \|u\|_2 = 1\}$  is not centrally symmetric} associated to the atomic set $\{uu^{\top}  : \|u_{i}\|_0 \leq k, \|u_{i}\|_2 = 1\}$ and the LMO in lemma \ref{lem:LMO} is the polar gauge $\Omega^{\circ}_{k,\succeq}$.
 
 \TODO{explain a lot more}
+
 $\Omega_{pos,k}$ can be generalised for different sparsity levels as
 \begin{align}
 \Omega_{\succeq}(Z):=\inf \sum_{k,i}w_{k}c_i^k \quad \text{s.t.} \quad Z=\sum_{k,i} c_i^k u_i^k u_{i}^{k\top}, \quad c_i^k\in \RR^{+} \quad u_{i}^k\in\RR^p  :   \|u_{i}^k\|_0 \leq k, \|u_{i}^k\|_2 = 1,
 \end{align}
 where $w_{k}$ is an increasing cardinality function that penalizes each sparsity level $k$ by $w_{k}$. We illustrate this generalization in the experiments.\\
+
+\TODO{better explained here}
+$\Omega_{pos,k}$ can be generalised for different sparsity levels.
+
+In the vector case \TODO{the norm on non symetric psd... when to explain ?}  boils down to the $k$-support norm \citep{argyriou2012sparse} and different sparsity levels are considered in the ordered weighted $\ell_1$ (OWL) norm introduced by \citet{bogdan2013statistical}. We can naturally extend this idea to the matrix counterpart $\Omega_{pos,w}$ of this norms 
+
+\begin{align}
+\Omega_{pos,w}(Z):=\inf \sum_{k,i}w_{k}c_i^k \quad \text{s.t.} \quad Z=\sum_{k,i} c_i^k u_i^k u_{i}^{k\top}, \quad c_i^k\in \RR^{+} \quad u_{i}^k\in\RR^p  :   \|u_{i}^k\|_0 \leq k, \|u_{i}^k\|_2 = 1,
+\end{align}
+where $w_{k}$ is an increasing cardinality function that penalizes each sparsity level $k$ by $w_{k}$. We illustrate this generalization in the experiments.
+
+
+%1) normes liees a la k-support norm\\
+%2) autres tailles considerees dans le cas vectoriel OWL \citet{bogdan2013statistical}
+%3) et que on peut naturellement ... the matrix counterpart of this norms. A la condition que les poids soient decroissants.
+
 
 
 \subsection{Convex formulation}

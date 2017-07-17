@@ -22,7 +22,7 @@ end
 I=speye(p)==1;
 obj1=+inf;
 t=1/Lip;
-while obj0<obj1    
+while obj0<obj1+1e-10    
     Snew=S-t*grad_S;
     Snew(I)=0;
     obj1=.5*norm((inputData.X1*(Snew+L+D)*inputData.X2 - inputData.Y),'fro')^2+param.mu*sum(abs(Snew(:)));

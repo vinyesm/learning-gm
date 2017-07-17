@@ -34,7 +34,7 @@ lam=1;%.11;
 gam=.00001;
 param.lambda=lam;
 param.mu=gam;
-param.max_nb_main_loop=5;
+param.max_nb_main_loop=10;
 
 
 %% blocks

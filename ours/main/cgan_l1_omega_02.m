@@ -140,7 +140,7 @@ for q=qs
             
             param.epsStop=2^(q-1)*epsStop;
             
-            for ttt=1:50
+            for ttt=1:20
     %             D diag update
                 tic
                 D = update_diag(param,inputData,L,S,D);

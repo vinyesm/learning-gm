@@ -60,6 +60,9 @@ end
 obj0  = [];
 loss0 = [];
 pen0  = [];
+timeD  = [];
+timeS  = [];
+timeL  = [];
 obj  = [];
 loss = [];
 pen  = [];
@@ -136,32 +139,42 @@ for q=qs
             end
             
             param.epsStop=2^(q-1)*epsStop;
+            
+            for ttt=1:50
+    %             D diag update
+                tic
+                D = update_diag(param,inputData,L,S,D);
+                ti=toc;
+                [ob, lo, pe] = get_val_l1_omega_02(L,S,D,inputData,param,ActiveSet);
+                obj0 = [obj0 ob];
+                loss0 = [loss0 lo];
+                pen0 = [pen0 pe];
+                timeD = [timeD ti];
 
-%             D diag update
-            D = update_diag(param,inputData,L,S,D);
-            [ob, lo, pe] = get_val_l1_omega_02(L,S,D,inputData,param,ActiveSet);
-            obj0 = [obj0 ob];
-            loss0 = [loss0 lo];
-            pen0 = [pen0 pe];
-           
-%             C=inputData.X1;
-%             keyboard;
+    %             C=inputData.X1;
+    %             keyboard;
+
+
+                % S sparse update
+                tic
+                S = update_sparse(param,inputData,L,S,D);
+                ti=toc;
+                [ob, lo, pe] = get_val_l1_omega_02(L,S,D,inputData,param,ActiveSet);
+                obj0 = [obj0 ob];
+                loss0 = [loss0 lo];
+                pen0 = [pen0 pe]; 
+                timeS = [timeS ti];          
+            end
             
-            
-            % S sparse update
-            S = update_sparse(param,inputData,L,S,D);
-            [ob, lo, pe] = get_val_l1_omega_02(L,S,D,inputData,param,ActiveSet);
-            obj0 = [obj0 ob];
-            loss0 = [loss0 lo];
-            pen0 = [pen0 pe]; 
             Z1=S+D;
-            % Z2=D+S
+            tic
             [Z, res, L, Hall,fall, ActiveSet, hist_ps] = solve_ps_l1_omega_asqp02(L+S+D,Z1,L, ActiveSet,param,inputData,atoms_l1_sym,Hall,fall);
+            ti=toc;
             [ob, lo, pe] = get_val_l1_omega_02(L,S,D,inputData,param,ActiveSet);
             obj0 = [obj0 ob];
             loss0 = [loss0 lo];
             pen0 = [pen0 pe];
-           
+            timeL = [timeL ti];
             
             param.epsStop=2^q*epsStop;
             
@@ -337,6 +350,9 @@ hist.active_var= active_var;
 hist.obj0=obj0;
 hist.loss0=loss0;
 hist.pen0=pen0;
+hist.timeD=timeD;
+hist.timeS=timeS;
+hist.timeL=timeL;
 if ActiveSet.atom_count>0
     ActiveSet.atoms=ActiveSet.atoms(:,1:ActiveSet.atom_count);
 end

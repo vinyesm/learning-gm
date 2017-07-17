@@ -22,8 +22,7 @@ end
 I=speye(p)==1;
 obj1=+inf;
 t=1/Lip;
-while obj0<obj1
-    
+while obj0<obj1    
     Snew=S-t*grad_S;
     Snew(I)=0;
     obj1=.5*norm((inputData.X1*(Snew+L+D)*inputData.X2 - inputData.Y),'fro')^2+param.mu*sum(abs(Snew(:)));
@@ -39,7 +38,7 @@ S= wthresh(Snew,'s',param.mu);
 if debug
     obj1=.5*norm((inputData.X1*(S+L+D)*inputData.X2 - inputData.Y),'fro')^2;
     if obj0<obj1
-        fprintf('error : objective does not decrease\n');
+        fprintf('error update S : objective does not decrease\n');
 %         keyboard;
     end
 %     keyboard; % [obj0 obj1]

@@ -34,7 +34,7 @@ lam=1;%.11;
 gam=.00001;
 param.lambda=lam;
 param.mu=gam;
-param.max_nb_main_loop=2;
+param.max_nb_main_loop=5;
 
 
 %% blocks
@@ -49,6 +49,12 @@ plot(hist.obj0);
 
 figure(2);clf;
 semilogy(hist.dg);
+
+figure(3);clf;
+plot(cumsum(hist.timeD),'r');hold on
+plot(cumsum(hist.timeS),'b');hold on
+plot(cumsum(hist.timeL),'k');hold on
+legend({'D updates' 'S updates' 'L updates'});
 
 %% reconstruction l1+om
 if ~isempty(ActiveSet.alpha)

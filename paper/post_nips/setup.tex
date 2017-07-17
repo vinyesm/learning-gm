@@ -125,18 +125,18 @@ which is known to be an NP-hard problem \citep{moghaddam2008sparse}.
 
 %In fact $\Omega_{k,\succeq}$ is an atomic gauge\footnote{$\Omega_{k,\succeq}$ is not a norm but only a gauge because the set $\{u u^\top \in\RR^p  :   \|u\|_0 \leq k, \|u\|_2 = 1\}$  is not centrally symmetric} associated to the atomic set $\{uu^{\top}  : \|u_{i}\|_0 \leq k, \|u_{i}\|_2 = 1\}$ and the LMO in lemma \ref{lem:LMO} is the polar gauge $\Omega^{\circ}_{k,\succeq}$.
 
-\TODO{explain a lot more}
+%\TODO{explain a lot more}
+%
+%$\Omega_{pos,k}$ can be generalised for different sparsity levels as
+%\begin{align}
+%\Omega_{\succeq}(Z):=\inf \sum_{k,i}w_{k}c_i^k \quad \text{s.t.} \quad Z=\sum_{k,i} c_i^k u_i^k u_{i}^{k\top}, \quad c_i^k\in \RR^{+} \quad u_{i}^k\in\RR^p  :   \|u_{i}^k\|_0 \leq k, \|u_{i}^k\|_2 = 1,
+%\end{align}
+%where $w_{k}$ is an increasing cardinality function that penalizes each sparsity level $k$ by $w_{k}$. We illustrate this generalization in the experiments.\\
+%
+%\TODO{better explained here}
+%$\Omega_{pos,k}$ can be generalised for different sparsity levels.
 
-$\Omega_{pos,k}$ can be generalised for different sparsity levels as
-\begin{align}
-\Omega_{\succeq}(Z):=\inf \sum_{k,i}w_{k}c_i^k \quad \text{s.t.} \quad Z=\sum_{k,i} c_i^k u_i^k u_{i}^{k\top}, \quad c_i^k\in \RR^{+} \quad u_{i}^k\in\RR^p  :   \|u_{i}^k\|_0 \leq k, \|u_{i}^k\|_2 = 1,
-\end{align}
-where $w_{k}$ is an increasing cardinality function that penalizes each sparsity level $k$ by $w_{k}$. We illustrate this generalization in the experiments.\\
-
-\TODO{better explained here}
-$\Omega_{pos,k}$ can be generalised for different sparsity levels.
-
-In the vector case \TODO{the norm on non symetric psd... when to explain ?}  boils down to the $k$-support norm \citep{argyriou2012sparse} and different sparsity levels are considered in the ordered weighted $\ell_1$ (OWL) norm introduced by \citet{bogdan2013statistical}. We can naturally extend this idea to the matrix counterpart $\Omega_{pos,w}$ of this norms 
+$\Omega_{pos,k}$ can be generalised for different sparsity levels. In the vector case \TODO{the norm on non symetric psd... when to explain ?}  boils down to the $k$-support norm \citep{argyriou2012sparse} and different sparsity levels are considered in the ordered weighted $\ell_1$ (OWL) norm introduced by \citet{bogdan2013statistical}. We can naturally extend this idea to the matrix counterpart $\Omega_{pos,w}$ of this norms 
 
 \begin{align}
 \Omega_{pos,w}(Z):=\inf \sum_{k,i}w_{k}c_i^k \quad \text{s.t.} \quad Z=\sum_{k,i} c_i^k u_i^k u_{i}^{k\top}, \quad c_i^k\in \RR^{+} \quad u_{i}^k\in\RR^p  :   \|u_{i}^k\|_0 \leq k, \|u_{i}^k\|_2 = 1,
@@ -163,19 +163,20 @@ where $w_{k}$ is an increasing cardinality function that penalizes each sparsity
 %f_{T}(K)&:=\frac{1}{2}\|\hat{\Sigma}^{1/2}K\hat{\Sigma}^{1/2}-I\|_2^2.
 %\end{align}
 
-We use $\Omega_{k,\succeq}$ to impose structure on the low rank component and consider the following convex optimization problem,
+We use $\Omega_{pos,k}$ to impose structure on the low rank component and consider the following convex optimization problem,
 \begin{align}
 \label{opt}
 \min_{S,L} f(S-L)+\lambda\big(\gamma\|S\|_{1}+\Omega_{k,\succeq}(L)\big) \quad s.t. \quad S-L \succeq 0 \quad L \succeq 0.
 \end{align}
-Since the norm $\Omega_k$ only provides symmetric p.s.d matrices, as a sum of p.s.d rank-one matrices, the nonnegativity constraint on $L$ can be dropped. The regularization $\gamma\|S\|_{1}+\Omega_k(L)$ defines an atomic norm on matrices as shown in the following lemma
+Since the norm $\Omega_k$ only provides symmetric p.s.d matrices, as a sum of p.s.d rank-one matrices, the nonnegativity constraint on $L$ can be dropped. 
 
-\TODO{plus une remarque q'un lemme}
-\begin{lemm} $\bar{\Omega}(M):=\inf\{\gamma\|A\|_{1}+\Omega_k(B)\mid M=A+B\}$ is an atomic norm and its polar norm is given by 
+\begin{rem} 
+The regularization $\gamma\|S\|_{1}+\Omega_k(L)$ defines an atomic norm on matrices. $\bar{\Omega}(M):=\inf\{\gamma\|A\|_{1}+\Omega_k(B)\mid M=A+B\}$ is an atomic norm and its polar norm is given by 
 \begin{align*}
 {\bar{\Omega}^{\circ}}(Y)=\max\left(\frac{\|Y\|_{\infty}}{\gamma},\Omega_{k,\succeq}^{\circ}(Y)\right).
 \end{align*}
-\end{lemm}
+\end{rem}
+
 In order to rewrite our problem as a simple convex regularized by $\bar{\Omega}$, we drop the nonegativity constraint on $S-L$. Thus our problem is rewritten as
 \begin{align}
 \label{opt_at}

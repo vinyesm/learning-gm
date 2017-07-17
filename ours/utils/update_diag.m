@@ -24,24 +24,24 @@ end
 
 
 %%projected gradient
-d0=d0-1/Lip*grad_D;
-d=min(d0,0);
-D=spdiags(d,0,p,p);
-
-%%projected exact minimimization
-% C=inputData.X1*inputData.X1;
-% C2=C.^2;
-% % d0=C2\diag(C-C*(S+L)*C); % if input.Y=eye
-% % d=max(d0,0);
-% d0=-C2\diag(C-C*(S+L)*C); % if input.Y=-eye
+% d0=d0-1/Lip*grad_D;
 % d=min(d0,0);
 % D=spdiags(d,0,p,p);
+
+%%projected exact minimimization
+C=inputData.X1*inputData.X1;
+C2=C.^2;
+% d0=C2\diag(C-C*(S+L)*C); % if input.Y=eye
+% d=max(d0,0);
+d0=-C2\diag(C-C*(S+L)*C); % if input.Y=-eye
+d=min(d0,0);
+D=spdiags(d,0,p,p);
 
 if debug 
     obj1=.5*norm((inputData.X1*(S+L+D)*inputData.X2 - inputData.Y),'fro')^2;
     if obj0<obj1
-        fprintf('error : objective increases\n');
-        keyboard;
+        fprintf('error update D: objective increases\n');
+%         keyboard;
     end
 end
 

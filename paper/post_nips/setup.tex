@@ -9,7 +9,11 @@ We consider a multivariate Gaussian variable $(X_{O},X_{H})\in\RR^{p+h}$ where $
 \Sigma_{OO}^{-1} = K_{OO}-K_{OH}K_{HH}^{-1}K_{HO}.
 \end{align}
 
-We assume that the original graphical model is sparse and that there is a small number of latent variables. In GGMs, the sparsity pattern of the concentration matrix  directly corresponds to the graphical model structure. This implies that  $K$ is a sparse  and therefore $K_{OO}$ is a sparse matrix. Having a small number of latent variables gives that $K_{OH}K_{HH}^{-1}K_{HO}$ is low-rank. Since $K$ is a concentration matrix, it is positive semidefinite (p.s.d.), which results in  $K_{OO}$ and $K_{OH}K_{HH}^{-1}K_{HO}$ being p.s.d.. $\Sigma_{OO}^{-1}$ is also p.s.d. as it is also a concentration matrix. \citet{chandrasekaran2010} suggest to approximate $\hat{\Sigma}$  by $S-L$ where $S$ is sparse and $L$ is low rank, where $S-L$, $S$ and $L$ are p.s.d. and propose propose a convex relaxation 
+We assume that the original graphical model is sparse and that there is a small number of latent variables. 
+%In GGMs, the sparsity pattern of the concentration matrix  directly corresponds to the graphical model structure. 
+This implies that  $K_{OO}$ is a sparse matrix and that $K_{OH}K_{HH}^{-1}K_{HO}$ is a low-rank matrix, of rank at most $h$. Note that $\Sigma_{OO}^{-1}$ may not be sparse due to the addition of the term $K_{OH}K_{HH}^{-1}K_{HO}$.
+%Since $K$ is a concentration matrix, it is positive semidefinite (p.s.d.), which results in  $K_{OO}$ and $K_{OH}K_{HH}^{-1}K_{HO}$ being p.s.d.. $\Sigma_{OO}^{-1}$ is also p.s.d. as it is also a concentration matrix. 
+\citet{chandrasekaran2010} suggest to approximate $\hat{\Sigma}$  by $S-L$ where $S$ is sparse and $L$ is low rank, where $S-L$, $S$ and $L$ are p.s.d. in order to ensure the statistical interpretation of the different components. The authors propose propose a convex relaxation 
 %Specifically, the nonzeros of the concentration matrix correspond to the edges of the graphical model. 
 %The sparsity of the complete GGM implies that $K$ is sparse. Then, $K_{OO}$ should be a sparse matrix and assuming has a small number of latent variables is low rank. \citet{chandrasekaran2010} suggest to approximate $\hat{\Sigma}$  by $S-L$ where $S$ is sparse and $L$ is low rank, and propose a convex relaxation
 
@@ -18,7 +22,7 @@ We assume that the original graphical model is sparse and that there is a small 
 \min_{S,L} f(S-L)+\lambda\left(\gamma\|S\|_{1}+ \tr(L)\right) \quad s.t. \quad S-L \succeq 0 \quad L \succeq 0,
 \end{align}
 
-where the function $f$ is the loss function and the positivity constraint on $S$ has been dropped since it is implied by $S-L \succeq 0$ and $L \succeq 0$. Typically, in GGM seletion $f$ is the negative log-likelihood
+where the function $f$ is a loss function and the positivity constraint on $S$ has been dropped since it is implied by $S-L \succeq 0$ and $L \succeq 0$. Typically, in GGM seletion $f$ is the negative log-likelihood
 
 \begin{align}
 f_{ML}(M)&:=-\log\det(M) + \tr(M\hat{\Sigma}).
@@ -32,10 +36,30 @@ f_{T}(M)&:=\frac{1}{2}\|\hat{\Sigma}^{1/2}M\hat{\Sigma}^{1/2}-I\|_2^2\\
 f_{SM}(M)&:=\frac{1}{2}\tr(M^2 \hat{\Sigma})-\tr(M).
 \end{align}
 
-\citet{chandrasekaran2010} show that under appropriate tecnical conditions, the regularized maximum log-likelihood formulation (\ref{opt_tr}) provides estimates  that have the same sparsity pattern and rank than $K_{OO}$ and $K_{OH}K_{HH}^{-1}K_{HO}$. The obtained low rank component of the estimates retrieves the latent variable subspace. However it does not recover its structure, in particular the connectivity between the variables $(X_{O}$ and $X_{H})$ cannot be recoverd since ther is not a unique decomposition of the low rank component.\\
+\citet{chandrasekaran2010} show that under appropriate technical conditions, the regularized maximum log-likelihood formulation (\ref{opt_tr}) provides estimates $(S_{n},L_{n})$ that have the same sparsity pattern and rank than $K_{OO}$ and $K_{OH}K_{HH}^{-1}K_{HO}$. 
 
-\TODO{explain better}
-The low rank component writes $UU^{\top}$, where $U\in\RR^{p\times h}$. If we assume that the latent variables are independent, i.e. $K_{HH}$ is  diagonal,  unicity of the decomposition $UU^{\top}$ can be achieved by imposing more structure on the low rank component, which we discuss in the next paragraph \ref{subsec:norm}. Under appropriate identifiability conditions, discussed in section \ref{sec:id}, it allows us to retrieve the structure of the full LVGGM. In order to obtain a convex formulation we introduce a norm for low rank \textit{positive semidefinite} (p.s.d.) matrices with multiple sparse factors. 
+%\TODO{explain better}
+%The obtained low rank component $L_{n}$ retrieves the latent variable subspace. However it does not recover its structure, in particular the connectivity between the variables $(X_{O}$ and $X_{H})$ cannot be recoverd since ther is not a unique decomposition of the low rank component.\\
+%
+%
+%The low rank component writes $UU^{\top}$, where $U\in\RR^{p\times h}$. If we assume that the latent variables are independent, i.e. $K_{HH}$ is  diagonal,  unicity of the decomposition $UU^{\top}$ can be achieved by imposing more structure on the low rank component, which we discuss in the next paragraph \ref{subsec:norm}. Under appropriate identifiability conditions, discussed in section \ref{sec:id}, it allows us to retrieve the structure of the full LVGGM. In order to obtain a convex formulation we introduce a norm for low rank \textit{positive semidefinite} (p.s.d.) matrices with multiple sparse factors. 
+
+
+\TODO{explain better: trying here}
+
+The obtained low rank component $L_{n}$ retrieves the latent variable subspace. However, in general, estimates for $K_{HH}$ and  $K_{OH}$ cannot be obtained from the low-rank estimate $L_{n}$. In particular the connectivity between the latent variables and the connectivity between latent and observed variables cannot be recovered from the sparse plus low-rank decomposition.
+
+%The low rank component writes $UU^{\top}$, where $U\in\RR^{p\times h}$, and to recover the 
+
+With the further assumption that the latent variables are independent,  i.e. $K_{HH}$ is  diagonal,  and writing the decomposition $S-UU^{\top}$, the structure of $U$, if unique,   gives the dependence structure  between the latent and the observed variables. In general unicity of $U$ is not \TODO{assuree}. If however we assume that the part of the graph $K_{OH}$ is also sparse, i.e. each latent variable is connected to a small number of observed variables, and provided that the sparsity patterns are not the same for each latent variable (for example sources connected to disjoint subsets of observed variables), we can ensure, under technical conditions discussed in \ref{sec:id}, that the dependency structure between latent and observed variables, i.e the sparsity pattern of.$K_{OH}$, is recovered. If $U$ is unique, we recover the dependence structure  between the latent and the observed variables. Consequently we recover the structure of the full model.
+
+%To impose sparsity in the low rank component..
+
+%but can be achieved by imposing more structure on the low rank component, which we discuss in the next paragraph \ref{subsec:norm}. 
+
+%With the further assumption that the latent variables are independent,  i.e. $K_{HH}$ is  diagonal,  unicity of the decomposition $UU^{\top}$ can be achieved by imposing more structure on the low rank component, which we discuss in the next paragraph \ref{subsec:norm}. Under appropriate identifiability conditions, discussed in section \ref{sec:id}, it allows us to retrieve the structure of the full LVGGM.
+
+In the following section we ...
 
 %and that the decomposition is unique (see section \ref{sec:id} on identifiability).  Unicity of $K_{OH}$ is achieved imposing more structure on the low rank component, which we discuss in the next paragraph.
  

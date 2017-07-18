@@ -62,4 +62,8 @@ if ~isfield(param,'Sstar')
     param.Sstar = 0;
 end
 
+if ~isfield(param,'no_l1')
+    param.no_l1 = false;
+end
+
 end

@@ -1,5 +1,5 @@
 %% EXPERIMENT ON NET1 DREAM5
-clear all; clc;
+clear all; clc; close all;
 %%
 addpath('../main');
 addpath('../active-set');
@@ -34,7 +34,7 @@ lam=1;%.11;
 gam=.00001;
 param.lambda=lam;
 param.mu=gam;
-param.max_nb_main_loop=10;
+param.max_nb_main_loop=2;
 
 
 %% blocks

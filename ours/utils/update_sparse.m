@@ -9,7 +9,7 @@ switch param.f
         %         H = Z - inputData.Y;
         Lip = 1;
     case 4 % bilinear
-        obj0=.5*norm((inputData.X1*Z*inputData.X2 - inputData.Y),'fro')^2;
+        obj0=.5*norm((inputData.X1*Z*inputData.X2 - inputData.Y),'fro')^2 + param.mu*sum(abs(S(:)));
         grad_S = inputData.X1'*(inputData.X1*Z*inputData.X2 - inputData.Y)*inputData.X2';
         Lip=norm(inputData.X1,'fro')^4;
     case 5 % score matching
@@ -18,28 +18,35 @@ switch param.f
         Lip=norm(inputData.X1,'fro');
 end
 
-%prox l1
+% Proximal gradient method
+Snew=S;
+Sigma=inputData.X1'*inputData.X1;
+R= inputData.X1'*(inputData.X1*(D+L)*inputData.X2 - inputData.Y)*inputData.X2';
 I=speye(p)==1;
-obj1=+inf;
 t=1/Lip;
-while obj0<obj1+1e-10    
+
+while dot(grad_S,Snew-S)+1/(2*t)*norm(Snew-S,'fro')^2<0
     Snew=S-t*grad_S;
     Snew(I)=0;
-    obj1=.5*norm((inputData.X1*(Snew+L+D)*inputData.X2 - inputData.Y),'fro')^2+param.mu*sum(abs(Snew(:)));
+    Snew=wthresh(Snew,'s',t*param.mu);
+%     obj1=.5*norm((inputData.X1*(Snew+L+D)*inputData.X2 - inputData.Y),'fro')^2 +param.mu*sum(abs(Snew(:)));
+    grad_S=Sigma*Snew*Sigma+R;
+%
     t=t/2;
 end
+S=Snew;
 % S=(Snew-param.mu*(ones(p)-eye(p))).*sign(Snew);
-S= wthresh(Snew,'s',param.mu);
+% S= wthresh(Snew,'s',param.mu);
 
 % keyboard;
 % 
 % S((speye(p)>0))=0;
 
 if debug
-    obj1=.5*norm((inputData.X1*(S+L+D)*inputData.X2 - inputData.Y),'fro')^2;
+    obj1=.5*norm((inputData.X1*(S+L+D)*inputData.X2 - inputData.Y),'fro')^2+param.mu*sum(abs(Snew(:)));
     if obj0<obj1
         fprintf('error update S : objective does not decrease\n');
-%         keyboard;
+        keyboard;
     end
 %     keyboard; % [obj0 obj1]
 end

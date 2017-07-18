@@ -226,7 +226,7 @@ while cont
                 maxval_om=maxval_om0;
             else
                 maxval_om=-inf;
-                keyboard;
+%                 keyboard;
             end
         else
             maxval_om=-inf;

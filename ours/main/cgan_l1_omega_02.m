@@ -119,9 +119,12 @@ epsStop=param.epsStop;
 [ob, lo, pe] = get_val_l1_omega_02(L,S,D,inputData,param,ActiveSet);
 obj0 = [obj0 ob];
 
+tau=inf;
+
 % for q=5:-1:0
 for q=qs
-    param.epsStop=2^q*epsStop;
+%     param.epsStop=2^q*epsStop;
+    param.epsStop=tau;
     c = 1;
     i = 0;
     while c
@@ -138,9 +141,9 @@ for q=qs
                 fprintf('   solving PS..\n ')
             end
             
-            param.epsStop=2^(q-1)*epsStop;
+%             param.epsStop=2^(q-1)*epsStop;
             
-            for ttt=1:50
+            for ttt=1:10
     %             D diag update
                 tic
                 D = update_diag(param,inputData,L,S,D);
@@ -168,15 +171,17 @@ for q=qs
             
             Z1=S+D;
             tic
-            [Z, res, L, Hall,fall, ActiveSet, hist_ps] = solve_ps_l1_omega_asqp02(L+S+D,Z1,L, ActiveSet,param,inputData,atoms_l1_sym,Hall,fall);
+            [Z, res, L, Hall,fall, ActiveSet, hist_ps,tau_new] = solve_ps_l1_omega_asqp02(L+S+D,Z1,L, ActiveSet,param,inputData,atoms_l1_sym,Hall,fall);
             ti=toc;
             [ob, lo, pe] = get_val_l1_omega_02(L,S,D,inputData,param,ActiveSet);
             obj0 = [obj0 ob];
             loss0 = [loss0 lo];
             pen0 = [pen0 pe];
             timeL = [timeL ti];
+            param.epsStop=tau_new;
             
-            param.epsStop=2^q*epsStop;
+%             param.epsStop=2^q*epsStop;
+            
             
             if ~isempty(ActiveSet.alpha) && param.debug==1
                 hist.nzalphas=[hist.nzalphas full(sum(ActiveSet.alpha>0))];

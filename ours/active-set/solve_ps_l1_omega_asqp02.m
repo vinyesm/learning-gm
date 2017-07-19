@@ -1,4 +1,4 @@
-function [ Z,Z1,Z2,Hall,fall, ActiveSet, hist] = solve_ps_l1_omega_asqp02( Z,Z1,Z2,ActiveSet,param,inputData,atoms_l1_sym,Hall,fall)
+function [ Z,Z1,Z2,Hall,fall, ActiveSet, hist,tau_new] = solve_ps_l1_omega_asqp02( Z,Z1,Z2,ActiveSet,param,inputData,atoms_l1_sym,Hall,fall)
 %Using Active Set to solve (PS) problem
 
 debug=1;
@@ -30,14 +30,15 @@ nb_pivot=zeros(1,param.niterPS);
 active_var=zeros(1,param.niterPS);
 
 p=size(Z,1);
-
 new_atom_added=false;
 idx_added=-1;
 ii=1;
 count=1;
 cont=true;
-
 H = real(gradient(Z,inputData,param));
+flag_first_dg=true;
+
+
 
 while cont
     %% get a new atom ui  [si=ui'*ui] in ActiveSet.atoms  from some C_I I
@@ -137,6 +138,10 @@ while cont
         if (param.sloppy==0 || (param.sloppy~=0 && mod(count,100)==1)) %&& ~isempty(ActiveSet.alpha)
             if compute_dg
                 [loss(ii),pen(ii),obj(ii),dg(ii),time(ii)]=get_val_omega_asqp(Z,Z1,Z2,ActiveSet,inputData,param);
+                if flag_first_dg
+                    param.epsStop=min(param.epsStop,dg(ii)/2);
+                    flag_first_dg=false;
+                end
                 nb_pivot(ii)=npiv;
                 active_var(ii)= sum(ActiveSet.alpha>0);
                 dualgap=dg(ii);
@@ -152,8 +157,6 @@ while cont
             else
                 dualgap=inf;
             end
-            ii=ii+1;
-            ii
             
             %% Verify sttopping criterion
             H = real(gradient(Z,inputData,param));
@@ -173,40 +176,41 @@ while cont
                 maxvar=0;
             end
             %% extra condition
-            if compute_dg
-                omega=pen(ii-1);
-            else
-                cfa=zeros(ActiveSet.atom_count,min(ActiveSet.atom_count,1));
-                card=sum(ActiveSet.atoms(:,1:ActiveSet.atom_count)~=0);
-                for i=1:ActiveSet.atom_count
-                    cfa(i)=min(param.cardfun(card(i):end));
-                end
-                if ~isempty(ActiveSet.alpha)
-                    omega = param.lambda*dot(cfa,ActiveSet.alpha);
-                else
-                    omega = 0;
-                end
-            end
-            
-            dotHZ=trace(-H*Z);
-            dualomega=max(maxvar/(cf*param.lambda),maxval_l1/param.mu);
-            cond=omega*dualomega - dotHZ;
-            epscond=param.epsStop;
-           
-            if cond<epscond
-                cont=false;
-            end
-            
+%             if compute_dg
+%                 omega=pen(ii);
+%             else
+%                 cfa=zeros(ActiveSet.atom_count,min(ActiveSet.atom_count,1));
+%                 card=sum(ActiveSet.atoms(:,1:ActiveSet.atom_count)~=0);
+%                 for i=1:ActiveSet.atom_count
+%                     cfa(ii)=min(param.cardfun(card(ii):end));
+%                 end
+%                 if ~isempty(ActiveSet.alpha)
+%                     omega = param.lambda*dot(cfa,ActiveSet.alpha);
+%                 else
+%                     omega = 0;
+%                 end
+%             end
+%             
+%             dotHZ=trace(-H*Z);
+%             dualomega=max(maxvar/(cf*param.lambda),maxval_l1/param.mu);
+%             cond=omega*dualomega - dotHZ;
+%             epscond=param.epsStop;
+%            
+%             if cond<epscond
+%                 cont=false;
+%             end
+%             
             if debug
-                fprintf('   maxIJ/mu=%4.2f<1     varmax/cf*lambda=%4.2f<1   dg/eps=%4.2f<1  cond=%4.2f<%4.2f\n',maxval_l1/param.mu,maxvar/(cf*param.lambda),dualgap/param.PSdualityEpsilon,cond,epscond);
+                fprintf('   maxIJ/mu=%4.2f<1     varmax/cf*lambda=%4.2f<1   dg/eps=%4.2f<1\n',maxval_l1/param.mu,maxvar/(cf*param.lambda),dualgap/param.PSdualityEpsilon);
             end
             
 %             cont=cont && count< param.niterPS;
             
-%             cont= count< 20;
-            cont= maxvar/(cf*param.lambda)>1+param.epsStop  && count< param.niterPS;
+%             cont= maxvar/(cf*param.lambda)>1+param.epsStop  && count< param.niterPS;
 
-%             cont=dg(i-1)<epscond && count< param.niterPS;
+            cont=dg(ii)>param.epsStop && count< param.niterPS;
+            ii=ii+1;
+            keyboard;
             
             
         end
@@ -428,6 +432,8 @@ hist.dg_sup=dg(1);
 hist.time_sup=time(1);
 hist.nb_pivot=nb_pivot(1:ii);
 hist.active_var=active_var(1:ii);
+
+tau_new=param.epsStop;
 
 if count>param.niterPS
     fprintf('maximum number of Ps iteration reached, duality gap=%f\n',hist.dg(end));

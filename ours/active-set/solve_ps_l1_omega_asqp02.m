@@ -135,11 +135,12 @@ while cont
         Z=Z1+Z2;
         
         %% Compute objective, loss, penalty and duality gap
-        if (param.sloppy==0 || (param.sloppy~=0 && mod(count,100)==1)) %&& ~isempty(ActiveSet.alpha)
+        if (param.sloppy==0 || (param.sloppy~=0 && mod(count-1,50)==1)) %&& ~isempty(ActiveSet.alpha)
             if compute_dg
                 [loss(ii),pen(ii),obj(ii),dg(ii),time(ii)]=get_val_omega_asqp(Z,Z1,Z2,ActiveSet,inputData,param);
                 if flag_first_dg
-                    param.epsStop=min(param.epsStop,dg(ii)/2);
+%                     param.epsStop=min(param.epsStop,dg(ii)/2);
+                    param.epsStop=min(dg(ii)/2);
                     flag_first_dg=false;
                 end
                 nb_pivot(ii)=npiv;
@@ -198,21 +199,19 @@ while cont
 %            
 %             if cond<epscond
 %                 cont=false;
-%             end
-%             
+%             end             
             if debug
-                fprintf('   maxIJ/mu=%4.2f<1     varmax/cf*lambda=%4.2f<1   dg/eps=%4.2f<1\n',maxval_l1/param.mu,maxvar/(cf*param.lambda),dualgap/param.PSdualityEpsilon);
-            end
-            
-%             cont=cont && count< param.niterPS;
-            
+                fprintf('varmax/cf*lambda=%4.2f<1   dg %f<%f \n',maxvar/(cf*param.lambda),dualgap,param.epsStop);
+            end            
+%             cont=cont && count< param.niterPS;            
 %             cont= maxvar/(cf*param.lambda)>1+param.epsStop  && count< param.niterPS;
-
             cont=dg(ii)>param.epsStop && count< param.niterPS;
-            ii=ii+1;
-            keyboard;
             
-            
+            if ~cont
+%                 keyboard;
+            end
+
+            ii=ii+1;         
         end
     else % isempty(Hall)
         if param.no_l1
@@ -231,16 +230,23 @@ while cont
         
         new_atom_l1=false;
         new_atom_om=false;
-        
+        H = real(gradient(Z,inputData,param));
+        if param.no_l1
+            maxval_l1=-inf;
+        else
+            [maxval_l1,new_row, new_col] = dual_l1_spca(H);
+            cf=1;
+        end
+
         %% omega atom
         
         cf=1;
         if ~isempty(ActiveSet.I)
-            %             [new_i, new_val, maxval_om0]=get_new_atom_spca(H,ActiveSet,param);
+            [new_i, new_val, maxval_om0]=get_new_atom_spca(H,ActiveSet,param);
             maxval_om0=maxval_om0*cf;
             anew=sparse(new_i,ones(length(new_i),1),new_val,p,1);
             cf=min(param.cardfun(length(new_i):end));
-            if maxval_om0-cf*param.lambda>param.epsStop/10
+            if maxval_om0-cf*param.lambda>min(0,param.epsStop/10)
                 maxval_om=maxval_om0;
             else
                 maxval_om=-inf;
@@ -268,10 +274,10 @@ while cont
         
         
         %%
-        if debug
-            fprintf('   maxval_l1=%f < %f     maxval_om=%f < %f\n',maxval_l1,param.mu,maxval_om,param.lambda*cf);
-            fprintf('   maxval_l1/mu = %f maxval_om/(cf*lambda) = %f\n',maxval_l1/param.mu,maxval_om/(cf*param.lambda));
-        end
+%         if debug
+%             fprintf('   maxval_l1=%f < %f     maxval_om=%f < %f\n',maxval_l1,param.mu,maxval_om,param.lambda*cf);
+%             fprintf('   maxval_l1/mu = %f maxval_om/(cf*lambda) = %f\n',maxval_l1/param.mu,maxval_om/(cf*param.lambda));
+%         end
         
         %% no atoms added, break
         if maxval_l1==-inf && maxval_om==-inf
@@ -287,10 +293,9 @@ while cont
             fprintf('\n not good atom omega d=%f\n',maxval_om);
             keyboard;
         end
-        if debug
-            fprintf('\n adding omega atom\n');
-            %                 keyboard;
-        end
+%         if debug
+%             fprintf('\n adding omega atom\n');
+%         end
         
         if ActiveSet.atom_count>0
             aom=[ActiveSet.atoms(:,1:ActiveSet.atom_count) anew];
@@ -421,6 +426,7 @@ while cont
 end
 
 %redimensioning arrays
+% keyboard;
 ii=ii-1;
 hist.obj = obj(1:ii);
 hist.pen =  pen(1:ii);
@@ -433,7 +439,11 @@ hist.time_sup=time(1);
 hist.nb_pivot=nb_pivot(1:ii);
 hist.active_var=active_var(1:ii);
 
-tau_new=param.epsStop;
+if ii>0
+    tau_new=min(param.epsStop,hist.dg(end));
+else
+    tau_new=param.epsStop;
+end
 
 if count>param.niterPS
     fprintf('maximum number of Ps iteration reached, duality gap=%f\n',hist.dg(end));

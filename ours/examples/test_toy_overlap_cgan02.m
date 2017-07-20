@@ -38,10 +38,12 @@ param.cardfun=inf*ones(1,p);
 param.cardfun(k)=1;
 
 %%% n=5000
-param.lambda=.3; %lamda ~ 2/k*mu
-param.mu=.0001;
+param.lambda=1.3; %lamda ~ 2/k*mu
+param.mu=.5;
 
-param.max_nb_main_loop=2;
+param.sloppy=1;
+param.max_nb_main_loop=10;
+
 
 %%
 % %% Starting solution
@@ -104,7 +106,7 @@ Z2b=Lb;
 
 %% objective
 figure(1);clf;
-plot(hist2.obj0);
+semilogy(hist2.obj0);
 
 figure(2);clf;
 semilogy(hist2.dg);

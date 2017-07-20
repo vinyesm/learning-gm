@@ -120,11 +120,12 @@ epsStop=param.epsStop;
 obj0 = [obj0 ob];
 
 tau=inf;
+param.epsStop=tau;
+eps_add=min(param.epsStop,1e-4);
 
-% for q=5:-1:0
+
 for q=qs
-%     param.epsStop=2^q*epsStop;
-    param.epsStop=tau;
+ 
     c = 1;
     i = 0;
     while c
@@ -174,11 +175,12 @@ for q=qs
             [Z, res, L, Hall,fall, ActiveSet, hist_ps,tau_new] = solve_ps_l1_omega_asqp02(L+S+D,Z1,L, ActiveSet,param,inputData,atoms_l1_sym,Hall,fall);
             ti=toc;
             [ob, lo, pe] = get_val_l1_omega_02(L,S,D,inputData,param,ActiveSet);
-            obj0 = [obj0 ob];
+            obj0 = [obj0 ob(end)];
             loss0 = [loss0 lo];
             pen0 = [pen0 pe];
             timeL = [timeL ti];
             param.epsStop=tau_new;
+            eps_add=min(param.epsStop,1e-4);
             
 %             param.epsStop=2^q*epsStop;
             
@@ -217,7 +219,7 @@ for q=qs
         cf=min(param.cardfun(kBest:end));
 %         keyboard;
         
-        if val<param.lambda*(1+param.epsStop)
+        if val<param.lambda*(1+eps_add)
             %%      few proximal steps for postprcessing
             %             keyboard;
             if pm && ActiveSet.atom_count>0 
@@ -292,8 +294,8 @@ for q=qs
         flag.var=varIJ;
         
         if param.verbose==1
-            fprintf(' maxIJ = %2.4e, thresh = %2.4e\n',maxIJ, param.mu*(1+param.epsStop));
-            fprintf(' varIJ = %2.4e, thresh = %2.4e\n',varIJ, param.lambda*(1+param.epsStop / kBest)* param.cardfun(kBest));
+            fprintf(' maxIJ = %2.4e, thresh = %2.4e\n',maxIJ, param.mu*(1+eps_add));
+            fprintf(' varIJ = %2.4e, thresh = %2.4e\n',varIJ, param.lambda*(1+eps_add / kBest)* param.cardfun(kBest));
             fprintf(' length(currI)=%d\n', length(currI));
             rho=p/2;
             if ~isempty(pen)
@@ -306,7 +308,7 @@ for q=qs
         end
         
         
-        if varIJ < param.lambda*cf*(1+param.epsStop) && maxIJ < param.mu*(1+param.epsStop)
+        if varIJ < param.lambda*cf*(1+eps_add) && maxIJ < param.mu*(1+eps_add)
             c=0;
         elseif ActiveSet.atom_count>=param.max_nb_atoms
             %         keyboard;
@@ -314,7 +316,7 @@ for q=qs
         elseif takenI
             fprintf(' This support has already been added. Stopping\n');
             %c=0;
-        elseif varIJ > param.lambda*cf*(1+param.epsStop)
+        elseif varIJ > param.lambda*cf*(1+eps_add)
             ActiveSet.I = [ActiveSet.I, currI];
             %ActiveSet.U = [ActiveSet.U, u(currI)];
             %ActiveSet.Sigma = [ActiveSet.Sigma, varIJ];

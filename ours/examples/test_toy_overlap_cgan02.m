@@ -38,60 +38,42 @@ param.cardfun=inf*ones(1,p);
 param.cardfun(k)=1;
 
 %%% n=5000
-param.lambda=1.3; %lamda ~ 2/k*mu
-param.mu=.5;
+param.lambda=.5; %lamda ~ 2/k*mu
+param.mu=.1;
 
 param.sloppy=1;
-param.max_nb_main_loop=10;
+param.max_nb_main_loop=20;
 
 
 %%
 % %% Starting solution
-% 
-% ActiveSet.max_atom_count_reached=0;
-% ActiveSet.I={};
-% ActiveSet.alpha= [];
-% ActiveSet.atoms=pl;
-% ActiveSet.atom_count = pl;
-% if param.f==4
-% %     [ Q,q,atoms_l1_sym ] = build_atoms_hessian_l1_sym(Doo,0);
-% elseif param.f==5
-%     [ Q,q,atoms_l1_sym ] = build_atoms_hessian_l1_SM(Doo,0);
-% end
-% [ActiveSet.I_l1, ActiveSet.beta]=mat2l1index(-Doo,atoms_l1_sym);
-% ActiveSet.k=mat2cell(ks,1,ones(1,length(ks)));
-% ActiveSet.alpha=sum(Dol.^2)';
-% ActiveSet.atoms=sparse(bsxfun(@rdivide, Dol, sqrt(sum(Dol.^2))));
-% for i=1:pl
-%     ActiveSet.I{i}=find(Dol(:,i));
-% end
-% 
-% cf=inf*ones(1,length(ks));
-% for j=1:length(ks)
-%     cf(j)=min(param.cardfun(ks(j):end));
-% end
-% 
-% ActiveSet.atoms=bsxfun(@rdivide,ActiveSet.atoms(:,1:ActiveSet.atom_count),sqrt(cf));
-% ActiveSet.alpha=ActiveSet.alpha.*cf';
-% 
-% 
-% startingZ.Z1=-Doo;
-% startingZ.Z2=Dol*Dol';
-% 
-% 
-% 
-% Z1=zeros(p);
-% nz=find(ActiveSet.beta>1e-15);
-% for j=nz'
-%     Z1=Z1+ActiveSet.beta(j)*reshape(atoms_l1_sym(:,ActiveSet.I_l1(j)),p,p);
-% end
-% Z2=zeros(p);
-% nz=find(ActiveSet.alpha>1e-15);
-% for j=nz'
-%     u=ActiveSet.atoms(:,j);
-%     Z2=Z2+ActiveSet.alpha(j)*(u*u');
-% end
-% Z=Z1+Z2;
+
+ActiveSet.max_atom_count_reached=0;
+ActiveSet.I={};
+ActiveSet.alpha= [];
+ActiveSet.atoms=pl;
+ActiveSet.atom_count = pl;
+ActiveSet.k=mat2cell(ks,1,ones(1,length(ks)));
+ActiveSet.alpha=sum(Dol.^2)';
+ActiveSet.atoms=sparse(bsxfun(@rdivide, Dol, sqrt(sum(Dol.^2))));
+for i=1:pl
+    ActiveSet.I{i}=find(Dol(:,i));
+end
+
+cf=inf*ones(1,length(ks));
+for j=1:length(ks)
+    cf(j)=min(param.cardfun(ks(j):end));
+end
+
+ActiveSet.atoms=bsxfun(@rdivide,ActiveSet.atoms(:,1:ActiveSet.atom_count),sqrt(cf));
+ActiveSet.alpha=ActiveSet.alpha.*cf';
+
+I=speye(p)==1;
+startingZ.Z1=-Doo;
+startingZ.D=diag(diag(startingZ.Z1));
+startingZ.Z1(I)=0;
+startingZ.Z2=Dol*Dol';
+
 
 
 %% blocks
@@ -100,7 +82,7 @@ param.max_nb_main_loop=10;
 % keyboard;
 
 %% tr+l1
-[Zb Lb Sb Db ActiveSet2 hist2 param2 flag2 output2] = cgan_l1_omega_02(inputData,param);
+[Zb Lb Sb Db ActiveSet2 hist2 param2 flag2 output2] = cgan_l1_omega_02(inputData,param,startingZ,ActiveSet);
 Z1b=Sb+Db;
 Z2b=Lb;
 

@@ -102,6 +102,10 @@ end
 if nargin > 2
     if param.f==4
 %         [Hall,fall] = build_Hessian_l1_sym(inputData,param,atoms_l1_sym(:,ActiveSet.I_l1),ActiveSet.atoms);
+        U=inputData.X1*ActiveSet.atoms;
+        Hall=(U'*U).^2;
+        fall= -diag(U'*((-inputData.X1*(S+D)*inputData.X2)+inputData.Y)*U);
+%         keyboard;
     elseif param.f==5
 %         [Hall,fall] = build_Hessian_l1_SM(inputData,param,atoms_l1_sym(:,ActiveSet.I_l1),ActiveSet.atoms);
     end

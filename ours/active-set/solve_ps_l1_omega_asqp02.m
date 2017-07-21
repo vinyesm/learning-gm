@@ -135,12 +135,12 @@ while cont
         Z=Z1+Z2;
         
         %% Compute objective, loss, penalty and duality gap
-        if (param.sloppy==0 || (param.sloppy~=0 && mod(count-1,50)==1)) %&& ~isempty(ActiveSet.alpha)
+        if (param.sloppy==0 || (param.sloppy~=0 && mod(count-1,5)==1)) %&& ~isempty(ActiveSet.alpha)
             if compute_dg
                 [loss(ii),pen(ii),obj(ii),dg(ii),time(ii)]=get_val_omega_asqp(Z,Z1,Z2,ActiveSet,inputData,param);
                 if flag_first_dg
-%                     param.epsStop=min(param.epsStop,dg(ii)/2);
-                    param.epsStop=min(dg(ii)/2);
+                    param.epsStop=min(param.epsStop,dg(ii)/2);
+%                     param.epsStop=min(dg(ii)/2);
                     flag_first_dg=false;
                 end
                 nb_pivot(ii)=npiv;
@@ -149,7 +149,7 @@ while cont
                 %cont = (dg(i)>param.PSdualityEpsilon) && count< param.niterPS;
                 
                 if debug && ii>1
-                    fprintf(' PS info obj=%f  loss=%f  pen=%f penl1=%f pen_om=%f dg=%f  \n', obj(ii),loss(ii), pen(ii), param.lambda*sum(ActiveSet.alpha),param.mu*sum(ActiveSet.beta), dg(ii));
+                    fprintf(' PS info obj=%f  loss=%f  pen=%f dg=%f  \n', obj(ii),loss(ii), pen(ii), dg(ii));
                     if obj(ii)>obj(ii-1)+param.epsStop
                         fprintf('objective increasing\n');
 %                         keyboard;
@@ -204,8 +204,8 @@ while cont
                 fprintf('varmax/cf*lambda=%4.2f<1   dg %f<%f \n',maxvar/(cf*param.lambda),dualgap,param.epsStop);
             end            
 %             cont=cont && count< param.niterPS;            
-%             cont= maxvar/(cf*param.lambda)>1+param.epsStop  && count< param.niterPS;
-            cont=dg(ii)>param.epsStop && count< param.niterPS;
+            cont= maxvar/(cf*param.lambda)>1+param.epsStop  && count< param.niterPS;
+%             cont=dg(ii)>param.epsStop && count< param.niterPS;
             
             if ~cont
 %                 keyboard;

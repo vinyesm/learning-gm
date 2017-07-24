@@ -53,8 +53,8 @@ S=Snew;
 % S((speye(p)>0))=0;
 
 if debug
-    obj1=.5*norm((inputData.X1*(S+L+D)*inputData.X2 - inputData.Y),'fro')^2+param.mu*sum(abs(Snew(:)));
-    if obj0<obj1
+    obj1=.5*norm((inputData.X1*(Snew+L+D)*inputData.X2 - inputData.Y),'fro')^2+param.mu*sum(abs(Snew(:)));
+    if obj0<=obj1
         fprintf('error update S : objective does not decrease\n');
         keyboard;
     end

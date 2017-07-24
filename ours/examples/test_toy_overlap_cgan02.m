@@ -38,11 +38,11 @@ param.cardfun=inf*ones(1,p);
 param.cardfun(k)=1;
 
 %%% n=5000
-param.lambda=.5; %lamda ~ 2/k*mu
+param.lambda=.7; %lamda ~ 2/k*mu
 param.mu=.1;
 
-param.sloppy=1;
-param.max_nb_main_loop=20;
+param.sloppy=0;
+param.max_nb_main_loop=10;
 
 
 %%
@@ -83,6 +83,7 @@ startingZ.Z2=Dol*Dol';
 
 %% tr+l1
 [Zb Lb Sb Db ActiveSet2 hist2 param2 flag2 output2] = cgan_l1_omega_02(inputData,param,startingZ,ActiveSet);
+% [Zb Lb Sb Db ActiveSet2 hist2 param2 flag2 output2] = cgan_l1_omega_02(inputData,param);%,startingZ,ActiveSet);
 Z1b=Sb+Db;
 Z2b=Lb;
 

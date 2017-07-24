@@ -139,7 +139,8 @@ while cont
             if compute_dg
                 [loss(ii),pen(ii),obj(ii),dg(ii),time(ii)]=get_val_omega_asqp(Z,Z1,Z2,ActiveSet,inputData,param);
                 if flag_first_dg
-                    param.epsStop=min(param.epsStop,dg(ii)/2);
+%                     param.epsStop=min(param.epsStop,dg(ii)/2);
+                      param.epsStop=1e-6;
 %                     param.epsStop=min(dg(ii)/2);
                     flag_first_dg=false;
                 end
@@ -205,6 +206,7 @@ while cont
             end            
 %             cont=cont && count< param.niterPS;            
             cont= maxvar/(cf*param.lambda)>1+param.epsStop  && count< param.niterPS;
+%             keyboard
 %             cont=dg(ii)>param.epsStop && count< param.niterPS;
             
             if ~cont
@@ -249,6 +251,7 @@ while cont
             if maxval_om0-cf*param.lambda>min(0,param.epsStop/10)
                 maxval_om=maxval_om0;
             else
+%                 keyboard;
                 maxval_om=-inf;
             end
         else

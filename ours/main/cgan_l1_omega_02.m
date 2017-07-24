@@ -42,7 +42,8 @@ if nargin < 3
     fall=[];
     cardVal=[];
     U=[];
-    qs=3:-1:0;
+%     qs=3:-1:0;
+    qs=0;
 else
     %     Z = startingZ;
     S = startingZ.Z1;
@@ -102,9 +103,9 @@ end
 if nargin > 2
     if param.f==4
 %         [Hall,fall] = build_Hessian_l1_sym(inputData,param,atoms_l1_sym(:,ActiveSet.I_l1),ActiveSet.atoms);
-        U=inputData.X1*ActiveSet.atoms;
+        U=inputData.X1*ActiveSet.atoms(:,1:ActiveSet.atom_count);
         Hall=(U'*U).^2;
-        fall= -diag(U'*((-inputData.X1*(S+D)*inputData.X2)+inputData.Y)*U);
+        fall= diag(U'*(inputData.X1*(S+D)*inputData.X2-inputData.Y)*U)+param.lambda*ActiveSet.alpha(1:ActiveSet.atom_count);
 %         keyboard;
     elseif param.f==5
 %         [Hall,fall] = build_Hessian_l1_SM(inputData,param,atoms_l1_sym(:,ActiveSet.I_l1),ActiveSet.atoms);
@@ -158,11 +159,14 @@ for q=qs
                 loss0 = [loss0 lo];
                 pen0 = [pen0 pe];
                 timeD = [timeD ti];
-
-    %             C=inputData.X1;
-    %             keyboard;
-
-
+                
+                %             C=inputData.X1;
+                %             keyboard;
+                if length(obj0)>1 && obj0(end-1)< ob(end)
+                    keyboard;
+                end
+                
+                
                 % S sparse update
                 tic
                 S = update_sparse(param,inputData,L,S,D);
@@ -170,9 +174,23 @@ for q=qs
                 [ob, lo, pe] = get_val_l1_omega_02(L,S,D,inputData,param,ActiveSet);
                 obj0 = [obj0 ob];
                 loss0 = [loss0 lo];
-                pen0 = [pen0 pe]; 
-                timeS = [timeS ti];          
+                pen0 = [pen0 pe];
+                timeS = [timeS ti];
+                
+                if obj0(end-1)< ob(end)
+                    keyboard;
+                end
             end
+            
+            % update Hall and fall
+            %keyboard;
+            if ActiveSet.atom_count>0
+                U=inputData.X1*ActiveSet.atoms(:,1:ActiveSet.atom_count);
+                Hall=(U'*U).^2;%ok
+                fall= diag(U'*((+inputData.X1*(S+D)*inputData.X2)-inputData.Y)*U)+param.lambda*ActiveSet.alpha(1:ActiveSet.atom_count);
+            end
+%             keyboard;
+            %
             
             Z1=S+D;
             tic
@@ -185,6 +203,11 @@ for q=qs
             timeL = [timeL ti];
             param.epsStop=tau_new;
             eps_add=min(param.epsStop,1e-4);
+            eps_add=1e-6;
+            
+            if obj0(end-1)< ob(end)
+%                 keyboard;
+            end
             
 %             param.epsStop=2^q*epsStop;
             

@@ -138,6 +138,7 @@ while cont
         if (param.sloppy==0 || (param.sloppy~=0 && mod(count-1,5)==1)) %&& ~isempty(ActiveSet.alpha)
             if compute_dg
                 [loss(ii),pen(ii),obj(ii),dg(ii),time(ii)]=get_val_omega_asqp(Z,Z1,Z2,ActiveSet,inputData,param);
+                
                 if flag_first_dg
 %                     param.epsStop=min(param.epsStop,dg(ii)/2);
                       param.epsStop=1e-6;

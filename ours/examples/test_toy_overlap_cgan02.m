@@ -42,7 +42,7 @@ param.lambda=.7; %lamda ~ 2/k*mu
 param.mu=.1;
 
 param.sloppy=0;
-param.max_nb_main_loop=10;
+param.max_nb_main_loop=50;
 
 
 %%
@@ -90,15 +90,22 @@ Z2b=Lb;
 %% objective
 figure(1);clf;
 semilogy(hist2.obj0);
+title('objective')
 
 figure(2);clf;
 semilogy(hist2.dg);
+title('dg sub-problems PS')
 
 figure(3);clf;
 plot(cumsum(hist2.timeD),'r');hold on
 plot(cumsum(hist2.timeS),'b');hold on
 plot(cumsum(hist2.timeL),'k');hold on
 legend({'D updates' 'S updates' 'L updates'});
+title('computing time spent per type of update')
+
+figure(4);clf;
+semilogy(hist2.dg_global);
+title('dg global')
 
 
 %% LOAD HERE lggm.mat

@@ -64,6 +64,7 @@ pen0  = [];
 timeD  = [];
 timeS  = [];
 timeL  = [];
+dg_global=[];
 obj  = [];
 loss = [];
 pen  = [];
@@ -159,6 +160,7 @@ for q=qs
                 loss0 = [loss0 lo];
                 pen0 = [pen0 pe];
                 timeD = [timeD ti];
+                dg_global=[dg_global get_dg_global(L,S,D,inputData,param,ActiveSet)];
                 
                 %             C=inputData.X1;
                 %             keyboard;
@@ -176,6 +178,7 @@ for q=qs
                 loss0 = [loss0 lo];
                 pen0 = [pen0 pe];
                 timeS = [timeS ti];
+                dg_global=[dg_global get_dg_global(L,S,D,inputData,param,ActiveSet)];
                 
                 if obj0(end-1)< ob(end)
                     keyboard;
@@ -201,9 +204,11 @@ for q=qs
             loss0 = [loss0 lo];
             pen0 = [pen0 pe];
             timeL = [timeL ti];
+            dg_global=[dg_global get_dg_global(L,S,D,inputData,param,ActiveSet)];
             param.epsStop=tau_new;
             eps_add=min(param.epsStop,1e-4);
             eps_add=1e-6;
+            
             
             if obj0(end-1)< ob(end)
 %                 keyboard;
@@ -387,6 +392,7 @@ hist.pen0=pen0;
 hist.timeD=timeD;
 hist.timeS=timeS;
 hist.timeL=timeL;
+hist.dg_global=dg_global;
 if ActiveSet.atom_count>0
     ActiveSet.atoms=ActiveSet.atoms(:,1:ActiveSet.atom_count);
 end

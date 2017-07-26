@@ -113,14 +113,13 @@ if ~isempty(idx); ee(idx) = ones(length(idx),1); end
 C{m+2,1} = mu*[ee; ee];
 fprintf('\n Set up data time = %3.2f\n',etime(clock,ttime));
 runPPA = 1;
-keyboard;
 if (runPPA)
     OPTIONS.smoothing  = 1;
     OPTIONS.scale_data = 0; %% or 2;
     OPTIONS.plotyes    = 0;
     OPTIONS.tol        = 1e-10;
     eta = [1; zeros(m+1,1)];
-    [obj,X,y,Z,info,runhist] = logdetPPA(blk,At,C,b,eta,OPTIONS);
+    [obj00,X,y,Z,info,runhist] = logdetPPA(blk,At,C,b,eta,OPTIONS);
     L=[];
     U=[];
     M=X{1};
@@ -158,7 +157,7 @@ if ~isempty(ActiveSet.I)
     Dfin(1:nl,(nl+1):(nl+p))=Uso';
     Dfin((nl+1):(nl+p),1:nl)=Uso;
 else
-    Dfin=Z1;
+    Dfin=S;
 end
 
 figure(1);clf;
@@ -179,6 +178,61 @@ title('true support');
 colorbar
 subplot(2,2,4)
 imagesc(abs(Dfin)>1e-15);
+pbaspect([1 1 1]);
+title('estimated support');
+colorbar
+
+%%
+
+keyboard;
+ActiveSet.I={};
+ActiveSet.k={};
+param.mu=.1;
+param.lambda=.5;
+param.k=15;
+param.verbose=1;
+param.max_nb_main_loop=100;
+param.cardfun=inf*ones(1,p);
+param.cardfun(k)=1;
+[M,S,L,U,hist] = logdetPPA_l1_omega(Sigma,param,ActiveSet);
+
+figure(2);clf;
+plot(hist.obj_sup);
+
+% 
+if ~isempty(ActiveSet.I)
+    Uso=[];
+    for i=1:m
+        Uso=[Uso U{i}];
+    end
+    nl=size(Uso,2);
+    Dfin2=zeros(p+nl);
+    Dfin2(1:nl,1:nl)=eye(nl);
+    Dfin2((nl+1):(nl+p),(nl+1):(nl+p))=S;
+    Dfin2(1:nl,(nl+1):(nl+p))=Uso';
+    Dfin2((nl+1):(nl+p),1:nl)=Uso;
+else
+    Dfin2=S;
+end
+
+figure(3);clf;
+subplot(2,2,1)
+imagesc(abs(Dfull));
+pbaspect([1 1 1]);
+title('true complete conc. mat.');
+colorbar
+subplot(2,2,2)
+imagesc(abs(Dfin2));
+pbaspect([1 1 1]);
+title('estimated complete conc. mat.');
+colorbar
+subplot(2,2,3)
+imagesc(abs(Dfull)>1e-15);
+pbaspect([1 1 1]);
+title('true support');
+colorbar
+subplot(2,2,4)
+imagesc(abs(Dfin2)>1e-15);
 pbaspect([1 1 1]);
 title('estimated support');
 colorbar

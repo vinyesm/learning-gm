@@ -149,6 +149,7 @@ ee  = sqrt(2)*ones(m2,1);
 if ~isempty(idx); ee(idx) = ones(length(idx),1); end
 C{3,1} = rho*[ee; ee];
 fprintf('\n Set up data time = %3.2f',etime(clock,ttime));
+keyboard;
 runPPA = 1;
 if (runPPA)
     OPTIONS.smoothing  = 1;

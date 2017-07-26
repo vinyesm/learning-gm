@@ -70,7 +70,7 @@ ttime  = clock;
 Sigma=S;
 n=po;
 mu=.1;
-lambda=.4;
+lambda=.5;
 invD = speye(n,n); 
 
 %
@@ -184,17 +184,16 @@ colorbar
 
 %%
 
-keyboard;
 ActiveSet.I={};
 ActiveSet.k={};
 param.mu=.1;
 param.lambda=.5;
 param.k=15;
 param.verbose=1;
-param.max_nb_main_loop=100;
+param.max_nb_main_loop=150;
 param.cardfun=inf*ones(1,p);
 param.cardfun(k)=1;
-[M,S,L,U,hist] = logdetPPA_l1_omega(Sigma,param,ActiveSet);
+[M,S,L,U,hist,ActiveSet] = logdetPPA_l1_omega(Sigma,param,ActiveSet);
 
 figure(2);clf;
 plot(hist.obj_sup);
@@ -202,7 +201,7 @@ plot(hist.obj_sup);
 % 
 if ~isempty(ActiveSet.I)
     Uso=[];
-    for i=1:m
+    for i=1:length(ActiveSet.I);
         Uso=[Uso U{i}];
     end
     nl=size(Uso,2);

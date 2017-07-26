@@ -1,4 +1,4 @@
-function [M,S,L,U,hist] = logdetPPA_l1_omega(Sigma,param,ActiveSet)
+function [M,S,L,U,hist,ActiveSet] = logdetPPA_l1_omega(Sigma,param,ActiveSet)
 
 param.epsStop=1e-8;
 param.debug=0;
@@ -55,7 +55,9 @@ At0=At;
 
 c=true;
 i=0;
-M=speye(p);
+% M=speye(p);
+M=randn(p);
+M=M*M';
 while c
     i = i+1;
     
@@ -83,7 +85,7 @@ while c
         
         %Remove useless blocks
         for mm=1:m
-            if trace(X{2+mm})<1e-3
+            if trace(X{2+mm})<1e-2
                 ActiveSet.I{mm}=[];
                 ActiveSet.k{mm}=[];
                 ActiveSet.I=ActiveSet.I(~cellfun('isempty',ActiveSet.I));  
@@ -164,7 +166,7 @@ while c
     elseif takenI
         fprintf(' This support has already been added. Stopping\n');
         %c=0;
-    elseif varIJ > param.lambda*cf*(1+param.epsStop)
+    elseif varIJ > param.lambda*cf*(1+param.epsStop) &&  i<param.max_nb_main_loop
         ActiveSet.I = [ActiveSet.I, currI];
         ActiveSet.k = [ActiveSet.k , kBest];
     else

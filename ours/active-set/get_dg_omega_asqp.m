@@ -31,17 +31,15 @@ end
 
 kappa = shrink * (inputData.X1*M*inputData.X2-inputData.Y);
 G=inputData.X1*kappa*inputData.X2;
-U=inputData.X1*L*inputData.X2;
+U=inputData.X1*M*inputData.X2;
 dgf=.5*norm(U - kappa -inputData.Y,'fro')^2;
 dgL= pen + trace(L*G);
 fprintf('dgf=%f  dgL=%f  omega_pol=%f  (<1)\n',dgf,dgL,temp_om)
 dualityGap = dgf+dgL;
 
-keyboard;
 
-
-if dualityGap<0 && abs(dualityGap)>1e-10
-    fprintf('Negative duality gap=%f, gapLoss=%f gapPen=%f\n',dualityGap, gapLoss, gapPen);
+if dgf<0 || dgL<0 && abs(dualityGap)>1e-10
+    fprintf('Negative duality gap\n');
     %     error('Negative duality gap=%f, gapLoss=%f gapPen=%f\n',dualityGap, gapLoss, gapPen);
     dualityGap=abs(dualityGap);
 end

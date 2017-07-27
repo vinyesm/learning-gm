@@ -149,9 +149,12 @@ for q=qs
             end
             
 %             param.epsStop=2^(q-1)*epsStop;
+            param.epsStop=1;
             
-            for ttt=[]
-              
+            dg_update=inf;
+            ttt=0;
+            while dg_update>param.epsStop && ttt<20
+                ttt=ttt+1;
                 % S sparse update
                 tic
                 [S dg_update]= update_sparse_all(param,inputData,L,S);
@@ -177,10 +180,8 @@ for q=qs
                 fall= diag(U'*((+inputData.X1*(S)*inputData.X2)-inputData.Y)*U)+param.lambda*ActiveSet.alpha(1:ActiveSet.atom_count);
             end
             
-            keyboard;
-            for ttt=1:10
-                dg_S=10;
-                param.epsStop=dg_S(end);
+%             keyboard;
+%             for ttt=1:10
                 tic
                 [Z, res, L, Hall,fall, ActiveSet, hist_ps,tau_new] = solve_ps_l1_omega_asqp03(L+S,S,L, ActiveSet,param,inputData,atoms_l1_sym,Hall,fall);
                 ti=toc;
@@ -190,11 +191,11 @@ for q=qs
                 pen0 = [pen0 pe];
                 timeL = [timeL ti];
                 dg_global=[dg_global get_dg_global_LS(L,S,inputData,param,ActiveSet)];
-                param.epsStop=tau_new;
-                eps_add=min(param.epsStop,1e-4);
-                eps_add=1e-6;
+%                 param.epsStop=tau_new;
+%                 eps_add=min(param.epsStop,1e-4);
+%                 eps_add=1e-6;
                 dg_L=[dg_L hist_ps.dg(end)]
-            end
+%             end
             
             if obj0(end-1)< ob(end)
 %                 keyboard;

@@ -47,6 +47,7 @@ mu=.02;
 %%
 %% set up SDP data in SDPT3 format
 %%
+tic
 Sigma=S;
 n=size(S,1);
 rho=mu;
@@ -90,6 +91,7 @@ if (runPPA)
     X1 = invD*X{1}*invD; X1 = 0.5*(X1+X1');
     X2 = invD*X{2}*invD; X2 = 0.5*(X2+X2');
 end
+time_chandra=toc;
 
 %% solution
 Ssl=X1+X2;
@@ -172,9 +174,9 @@ param.mu=gam;
 param.max_nb_main_loop=100;
 
 %% blocks
-tic
-[Z Z1 Z2 ActiveSet hist param flag output] = cgan_l1_omega(inputData,param);
-toc
+% tic
+% [Z Z1 Z2 ActiveSet hist param flag output] = cgan_l1_omega(inputData,param);
+% toc
 
 %% 
 if ~isempty(ActiveSet.alpha)
@@ -294,7 +296,7 @@ end
 Z2=zeros(p);
 Z=Z1+Z2;
 
-[Z Z1 Z2 ActiveSet hist param flag output] = cgan_l1_omega(inputData,param,startingZ,ActiveSet);
+% [Z Z1 Z2 ActiveSet hist param flag output] = cgan_l1_omega(inputData,param,startingZ,ActiveSet);
 % save(['MILE_100_lam_' num2str(param.lambda) '_mu_' num2str(param.mu) '_rank_' num2str(ActiveSet.atom_count) '_3.mat'], 'Ssl', 'Lsl','Z','Z1','Z2','ActiveSet','param');
 
 end

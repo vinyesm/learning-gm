@@ -25,7 +25,13 @@ for k=1:size(B,1)
         options.maxIter=1000;
         options.cardinality_vec=k;
         options.initType=1; %default 2
-        [u,lambda] = TPower_SPCA(B, options);
+        [uTP,lambdaTP] = TPower_SPCA(B, options);
+        [u ,nIter ,~, ~] = spca_am(rand(size(A,1),1), B, 2, 0, 0,k, 500, 1e-6);
+        lambda=u'*B*u;
+        if lambdaTP>lambda
+            lambda=lambdaTP;
+            u=uTP;
+        end
         if emin<0
             lambda=(lambda+2*emin)/cf;
         else

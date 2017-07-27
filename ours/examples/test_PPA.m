@@ -15,6 +15,7 @@ addpath('../prox');
 addpath('../TPower_1.0');
 addpath('../TPower_1.0/algorithms/TPower/');
 addpath('../TPower_1.0/misc/');
+addpath('../../spca_am-master');
 
 HOME = '/Users/marina/Documents/learning-gm/code-from-Kim-Chuan/LogdetPPA-0'; %if my  mac
 HOME = '/home/marina/Marina/learning-gm/code-from-Kim-Chuan/LogdetPPA-0';%if lab pc
@@ -57,7 +58,7 @@ ttime  = clock;
 % %% data
 run('../../toy-data/toy_overlap.m');k=15;
 
-ActiveSet.I={1:15,11:25,21:35,31:45};
+ActiveSet.I={(1:15)',(11:25)',(21:35)',(31:45)'};
 k=15;
 m=length(ActiveSet.I);
 
@@ -69,8 +70,8 @@ ttime  = clock;
 %%
 Sigma=S;
 n=po;
-mu=.1;
-lambda=.5;
+mu=2*.1;
+lambda=2*.5;
 invD = speye(n,n); 
 
 %
@@ -181,16 +182,17 @@ imagesc(abs(Dfin)>1e-15);
 pbaspect([1 1 1]);
 title('estimated support');
 colorbar
-
+keyboard;
 %%
-
-ActiveSet.I={};
-ActiveSet.k={};
-param.mu=.1;
-param.lambda=.5;
+ActiveSet.I={(1:15)',(11:25)',(21:35)',(31:45)'};
+ActiveSet.k={15,15,15,15};
+% ActiveSet.I={};
+% ActiveSet.k={};
+param.mu=2*.1;
+param.lambda=2*.5;
 param.k=15;
 param.verbose=1;
-param.max_nb_main_loop=150;
+param.max_nb_main_loop=100;
 param.cardfun=inf*ones(1,p);
 param.cardfun(k)=1;
 [M,S,L,U,hist,ActiveSet] = logdetPPA_l1_omega(Sigma,param,ActiveSet);

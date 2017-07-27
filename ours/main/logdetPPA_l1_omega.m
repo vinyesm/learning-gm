@@ -55,9 +55,9 @@ At0=At;
 
 c=true;
 i=0;
-% M=speye(p);
-M=randn(p);
-M=M*M';
+M=speye(p);
+% M=randn(p);
+% M=M*M';
 while c
     i = i+1;
     
@@ -80,12 +80,13 @@ while c
         
         eta = [1; zeros(m+1,1)];
         [obj,X,y,Z,info,runhist] = logdetPPA(blk,At,C,b,eta,OPTIONS);
+        info.termcode
         M=X{1};
         obj_sup = [obj_sup obj(1)];
         
         %Remove useless blocks
         for mm=1:m
-            if trace(X{2+mm})<1e-2
+            if trace(X{2+mm})<1e-6
                 ActiveSet.I{mm}=[];
                 ActiveSet.k{mm}=[];
                 ActiveSet.I=ActiveSet.I(~cellfun('isempty',ActiveSet.I));  
@@ -161,6 +162,7 @@ while c
     if varIJ < param.lambda*cf*(1+param.epsStop) && maxIJ < param.mu*(1+param.epsStop)
         c=0;
         c=1;
+%         keyboard;
 %     elseif ActiveSet.atom_count>=param.max_nb_atoms
 %         c=0;
     elseif takenI
@@ -171,6 +173,7 @@ while c
         ActiveSet.k = [ActiveSet.k , kBest];
     else
         %c = 0;
+%         keyboard;
     end
     c = i<param.max_nb_main_loop & c;
 end

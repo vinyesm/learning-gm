@@ -208,9 +208,7 @@ while cont
             cf=min(param.cardfun(length(new_i):end));
             if maxval_om0-cf*param.lambda>0
                 maxval_om=maxval_om0;
-                keyboard
             else
-                keyboard;
                 maxval_om=-inf;
             end
         else

@@ -19,6 +19,7 @@ addpath('../../spca_am-master');
 
 HOME = '/Users/marina/Documents/learning-gm/code-from-Kim-Chuan/LogdetPPA-0'; %if my  mac
 HOME = '/home/marina/Marina/learning-gm/code-from-Kim-Chuan/LogdetPPA-0';%if lab pc
+HOME = '../../code-from-Kim-Chuan/LogdetPPA-0';%if lab pc
 addpath(strcat(HOME,'/solver/'))
 addpath(strcat(HOME,'/solver/mexfun'))
 addpath(strcat(HOME,'/util/'))

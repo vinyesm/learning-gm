@@ -29,6 +29,13 @@ addpath(strcat(HOME,'/util/'))
 % addpath LogdetPPA-0/solver/mexfun/;
 % addpath LogdetPPA-0/util/;
 
+addpath('../../spca_am-master');
+
+HOME = '../../code-from-Kim-Chuan/LogdetPPA-0';%if lab pc
+addpath(strcat(HOME,'/solver/'))
+addpath(strcat(HOME,'/solver/mexfun'))
+addpath(strcat(HOME,'/util/'))
+
 
 %% data
 % run('pp_movielens.m');

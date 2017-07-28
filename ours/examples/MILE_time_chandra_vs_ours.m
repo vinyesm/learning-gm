@@ -4,6 +4,8 @@
 % We build the complete model and sample from it
 % We assume latept variables ndependept
 
+fig=0
+
 %% add paths
 clc; clear all; close all;
 addpath('../main');
@@ -113,7 +115,7 @@ Dsl((nl+1):(nl+p),(nl+1):(nl+p))=Ssl;
 Dsl(1:nl,(nl+1):(nl+p))=Usl';
 Dsl((nl+1):(nl+p),1:nl)=Usl;
 
-
+if fig
 figure(3);clf;
 subplot(1,4,1);
 imagesc(min(abs(Dsl),1));
@@ -132,13 +134,14 @@ subplot(1,4,4);
 imagesc(abs(Lsl));colormap hot
 title('L');
 axis square
+end
 
 ActiveSet.I={};
 ActiveSet.k={};
 % ActiveSet.I={};
 % ActiveSet.k={};
-param.mu=.1;
-param.lambda=.1;
+param.mu=10;
+param.lambda=1;
 param.k=100;
 param.verbose=1;
 param.max_nb_main_loop=100;
@@ -148,8 +151,10 @@ tic
 [M,S,L,U,hist,ActiveSet] = logdetPPA_l1_omega(Sigma,param,ActiveSet);
 time_solver=toc
 
+if fig
 figure(2);clf;
 plot(hist.obj_sup);
+end
 
 % 
 if ~isempty(ActiveSet.I)
@@ -167,6 +172,7 @@ else
     Dfin2=S;
 end
 
+if fig
 figure(3);clf;
 subplot(1,2,1)
 imagesc(abs(Dfin2));
@@ -178,7 +184,7 @@ imagesc(abs(Dfin2)>1e-15);
 pbaspect([1 1 1]);
 title('estimated support');
 colorbar
-
+end
 
 % save('Lsl','Lsl', 'Ssl');
 

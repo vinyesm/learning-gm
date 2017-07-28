@@ -45,7 +45,7 @@ lambda=1;
 mu=.02;
 
 %% OURS
-param.mu=.1;
+param.mu=10;
 param.lambda=1;
 
 %% LVGGM Chandrasekaran S-L, (Sparse-Low Rank)

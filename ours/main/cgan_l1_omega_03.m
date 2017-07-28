@@ -106,7 +106,7 @@ if nargin > 2
         %         [Hall,fall] = build_Hessian_l1_sym(inputData,param,atoms_l1_sym(:,ActiveSet.I_l1),ActiveSet.atoms);
         U=inputData.X1*ActiveSet.atoms(:,1:ActiveSet.atom_count);
         Hall=(U'*U).^2;
-        fall= diag(U'*(inputData.X1*(S)*inputData.X2-inputData.Y)*U)+param.lambda*ActiveSet.alpha(1:ActiveSet.atom_count);
+        fall= diag(U'*(inputData.X1*(S)*inputData.X2-inputData.Y)*U)+param.lambda;
         %         keyboard;
     elseif param.f==5
         %         [Hall,fall] = build_Hessian_l1_SM(inputData,param,atoms_l1_sym(:,ActiveSet.I_l1),ActiveSet.atoms);
@@ -181,7 +181,7 @@ for q=qs
             if ActiveSet.atom_count>0
                 U=inputData.X1*ActiveSet.atoms(:,1:ActiveSet.atom_count);
                 Hall=(U'*U).^2;%ok
-                fall= diag(U'*((+inputData.X1*(S)*inputData.X2)-inputData.Y)*U)+param.lambda*ActiveSet.alpha(1:ActiveSet.atom_count);
+                fall= diag(U'*(inputData.X1*(S)*inputData.X2-inputData.Y)*U)+param.lambda;
             end
             
             %             keyboard;

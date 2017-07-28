@@ -9,4 +9,4 @@ par.verbose=true;
 par.max_it=10000;
 
 
-[W optim]=mexFistaFlat(Y,X,W0,par);
+[W optim]=mexFistaFlat(Y,X,W0git commit ,par);

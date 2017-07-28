@@ -1,6 +1,6 @@
 function [S] = update_sparse_all(param,inputData,L,S)
 debug=1;
-spams=0;
+spams=1;
 Sold=S;
 Z=S+L;
 p=size(Z,1);
@@ -8,16 +8,17 @@ Y=inputData.Y-inputData.X1*L*inputData.X2;
 X=inputData.X1;
 
 if spams
-param_spams.loss='cur';
-param_spams.lambda=param.mu;
-param_spams.regul='l1';
-param_spams.max_it=1000;
-param_spams.verbose=1; 
-.5*norm(Y-X*Sold*X,'fro')^2+param.mu*sum(abs(Sold(:)));
-[W optim]=mexFistaFlat(Y,X,Sold,param_spams);
-.5*norm(Y-X*W*X,'fro')^2+param.mu*sum(abs(W(:)));
-S=W;
-% keyboard;
+    param_spams.loss='cur';
+    param_spams.lambda=param.mu;
+    param_spams.regul='l1';
+    param_spams.max_it=1000;
+    param_spams.verbose=1;
+    param_spams.tol=param.epsStop;
+%     .5*norm(Y-X*Sold*X,'fro')^2+param.mu*sum(abs(Sold(:)));
+    [W optim]=mexFistaFlat(Y,X,Sold,param_spams);
+%     .5*norm(Y-X*W*X,'fro')^2+param.mu*sum(abs(W(:)));
+    S=W;
+    % keyboard;
 end
 
 if ~spams

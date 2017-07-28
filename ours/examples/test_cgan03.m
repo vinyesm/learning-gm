@@ -44,6 +44,7 @@ param.mu=.1;
 
 param.sloppy=0;
 param.max_nb_main_loop=10;
+param.niterPS=100;
 
 
 %%

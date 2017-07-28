@@ -13,11 +13,11 @@ param_spams.lambda=param.mu;
 param_spams.regul='l1';
 param_spams.max_it=1000;
 param_spams.verbose=1; 
-.5*norm(Y-X*Sold*X,'fro')^2+param.mu*sum(abs(Sold(:)))
+.5*norm(Y-X*Sold*X,'fro')^2+param.mu*sum(abs(Sold(:)));
 [W optim]=mexFistaFlat(Y,X,Sold,param_spams);
-.5*norm(Y-X*W*X,'fro')^2+param.mu*sum(abs(W(:)))
+.5*norm(Y-X*W*X,'fro')^2+param.mu*sum(abs(W(:)));
 S=W;
-keyboard;
+% keyboard;
 end
 
 if ~spams

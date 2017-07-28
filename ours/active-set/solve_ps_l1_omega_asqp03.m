@@ -85,31 +85,20 @@ while cont
         
         %% for robustness (too small alpha are deleted)
         
-        eps_alph=0;1e-8;
+        eps_alph=1e-10;
         
         if(min(abs(alph(Jset))))<eps_alph
             fprintf('small alph\n');
             alph(abs(alph)<eps_alph | alph<0)=0;
             Jset(abs(alph)<eps_alph | alph<0)=0;
         end
-        
-        if nbetas>0
-            Jbeta=Jset(1:nbetas);
-            ActiveSet.beta=alph(1:nbetas);
-            ActiveSet.beta=ActiveSet.beta(Jbeta);
-            ActiveSet.I_l1=ActiveSet.I_l1(Jbeta);
-        end
-        
-        if length(alph)>nbetas
-            Jalpha=Jset((nbetas+1):end);
-            ActiveSet.alpha=alph((nbetas+1):end);
-            new_atom_count=sum(Jalpha);
-            ActiveSet.atom_count=new_atom_count;
-            ActiveSet.atoms=ActiveSet.atoms(:,Jalpha);%not necessary (for debbuggging here)
-            ActiveSet.alpha=ActiveSet.alpha(Jalpha);
-        end
-        
-        nbetas=length(ActiveSet.beta);
+
+        ActiveSet.alpha=alph((nbetas+1):end);
+        new_atom_count=sum(Jset);
+        ActiveSet.atom_count=new_atom_count;
+        ActiveSet.atoms=ActiveSet.atoms(:,Jset);%not necessary (for debbuggging here)
+        ActiveSet.alpha=ActiveSet.alpha(Jset);
+
         Hall=Hall(Jset,Jset);
         fall=fall(Jset);
         
@@ -166,6 +155,7 @@ while cont
 %             cont= maxvar/(cf*param.lambda)>1+param.epsStop  && count< param.niterPS;
 %             keyboard
             cont=dg(ii)>param.epsStop && count< param.niterPS;
+            
             
             if ~cont
 %                 keyboard;
@@ -266,6 +256,9 @@ while cont
             fprintf('\n Not a descent direction when adding om atom d=%f\n',full(g(end)));
             keyboard;
             break;
+        elseif abs(g(end))<1e-10
+            fprintf('\n small gradient, stopping\n');
+            keyboard;
         else
             ActiveSet.atom_count = ActiveSet.atom_count +1;
             ActiveSet.max_atom_count_reached=max(ActiveSet.max_atom_count_reached,ActiveSet.atom_count);

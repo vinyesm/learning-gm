@@ -151,10 +151,10 @@ for q=qs
             %             param.epsStop=2^(q-1)*epsStop;
             param.epsStop=1e-2;
             
-            dg_update=inf;
+            dg1=inf;
             ttt=0;
             fprintf('   update in S..\n ')
-            while dg_update>param.epsStop && ttt<20
+            while dg1>param.epsStop && ttt<1
                 ttt=ttt+1;
                 % S sparse update
                 [S]= update_sparse_all(param,inputData,L,S);

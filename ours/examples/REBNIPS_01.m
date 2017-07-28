@@ -4,7 +4,7 @@
 % We build the complete model and sample from it
 % We assume latept variables ndependept
 
-fig=0
+
 
 %% add paths
 clc; clear all; close all;
@@ -36,6 +36,7 @@ addpath(strcat(HOME,'/solver/'))
 addpath(strcat(HOME,'/solver/mexfun'))
 addpath(strcat(HOME,'/util/'))
 
+fig=0;
 
 %% data
 % run('pp_movielens.m');
@@ -50,7 +51,7 @@ run('pp_MILE.m');
 % WHEN 200 genes
 lambda=1;
 mu=.02;
-
+fig=0;
 %% OURS
 param.mu=10;
 param.lambda=1;

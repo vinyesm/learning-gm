@@ -4,7 +4,6 @@
 % We build the complete model and sample from it
 % We assume latept variables ndependept
 
-fig=0
 
 %% add paths
 clc; clear all; close all;
@@ -43,7 +42,7 @@ run('pp_MILE.m');
 % WHEN 200 genes
 lambda=1;
 mu=.02;
-
+fig=0
 %% LVGGM Chandrasekaran S-L, (Sparse-Low Rank)
 
 %%

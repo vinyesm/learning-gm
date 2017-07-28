@@ -80,7 +80,7 @@ while c
         
         eta = [1; zeros(m+1,1)];
         [obj,X,y,Z,info,runhist] = logdetPPA(blk,At,C,b,eta,OPTIONS);
-        info.termcode
+        info.termcode;
         M=X{1};
         obj_sup = [obj_sup obj(1)];
         
@@ -161,7 +161,7 @@ while c
     
     if varIJ < param.lambda*cf*(1+param.epsStop) && maxIJ < param.mu*(1+param.epsStop)
         c=0;
-        c=1;
+%         c=1;
 %         keyboard;
 %     elseif ActiveSet.atom_count>=param.max_nb_atoms
 %         c=0;

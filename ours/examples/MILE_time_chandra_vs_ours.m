@@ -133,170 +133,217 @@ imagesc(abs(Lsl));colormap hot
 title('L');
 axis square
 
-% save('Lsl','Lsl', 'Ssl');
-
-
-%%%___________________________
-%%
-% S2=inv(2*eigs(Lsl,1, 'la')*eye(p)-Lsl);
-p=size(Lsl,1);
-param.verbose=1;
-%
-param.f=1; %prox
-param.verbose=1;
-inputData.Y=eye(p)+Lsl;
-
-%
-% param.f=4;
-% param.verbose=1;
-% inputData.X1=S2^.5;
-% inputData.X2=S2^.5;
-% inputData.Y=-eye(p);
-
-%
-% param.f=5;
-% inputData.X=S;
-% inputData.Y=-eye(p);
-
-%
-% reg param
-% beta=.5;
-% param.cardfun=((1:p).^beta)/p^beta;
-% param.cardfun(1:5)=inf;
-% param.cardfun(150:end)=inf;
-param.cardfun=inf*ones(1,p);
-param.cardfun(100)=1;
-lam=10;
-% lam=12;
-gam=100;
-param.lambda=lam;
-param.mu=gam;
-param.max_nb_main_loop=100;
-
-%% blocks
-% tic
-% [Z Z1 Z2 ActiveSet hist param flag output] = cgan_l1_omega(inputData,param);
-% toc
-
-%% 
-if ~isempty(ActiveSet.alpha)
-    Uso=bsxfun(@times,sqrt(ActiveSet.alpha)',ActiveSet.atoms);
-else
-    Uso=zeros(p,1);
-    Dfin=Z1;
-end
-
-%% reorder
-
-[I]=grayorder(Uso~=0);
-
-% Z = linkage(full(Uso),'ward');
-% [Cres,I]=order_of_tree(Z);
-% 
-genesI0=genesI;
-genesI=genesI(I);
-UsoI=Uso(I,:);
-Z2II=Z2(I,I);
-imp_idxII=imp_idxI(I);
-%%
-
-figure(1);clf;
-subplot(2,3,1);
-imagesc(abs(Uso)>1e-10);
-axis square;
-subplot(2,3,2);
-imagesc(abs(Z2));
-title('L')
-axis square;
-subplot(2,3,3);
-imagesc(imp_idxI');
-axis square;
-subplot(2,3,4);
-imagesc(abs(UsoI)>1e-10);
-axis square;
-subplot(2,3,5);
-imagesc(abs(Z2II));
-title('L')
-axis square;
-subplot(2,3,6);
-imagesc(imp_idxII');
-colormap hot
-axis square;
-
-figure(4);clf;
-subplot(2,3,1);
-imagesc(abs(Ssl)>1e-3);
-title('S');
-axis square
-subplot(2,3,2);
-imagesc(abs(Lsl));colormap hot
-title('L');
-axis square
-subplot(2,3,3);
-imagesc(imp_idxI');
-axis square;
-subplot(2,3,4);
-imagesc(abs(Ssl(I,I))>1e-3);
-title('S');
-axis square
-subplot(2,3,5);
-imagesc(abs(Lsl(I,I)));colormap hot
-title('L');
-axis square
-subplot(2,3,6);
-imagesc(imp_idxII');
-colormap hot
-axis square;
-
-% keyboard
-%%
-%  starting solution  init sparse matrix
-keyboard;
-RUN_OM=1;
-
-if RUN_OM
-
-p=size(S,1);
-param.lambda=.1;
-param.mu=.005;
-param.f=4;
-param.verbose=1;
-inputData.X1=S^.5;
-inputData.X2=S^.5;
-inputData.Y=-eye(p);
-param.cardfun=inf*ones(1,p);
-param.cardfun(100)=1;
-param.max_nb_main_loop=100;
-
-%init
-Doo=Ssl;
-Doo(abs(Doo)<1e-3)=0;
-ActiveSet.max_atom_count_reached=0;
+ActiveSet.I={};
+ActiveSet.k={};
 % ActiveSet.I={};
 % ActiveSet.k={};
-% ActiveSet.alpha= [];
-% ActiveSet.atoms=[];
-% ActiveSet.atom_count = 0;
-if param.f==4
-    [ Q,q,atoms_l1_sym ] = build_atoms_hessian_l1_sym(Doo,0);
-elseif param.f==5
-    [ Q,q,atoms_l1_sym ] = build_atoms_hessian_l1_SM(Doo,0);
+param.mu=.1;
+param.lambda=.1;
+param.k=100;
+param.verbose=1;
+param.max_nb_main_loop=100;
+param.cardfun=inf*ones(1,p);
+param.cardfun(param.k)=1;
+tic
+[M,S,L,U,hist,ActiveSet] = logdetPPA_l1_omega(Sigma,param,ActiveSet);
+time_solver=toc
+
+figure(2);clf;
+plot(hist.obj_sup);
+
+% 
+if ~isempty(ActiveSet.I)
+    Uso=[];
+    for i=1:length(ActiveSet.I);
+        Uso=[Uso U{i}];
+    end
+    nl=size(Uso,2);
+    Dfin2=zeros(p+nl);
+    Dfin2(1:nl,1:nl)=eye(nl);
+    Dfin2((nl+1):(nl+p),(nl+1):(nl+p))=S;
+    Dfin2(1:nl,(nl+1):(nl+p))=Uso';
+    Dfin2((nl+1):(nl+p),1:nl)=Uso;
+else
+    Dfin2=S;
 end
-[ActiveSet.I_l1, ActiveSet.beta]=mat2l1index(-Doo,atoms_l1_sym);
+
+figure(3);clf;
+subplot(1,2,1)
+imagesc(abs(Dfin2));
+pbaspect([1 1 1]);
+title('estimated complete conc. mat.');
+colorbar
+subplot(1,2,2)
+imagesc(abs(Dfin2)>1e-15);
+pbaspect([1 1 1]);
+title('estimated support');
+colorbar
 
 
-startingZ.Z1=-Doo;
-startingZ.Z2= zeros(p);
+% save('Lsl','Lsl', 'Ssl');
 
-Z1=zeros(p);
-nz=find(ActiveSet.beta>1e-15);
-for j=nz'
-    Z1=Z1+ActiveSet.beta(j)*reshape(atoms_l1_sym(:,ActiveSet.I_l1(j)),p,p);
-end
-Z2=zeros(p);
-Z=Z1+Z2;
-
-% [Z Z1 Z2 ActiveSet hist param flag output] = cgan_l1_omega(inputData,param,startingZ,ActiveSet);
-% save(['MILE_100_lam_' num2str(param.lambda) '_mu_' num2str(param.mu) '_rank_' num2str(ActiveSet.atom_count) '_3.mat'], 'Ssl', 'Lsl','Z','Z1','Z2','ActiveSet','param');
-
-end
+% 
+% %%%___________________________
+% %%
+% % S2=inv(2*eigs(Lsl,1, 'la')*eye(p)-Lsl);
+% p=size(Lsl,1);
+% param.verbose=1;
+% %
+% param.f=1; %prox
+% param.verbose=1;
+% inputData.Y=eye(p)+Lsl;
+% 
+% %
+% % param.f=4;
+% % param.verbose=1;
+% % inputData.X1=S2^.5;
+% % inputData.X2=S2^.5;
+% % inputData.Y=-eye(p);
+% 
+% %
+% % param.f=5;
+% % inputData.X=S;
+% % inputData.Y=-eye(p);
+% 
+% %
+% % reg param
+% % beta=.5;
+% % param.cardfun=((1:p).^beta)/p^beta;
+% % param.cardfun(1:5)=inf;
+% % param.cardfun(150:end)=inf;
+% param.cardfun=inf*ones(1,p);
+% param.cardfun(100)=1;
+% lam=10;
+% % lam=12;
+% gam=100;
+% param.lambda=lam;
+% param.mu=gam;
+% param.max_nb_main_loop=100;
+% 
+% %% blocks
+% % tic
+% % [Z Z1 Z2 ActiveSet hist param flag output] = cgan_l1_omega(inputData,param);
+% % toc
+% 
+% %% 
+% if ~isempty(ActiveSet.alpha)
+%     Uso=bsxfun(@times,sqrt(ActiveSet.alpha)',ActiveSet.atoms);
+% else
+%     Uso=zeros(p,1);
+%     Dfin=Z1;
+% end
+% 
+% %% reorder
+% 
+% [I]=grayorder(Uso~=0);
+% 
+% % Z = linkage(full(Uso),'ward');
+% % [Cres,I]=order_of_tree(Z);
+% % 
+% genesI0=genesI;
+% genesI=genesI(I);
+% UsoI=Uso(I,:);
+% Z2II=Z2(I,I);
+% imp_idxII=imp_idxI(I);
+% %%
+% 
+% figure(1);clf;
+% subplot(2,3,1);
+% imagesc(abs(Uso)>1e-10);
+% axis square;
+% subplot(2,3,2);
+% imagesc(abs(Z2));
+% title('L')
+% axis square;
+% subplot(2,3,3);
+% imagesc(imp_idxI');
+% axis square;
+% subplot(2,3,4);
+% imagesc(abs(UsoI)>1e-10);
+% axis square;
+% subplot(2,3,5);
+% imagesc(abs(Z2II));
+% title('L')
+% axis square;
+% subplot(2,3,6);
+% imagesc(imp_idxII');
+% colormap hot
+% axis square;
+% 
+% figure(4);clf;
+% subplot(2,3,1);
+% imagesc(abs(Ssl)>1e-3);
+% title('S');
+% axis square
+% subplot(2,3,2);
+% imagesc(abs(Lsl));colormap hot
+% title('L');
+% axis square
+% subplot(2,3,3);
+% imagesc(imp_idxI');
+% axis square;
+% subplot(2,3,4);
+% imagesc(abs(Ssl(I,I))>1e-3);
+% title('S');
+% axis square
+% subplot(2,3,5);
+% imagesc(abs(Lsl(I,I)));colormap hot
+% title('L');
+% axis square
+% subplot(2,3,6);
+% imagesc(imp_idxII');
+% colormap hot
+% axis square;
+% 
+% % keyboard
+% %%
+% %  starting solution  init sparse matrix
+% keyboard;
+% RUN_OM=1;
+% 
+% if RUN_OM
+% 
+% p=size(S,1);
+% param.lambda=.1;
+% param.mu=.005;
+% param.f=4;
+% param.verbose=1;
+% inputData.X1=S^.5;
+% inputData.X2=S^.5;
+% inputData.Y=-eye(p);
+% param.cardfun=inf*ones(1,p);
+% param.cardfun(100)=1;
+% param.max_nb_main_loop=100;
+% 
+% %init
+% Doo=Ssl;
+% Doo(abs(Doo)<1e-3)=0;
+% ActiveSet.max_atom_count_reached=0;
+% % ActiveSet.I={};
+% % ActiveSet.k={};
+% % ActiveSet.alpha= [];
+% % ActiveSet.atoms=[];
+% % ActiveSet.atom_count = 0;
+% if param.f==4
+%     [ Q,q,atoms_l1_sym ] = build_atoms_hessian_l1_sym(Doo,0);
+% elseif param.f==5
+%     [ Q,q,atoms_l1_sym ] = build_atoms_hessian_l1_SM(Doo,0);
+% end
+% [ActiveSet.I_l1, ActiveSet.beta]=mat2l1index(-Doo,atoms_l1_sym);
+% 
+% 
+% startingZ.Z1=-Doo;
+% startingZ.Z2= zeros(p);
+% 
+% Z1=zeros(p);
+% nz=find(ActiveSet.beta>1e-15);
+% for j=nz'
+%     Z1=Z1+ActiveSet.beta(j)*reshape(atoms_l1_sym(:,ActiveSet.I_l1(j)),p,p);
+% end
+% Z2=zeros(p);
+% Z=Z1+Z2;
+% 
+% % [Z Z1 Z2 ActiveSet hist param flag output] = cgan_l1_omega(inputData,param,startingZ,ActiveSet);
+% % save(['MILE_100_lam_' num2str(param.lambda) '_mu_' num2str(param.mu) '_rank_' num2str(ActiveSet.atom_count) '_3.mat'], 'Ssl', 'Lsl','Z','Z1','Z2','ActiveSet','param');
+% 
+% end

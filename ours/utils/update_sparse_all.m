@@ -1,9 +1,26 @@
-function [S dg] = update_sparse_all(param,inputData,L,S)
+function [S] = update_sparse_all(param,inputData,L,S)
 debug=1;
+spams=0;
 Sold=S;
 Z=S+L;
 p=size(Z,1);
+Y=inputData.Y-inputData.X1*L*inputData.X2;
+X=inputData.X1;
 
+if spams
+param_spams.loss='cur';
+param_spams.lambda=param.mu;
+param_spams.regul='l1';
+param_spams.max_it=1000;
+param_spams.verbose=1; 
+.5*norm(Y-X*Sold*X,'fro')^2+param.mu*sum(abs(Sold(:)))
+[W optim]=mexFistaFlat(Y,X,Sold,param_spams);
+.5*norm(Y-X*W*X,'fro')^2+param.mu*sum(abs(W(:)))
+S=W;
+keyboard;
+end
+
+if ~spams
 switch param.f
     case 1 % prox
         %         H = Z - inputData.Y;
@@ -41,23 +58,23 @@ if debug
 end
 
 %computing dg
-M=L+S;
-H = inputData.X1'*(inputData.X1*(S+L)*inputData.X2 - inputData.Y)*inputData.X2';
-temp_l1 = max(abs(H(:)));
-shrink=min(1,param.mu / temp_l1);
-kappa = shrink * (inputData.X1*M*inputData.X2-inputData.Y);
-G=inputData.X1*kappa*inputData.X2;
-dg_f=.5*norm(inputData.X1*M*inputData.X2 - kappa -inputData.Y,'fro')^2;
-dg_S=param.mu*sum(abs(S(:)))+trace(G*S);
-dg=dg_f+dg_S;
+% M=L+S;
+% H = inputData.X1'*(inputData.X1*(S+L)*inputData.X2 - inputData.Y)*inputData.X2';
+% temp_l1 = max(abs(H(:)));
+% shrink=min(1,param.mu / temp_l1);
+% kappa = shrink * (inputData.X1*M*inputData.X2-inputData.Y);
+% G=inputData.X1*kappa*inputData.X2;
+% dg_f=.5*norm(inputData.X1*M*inputData.X2 - kappa -inputData.Y,'fro')^2;
+% dg_S=param.mu*sum(abs(S(:)))+trace(G*S);
+% dg=dg_f+dg_S;
+% 
+% if dg_f<0 || dg_S<0  abs(dg)>1e-10
+%     fprintf('Negative duality gap\n');
+%     keyboard;
+%     %     error('Negative duality gap=%f, gapLoss=%f gapPen=%f\n',dualityGap, gapLoss, gapPen);
+%     dg=abs(dg);
+% end
 
-if dg_f<0 || dg_S<0  abs(dg)>1e-10
-    fprintf('Negative duality gap\n');
-    keyboard;
-    %     error('Negative duality gap=%f, gapLoss=%f gapPen=%f\n',dualityGap, gapLoss, gapPen);
-    dg=abs(dg);
 end
-
-
 
 

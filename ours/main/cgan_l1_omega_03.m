@@ -2,7 +2,7 @@ function [Z L S  ActiveSet hist param flag output] = cgan_l1_omega_03(inputData,
 
 %% f(S,L)
 % prox_l1 on S
-% cgan/ active set on L 
+% cgan/ active set on L
 
 
 %%
@@ -24,11 +24,11 @@ if nargin < 3
     D = zeros(size(Z,1));
     ActiveSet = {};
     ActiveSet.I = {};
-%     ActiveSet.U = {};
-%     ActiveSet.Sigma = {};
-%     ActiveSet.Z = {};
-%     ActiveSet.tracenorm = {};
-%     ActiveSet.fronorm = {};
+    %     ActiveSet.U = {};
+    %     ActiveSet.Sigma = {};
+    %     ActiveSet.Z = {};
+    %     ActiveSet.tracenorm = {};
+    %     ActiveSet.fronorm = {};
     ActiveSet.k = {};
     ActiveSet.atomsSupport = {};
     ActiveSet.alpha= [];
@@ -41,7 +41,7 @@ if nargin < 3
     fall=[];
     cardVal=[];
     U=[];
-%     qs=3:-1:0;
+    %     qs=3:-1:0;
     qs=0;
 else
     %     Z = startingZ;
@@ -89,27 +89,27 @@ if param.no_l1
 end
 
 if ~param.no_l1
-if param.f==1
-    [ Q,q,atoms_l1_sym ] = build_atoms_hessian_prox(sparse(inputData.Y),param.mu);
-elseif param.f==4
-%     fprintf('Warning : change build_atoms_hessian_l1_sym when loss is not .5*|S^.5*X*S.^5-I|\n');
-    [ Q,q,atoms_l1_sym ] = build_atoms_hessian_l1_sym(sparse(inputData.X1*inputData.X1),param.mu);
-elseif param.f==5
-    [ Q,q,atoms_l1_sym ] = build_atoms_hessian_l1_SM(sparse(inputData.X),param.mu); %score matching
-end
+    if param.f==1
+        [ Q,q,atoms_l1_sym ] = build_atoms_hessian_prox(sparse(inputData.Y),param.mu);
+    elseif param.f==4
+        %     fprintf('Warning : change build_atoms_hessian_l1_sym when loss is not .5*|S^.5*X*S.^5-I|\n');
+        [ Q,q,atoms_l1_sym ] = build_atoms_hessian_l1_sym(sparse(inputData.X1*inputData.X1),param.mu);
+    elseif param.f==5
+        [ Q,q,atoms_l1_sym ] = build_atoms_hessian_l1_SM(sparse(inputData.X),param.mu); %score matching
+    end
 else
     atoms_l1_sym=[];
 end
 
 if nargin > 2
     if param.f==4
-%         [Hall,fall] = build_Hessian_l1_sym(inputData,param,atoms_l1_sym(:,ActiveSet.I_l1),ActiveSet.atoms);
+        %         [Hall,fall] = build_Hessian_l1_sym(inputData,param,atoms_l1_sym(:,ActiveSet.I_l1),ActiveSet.atoms);
         U=inputData.X1*ActiveSet.atoms(:,1:ActiveSet.atom_count);
         Hall=(U'*U).^2;
         fall= diag(U'*(inputData.X1*(S)*inputData.X2-inputData.Y)*U)+param.lambda*ActiveSet.alpha(1:ActiveSet.atom_count);
-%         keyboard;
+        %         keyboard;
     elseif param.f==5
-%         [Hall,fall] = build_Hessian_l1_SM(inputData,param,atoms_l1_sym(:,ActiveSet.I_l1),ActiveSet.atoms);
+        %         [Hall,fall] = build_Hessian_l1_SM(inputData,param,atoms_l1_sym(:,ActiveSet.I_l1),ActiveSet.atoms);
     end
 end
 
@@ -131,7 +131,7 @@ eps_add=min(param.epsStop,1e-4);
 
 
 for q=qs
- 
+    
     c = 1;
     i = 0;
     while c
@@ -145,32 +145,36 @@ for q=qs
         
         if 1 %~isempty(ActiveSet.I) % now we already have all the Eij+Eji atoms
             if param.verbose==1
-                fprintf('   solving PS..\n ')
+                
             end
             
-%             param.epsStop=2^(q-1)*epsStop;
-            param.epsStop=1;
+            %             param.epsStop=2^(q-1)*epsStop;
+            param.epsStop=1e-2;
             
             dg_update=inf;
             ttt=0;
+            fprintf('   update in S..\n ')
             while dg_update>param.epsStop && ttt<20
                 ttt=ttt+1;
                 % S sparse update
-                tic
-                [S dg_update]= update_sparse_all(param,inputData,L,S);
+                [S]= update_sparse_all(param,inputData,L,S);
                 ti=toc;
                 [ob, lo, pe] = get_val_l1_omega_03(L,S,inputData,param,ActiveSet);
                 obj0 = [obj0 ob];
                 loss0 = [loss0 lo];
                 pen0 = [pen0 pe];
                 timeS = [timeS ti];
+                
                 dg_global=[dg_global get_dg_global_LS(L,S,inputData,param,ActiveSet)];
-                dg_S=[dg_S dg_update]
+                [dg1, dg2]= compute_dg_S_L(S,L,inputData,param,ActiveSet);
+                dg_S=[dg_S dg1];
+                dg_L=[dg_L dg2];
                 
                 if obj0(end-1)< ob(end)
                     keyboard;
                 end
             end
+            fprintf('   \n ')
             
             % update Hall and fall
             
@@ -180,28 +184,33 @@ for q=qs
                 fall= diag(U'*((+inputData.X1*(S)*inputData.X2)-inputData.Y)*U)+param.lambda*ActiveSet.alpha(1:ActiveSet.atom_count);
             end
             
-%             keyboard;
-%             for ttt=1:10
-                tic
-                [Z, res, L, Hall,fall, ActiveSet, hist_ps,tau_new] = solve_ps_l1_omega_asqp03(L+S,S,L, ActiveSet,param,inputData,atoms_l1_sym,Hall,fall);
-                ti=toc;
-                [ob, lo, pe] = get_val_l1_omega_03(L,S,inputData,param,ActiveSet);
-                obj0 = [obj0 ob(end)];
-                loss0 = [loss0 lo];
-                pen0 = [pen0 pe];
-                timeL = [timeL ti];
-                dg_global=[dg_global get_dg_global_LS(L,S,inputData,param,ActiveSet)];
-%                 param.epsStop=tau_new;
-%                 eps_add=min(param.epsStop,1e-4);
-%                 eps_add=1e-6;
-                dg_L=[dg_L hist_ps.dg(end)]
-%             end
+            %             keyboard;
+            %             for ttt=1:10
+            fprintf('   solving PS..\n ')
+            [Z, res, L, Hall,fall, ActiveSet, hist_ps,tau_new] = solve_ps_l1_omega_asqp03(L+S,S,L, ActiveSet,param,inputData,atoms_l1_sym,Hall,fall);
+            ti=toc;
+            [ob, lo, pe] = get_val_l1_omega_03(L,S,inputData,param,ActiveSet);
+            obj0 = [obj0 ob(end)];
+            loss0 = [loss0 lo];
+            pen0 = [pen0 pe];
+            timeL = [timeL ti];
+            
+            dg_global=[dg_global get_dg_global_LS(L,S,inputData,param,ActiveSet)];
+            [dg1, dg2]= compute_dg_S_L(S,L,inputData,param,ActiveSet);
+            dg_S=[dg_S dg1];
+            dg_L=[dg_L dg2];
+            %                 param.epsStop=tau_new;
+            %                 eps_add=min(param.epsStop,1e-4);
+            %                 eps_add=1e-6;
+            %                 dg_L=[dg_L hist_ps.dg(end)]
+            %             end
+            fprintf('   \n ')
             
             if obj0(end-1)< ob(end)
-%                 keyboard;
+                %                 keyboard;
             end
             
-%             param.epsStop=2^q*epsStop;
+            %             param.epsStop=2^q*epsStop;
             
             
             if ~isempty(ActiveSet.alpha) && param.debug==1
@@ -234,14 +243,14 @@ for q=qs
         end
         
         [u, kBest,val] = lmo_spsd_TPower(-H,param);
-%         keyboard;
+        %         keyboard;
         cf=min(param.cardfun(kBest:end));
-%         keyboard;
+        %         keyboard;
         
         if val<param.lambda*(1+eps_add)
             %%      few proximal steps for postprcessing
             %             keyboard;
-            if pm && ActiveSet.atom_count>0 
+            if pm && ActiveSet.atom_count>0
                 fprintf(' ...No new atom found, prox steps for cleaning after PS.. \n');
                 if param.f==1
                     [L,ActiveSet]=prox_cleaning_prox(S,L,inputData.Y,ActiveSet,param,20,0);
@@ -266,7 +275,7 @@ for q=qs
                 [u, kBest,val] = lmo_spsd_TPower(-H,param);
                 cf=min(param.cardfun(kBest:end));
                 %             fprintf('old val=%f new val=%f < %f.. \n',val_old,val, param.lambda*cf);
-%                 keyboard;
+                %                 keyboard;
             end
         end
         
@@ -323,7 +332,7 @@ for q=qs
                 dg1=abs(trace(H*Z));
             end
             dg2=max(maxIJ-param.mu, varIJ-param.lambda)*rho;
-%             fprintf('   dg1 = %2.4e dg2 = %2.4e  dg =  %2.4e\n',dg1,dg2,dg1+dg2);
+            %             fprintf('   dg1 = %2.4e dg2 = %2.4e  dg =  %2.4e\n',dg1,dg2,dg1+dg2);
         end
         
         
@@ -348,7 +357,7 @@ for q=qs
         end
         c = i<max_nb_main_loop & c;
         %         keyboard
-    end  
+    end
 end
 
 

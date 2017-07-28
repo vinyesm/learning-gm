@@ -18,6 +18,7 @@ addpath('../prox');
 addpath('../TPower_1.0');
 addpath('../TPower_1.0/algorithms/TPower/');
 addpath('../TPower_1.0/misc/');
+addpath('../../spams-matlab-v2.6/build/');
 
 % %% data
 run('../../toy-data/toy_overlap.m');k=15;
@@ -80,8 +81,8 @@ startingZ.Z2=Dol*Dol';
 % keyboard;
 
 %% tr+l1
-[Zb Lb Sb ActiveSet2 hist2 param2 flag2 output2] = cgan_l1_omega_03(inputData,param,startingZ,ActiveSet);
-% [Zb Lb Sb Db ActiveSet2 hist2 param2 flag2 output2] = cgan_l1_omega_02(inputData,param);%,startingZ,ActiveSet);
+% [Zb Lb Sb ActiveSet2 hist2 param2 flag2 output2] = cgan_l1_omega_03(inputData,param,startingZ,ActiveSet);
+[Zb Lb Sb ActiveSet2 hist2 param2 flag2 output2] = cgan_l1_omega_03(inputData,param);%,startingZ,ActiveSet);
 Z1b=Sb;
 Z2b=Lb;
 
@@ -95,11 +96,10 @@ semilogy(hist2.dg);
 title('dg sub-problems PS')
 
 figure(3);clf;
-plot(cumsum(hist2.timeD),'r');hold on
-plot(cumsum(hist2.timeS),'b');hold on
-plot(cumsum(hist2.timeL),'k');hold on
-legend({'D updates' 'S updates' 'L updates'});
-title('computing time spent per type of update')
+semilogy(hist2.dg_S,'r');hold on;
+semilogy(hist2.dg_L,'b');hold on;
+legend({'S dg' 'L dg'});
+title('duality gaps of subproblems')
 
 figure(4);clf;
 semilogy(hist2.dg_global);
@@ -150,7 +150,7 @@ end
 
 %%
 
-figure(3);clf;
+figure(5);clf;
 subplot(2,2,1)
 imagesc(abs(Dfull));
 pbaspect([1 1 1]);

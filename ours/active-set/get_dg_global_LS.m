@@ -6,6 +6,7 @@ H = gradient(M,inputData,param); % gradient
 Y=inputData.Y;
 
 [u, kBest,temp_om] = lmo_spsd_TPower(-H,param);
+
 % temp_om = -1;
 % for i = 1:length(ActiveSet.I)
 %     currS=-H(ActiveSet.I{i}, ActiveSet.I{i});
@@ -46,7 +47,7 @@ dualityGap = dg_f+dg_S+dg_L;
 
 if dg_f<0 || dg_S<0 || dg_L<0 && abs(dualityGap)>1e-10
     fprintf('Negative duality gap\n');
-    keyboard;
+%     keyboard;
     %     error('Negative duality gap=%f, gapLoss=%f gapPen=%f\n',dualityGap, gapLoss, gapPen);
     dualityGap=abs(dualityGap);
 end

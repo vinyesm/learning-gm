@@ -158,6 +158,7 @@ param.cardfun(param.k)=1;
 tic
 [M,S,L,U,hist,ActiveSet] = logdetPPA_l1_omega(Sigma,param,ActiveSet);
 time_solver=toc
+fprintf('totalt=%f tsolver=%f nbcallsolver=%d tspca=%f \n', time_solver,hist.tsolver,hist.nbcalls,hist.tspca);
 
 if fig
     figure(2);clf;

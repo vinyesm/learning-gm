@@ -6,6 +6,9 @@ param.debug=0;
 
 obj_sup = [];
 hist.varIJ =[];
+hist.nbcalls=0;
+hist.tspca=0;
+hist.tsolver=0;
 fprintf('\n \n logdetPPA L1 OMEGA\n');
 
 %% set up SDP data in SDPT3 format
@@ -79,7 +82,9 @@ while c
         end                
         
         eta = [1; zeros(m+1,1)];
+        tic
         [obj,X,y,Z,info,runhist] = logdetPPA(blk,At,C,b,eta,OPTIONS);
+        hist.tsolver=hist.tsolver+toc;
         info.termcode;
         M=X{1};
         obj_sup = [obj_sup obj(1)];
@@ -106,7 +111,9 @@ while c
         fprintf('%d/%d   \n',i,param.max_nb_main_loop);
     end
     
+    tic
     [u, kBest,val] = lmo_spsd_TPower(-H,param);
+    hist.tspca=hist.tspca+toc;
     cf=min(param.cardfun(kBest:end));
 
     if val<0
@@ -177,6 +184,7 @@ while c
     end
     c = i<param.max_nb_main_loop & c;
 end
+hist.nbcalls=i;
 
 
 if param.debug==1

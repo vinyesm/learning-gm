@@ -1,6 +1,6 @@
 
 % run('pp_MILE.m');
-p=size(Z,1);
+p=size(Z1,1);
 
 %% 
 if ~isempty(ActiveSet.alpha)
@@ -146,7 +146,13 @@ axis square;
 mkdir('fig');
 print('fig/MILE_Ssl_ordered','-depsc')
 
-figure(18);
-set(gca, 'CLim', [0 .2]);
-colormap hot;
-colorbar
+% figure(18);
+% set(gca, 'CLim', [0 .2]);
+% colormap hot;
+% colorbar
+
+
+%%
+ActiveSet.alpha=ActiveSet.alpha([1 5 6 7]);
+ActiveSet.atoms=ActiveSet.atoms(:,[1 5 6 7]);
+save('FIG_MILE','Z1','ActiveSet','genesI','Ssl','Lsl');

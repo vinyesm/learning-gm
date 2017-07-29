@@ -82,9 +82,10 @@ while c
         end                
         
         eta = [1; zeros(m+1,1)];
-        tic
+        t0=toc;
         [obj,X,y,Z,info,runhist] = logdetPPA(blk,At,C,b,eta,OPTIONS);
-        hist.tsolver=hist.tsolver+toc;
+        t1=toc;
+        hist.tsolver=hist.tsolver+t1-t0;
         info.termcode;
         M=X{1};
         obj_sup = [obj_sup obj(1)];
@@ -111,9 +112,10 @@ while c
         fprintf('%d/%d   \n',i,param.max_nb_main_loop);
     end
     
-    tic
+    t0=toc;
     [u, kBest,val] = lmo_spsd_TPower(-H,param);
-    hist.tspca=hist.tspca+toc;
+    t1=toc;
+    hist.tspca=hist.tspca+t1-t0;
     cf=min(param.cardfun(kBest:end));
 
     if val<0

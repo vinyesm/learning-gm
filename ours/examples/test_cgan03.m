@@ -43,7 +43,7 @@ param.lambda=.7; %lamda ~ 2/k*mu
 param.mu=.1;
 
 param.sloppy=0;
-param.max_nb_main_loop=100;
+param.max_nb_main_loop=400;
 param.niterPS=100;
 
 

@@ -149,7 +149,7 @@ for q=qs
             end
             
             %             param.epsStop=2^(q-1)*epsStop;
-            param.epsStop=1e-2;
+            param.epsStop=1e-8;
             
             dg1=inf;
             ttt=0;
@@ -171,7 +171,8 @@ for q=qs
                 dg_L=[dg_L dg2];
                 
                 if obj0(end-1)< ob(end)
-                    keyboard;
+                    fprintf('objebctive increases of %f \n ',ob(end)-obj0(end-1))
+%                     keyboard;
                 end
             end
             fprintf('   \n ')
@@ -335,9 +336,11 @@ for q=qs
             %             fprintf('   dg1 = %2.4e dg2 = %2.4e  dg =  %2.4e\n',dg1,dg2,dg1+dg2);
         end
         
-        
-        if varIJ < param.lambda*cf*(1+eps_add) && maxIJ < param.mu*(1+eps_add)
+        if dg_global(end)<1e-3
             c=0;
+        end
+        if varIJ < param.lambda*cf*(1+eps_add) && maxIJ < param.mu*(1+eps_add)
+%             c=0;
         elseif ActiveSet.atom_count>=param.max_nb_atoms
             %         keyboard;
             c=0;

@@ -1,5 +1,5 @@
 function [uBest,kBest,lambdaBest] = lmo_spsd_TPower(A,param)
-
+both=0;
 B=0.5*(A+A');
 
 % emin=eigs(B,1,'sa');
@@ -14,6 +14,7 @@ end
 % end
 % B=A-1.1*emin*eye(size(A,1));
 lambdaBest= -inf;
+lambda_am = -inf;
 kBest=0;
 allVal=zeros(size(B,1),1);
 
@@ -26,9 +27,11 @@ for k=1:size(B,1)
         options.cardinality_vec=k;
         options.initType=1; %default 2
         [uTP,lambdaTP] = TPower_SPCA(B, options);
-        [u ,nIter ,~, ~] = spca_am(rand(size(A,1),1), B, 2, 0, 0,k, 500, 1e-6);
-        lambda=u'*B*u;
-        if lambdaTP>lambda
+        if both
+            [u ,nIter ,~, ~] = spca_am(rand(size(A,1),1), B, 2, 0, 0,k, 500, 1e-6);
+            lambda_am=u'*B*u;
+        end
+        if lambdaTP>lambda_am
             lambda=lambdaTP;
             u=uTP;
         end

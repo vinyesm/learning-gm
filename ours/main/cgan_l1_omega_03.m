@@ -149,7 +149,7 @@ for q=qs
             end
             
             %             param.epsStop=2^(q-1)*epsStop;
-            param.epsStop=1e-8;
+            param.epsStop=1e-5;
             
             dg1=inf;
             ttt=0;

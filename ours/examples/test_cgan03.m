@@ -7,21 +7,21 @@
 % We assume latept variables ndependept
 
 %% add paths
-clc
-clc; clear all; close all;
-addpath('../main');
-addpath('../active-set');
-addpath('../atom-selection');
-addpath('../utils');
-addpath('../other');
-addpath('../prox');
-addpath('../TPower_1.0');
-addpath('../TPower_1.0/algorithms/TPower/');
-addpath('../TPower_1.0/misc/');
-addpath('../../spams-matlab-v2.6/build/');
-
-% %% data
-run('../../toy-data/toy_overlap.m');k=15;
+% clc
+% clc; clear all; close all;
+% addpath('../main');
+% addpath('../active-set');
+% addpath('../atom-selection');
+% addpath('../utils');
+% addpath('../other');
+% addpath('../prox');
+% addpath('../TPower_1.0');
+% addpath('../TPower_1.0/algorithms/TPower/');
+% addpath('../TPower_1.0/misc/');
+% addpath('../../spams-matlab-v2.6/build/');
+% 
+% % %% data
+% run('../../toy-data/toy_overlap.m');k=15;
 
 %% our norm psd with decomposition S-M sparse_omega_lgm
 p=po;
@@ -43,7 +43,7 @@ param.lambda=.7; %lamda ~ 2/k*mu
 param.mu=.1;
 
 param.sloppy=0;
-param.max_nb_main_loop=400;
+param.max_nb_main_loop=1500;
 param.niterPS=100;
 
 

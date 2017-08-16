@@ -258,4 +258,10 @@ colorbar
 %                      'Z', 'Z1', 'Z2', 'ActiveSet', 'hist', 'param', 'flag', 'output', 'Dfin', ...
 %                      'Z_tr', 'Z1_tr', 'Z2_tr', 'ActiveSet_tr', 'hist_tr', 'param_tr', 'flag_tr', 'output_tr', 'Dfin_tr', ...
 %                      'THRESH');
-%                      
+%              
+
+
+%6.703729969272877
+%6.703729969271997
+%6.703729969272731
+%6.703729969272167

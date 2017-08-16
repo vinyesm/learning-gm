@@ -867,7 +867,86 @@ namespace FISTA {
             T _delta;
       };
 
-   template <typename T> 
+   
+// ////////////////////// Original ////////////////////////////////////
+//          template <typename T> 
+//       class LossCur: public Loss<T, Matrix<T>, Matrix<T> > {
+//          public:
+//             LossCur(const AbstractMatrixB<T>& X) : _X(&X) {  };
+// 
+//             virtual ~LossCur() { };
+// 
+//             /* marina modif */
+// //             inline void init(const Matrix<T>& y) { 
+// //                 _y.copy(y); 
+// //             };
+//             inline void init(const Matrix<T>& y) { };
+//             /* end marina modif */  
+// 
+//             inline T eval(const Matrix<T>& A) const {
+//                Matrix<T> tmp(_X->m(),A.n());
+//                _X->mult(A,tmp);
+//                Matrix<T> tmp2;
+//                //tmp2.copy(*_X);
+//                /* marina modif */
+// //                tmp2.copy(_y);
+//                _X->copyTo(tmp2); 
+//                /* end marina modif */        
+//                //tmp.mult(*_X,tmp2,false,false,T(-1.0),T(1.0));
+//                _X->multSwitch(tmp,tmp2,false,false,T(-1.0),T(1.0));
+//                return 0.5*tmp2.normFsq();
+//             };
+//             inline void grad(const Matrix<T>& A, Matrix<T>& grad) const {
+//                Matrix<T> tmp(_X->m(),A.n());
+//                _X->mult(A,tmp);
+//                Matrix<T> tmp2;
+//                //tmp2.copy(*_X);
+//                /* marina modif */
+// //                tmp2.copy(_y);
+//                _X->copyTo(tmp2); 
+//                /* end marina modif */   
+//                //tmp.mult(*_X,tmp2,false,false,T(-1.0),T(1.0));
+//                _X->multSwitch(tmp,tmp2,false,false,T(-1.0),T(1.0));
+//                //tmp2.mult(*_X,tmp,false,true,T(-1.0),T(0.0));
+//                _X->multSwitch(tmp2,tmp,true,false,T(-1.0),T(0.0));
+//                grad.resize(A.m(),A.n());
+//                _X->mult(tmp,grad,true,false);
+//             };
+//             virtual T fenchel(const Matrix<T>& input) const {
+//                /* marina modif */
+// //                 return 0.5*input.normFsq()+input.dot(_y);
+//                return 0.5*input.normFsq()+_X->dot(input);
+//                /* end marina modif */  
+//             }
+//             virtual void var_fenchel(const Matrix<T>& A, Matrix<T>& grad1, Matrix<T>& grad2, const bool intercept) const {
+//                Matrix<T> tmp(_X->m(),A.n());
+//                _X->mult(A,tmp);
+//                //grad1.copy(*_X);
+//                /* marina modif */
+// //                grad1.copy(_y);
+//                _X->copyTo(grad1);
+//                /* end marina modif */ 
+//                //tmp.mult(*_X,grad1,false,false,T(1.0),T(-1.0));
+//                _X->multSwitch(tmp,grad1,false,false,T(1.0),T(-1.0));
+//                //grad1.mult(*_X,tmp,false,true,T(1.0),T(0.0));
+//                _X->multSwitch(grad1,tmp,true,false,T(1.0),T(0.0));
+//                grad2.resize(A.m(),A.n());
+//                _X->mult(tmp,grad2,true,false);
+//             };
+//          private:
+//             explicit LossCur<T>(const LossCur<T>& dict);
+//             LossCur<T>& operator=(const LossCur<T>& dict);
+//             /* marina modif */
+// //             Matrix<T> _y;
+//             /* end marina modif */ 
+//             const AbstractMatrixB<T>* _X;
+//       };
+//       
+// //////////////////////////////////////////////////////////////////////////
+
+
+//////////////////// Marina Linux ////////////////////////////////////
+         template <typename T> 
       class LossCur: public Loss<T, Matrix<T>, Matrix<T> > {
          public:
             LossCur(const AbstractMatrixB<T>& X) : _X(&X) {  };
@@ -885,12 +964,10 @@ namespace FISTA {
                Matrix<T> tmp(_X->m(),A.n());
                _X->mult(A,tmp);
                Matrix<T> tmp2;
-               //tmp2.copy(*_X);
                /* marina modif */
                tmp2.copy(_y);
                //_X->copyTo(tmp2); 
                /* end marina modif */        
-               //tmp.mult(*_X,tmp2,false,false,T(-1.0),T(1.0));
                _X->multSwitch(tmp,tmp2,false,false,T(-1.0),T(1.0));
                return 0.5*tmp2.normFsq();
             };
@@ -898,14 +975,11 @@ namespace FISTA {
                Matrix<T> tmp(_X->m(),A.n());
                _X->mult(A,tmp);
                Matrix<T> tmp2;
-               //tmp2.copy(*_X);
                /* marina modif */
                tmp2.copy(_y);
                //_X->copyTo(tmp2); 
                /* end marina modif */   
-               //tmp.mult(*_X,tmp2,false,false,T(-1.0),T(1.0));
                _X->multSwitch(tmp,tmp2,false,false,T(-1.0),T(1.0));
-               //tmp2.mult(*_X,tmp,false,true,T(-1.0),T(0.0));
                _X->multSwitch(tmp2,tmp,true,false,T(-1.0),T(0.0));
                grad.resize(A.m(),A.n());
                _X->mult(tmp,grad,true,false);
@@ -919,14 +993,11 @@ namespace FISTA {
             virtual void var_fenchel(const Matrix<T>& A, Matrix<T>& grad1, Matrix<T>& grad2, const bool intercept) const {
                Matrix<T> tmp(_X->m(),A.n());
                _X->mult(A,tmp);
-               //grad1.copy(*_X);
                /* marina modif */
                grad1.copy(_y);
                //_X->copyTo(grad1);
                /* end marina modif */ 
-               //tmp.mult(*_X,grad1,false,false,T(1.0),T(-1.0));
                _X->multSwitch(tmp,grad1,false,false,T(1.0),T(-1.0));
-               //grad1.mult(*_X,tmp,false,true,T(1.0),T(0.0));
                _X->multSwitch(grad1,tmp,true,false,T(1.0),T(0.0));
                grad2.resize(A.m(),A.n());
                _X->mult(tmp,grad2,true,false);
@@ -939,6 +1010,8 @@ namespace FISTA {
             /* end marina modif */ 
             const AbstractMatrixB<T>* _X;
       };
+      
+////////////////////////////////////////////////////////////////////////
 
    template <typename T> 
       class SqLossMat : public Loss<T, Matrix<T> , Matrix<T> > {

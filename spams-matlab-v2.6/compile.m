@@ -15,6 +15,7 @@ get_architecture;
 %    - 'vs'  (visual studio compiler) for windows computers (10.0 or more is recommended)
 %                for some unknown reason, the performance obtained with vs is poor compared to icc/gcc
 compiler='gcc';
+% compiler='mex';
 
  %%%%%%%%%%%% BLAS/LAPACK CONFIGURATION %%%%%%%%%%%%%%
 % set up the blas/lapack library you want to use. Possible choices are
@@ -30,7 +31,7 @@ blas='builtin';
 %%%%%%%%%%%% MULTITHREADING CONFIGURATION %%%%%%%%%%%%%%
 % set true if you want to use multi-threaded capabilities of the toolbox. You
 % need an appropriate compiler for that (intel compiler, most recent gcc, or visual studio pro)
-use_multithread=true; % (might not compatible with compiler=mex)
+use_multithread=false; % (might not compatible with compiler=mex)
 % if the compilation fails on Mac, try the single-threaded version.
 % to run the toolbox on a cluster, it can be a good idea to deactivate this
 
@@ -137,7 +138,8 @@ elseif strcmp(blas,'builtin')
 end
 
 if mac
-    add_flag=' -mmacosx-version-min=10.6';
+    %add_flag=' -mmacosx-version-min=10.6';
+    add_flag=' -mmacosx-version-min=10.10';
 end
 
 debug=false;
@@ -436,11 +438,18 @@ for k = 1:length(COMPILE),
     if windows
         str = [str ' -outdir ' out_dir, ' ' DEFS ' ' links_lib ' OPTIMFLAGS="' compile_flags '" '];
     else
+%         keyboard;
+% Marina off
         if verLessThan('matlab','8.3.0')
             str = [str ' -outdir ' out_dir, ' ' DEFS ' CXXOPTIMFLAGS="' compile_flags '" LDOPTIMFLAGS="' link_flags '" ' links_lib];
         else
             str = [str ' -outdir ' out_dir, ' ' DEFS ' CXXOPTIMFLAGS="' compile_flags '" LDOPTIMFLAGS="' link_flags '" ' ' LINKLIBS="$LINKLIBS ' links_lib '" '];
         end
+% % Marina on
+%         str = [str ' -outdir ' out_dir, ' ' DEFS ' CXXOPTIMFLAGS="' compile_flags '" LDOPTIMFLAGS="' link_flags '" ' ' LINKLIBS="$LINKLIBS ' links_lib '" '];
+% %         str = [str ' -outdir ' out_dir, ' ' DEFS ' CXXOPTIMFLAGS="' compile_flags '" LDOPTIMFLAGS="' link_flags '" ' ' LINKLIBS="$LINKLIBS ' blas_link '" '];
+% %         str = [ str ' -outdir ' out_dir,' ' blas_link];
+% % Marina end
     end
     args = regexp(str, '\s+', 'split');
     args = args(find(~cellfun(@isempty, args)));

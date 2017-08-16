@@ -7,6 +7,7 @@ p=size(Z,1);
 Y=inputData.Y-inputData.X1*L*inputData.X2;
 X=inputData.X1;
 
+
 if spams
     param_spams.loss='cur';
     param_spams.lambda=param.mu;

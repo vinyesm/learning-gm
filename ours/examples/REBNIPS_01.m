@@ -53,8 +53,8 @@ lambda=1;
 mu=.02;
 fig=0;
 %% OURS
-param.mu=.1;
-param.lambda=.1;
+param.mu=.04;
+param.lambda=0.5;
 
 %% LVGGM Chandrasekaran S-L, (Sparse-Low Rank)
 
@@ -192,6 +192,13 @@ if fig
     imagesc(abs(Dfin2)>1e-15);
     pbaspect([1 1 1]);
     title('estimated support');
+    colorbar
+end
+
+if fig
+    figure(4);clf;
+    imagesc(Dfin2);
+    pbaspect([1 1 1]);
     colorbar
 end
 

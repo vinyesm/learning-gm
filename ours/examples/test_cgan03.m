@@ -7,21 +7,23 @@
 % We assume latept variables ndependept
 
 %% add paths
-% clc
-% clc; clear all; close all;
-% addpath('../main');
-% addpath('../active-set');
-% addpath('../atom-selection');
-% addpath('../utils');
-% addpath('../other');
-% addpath('../prox');
-% addpath('../TPower_1.0');
-% addpath('../TPower_1.0/algorithms/TPower/');
-% addpath('../TPower_1.0/misc/');
-% addpath('../../spams-matlab-v2.6/build/');
-% 
-% % %% data
-% run('../../toy-data/toy_overlap.m');k=15;
+clc
+clc; clear all; close all;
+addpath('../main');
+addpath('../active-set');
+addpath('../atom-selection');
+addpath('../utils');
+addpath('../other');
+addpath('../prox');
+addpath('../TPower_1.0');
+addpath('../TPower_1.0/algorithms/TPower/');
+addpath('../TPower_1.0/misc/');
+addpath('../../spams-matlab-v2.6/build/');
+addpath('../../PathSPCA/PathSPCA/');
+addpath('../../spca_am-master');
+
+% %% data
+run('../../toy-data/toy_overlap.m');k=15;
 
 %% our norm psd with decomposition S-M sparse_omega_lgm
 p=po;
@@ -43,8 +45,9 @@ param.lambda=.7; %lamda ~ 2/k*mu
 param.mu=.1;
 
 param.sloppy=0;
-param.max_nb_main_loop=1500;
+param.max_nb_main_loop=500;
 param.niterPS=100;
+param.epsStop=1e-6;
 
 
 %%
@@ -100,11 +103,11 @@ figure(3);clf;
 semilogy(hist2.dg_S,'r');hold on;
 semilogy(hist2.dg_L,'b');hold on;
 legend({'S dg' 'L dg'});
-title('duality gaps of subproblems')
+title('relative duality gaps of subproblems')
 
 figure(4);clf;
 semilogy(hist2.dg_global);
-title('dg global')
+title('relative dg global')
 
 
 %% LOAD HERE lggm.mat

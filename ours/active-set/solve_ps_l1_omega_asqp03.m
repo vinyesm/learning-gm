@@ -154,11 +154,13 @@ while cont
 %             cont=cont && count< param.niterPS;            
 %             cont= maxvar/(cf*param.lambda)>1+param.epsStop  && count< param.niterPS;
 %             keyboard
-            cont=dg(ii)>param.epsStop && count< param.niterPS;
+
+            % relative dualtity gap stopping criterion
+            cont=dg(ii)/obj(ii)>param.epsStop && count< param.niterPS;
             
             
             if ~cont
-%                 keyboard;
+                %keyboard;
             end
 
             ii=ii+1;         
@@ -291,11 +293,16 @@ hist.time_sup=time(1);
 hist.nb_pivot=nb_pivot(1:ii);
 hist.active_var=active_var(1:ii);
 
-if ii>0
-    tau_new=min(param.epsStop,hist.dg(end));
-else
-    tau_new=param.epsStop;
-end
+% if ii>0
+%     tau_new=min(param.epsStop,hist.dg(end));
+% else
+%     tau_new=param.epsStop;
+% end
+tau_new=param.epsStop;
+
+% if length(hist.dg)>0 && hist.dg(end)<1e-8
+%     keyboard
+% end
 
 if count>param.niterPS
     fprintf('maximum number of Ps iteration reached, duality gap=%f\n',hist.dg(end));

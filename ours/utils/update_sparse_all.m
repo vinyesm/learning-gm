@@ -1,4 +1,4 @@
-function [S] = update_sparse_all(param,inputData,L,S)
+function [S, nb_iter, dg] = update_sparse_all(param,inputData,L,S)
 debug=1;
 spams=1;
 Sold=S;
@@ -17,9 +17,13 @@ if spams
     param_spams.tol=param.epsStop;
 %     .5*norm(Y-X*Sold*X,'fro')^2+param.mu*sum(abs(Sold(:)));
     [W optim]=mexFistaFlat(Y,X,Sold,param_spams);
-%     .5*norm(Y-X*W*X,'fro')^2+param.mu*sum(abs(W(:)));
+%     primal=.5*norm(Y-X*W*X,'fro')^2+param.mu*sum(abs(W(:)));
     S=W;
-    % keyboard;
+    dg=optim(3);
+    nb_iter=optim(4);
+    if nb_iter>=param_spams.max_it
+%         keyboard;
+    end
 end
 
 if ~spams

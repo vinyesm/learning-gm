@@ -41,14 +41,15 @@ if nargin < 3
     fall=[];
     cardVal=[];
     U=[];
-    %     qs=3:-1:0;
-    qs=0;
+    qs=3:-1:0;
+    %qs=0;
 else
     %     Z = startingZ;
     S = startingZ.Z1;
     L = startingZ.Z2;
     Z = S+L;
-    qs=0;
+%     qs=0;
+    qs=3:-1:0;
 end
 
 if param.Sfixed
@@ -125,9 +126,9 @@ epsStop=param.epsStop;
 [ob, lo, pe] = get_val_l1_omega_03(L,S,inputData,param,ActiveSet);
 obj0 = [obj0 ob];
 
-tau=inf;
-param.epsStop=tau;
-eps_add=min(param.epsStop,1e-4);
+% tau=inf;
+% param.epsStop=tau;
+% eps_add=min(param.epsStop,1e-4);
 
 
 for q=qs
@@ -148,8 +149,12 @@ for q=qs
                 
             end
             
-            %             param.epsStop=2^(q-1)*epsStop;
-            param.epsStop=1e-5;
+            
+            param.epsStop=10^(q-1)*epsStop;
+            eps_global=1e3*param.epsStop;
+            eps_add=param.epsStop;
+%             param.epsStop=1e-5;
+%keyboard
             
             dg1=inf;
             ttt=0;
@@ -157,7 +162,8 @@ for q=qs
             while dg1>param.epsStop && ttt<1
                 ttt=ttt+1;
                 % S sparse update
-                [S]= update_sparse_all(param,inputData,L,S);
+                [S, nb_iter, dg]= update_sparse_all(param,inputData,L,S);
+                
                 ti=toc;
                 [ob, lo, pe] = get_val_l1_omega_03(L,S,inputData,param,ActiveSet);
                 obj0 = [obj0 ob];
@@ -165,10 +171,13 @@ for q=qs
                 pen0 = [pen0 pe];
                 timeS = [timeS ti];
                 
-                dg_global=[dg_global get_dg_global_LS(L,S,inputData,param,ActiveSet)];
+                dg_global=[dg_global get_dg_global_LS(L,S,inputData,param,ActiveSet)/ob(end)];
                 [dg1, dg2]= compute_dg_S_L(S,L,inputData,param,ActiveSet);
-                dg_S=[dg_S dg1];
-                dg_L=[dg_L dg2];
+                dg_S=[dg_S dg1/ob(end)];
+                dg_L=[dg_L dg2/ob(end)];
+                if dg1>param.epsStop
+%                     keyboard
+                end
                 
                 if obj0(end-1)< ob(end)
                     fprintf('objebctive increases of %f \n ',ob(end)-obj0(end-1))
@@ -196,10 +205,11 @@ for q=qs
             pen0 = [pen0 pe];
             timeL = [timeL ti];
             
-            dg_global=[dg_global get_dg_global_LS(L,S,inputData,param,ActiveSet)];
+            dg_global=[dg_global get_dg_global_LS(L,S,inputData,param,ActiveSet)/ob(end)];
             [dg1, dg2]= compute_dg_S_L(S,L,inputData,param,ActiveSet);
-            dg_S=[dg_S dg1];
-            dg_L=[dg_L dg2];
+            dg_S=[dg_S dg1/ob(end)];
+            dg_L=[dg_L dg2/ob(end)];
+            
             %                 param.epsStop=tau_new;
             %                 eps_add=min(param.epsStop,1e-4);
             %                 eps_add=1e-6;
@@ -336,7 +346,7 @@ for q=qs
             %             fprintf('   dg1 = %2.4e dg2 = %2.4e  dg =  %2.4e\n',dg1,dg2,dg1+dg2);
         end
         
-        if dg_global(end)<1e-3
+        if dg_global(end)<eps_global
             c=0;
         end
         if varIJ < param.lambda*cf*(1+eps_add) && maxIJ < param.mu*(1+eps_add)

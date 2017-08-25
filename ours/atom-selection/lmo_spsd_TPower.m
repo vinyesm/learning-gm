@@ -1,5 +1,5 @@
 function [uBest,kBest,lambdaBest] = lmo_spsd_TPower(A,param)
-both=1;
+both=0;
 B=0.5*(A+A');
 
 % emin=eigs(B,1,'sa');

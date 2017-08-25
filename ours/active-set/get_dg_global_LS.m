@@ -8,22 +8,22 @@ Y=inputData.Y;
 [u, kBest,temp_om] = lmo_spsd_TPower(-H,param);
 
 
-temp_om_restricted = -1;
-for i = 1:length(ActiveSet.I)
-    currS=-H(ActiveSet.I{i}, ActiveSet.I{i});
-    currS=0.5*(currS+currS');
-    
-    if rcond(currS)<1e-14 || sum(sum(isnan(currS)))
-        fprintf('get_dg_l1_omega_asqp: bad conditioned or nan\n');
-    end
-    
-    currTemp = eigs(currS,1,'la');
+% temp_om_restricted = -1;
+% for i = 1:length(ActiveSet.I)
+%     currS=-H(ActiveSet.I{i}, ActiveSet.I{i});
+%     currS=0.5*(currS+currS');
+%     
+%     if rcond(currS)<1e-14 || sum(sum(isnan(currS)))
+%         fprintf('get_dg_l1_omega_asqp: bad conditioned or nan\n');
+%     end
+%     
+%     currTemp = eigs(currS,1,'la');
+% %     currTemp = currTemp/(param.cardfun(ActiveSet.k{i}));
 %     currTemp = currTemp/(param.cardfun(ActiveSet.k{i}));
-    currTemp = currTemp/(param.cardfun(ActiveSet.k{i}));
-    if currTemp>temp_om_restricted
-        temp_om_restricted = currTemp;
-    end
-end
+%     if currTemp>temp_om_restricted
+%         temp_om_restricted = currTemp;
+%     end
+% end
 
 temp_l1 = max(abs(H(:)));
 
@@ -48,7 +48,7 @@ dualityGap = dg_f+dg_S+dg_L;
 
 if dg_f<0 || dg_S<0 || dg_L<0 && abs(dualityGap)>1e-10
     fprintf('Negative duality gap\n');
-    keyboard;
+%     keyboard;
     %     error('Negative duality gap=%f, gapLoss=%f gapPen=%f\n',dualityGap, gapLoss, gapPen);
     dualityGap=abs(dualityGap);
 end

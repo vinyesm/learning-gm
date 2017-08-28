@@ -26,8 +26,8 @@ pen =  zeros(1,param.niterPS);
 loss =  zeros(1,param.niterPS);
 dg =  zeros(1,param.niterPS);
 time =  zeros(1,param.niterPS);
-nb_pivot=zeros(1,param.niterPS);
-active_var=zeros(1,param.niterPS);
+nb_pivot = zeros(1,param.niterPS);
+active_var = zeros(1,param.niterPS);
 
 p=size(Z,1);
 new_atom_added=false;

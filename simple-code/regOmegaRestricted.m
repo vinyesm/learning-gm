@@ -79,7 +79,9 @@ sloppyCount = 0;
 % memory allocation
 grad1 = zeros(p,p);
 grad2 = zeros(p,p);
-l1 = sum(abs(init.S(:)));
+if isfield(init,'S')
+    l1 = sum(abs(init.S(:)));
+end
 
 % main loop
 firstPass=true;

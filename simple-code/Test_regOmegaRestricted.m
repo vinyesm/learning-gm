@@ -2,9 +2,9 @@ clear all
 close all
 clc
 
-addpath TPower_1.0/misc/
-addpath TPower_1.0/algorithms/TPower/
-addpath TPower_1.0/algorithms/PathSPCA/PathSPCA/
+addpath ../ours/TPower_1.0/misc/
+addpath ../ours/TPower_1.0/algorithms/TPower/
+addpath ../ours/TPower_1.0/algorithms/PathSPCA/PathSPCA/
 
 % % example 1
 % p = 6;
@@ -69,6 +69,10 @@ outa = output2.atoms_u(:,1:output2.atomCount);
 % full(output2.atoms_u(:,1:output2.atomCount))
 % full(atoms_u)
 
-figure(2)
+figure(1)
 semilogy(hist2.dualityGap);
+
+figure(2);clf
+semilogy(hist2.objective,'k');
+title('objective')
 

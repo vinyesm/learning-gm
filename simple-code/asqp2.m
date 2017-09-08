@@ -37,7 +37,7 @@ MAX_NB_FULL_STEPS=200;
 max_iter=param.max_iter;
 epsilon=param.epsilon;
 debug_mode=param.debug_mode;
-debug_mode=1;
+debug_mode=0;
 
 tol=1e-12;
 epsilon=tol*10;
@@ -49,7 +49,7 @@ if param.ws
     if new_atom_added,
         A(idx_atom)=true; % adding the last one
         if g(idx_atom)>0,
-            error('The new atom direction is not a descent direction')
+            warning('The new atom direction is not a descent direction')
         end
 %         %
 %         E=eye(t);
@@ -102,7 +102,7 @@ while(iter<=max_iter)
         hist.norm_g(iter)=norm(g(A));
     end
     d=zeros(t,1);
-    if debug_mode && (condest(Q(A,A))>1e15),
+    if debug_mode && (condest(Q(A,A))>1e16),
         display('asqp : Warning, Hessian badly conditioned\n');
         r=null(Q(A,A));
         r=r(:,1); %sign(r(end,1))*

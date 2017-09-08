@@ -21,6 +21,7 @@ coeff = 5*abs(randn(3,1));
 coeff_atoms_u = bsxfun(@times, sqrt(coeff)', atoms_u);
 M=full(coeff_atoms_u*coeff_atoms_u');
 S=triu(randn(p,p));
+S=S./max(abs(S(:)));
 S=(abs(S)>.9).*S;
 S=.5*(S+S');
 D=ones(p,1);
@@ -33,12 +34,30 @@ inputData.X = X;
 inputData.Y = Y;
 param.k=k;
 set = supp;
-param.epsStop=1e-6;
+param.epsStop=1e-4;
 param.lambda=.01/p;
-param.mu=.1/p;
-param.maxIter=50;
-param.maxNbAtoms=20;
+param.mu=.01/p;
+param.maxIter=250;
+param.maxNbAtoms=1000;
+param.verbose=1;
 
-[ output1, hist1 ] = regOmegaL1( inputData, param, set);
-keyboard;
 
+[ output, hist ] = regOmegaL1( inputData, param, set);
+
+
+figure(1);clf
+semilogy(hist.reldgl1,'r');hold on
+semilogy(hist.reldgom,'b');
+legend('rel dg l1','rel dg om');
+title('relative duality gaps of the subproblems');
+
+figure(2);clf
+semilogy(hist.reldg,'k');
+title('relative global duality gap');
+
+figure(3);clf
+semilogy(hist.objective,'k');
+title('objective');
+
+%dif=sign(output.S)+sign(S);
+%full(output.atoms_u)

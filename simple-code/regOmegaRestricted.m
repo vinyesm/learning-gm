@@ -1,4 +1,4 @@
-function [ output, hist, qp ] = regOmegaRestricted( inputData, param, set, init, qp )
+function [ output, hist, qp] = regOmegaRestricted( inputData, param, set, init, qp )
 % Solves problem :  min_M |X*M*X-Y|_F^2 + lambda*Omega_S(M)  (P)
 % where Omega_B is the norm Omega restricted to the supports contained in
 % set S. Where M is bay construction M=sum_i coeff_i*u_i*u_i'
@@ -45,6 +45,10 @@ if ~isfield(inputData,'X2')
     inputData.Y2=inputData.X*inputData.Y*inputData.X;
 end
 
+if ~isfield(param,'verbose')
+    param.verbose=1;
+end
+
 if nargin < 4
     init.coeff = sparse(param.maxNbAtoms,1);
     init.atoms_u = sparse(p,param.maxNbAtoms);
@@ -62,6 +66,7 @@ hist.time = zeros(1,param.maxIter);
 hist.dualityGap = zeros(1,param.maxIter);
 hist.loss = zeros(1,param.maxIter);
 hist.omega = zeros(1,param.maxIter);
+hist.reldgl1 = zeros(1,param.maxIter);
 
 paramAS.max_iter=1e3;
 paramAS.epsilon=1e-14;
@@ -74,8 +79,7 @@ sloppyCount = 0;
 % memory allocation
 grad1 = zeros(p,p);
 grad2 = zeros(p,p);
-
-
+l1 = sum(abs(init.S(:)));
 
 % main loop
 firstPass=true;
@@ -88,48 +92,48 @@ while count<=param.maxIter
     end
     
     if ~firstPass
-    %active-set
-    if init.atomCount>0
-        c0 = [init.coeff(1:init.atomCount-1); 0];
-%         if abs(c0'*qp.H*c0-norm(inputData.X*init.M*inputData.X, 'fro')^2)/abs(c0'*qp.H*c0)>1e-14
-%             keyboard;
-%         end
-%         if abs(-trace(inputData.X*init.M*inputData.X*inputData.Y)+param.lambda*sum(c0)-dot(c0,qp.b))>1e-14
-%             keyboard;
-%         end
-%         g = qp.H*c0+qp.b;
-%         if g(end)>0
-%             keyboard
-%         end
-        [c,A,nbpivot,ng]=asqp2(qp.H,-qp.b,c0,paramAS,new_atom_added,idx_atom,init.atoms_u(:,init.atomCount));
-        K = c>0;
-        qp.H=qp.H(K,K);
-        qp.b=qp.b(K);
-        %fprintf('TODO : if Y changes qp.b has to be updated at each iteration\n');
-        init.atoms_u(:,1:sum(K)) = init.atoms_u(:,K);
-        init.Xatoms_u(:,1:sum(K)) = init.Xatoms_u(:,K);
-        init.X2atoms_u(:,1:sum(K)) = init.X2atoms_u(:,K);
-        init.atomCount = sum(K);
-        init.coeff(1:sum(K))= c(K);
-        init.coeff(sum(K)+1:end)= 0;
-        init.atoms_u(:,sum(K)+1:end) = 0;
-        init.Xatoms_u(:,sum(K)+1:end) = 0;
-        init.X2atoms_u(:,sum(K)+1:end) = 0;
-    end
+        %active-set
+        if init.atomCount>0
+            c0 = [init.coeff(1:init.atomCount-1); 0];
+            %         if abs(c0'*qp.H*c0-norm(inputData.X*init.M*inputData.X, 'fro')^2)/abs(c0'*qp.H*c0)>1e-14
+            %             keyboard;
+            %         end
+            %         if abs(-trace(inputData.X*init.M*inputData.X*inputData.Y)+param.lambda*sum(c0)-dot(c0,qp.b))>1e-14
+            %             keyboard;
+            %         end
+            %         g = qp.H*c0+qp.b;
+            %         if g(end)>0
+            %             keyboard
+            %         end
+            [c,A,~,ng]=asqp2(qp.H,-qp.b,c0,paramAS,new_atom_added,idx_atom,init.atoms_u(:,init.atomCount));
+            K = c>0;
+            qp.H=qp.H(K,K);
+            qp.b=qp.b(K);
+            %fprintf('TODO : if Y changes qp.b has to be updated at each iteration\n');
+            init.atoms_u(:,1:sum(K)) = init.atoms_u(:,K);
+            init.Xatoms_u(:,1:sum(K)) = init.Xatoms_u(:,K);
+            init.X2atoms_u(:,1:sum(K)) = init.X2atoms_u(:,K);
+            init.atomCount = sum(K);
+            init.coeff(1:sum(K))= c(K);
+            init.coeff(sum(K)+1:end)= 0;
+            init.atoms_u(:,sum(K)+1:end) = 0;
+            init.Xatoms_u(:,sum(K)+1:end) = 0;
+            init.X2atoms_u(:,sum(K)+1:end) = 0;
+        end
     end
     
     %new atom
     [grad1, grad2] = varFenchel(inputData, init, grad1, grad2, 1);
     [newAtom, val]= dualOmega(-grad2,set,param.k);
-%     [newAtom, val]= dualOmega(-grad2,inf,param.k);
+    %     [newAtom, val]= dualOmega(-grad2,inf,param.k);
     
     %test adding same atom
     if init.atomCount>0
         scal = sum(bsxfun(@times,newAtom,init.atoms_u(:,1:init.atomCount)));
-        [scalmin idx]=max(abs(scal));
+        [scalmin, idx]=max(abs(scal));
         if scalmin>.9
-            fprintf('adding same atom\n');
-%             keyboard
+            %fprintf('adding same atom\n');
+            %             keyboard
         end
     end
     
@@ -141,11 +145,17 @@ while count<=param.maxIter
             atom = init.atoms_u(:,ia);
             init.M = init.M + init.coeff(ia)*(atom*atom');
         end
-        dg = dualityGap(init, grad1, grad2, val, param);
+        dg = dualityGapL(init, grad1, grad2, val, param);
         hist.dualityGap(sloppyCount)=dg;
         hist.loss(sloppyCount)=loss(grad1,1);
         hist.omega(sloppyCount)=omega(init,1);
         hist.objective(sloppyCount)=hist.loss(sloppyCount)+param.lambda*hist.omega(sloppyCount);
+        hist.reldg(sloppyCount)=hist.dualityGap(sloppyCount)/hist.objective(sloppyCount);
+        if isfield(init,'S')
+            valS = max(abs(-grad2(:)));
+            dgl1 = dualityGapS(init, grad1, grad2, valS, param);
+            hist.reldgl1(sloppyCount)=dgl1/(hist.loss(sloppyCount)+param.mu*l1); 
+        end
         hist.time(sloppyCount)=toc;
         if dg/hist.objective(sloppyCount)<param.eps
             break;
@@ -165,7 +175,7 @@ while count<=param.maxIter
         idx_atom = init.atomCount;
     else
         warning('No new atom found. Breaking..')
-%         keyboard;
+        %         keyboard;
         break;
     end
     
@@ -180,6 +190,7 @@ hist.dualityGap = hist.dualityGap(1:sloppyCount);
 hist.loss = hist.loss(1:sloppyCount);
 hist.omega = hist.omega(1:sloppyCount);
 hist.objective = hist.objective(1:sloppyCount);
+hist.reldgl1 = hist.reldgl1(1:sloppyCount);
 hist.time = hist.time(1:sloppyCount);
 output=init;
 

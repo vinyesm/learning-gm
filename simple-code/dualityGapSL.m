@@ -11,4 +11,8 @@ dgf=.5*(1-shrink)*norm(grad1,'fro')^2;
 dgS=param.mu*sum(abs(init.S(:)))+shrink*trace(init.S*grad2);
 dgL= param.lambda*sum(init.coeff(1:init.atomCount)) + shrink*trace(init.M*grad2);
 dg = dgf+dgL+dgS;
-fprintf('dgf=%f  dgL=%f dgS=%f dgPS=%f  (<1)\n',dgf,dgL,dgS,dg);
+
+if param.verbose>=2
+    fprintf('dgf=%f  dgL=%f dgS=%f dg_global=%f  (<1)\n',dgf,dgL,dgS,dg);
+end
+

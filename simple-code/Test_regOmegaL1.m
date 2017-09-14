@@ -39,7 +39,7 @@ param.lambda=.01/p;
 param.mu=.01/p;
 param.maxIter=250;
 param.maxNbAtoms=1000;
-param.verbose=1;
+param.verbose=2;
 
 
 [ output, hist ] = regOmegaL1( inputData, param, set);

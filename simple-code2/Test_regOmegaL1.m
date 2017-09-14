@@ -32,8 +32,8 @@ addpath ../spams-matlab-v2.6/build/
 % end
 % X=inv(S-M)^.5; %X*M*X=X
 % Y=eye(p);
-% param.lambda=.01/p;
-% param.mu=.01/p;
+% param.lambda=.01/p*1000;
+% param.mu=.01/p*1000;
 % %keyboard;
 
 

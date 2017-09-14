@@ -109,8 +109,8 @@ for q=1;
         [init.S, nb_iter, reldgl1] = regL1(paramRL1,inputData,init,1);
         
         % hist S and update of inputData for L update
-        g1 = inputData.X*(init.M+init.S)*inputData.X+Y;
-        g2 = inputData.X*(g1)*inputData.X;
+%         g1 = inputData.X*(init.M+init.S)*inputData.X+Y;
+%         g2 = inputData.X*(g1)*inputData.X;
         inputData.Y=-inputData.X*init.S*inputData.X-Y;
         inputData.Y2=inputData.X*inputData.Y*inputData.X;
         [grad1, grad2]=varFenchel(inputData, init, grad1, grad2, 1);

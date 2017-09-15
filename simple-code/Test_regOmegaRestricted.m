@@ -57,6 +57,7 @@ param.eps=1e-6;
 param.lambda=1/p;
 param.maxIter=50;
 param.maxNbAtoms=20;
+param.verbose=2;
 
 ntest=1;
 objTest=zeros(1,ntest);

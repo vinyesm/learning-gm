@@ -5,8 +5,8 @@
 %% add paths
 clc; clear all; close all;
 
- HOME = '/Users/marina/Documents/learning-gm/code-from-Kim-Chuan/LogdetPPA-0'; %if my  mac
-% HOME = '/home/marina/Marina/learning-gm/code-from-Kim-Chuan/LogdetPPA-0';%if lab pc
+% HOME = '/Users/marina/Documents/learning-gm/code-from-Kim-Chuan/LogdetPPA-0'; %if my  mac
+ HOME = '/home/marina/Marina/learning-gm/code-from-Kim-Chuan/LogdetPPA-0';%if lab pc
 addpath(strcat(HOME,'/solver/'))
 addpath(strcat(HOME,'/solver/mexfun'))
 addpath(strcat(HOME,'/util/'))
@@ -79,3 +79,20 @@ axis square
 subplot(1,2,2)
 imagesc(abs(Lsl)); colormap hot;
 axis square
+
+%%
+% %% reorder
+% % Uso=Uso(:,size(Uso,2):-1:1);
+% [V,D] = eig(Lsl);
+% [I]=grayorder(V~=0);
+% 
+% Lsl_I = Lsl(I,I);
+% Ssl_I = Ssl(I,I);
+% 
+% figure(2);
+% subplot(1,2,1)
+% imagesc(abs(Ssl_I-diag(diag(Ssl_I)))); colormap hot;
+% axis square
+% subplot(1,2,2)
+% imagesc(abs(Lsl_I)); colormap hot;
+% axis square

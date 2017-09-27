@@ -8,41 +8,23 @@ addpath ../ours/TPower_1.0/algorithms/TPower/
 addpath ../ours/TPower_1.0/algorithms/PathSPCA/PathSPCA/
 addpath ../spams-matlab-v2.6/build/
 
-%%
+load('../genedata/BC.mat')
 % example 1
-p = 20;
-k = 5;
-ix = 1:(3*k);
-jx = kron(1:3,ones(1,k));
-supp = sparse(ix, jx,true,p,3);
-atoms_u = sparse(ix, jx,randn(3*k,1),p,3);
-atoms_u = normc(atoms_u);
-coeff = 5*abs(randn(3,1));
-coeff_atoms_u = bsxfun(@times, sqrt(coeff)', atoms_u);
-M=full(coeff_atoms_u*coeff_atoms_u');
-S=triu(randn(p,p));
-S=S./max(abs(S(:)));
-S=(abs(S)>.9).*S;
-S=.5*(S+S');
-D=ones(p,1);
-emin=eigs(S-M,1,'sa');
-S=S-2*emin*diag(D);
-X=inv(S-M)^.5; %X*M*X=X
+p = size(Sigma,1);
+k = 30;
 Y=eye(p);
-
-inputData.X = X;
+inputData.X = Sigma;
 inputData.Y = Y;
 param.k=k;
-set = supp;
 param.epsStop=1e-4;
-param.lambda=.01/p*1;
-param.mu=.01/p*1;
+param.lambda=.0000001/p*1000;
+param.mu=.001/p*1000;
 param.maxIter=250;
 param.maxNbAtoms=1000;
 param.verbose=2;
 
-
-[ output, hist ] = regOmegaL1( inputData, param, set);
+%%
+[ output, hist ] = regOmegaL1( inputData, param, inf);
 
 
 figure(1);clf
@@ -59,6 +41,16 @@ figure(3);clf
 semilogy(hist.objective,'k');
 title('objective');
 
+%%
+S0 = output.S;
+L0 = output.M;
+figure(4);clf
+subplot(1,2,1)
+imagesc(abs(S0-diag(diag(S0)))); colormap hot;
+axis square
+subplot(1,2,2)
+imagesc(abs(L0)>0); colormap hot;
+axis square
+
 %dif=sign(output.S)+sign(S);
 %full(output.atoms_u)
-

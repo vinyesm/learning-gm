@@ -12,9 +12,11 @@
 
 clc; clear all;
 load('Rosetta.mat', 'exprs');
+load('Rosetta.mat', 'names');
 X = exprs.data;
 % Xn = quantilenorm(X,'DISPLAY',true);
-Xn = quantilenorm(X);
+Xn0 = quantilenorm(X);
+Xn = quantilenorm(Xn0')';
 Xn = Xn(1:500,:);
 [n,p] = size(Xn);
 % C = Xn*Xn';
@@ -41,7 +43,7 @@ S=cov(X4');
 %%
 figure(1);clf
 % imagesc(S(OUTPERM,OUTPERM));
-imagesc(min(abs(S),0.1)); colormap hot;
+imagesc(min(abs(S),0.5)); colormap hot;
 axis square
 Sigma = S;
 save('BC','Sigma');
@@ -66,3 +68,7 @@ axis square
 % plot(Q,N0)
 % title('Q-Q plot')
 
+%%
+for i=1:80
+    fprintf('%s\n',names{i});
+end

@@ -77,3 +77,5 @@ figure(2);clf
 semilogy(hist2.objective,'k');
 title('objective')
 
+
+

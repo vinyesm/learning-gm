@@ -45,7 +45,7 @@ sum(1.*is.na(nki.imputed))
 
 ## Save in Matlab v6 format with 'writeMat'
 library(R.matlab)
-writeMat("Rosetta.mat", exprs = nki.imputed)
+writeMat("Rosetta.mat", exprs = nki.imputed, names = featureNames(nki.imputed))
 
 
 # to intall rJava Package

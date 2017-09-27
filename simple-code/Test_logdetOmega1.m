@@ -46,7 +46,7 @@ Sigma = X;
 param.k=k;
 
 param.epsObj=1e-16;
-param.lambda=.005;
+param.lambda=.001;
 param.mu=.005;
 param.maxIter=50;
 param.maxNbBlocks=100;

@@ -1,56 +1,51 @@
-
-clear all
-close all
-clc
+clear all;close all;clc
 
 addpath ../ours/TPower_1.0/misc/
 addpath ../ours/TPower_1.0/algorithms/TPower/
 addpath ../ours/TPower_1.0/algorithms/PathSPCA/PathSPCA/
 addpath ../spams-matlab-v2.6/build/
 
+% HOME = '/Users/marina/Documents/learning-gm/code-from-Kim-Chuan/LogdetPPA-0'; %if my  mac
+ HOME = '/home/marina/Marina/learning-gm/code-from-Kim-Chuan/LogdetPPA-0';%if lab pc
+addpath(strcat(HOME,'/solver/'))
+addpath(strcat(HOME,'/solver/mexfun'))
+addpath(strcat(HOME,'/util/'))
+
 load('../genedata/BC.mat')
-% example 1
-p = size(Sigma,1);
-k = 30;
-Y=eye(p);
-inputData.X = Sigma;
-inputData.Y = Y;
-param.k=k;
-param.epsStop=1e-4;
-param.lambda=.0000001/p*1000;
-param.mu=.001/p*1000;
-param.maxIter=250;
-param.maxNbAtoms=1000;
+
+
+%% param
+
+param.k=30;
+param.epsObj=1e-16;
+param.lambda=.001;
+param.mu=.005;
+param.maxIter=50;
+param.maxNbBlocks=100;
 param.verbose=2;
 
-%%
-[ output, hist ] = regOmegaL1( inputData, param, inf);
+
+%% logdetOmegaL1 initialised with true support
+
+[S1,M1,L1,U1,hist_ch1,set1] = logdetOmegaL1(Sigma,param,inf);
+K1=S1-M1;
+%log(det(K1))-trace(K1*Sigma);
 
 
 figure(1);clf
-semilogy(hist.reldgl1,'r');hold on
-semilogy(hist.reldgom,'b');
-legend('rel dg l1','rel dg om');
-title('relative duality gaps of the subproblems');
+semilogy(hist_ch1.objective,'k');
+title(['objective logdetOmegaL1 initialised with true support fend=' num2str(hist_ch1.objective(end))]);
 
-figure(2);clf
-semilogy(hist.reldg,'k');
-title('relative global duality gap');
-
-figure(3);clf
-semilogy(hist.objective,'k');
-title('objective');
-
-%%
-S0 = output.S;
-L0 = output.M;
-figure(4);clf
-subplot(1,2,1)
-imagesc(abs(S0-diag(diag(S0)))); colormap hot;
-axis square
-subplot(1,2,2)
-imagesc(abs(L0)>0); colormap hot;
-axis square
-
-%dif=sign(output.S)+sign(S);
-%full(output.atoms_u)
+figure(2);clf;
+subplot(2,2,1);
+imagesc(abs(S));
+axis square;
+subplot(2,2,2);
+imagesc(abs(M));
+axis square;
+subplot(2,2,3);
+imagesc(abs(S1));
+axis square;
+subplot(2,2,4);
+imagesc(abs(M1));
+axis square;

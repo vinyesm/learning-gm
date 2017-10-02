@@ -118,7 +118,8 @@ for q=1;
             At=At0;
         end
         %         for mm=1:m
-        for mm=1:size(set,2)
+        nset = size(set,2);
+        for mm=1:nset
             I=find(set(:,mm));
             blk{2+mm,1} = 's'; blk{2+mm,2} = k;
             phi=sparse(I,(1:k)',1,p,k);
@@ -183,11 +184,11 @@ L={};
 U={};
 S=X{1};
 M=zeros(p);
-m=size(set,2);
+%m=size(set,2);
 thresh1 = 1e-3;
 thresh2 = 1e-6;
 it = 0;
-for mm=1:m
+for mm=1:nset
     I=find(set(:,mm));
     [V,D] = eig(X{2+mm});
     d=diag(D);

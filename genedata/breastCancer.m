@@ -13,6 +13,7 @@
 clc; clear all;
 load('Rosetta.mat', 'exprs');
 load('Rosetta.mat', 'names');
+load('Rosetta.mat', 'erdata');
 X = exprs.data;
 % Xn = quantilenorm(X,'DISPLAY',true);
 Xn0 = quantilenorm(X);

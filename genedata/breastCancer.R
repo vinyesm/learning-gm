@@ -15,7 +15,7 @@ data(nki)
 ## show the first 5 rows and columns of the expression data
 exprs(nki)[1:5,1:5]
 ## show the first 6 rows of the phenotype data
-head(pData(nki))
+head(pData(nki)[,8])
 ## show first 20 feature names
 featureNames(nki)[1:20]
 ## show the experiment data summary
@@ -45,7 +45,7 @@ sum(1.*is.na(nki.imputed))
 
 ## Save in Matlab v6 format with 'writeMat'
 library(R.matlab)
-writeMat("Rosetta.mat", exprs = nki.imputed, names = featureNames(nki.imputed))
+writeMat("Rosetta.mat", exprs = nki.imputed, names = featureNames(nki.imputed), erdata=pData(nki)[,8])
 
 
 # to intall rJava Package

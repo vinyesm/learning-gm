@@ -95,6 +95,7 @@ OPTIONS.smoothing  = 1;
 OPTIONS.scale_data = 0; %% or 2;
 OPTIONS.plotyes    = 0;
 OPTIONS.tol        = 1e-10;
+OPTIONS.printlevel = 0;
 
 blk0=blk;
 C0=C;
@@ -108,8 +109,13 @@ X{1}=speye(p);
 
 tic
 %qs= 10.^(4:-1:1);
-for q=1;
-    while iter<=param.maxIter
+for q=1;    
+    while iter<=param.maxIter 
+    fprintf('-------------------------------------------------------------');
+    fprintf('-------------------------------------------------------------');
+    fprintf('\n Call %d\n', calls);
+    fprintf('-------------------------------------------------------------');
+    fprintf('-------------------------------------------------------------');
         iter = iter+1;
         nblocks=size(set,2);
         if size(blk,1)>2
@@ -144,11 +150,19 @@ for q=1;
         end
         
         %Remove useless blocks
-        %             for mm=nblocks:-1:1
-        %                 if trace(X{2+mm})<1e-6
-        %                     set(:,mm)=[];
-        %                 end
-        %             end
+        ii=0;
+        nset=0;
+        for mm=nblocks:-1:1
+            ii = ii+1;
+            if trace(X{2+mm})<1e-6
+                set(:,mm)=[];
+                keyboard
+            else
+                nset = nset+1;
+                X{2+ii} = X{2+mm};
+            end
+        end
+        
         
         %% get a new descent direction using truncated power iteration
         

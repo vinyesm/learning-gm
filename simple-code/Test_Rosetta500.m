@@ -11,7 +11,7 @@ addpath(strcat(HOME,'/solver/'))
 addpath(strcat(HOME,'/solver/mexfun'))
 addpath(strcat(HOME,'/util/'))
 
-addpath ../reorder
+addpath ../reorder/
 
 load('../genedata/BC.mat')
 
@@ -21,8 +21,8 @@ load('../genedata/BC.mat')
 param.k=50;
 param.epsObj=1e-16;
 param.lambda=.01;
-param.mu=.01;
-param.maxIter=50;
+param.mu=.005;
+param.maxIter=20;
 param.maxNbBlocks=100;
 param.verbose=2;
 
@@ -41,7 +41,7 @@ title(['objective logdetOmegaL1 initialised with true support fend=' num2str(his
 %%
 figure(2);clf;
 subplot(1,2,1);
-imagesc(abs(S1));
+imagesc(abs(S1)>0);
 axis square;
 subplot(1,2,2);
 imagesc(abs(M1)>0);
@@ -60,8 +60,8 @@ axis square;
 % axis square;
 
 %%
-% keyboard
-[J]=grayorder(set1~=0);
+keyboard
+[J]=grayorder(full(set1~=0));
 figure(3);clf;
 subplot(1,2,1);
 imagesc(min(abs(S1(J,J)),10));
@@ -69,3 +69,8 @@ axis square;
 subplot(1,2,2);
 imagesc(min(abs(M1(J,J)),10));
 axis square;
+
+%%
+[~, K] = sort(erdata);
+figure(4); clf;
+imagesc(Xn(:,K));

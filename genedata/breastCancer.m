@@ -18,7 +18,8 @@ X = exprs.data;
 % Xn = quantilenorm(X,'DISPLAY',true);
 Xn0 = quantilenorm(X);
 Xn = quantilenorm(Xn0')';
-Xn = Xn(1:500,:);
+n = 500;
+Xn = Xn(1:n,:);
 [n,p] = size(Xn);
 % C = Xn*Xn';
 
@@ -47,11 +48,12 @@ figure(1);clf
 imagesc(min(abs(S),0.5)); colormap hot;
 axis square
 Sigma = S;
-save('BC','Sigma');
+gnames = names{1:n};
+save('BC','Sigma', 'erdata', 'gnames','Xn');
 
 figure(2);clf
 % imagesc(S(OUTPERM,OUTPERM));
-imagesc(abs(corr(X4'))); colormap hot;
+imagesc(abs(corr(X4'))); colormap jet;
 axis square
 
 % x = sort(X(:,1:20));

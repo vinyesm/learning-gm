@@ -17,7 +17,7 @@
 
 function [] = launch_exp(lambda, mu, k, Sigma, savename)
     param.k=k;
-    param.epsObj=1e-16;
+    param.epsObj=1e-10;
     param.lambda=lambda;
     param.mu=mu;
     param.maxIter=1000;

@@ -1,4 +1,4 @@
-function [S,M,L,U,hist,set] = logdetOmegaL1(Sigma,param,set)
+function [S,M,L,U,hist,setout] = logdetOmegaL1(Sigma,param,set)
 
 % This code uses logdetPPA solver implemented by Professor Kim-Chuan Toh
 % Chengjing Wang, Defeng Sun and Kim-Chuan Toh,
@@ -156,7 +156,7 @@ for q=1;
             ii = ii+1;
             if trace(X{2+mm})<1e-6
                 set(:,mm)=[];
-                keyboard
+%                 keyboard
             else
                 nset = nset+1;
                 X{2+ii} = X{2+mm};
@@ -202,12 +202,14 @@ M=zeros(p);
 thresh1 = 1e-3;
 thresh2 = 1e-6;
 it = 0;
+setout = [];
 for mm=1:nset
     I=find(set(:,mm));
     [V,D] = eig(X{2+mm});
     d=diag(D);
     ll=sum(d>thresh1);
     if ll > 0
+        setout = [setout set(:,mm)];
         it=it+1;
         L{it}=zeros(p);
         L{it}(I,I)=X{2+it};

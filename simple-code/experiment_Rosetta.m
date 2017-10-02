@@ -6,7 +6,8 @@ addpath ../ours/TPower_1.0/algorithms/PathSPCA/PathSPCA/
 addpath ../spams-matlab-v2.6/build/
 
 %HOME = '/Users/marina/Documents/learning-gm/code-from-Kim-Chuan/LogdetPPA-0'; %if my  mac
- HOME = '/home/marina/Marina/learning-gm/code-from-Kim-Chuan/LogdetPPA-0';%if lab pc
+% HOME = '/home/marina/Marina/learning-gm/code-from-Kim-Chuan/LogdetPPA-0';%if lab pc
+HOME = '../code-from-Kim-Chuan/LogdetPPA-0';
 addpath(strcat(HOME,'/solver/'))
 addpath(strcat(HOME,'/solver/mexfun'))
 addpath(strcat(HOME,'/util/'))

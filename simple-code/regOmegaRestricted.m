@@ -67,6 +67,7 @@ hist.dualityGap = zeros(1,param.maxIter);
 hist.loss = zeros(1,param.maxIter);
 hist.omega = zeros(1,param.maxIter);
 hist.reldgl1 = zeros(1,param.maxIter);
+hist.reldg = zeros(1,param.maxIter);
 
 paramAS.max_iter=1e3;
 paramAS.epsilon=1e-14;
@@ -193,6 +194,7 @@ hist.loss = hist.loss(1:sloppyCount);
 hist.omega = hist.omega(1:sloppyCount);
 hist.objective = hist.objective(1:sloppyCount);
 hist.reldgl1 = hist.reldgl1(1:sloppyCount);
+hist.reldg = hist.reldg(1:sloppyCount);
 hist.time = hist.time(1:sloppyCount);
 output=init;
 

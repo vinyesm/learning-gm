@@ -109,8 +109,8 @@ for q=1;
         [init.S, nb_iter, reldgl1] = regL1(paramRL1,inputData,init,1);
         
         % hist S and update of inputData for L update
-        g1 = inputData.X*(init.M+init.S)*inputData.X+Y;
-        g2 = inputData.X*(g1)*inputData.X;
+%         g1 = inputData.X*(init.M+init.S)*inputData.X+Y;
+%         g2 = inputData.X*(g1)*inputData.X;
         inputData.Y=-inputData.X*init.S*inputData.X-Y;
         inputData.Y2=inputData.X*inputData.Y*inputData.X;
         [grad1, grad2]=varFenchel(inputData, init, grad1, grad2, 1);
@@ -120,7 +120,7 @@ for q=1;
         valS = max(abs(-grad2(:)));
         dg = dualityGapSL(init, grad1, grad2, valL, valS, param);
         dgL= dualityGapL(init, grad1, grad2, valL, param);
-        %dgS= dualityGapS(init, grad1, grad2, valS, param);
+        dgS= dualityGapS(init, grad1, grad2, valS, param);% to check if dgS/obj
         hist.dualityGap=[hist.dualityGap dg];
         hist.loss= [hist.loss loss(grad1,1)];
         hist.omega= [hist.omega omega(init,1)];
@@ -131,6 +131,16 @@ for q=1;
         hist.reldg= [hist.reldg  dg./hist.objective(end)];
         hist.time=[hist.time toc];
         
+        % checking if spams and ours compute the same duality gap for S
+        if param.verbose>=2
+            objS = hist.loss(end)+param.mu*hist.l1(end);
+            fprintf('Security check : reldgl1=%f   rel_dg_allS=%f (should be equal)\n', reldgl1, dgS/objS);
+            err = (reldgl1-dgS/objS)^2;
+            if err>1e-5
+                warning(['spams and ours return different duality gaps for S, l2_error=' num2str(err)])
+            end
+        end
+        
         if param.verbose>=1
             fprintf('reldgom=%f  reldgl1=%f reldgglobal=%f  (<1)\n',hist.reldgom(end),hist.reldgl1(end),hist.reldg(end));
         end
@@ -140,7 +150,10 @@ for q=1;
             break
         end
         
-        % L update
+        % L update 
+        if param.verbose>=1
+            fprintf('\n')
+        end
         nba = size(init.Xatoms_u,2);
         for ia=1:nba
             xatom=init.Xatoms_u(:,ia);

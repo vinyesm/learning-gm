@@ -123,7 +123,7 @@ for epoch=1
         inputData.Y2=inputData.X*inputData.Y*inputData.X;
         [grad1, grad2]=varFenchel(inputData, init, grad1, grad2, 1);
         [~, valLall]= dualOmega(-grad2,inf,param.k);
-        [~, valLset,~,val_list]= dualOmega(-grad2,set,param.k);
+        [~, valLset,~,val_list]= dualOmega(-grad2,set,param.k); % GO 
         valL=max(valLall,valLset);
         valS = max(abs(-grad2(:)));
         dgS= dualityGapS(init, grad1, grad2, valS, param);%GO debug
@@ -170,7 +170,7 @@ for epoch=1
         [grad1, grad2]=varFenchel(inputData, init, grad1, grad2, 1);
         [~, valLall]= dualOmega(-grad2,inf,param.k);
         [~, valLset,~,val_list]= dualOmega(-grad2,set,param.k);
-        check_complementary_slackness(init,set,val_list,param);
+        check_complementary_slackness(init,set,val_list,param); % GO
         valL=max(valLall,valLset);
         valS = max(abs(-grad2(:)));
         dgS= dualityGapS(init, grad1, grad2, valS, param); % GO debug

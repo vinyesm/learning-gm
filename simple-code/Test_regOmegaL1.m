@@ -8,7 +8,7 @@ addpath ../ours/TPower_1.0/algorithms/TPower/
 addpath ../ours/TPower_1.0/algorithms/PathSPCA/PathSPCA/
 addpath ../spams-matlab-v2.6/build/
 
-
+%%
 % example 1
 p = 20;
 k = 5;
@@ -35,11 +35,11 @@ inputData.Y = Y;
 param.k=k;
 set = supp;
 param.epsStop=1e-4;
-param.lambda=.01/p;
-param.mu=.01/p;
+param.lambda=.01/p*1;
+param.mu=.01/p*1;
 param.maxIter=250;
 param.maxNbAtoms=1000;
-param.verbose=1;
+param.verbose=2;
 
 
 [ output, hist ] = regOmegaL1( inputData, param, set);
@@ -61,3 +61,4 @@ title('objective');
 
 %dif=sign(output.S)+sign(S);
 %full(output.atoms_u)
+

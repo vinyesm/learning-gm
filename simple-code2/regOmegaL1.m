@@ -126,6 +126,7 @@ for epoch=1
         [~, valLset,~,val_list]= dualOmega(-grad2,set,param.k); % GO 
         valL=max(valLall,valLset);
         valS = max(abs(-grad2(:)));
+        dgS= dualityGapS(init, grad1, grad2, valS, param);%GO debug
         dg = dualityGapSL(init, grad1, grad2, valL, valS, param);
         dgL= dualityGapL(init, grad1, grad2, valL, param);
         %dgS= dualityGapS(init, grad1, grad2, valS, param);
@@ -172,6 +173,7 @@ for epoch=1
         check_complementary_slackness(init,set,val_list,param); % GO
         valL=max(valLall,valLset);
         valS = max(abs(-grad2(:)));
+        dgS= dualityGapS(init, grad1, grad2, valS, param); % GO debug
         dg = dualityGapSL(init, grad1, grad2, valL, valS, param);
         hist.dualityGap=[hist.dualityGap dg];
         hist.loss= [hist.loss histL.loss];
@@ -218,5 +220,6 @@ init.atoms_X2u=init.X2atoms_u(:,1:init.atomCount);
 init.coeff=init.coeff(1:init.atomCount);
 output=init;
 
+keyboard
 
 

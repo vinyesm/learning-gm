@@ -1,5 +1,4 @@
 function [order]=grayorder(M)
-
 [n,p]=size(M);
 
 x=2.^(0:(p-1))';

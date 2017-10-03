@@ -2,7 +2,7 @@
 %
 addpath ../reorder/
 load('../genedata/BC.mat')
-load('exp_50_100_100.mat')
+%load('exp/exp_50_10_1.mat')
 
 
 %K1=S1-M1;
@@ -35,8 +35,8 @@ axis square;
 % axis square;
 
 %%
-keyboard
-[J]=grayorder(full(set1~=0));
+pmin = min(49,size(set1,2));
+[J]=grayorder(full(set1(:,1:pmin)~=0));
 figure(3);clf;
 subplot(1,2,1);
 imagesc(min(abs(S1(J,J)),10));

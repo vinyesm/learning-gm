@@ -94,7 +94,7 @@ IJi= (Ialli-1)*k+Jalli;
 OPTIONS.smoothing  = 1;
 OPTIONS.scale_data = 0; %% or 2;
 OPTIONS.plotyes    = 0;
-OPTIONS.tol        = 1e-10;
+OPTIONS.tol        = 1e-10; %% 1e-12
 OPTIONS.printlevel = 0;
 
 blk0=blk;
@@ -173,14 +173,14 @@ for q=1;
         if val > param.lambda
             if ~isempty(set) && any(prod(bsxfun(@times, newAtom~=0, set))==1)
                 warning('Repeated block found. Breaking..')
-                break
+%                 break
             else
                 set = [set, newAtom~=0];
             end
         else
 %             keyboard;
             warning('No new block found. Breaking..')
-            break;
+%             break;
         end
         
     end

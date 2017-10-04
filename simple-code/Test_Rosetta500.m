@@ -13,8 +13,8 @@ addpath(strcat(HOME,'/util/'))
 
 addpath ../reorder/
 
-load('../genedata/BC.mat')
-
+%load('../genedata/BC.mat')
+run('../DREAM5/Dream/pp_net1');
 
 %% param
 

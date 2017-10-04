@@ -74,8 +74,11 @@ X0=inv(S-M)^.5; %X*M*X=X
 X=randn(n,p)*X0;
 X=((1./n)*(X'*X))^.5;
 Y=eye(p);
-param.lambda=.02;
-param.mu=.002;
+% param.lambda=.02;
+% param.mu=.002;
+param.lambda=.1;
+param.mu=.02;
+param.epsStop=1e-5;
 
 pause()
 %keyboard
@@ -84,13 +87,13 @@ inputData.X = X;
 inputData.Y = Y;
 param.k=k;
 set = supp;
-param.epsStop=1e-3;
+%param.epsStop=1e-3;
 param.maxIter=1000;
 param.maxNbAtoms=1000;
 param.verbose=2;
 
 
-[ output, hist ] = regOmegaL1( inputData, param, set);
+[ output, hist ] = regOmegaL1( inputData, param, inf );
 
 
 figure(1);clf

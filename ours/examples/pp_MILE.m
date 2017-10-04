@@ -80,7 +80,7 @@ genes=genes(perm);
 imp_idx=imp_idx(perm);
 
 %% select genes with more variance
-N=250;
+N=500;
 N2=N-sum(imp_idx);
 S=cov(X2(:,sum(imp_idx)+1:end));
 [res ord]=sort(diag(S),'descend');

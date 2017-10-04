@@ -5,7 +5,7 @@ for i=1:size(set,2)
         Z=init.atoms_u(:,atomidxset_for_i)*diag(init.coeff(atomidxset_for_i))*init.atoms_u(:,atomidxset_for_i)';
         if abs(norm(full(Z))*(param.lambda-val_list))./param.lambda>1e-1
             fprintf('complementary slackness does not hold\n');
-            keyboard
+            %keyboard
         end
     end
 end

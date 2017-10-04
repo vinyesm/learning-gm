@@ -74,12 +74,12 @@ hist.reldg = [];
 hist.reldgl1 = [];
 hist.reldgom = [];
 
-paramRL1.mu=param.lambda;
+paramRL1.mu=param.mu; %GO: was param.lambda
 
 paramRO.k=param.k;
 paramRO.lambda=param.lambda;
 paramRO.maxIter=1000;
-paramRO.maxNbAtoms=100;
+paramRO.maxNbAtoms=1000;
 paramRO.verbose=param.verbose;
 paramRO.mu=param.mu;
 
@@ -98,11 +98,11 @@ Y2=inputData.Y2;
 tic
 
 %qs= 10.^(4:-1:0)
-for epoch=1
-    q=1; %0.^(-epoch);
-    qeps=q*param.epsStop;
-    paramRO.eps=10*qeps;
-    paramRL1.eps=10*qeps;
+for epoch=1:8
+    q=10^(4-epoch/2);
+    qeps=q*10*param.epsStop;
+    paramRO.eps=qeps;
+    paramRL1.eps=qeps;
     while iter<=param.maxIter
         
         iter = iter+1;
@@ -110,10 +110,13 @@ for epoch=1
         % S sparse update
         inputData.Y=-inputData.X*init.M*inputData.X-Y;    %This definition is only useful for regL1
         inputData.Y2=inputData.X*inputData.Y*inputData.X; %idem
-        [init.S, nb_iter, reldgl1] = regL1(paramRL1,inputData,init,1);
+        %[init.S, nb_iter, reldgl1] = regL1(paramRL1,inputData,init,10,1);
             
         if iter==1 && epoch==1
+            [init.S, nb_iter, reldgl1] = regL1(paramRL1,inputData,init,10,1);
             init.S=diag(diag(init.S));
+        else
+            [init.S, nb_iter, reldgl1] = regL1(paramRL1,inputData,init,10,1);
         end
         
         % hist S and update of inputData for L update
@@ -126,7 +129,7 @@ for epoch=1
         [~, valLset,~,val_list]= dualOmega(-grad2,set,param.k); % GO 
         valL=max(valLall,valLset);
         valS = max(abs(-grad2(:)));
-        dgS= dualityGapS(init, grad1, grad2, valS, param);%GO debug
+        %dgS= dualityGapS(init, grad1, grad2, valS, param);%GO debug
         dg = dualityGapSL(init, grad1, grad2, valL, valS, param);
         dgL= dualityGapL(init, grad1, grad2, valL, param);
         %dgS= dualityGapS(init, grad1, grad2, valS, param);
@@ -153,7 +156,8 @@ for epoch=1
         end
         
         if hist.reldg(end)<qeps
-            keyboard
+            %keyboard
+            fprintf('\nEpoch %d completed\n\n',epoch);
             break
         end
         
@@ -173,7 +177,7 @@ for epoch=1
         check_complementary_slackness(init,set,val_list,param); % GO
         valL=max(valLall,valLset);
         valS = max(abs(-grad2(:)));
-        dgS= dualityGapS(init, grad1, grad2, valS, param); % GO debug
+        %dgS= dualityGapS(init, grad1, grad2, valS, param); % GO debug
         dg = dualityGapSL(init, grad1, grad2, valL, valS, param);
         hist.dualityGap=[hist.dualityGap dg];
         hist.loss= [hist.loss histL.loss];
@@ -190,7 +194,8 @@ for epoch=1
         end
         
         if hist.reldg(end)<qeps
-            keyboard
+            %keyboard
+            fprintf('\nEpoch %d completed\n\n',epoch);
             break
         end
         
@@ -220,6 +225,6 @@ init.atoms_X2u=init.X2atoms_u(:,1:init.atomCount);
 init.coeff=init.coeff(1:init.atomCount);
 output=init;
 
-keyboard
+%keyboard
 
 

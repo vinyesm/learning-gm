@@ -31,10 +31,10 @@ Z = linkage(full(adjacency'));%'ward'
 %%
 figure(2)
 subplot(1,2,1)
-imagesc(adjacency'*adjacency)
+imagesc(adjacency)
 axis square
 subplot(1,2,2)
-imagesc(adjacency(OUTPERM,OUTPERM)'*adjacency(OUTPERM,OUTPERM))
+imagesc(adjacency(:,OUTPERM))
 axis square
 
 %%

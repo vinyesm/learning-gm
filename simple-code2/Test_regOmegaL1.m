@@ -38,11 +38,12 @@ addpath ../spams-matlab-v2.6/build/
 
 
 %example 2
-p = 20;
-k = 5;
-tau=0.05;
+p = 160;
+n= 2000;
+k = 35;
+tau=0.01;
 invsigma=1;
-h=3;
+h=4;
 
 % Construction of a real-valued adjacency matrix A (columns index real-valued edges)
 %       Ah are connections from the hidden variables to the rest
@@ -69,10 +70,12 @@ nnzS=sum(sum((S-diag(diag(S))~=0)));
 fprintf('S has %d off-diagonal non-zeroes\n',nnzS);
 M=K(h+(1:p),1:h)*(K(1:h,1:h)\(K(h+(1:p),1:h)')); %=K_ho (K_oo)^-1 K_oh
 M=0.5*(M+M'); %stabilizing numerically
-X=inv(S-M)^.5; %X*M*X=X
+X0=inv(S-M)^.5; %X*M*X=X
+X=randn(n,p)*X0;
+X=((1./n)*(X'*X))^.5;
 Y=eye(p);
-param.lambda=.5;
-param.mu=.005;
+param.lambda=.02;
+param.mu=.002;
 
 pause()
 %keyboard
@@ -81,8 +84,8 @@ inputData.X = X;
 inputData.Y = Y;
 param.k=k;
 set = supp;
-param.epsStop=1e-4;
-param.maxIter=100;
+param.epsStop=1e-3;
+param.maxIter=1000;
 param.maxNbAtoms=1000;
 param.verbose=2;
 
@@ -103,6 +106,18 @@ title('relative global duality gap');
 figure(3);clf
 semilogy(hist.objective,'k');
 title('objective');
+
+figure(17)
+imagesc(output.M);
+figure(18)
+imagesc(M);
+
+figure(19)
+imagesc(-full(output.S));
+figure(20)
+imagesc(S);
+
+
 
 %dif=sign(output.S)+sign(S);
 %full(output.atoms_u)

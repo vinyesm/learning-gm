@@ -182,9 +182,33 @@ while count<=param.maxIter
         new_atom_added = true;
         idx_atom = init.atomCount;
     else
-        warning('No new atom found. Breaking..')
-             %keyboard;
-        break;
+        % GO: if no atom found computing duality gap to check everything is
+        % fine
+        sloppyCount = sloppyCount+1;
+        init.M = 0;
+        for ia=1:init.atomCount
+            atom = init.atoms_u(:,ia);
+            init.M = init.M + init.coeff(ia)*(atom*atom');
+        end
+        dg = dualityGapL(init, grad1, grad2, val, param);
+        hist.dualityGap(sloppyCount)=dg;
+        hist.loss(sloppyCount)=loss(grad1,1);
+        hist.omega(sloppyCount)=omega(init,1);
+        hist.objective(sloppyCount)=hist.loss(sloppyCount)+param.lambda*hist.omega(sloppyCount);
+        hist.reldg(sloppyCount)=hist.dualityGap(sloppyCount)/hist.objective(sloppyCount);
+        if isfield(init,'S')
+            valS = max(abs(-grad2(:)));
+            dgl1 = dualityGapS(init, grad1, grad2, valS, param);
+            hist.reldgl1(sloppyCount)=dgl1/(hist.loss(sloppyCount)+param.mu*l1);
+        end
+        hist.time(sloppyCount)=toc;
+        if dg/hist.objective(sloppyCount)<param.eps
+            break;
+        end
+        
+        error('No new atom found, but optimality not reached...')
+             keyboard;
+        %break;
     end
     
     firstPass=false;

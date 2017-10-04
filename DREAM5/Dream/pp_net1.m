@@ -23,10 +23,25 @@ for i=1:nedges
 end
 
 %%
-Z = linkage(full(adjacency'),'ward');
+Z = linkage(full(adjacency'));%'ward'
+% leafOrder = optimalleaforder(tree,D)
 % keyboard;
-[H,T,OUTPERM] = dendrogram(Z) ;
+[H,T,OUTPERM] = dendrogram(Z, 0) ;
 %[Cres,I]=order_of_tree(Z);
+%%
+figure(2)
+subplot(1,2,1)
+imagesc(adjacency'*adjacency)
+axis square
+subplot(1,2,2)
+imagesc(adjacency(OUTPERM,OUTPERM)'*adjacency(OUTPERM,OUTPERM))
+axis square
+
+%%
+A = (adjacency + adjacency')> 0;
+G = graph(A);
+figure(2)
+plot(G,'Layout','force')
 
 %%
 expr = BBB.data;

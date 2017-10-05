@@ -20,61 +20,47 @@ run('../DREAM5/Dream/pp_net1');
 
 param.k=30;
 param.epsObj=1e-16;
-param.lambda=.02;
-param.mu=.01;
+param.lambda=1000;
 param.maxIter=50;
 param.maxNbBlocks=100;
 param.verbose=2;
 
+pos = sum(sum((Ac==1)));
+neg = sum(sum((Ac==0)));
+tpr = [];
+fpr = [];
 
 %% logdetOmegaL1 initialised with true support
+mus = 2.^linspace(-16,1,30);
+for mu=mus
+    param.mu=mu;
+    [S1,M1,L1,U1,hist_ch1,set1] = logdetOmegaL1(Sigma,param,inf);
+    K1=S1-M1;
 
-[S1,M1,L1,U1,hist_ch1,set1] = logdetOmegaL1(Sigma,param,inf);
-K1=S1-M1;
-%log(det(K1))-trace(K1*Sigma);
+    Sc = abs(S1-diag(diag(S1)))>0;
+    tp = sum(sum((Ac==1) & Sc));
+    fp = sum(sum((Ac==0) & Sc));
+    tpr = [tpr, tp/pos];
+    fpr = [fpr, fp/(fp+neg)];
+end
 
 
 figure(1);clf
-semilogy(hist_ch1.objective,'k');
-title(['objective logdetOmegaL1 initialised with true support fend=' num2str(hist_ch1.objective(end))]);
+plot(fpr,tpr,'.');hold on;
+plot([0 1],[0,1],'r-'); 
+axis([0 1 0 1])
 
-%%
-figure(2);clf;
-subplot(1,2,1);
-imagesc(abs(S1)>0);
-axis square;
-subplot(1,2,2);
-imagesc(abs(M1)>0);
-axis square;
-
-% %%
-% Z = linkage(M1,'ward');
-% % [H,T,OUTPERM] = dendrogram(Z) ;
-% [Cres,I]=order_of_tree(Z);
-% figure(3);clf;
-% subplot(1,2,1);
-% imagesc(min(abs(S1),10));
-% axis square;
-% subplot(1,2,2);
-% imagesc(min(abs(M1(I,I)),10));
-% axis square;
+keyboard;
 
 %%
 
 [J]=grayorder(full(set1~=0));
 figure(3);clf;
-subplot(2,2,1);
+subplot(1,2,1);
 imagesc(min(abs(S1),10));
 axis square;
-subplot(2,2,2);
+subplot(1,2,2);
 imagesc(min(abs(M1),10));
-axis square;
-subplot(2,2,3);
-imagesc(min(abs(S1(J,J)),10));
-axis square;
-subplot(2,2,4);
-imagesc(min(abs(M1(J,J)),10));
-axis square;
 
 %%
 % [~, K] = sort(erdata);

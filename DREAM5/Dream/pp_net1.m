@@ -1,7 +1,9 @@
 clc; clear all; close all;
 
 addpath DREAM5_NetworkInferenceChallenge_AlternativeDataFormats/net1/
-addpath Network_predictions/Community' 'integration
+%addpath Network_predictions/Community' 'integration
+addpath Network_predictions/Network_predictions/Community' 'integration/
+%addpath ../../reorder/
 addpath ../../reorder/
 
 CCC=importdata('DREAM5_NetworkInference_Community_Network1.txt');
@@ -23,29 +25,16 @@ BBB=importdata('net1_expression_data_avg_t.tsv','\t');
 %     W(g1,g2)=w;
 %     W(g2,g1)=w;
 % end
-% % save('adjacency','W');
+% save('adjacency','W');
 load('adjacency.mat');
-%%
+
+%% cutoff the edges
 cut = .713; %1684
 A = 1.0*(W > cut);
 
-
-% %%
-% Z = linkage(full(W),'ward');
-% % leafOrder = optimalleaforder(tree,D)
-% % keyboard;
-% [H,T,OUTPERM] = dendrogram(Z, 0) ;
-% %[Cres,I]=order_of_tree(Z);
-% 
-% %%
-% figure(1)
-% subplot(1,2,1)
-% imagesc(A)
-% axis square
-% subplot(1,2,2)
-% imagesc(A(OUTPERM,OUTPERM))
-% axis square
-
+%% remove isolated nodes
+IA = any(A~=0,1);
+A = A(IA,IA);
 
 %% Spectral clustering
 d = sum(A);
@@ -53,26 +42,84 @@ L = diag(d) - A;
 Ln = diag(d.^(-0.5))*L*diag(d.^(-0.5));
 [V,D]= eig(full(Ln));
 ee = diag(D);
-[val, idx] = min(ee(ee>0));
+idx = find(ee>1e-6,1);
+
+figure(30);
+imagesc(max(min(V(:,1:idx), 0.05), -0.05));
+
+%%
+% remove big component
+ % largest component index
+K = 1:idx-1;
+ic = kmeans(V(:,K),length(K));
+
+[ics, JJ] = sort(ic);
+figure(31);
+imagesc(max(min(V(JJ,K), 0.05), -0.05));
+
+figure(32);
+plot(max(min(V(JJ,13), 0.05), -0.05),'.');
+
+i0 = 13;
+jc = V(:,i0)<-0.01;
+
+% KK = [1:12, 14:idx-1];
+% V1 = V(~jc,KK);
+% ic1 = kmeans(V1,length(K)-1);
+% [ics1, JJ1] = sort(ic1);
+% figure(33);
+% imagesc(max(min(V1(JJ1,:), 0.05), -0.05));
+
+%%
+I = find(~jc);
+A1 =  A(~jc,~jc);
+p = size(A1,1);
+% check 
+% norm(A(jc,~jc),'fro')
+B = inv(eye(p)-A1./(1.9*norm(full(A1))));
+B = B - eye(p);
+B = B>1e-6;
+
+figure(34);
+imagesc(B);
+
+[C,ia,icc]=unique(B, 'rows');
+
+figure(35);
+imagesc(C);
+
+[~,perm] = sort(icc);
+Ipc = I(perm);
+figure(36);
+imagesc(A(Ipc,Ipc)); colormap gray
+
+
+%% spectral clustering large connex component
+I = find(jc);
+A2 = A(jc,jc);
+
+d = sum(A2);
+L = diag(d) - A2;
+Ln = diag(d.^(-0.5))*L*diag(d.^(-0.5));
+[V,D]= eig(full(Ln));
+ee = diag(D);
+idx = find(ee>1e-6,1);
 vi = V(:,idx);
-[vsi, perm] = sort(vi);
 
-%%
-% ic = kmeans(V(:,idx),2);
-% I1 = (ic==1);
-% I2 = (ic==2);
-% I1 = vi <= median(vi);
-% I2 = vi > median(vi);
-I1 = vi<=0;
-I2 = vi>0;
-I=perm;
+figure(37);
+plot(sort(vi));
 
-figure(20);clf;
-plot(sort(vi(I1)),'r.');hold on;
-plot(sort(vi(I2)),'b.');
-%%
-figure(21);clf;
-imagesc(abs(Ln(I,I))>0);
+[~,perm] = sort(vi);
+nmax = sum(vi < 0);
+Igc = I(perm);
+Igc = Igc(nmax+1:end);
+% Igc = Igc(1:nmax);
+
+%% prendre genes Igc & Ipc
+Ic = [Ipc;Igc];
+Ac = A(Ic,Ic);
+figure(38);
+imagesc(Ac); colormap gray
 
 %%
 % G = graph(W(I,I));
@@ -87,40 +134,33 @@ imagesc(abs(Ln(I,I))>0);
 % figure(12)
 % plot(G2)
 
-
-
-%%
-figure(2)
-subplot(1,2,1)
-imagesc(W)
-axis square
-subplot(1,2,2)
-imagesc(W(I,I))
-axis square
-
 %%
 expr = BBB.data;
-expr = expr(I1,:);
-X = quantilenorm(expr);
+expr = expr(Ic,:);
+X  = expr;
+%X = quantilenorm(X);
 Sigma = cov(X');
 Cor = corr(X');
 
 Z = linkage(Cor,'ward');
+[Cres,I1]=order_of_tree(Z);
 % leafOrder = optimalleaforder(tree,D)
 % keyboard;
-[H,T,OUTPERM] = dendrogram(Z, 0) ;
-%[Cres,I]=order_of_tree(Z);
+%[H,T,OUTPERM1] = dendrogram(Z, 0) ;
 
 figure(3);clf;
+subplot(1,2,1)
+imagesc(abs(Sigma))
+axis square
+subplot(1,2,2)
+imagesc(abs(Sigma(I1,I1)));
+axis square
+
+figure(40);clf;
 subplot(1,2,1)
 imagesc(abs(Cor))
 axis square
 subplot(1,2,2)
-imagesc(abs(Cor(OUTPERM,OUTPERM)));
+imagesc(abs(Cor(I1,I1)));
 axis square
-% subplot(2,2,3)
-% imagesc(abs(Cor))
-% axis square
-% subplot(2,2,4)
-% imagesc(abs(Cor(I,I)));
-% axis square
+

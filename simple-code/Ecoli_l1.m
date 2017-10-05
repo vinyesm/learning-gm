@@ -5,8 +5,9 @@ addpath ../ours/TPower_1.0/algorithms/TPower/
 addpath ../ours/TPower_1.0/algorithms/PathSPCA/PathSPCA/
 addpath ../spams-matlab-v2.6/build/
 
+HOME = '../code-from-Kim-Chuan/LogdetPPA-0';
 %HOME = '/Users/marina/Documents/learning-gm/code-from-Kim-Chuan/LogdetPPA-0'; %if my  mac
- HOME = '/home/marina/Marina/learning-gm/code-from-Kim-Chuan/LogdetPPA-0';%if lab pc
+% HOME = '/home/marina/Marina/learning-gm/code-from-Kim-Chuan/LogdetPPA-0';%if lab pc
 addpath(strcat(HOME,'/solver/'))
 addpath(strcat(HOME,'/solver/mexfun'))
 addpath(strcat(HOME,'/util/'))
@@ -14,7 +15,8 @@ addpath(strcat(HOME,'/util/'))
 addpath ../reorder/
 
 %load('../genedata/BC.mat')
-run('../DREAM5/Dream/pp_net1');
+%run('../DREAM5/Dream/pp_net1');
+load('../DREAM5/Dream/pp_net1.mat')
 
 %% param
 

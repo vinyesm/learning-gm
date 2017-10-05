@@ -1,7 +1,7 @@
 clc; clear all; close all;
 
 addpath DREAM5_NetworkInferenceChallenge_AlternativeDataFormats/net1/
-%addpath Network_predictions/Community' 'integration
+addpath Network_predictions/Community' 'integration
 addpath Network_predictions/Network_predictions/Community' 'integration/
 %addpath ../../reorder/
 addpath ../../reorder/
@@ -60,7 +60,7 @@ imagesc(max(min(V(JJ,K), 0.05), -0.05));
 figure(32);
 plot(max(min(V(JJ,13), 0.05), -0.05),'.');
 
-i0 = 13;
+i0 = 10;
 jc = V(:,i0)<-0.01;
 
 % KK = [1:12, 14:idx-1];
@@ -134,6 +134,12 @@ imagesc(Ac); colormap gray
 % figure(12)
 % plot(G2)
 
+%%
+% rmv = [25 26 136 193];
+% Ic(rmv) = [];
+% Ac = A(Ic,Ic);
+% figure(38);
+% imagesc(Ac); colormap gray
 %%
 expr = BBB.data;
 expr = expr(Ic,:);

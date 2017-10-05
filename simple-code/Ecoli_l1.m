@@ -49,20 +49,3 @@ figure(1);clf
 plot(fpr,tpr,'.');hold on;
 plot([0 1],[0,1],'r-'); 
 axis([0 1 0 1])
-
-keyboard;
-
-%%
-
-[J]=grayorder(full(set1~=0));
-figure(3);clf;
-subplot(1,2,1);
-imagesc(min(abs(S1),10));
-axis square;
-subplot(1,2,2);
-imagesc(min(abs(M1),10));
-
-%%
-% [~, K] = sort(erdata);
-% figure(4); clf;
-% imagesc(Xn(:,K));

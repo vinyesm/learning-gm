@@ -6,6 +6,7 @@ addpath Network_predictions/Network_predictions/Community' 'integration/
 %addpath ../../reorder/
 addpath ../../reorder/
 
+% In silico
 CCC=importdata('DREAM5_NetworkInference_Community_Network1.txt');
 
 BBB=importdata('net1_expression_data_avg_t.tsv','\t');
@@ -60,7 +61,7 @@ imagesc(max(min(V(JJ,K), 0.05), -0.05));
 figure(32);
 plot(max(min(V(JJ,13), 0.05), -0.05),'.');
 
-i0 = 10;
+i0 = 13;
 jc = V(:,i0)<-0.01;
 
 % KK = [1:12, 14:idx-1];
@@ -135,16 +136,26 @@ imagesc(Ac); colormap gray
 % plot(G2)
 
 %%
-% rmv = [25 26 136 193];
-% Ic(rmv) = [];
-% Ac = A(Ic,Ic);
-% figure(38);
-% imagesc(Ac); colormap gray
+I0 = 1:length(Ic);
+rmv = [25 26 191 192 193];
+Acc = Ac;
+for i=rmv
+    Ir = Ac(i,:)>0;
+    Acc(Ir,Ir) = 1;
+end
+
+I0(rmv) = [];
+Ic = Ic(I0);
+Ac = Acc(I0,I0);
+figure(38);
+imagesc(Ac); colormap gray
+
 %%
 expr = BBB.data;
 expr = expr(Ic,:);
 X  = expr;
-%X = quantilenorm(X);
+X = quantilenorm(X);
+X = quantilenorm(X')';
 Sigma = cov(X');
 Cor = corr(X');
 
@@ -170,3 +181,4 @@ subplot(1,2,2)
 imagesc(abs(Cor(I1,I1)));
 axis square
 
+save('pp_net1', 'Sigma', 'Ac')

@@ -14,15 +14,16 @@ addpath(strcat(HOME,'/util/'))
 addpath ../reorder/
 
 %load('../genedata/BC.mat')
-run('../DREAM5/Dream/pp_net1');
+%run('../DREAM5/Dream/pp_net1');
+load('../DREAM5/Dream/pp_net1.mat')
 
 %% param
 
-param.k=30;
+param.k=15;
 param.epsObj=1e-16;
-param.lambda=.02;
-param.mu=.01;
-param.maxIter=50;
+param.lambda=.004;
+param.mu=.002;
+param.maxIter=10;
 param.maxNbBlocks=100;
 param.verbose=2;
 
@@ -75,6 +76,28 @@ axis square;
 subplot(2,2,4);
 imagesc(min(abs(M1(J,J)),10));
 axis square;
+
+figure(4);clf;
+subplot(2,3,1);
+imagesc(abs(S1)>1e-2); colormap gray
+axis square;
+subplot(2,3,2);
+imagesc(abs(M1)>1e-2);
+axis square;
+subplot(2,3,3);
+imagesc(Ac);
+axis square;
+subplot(2,3,4);
+imagesc(abs(S1(J,J))>1e-2);
+axis square;
+subplot(2,3,5);
+imagesc(abs(M1(J,J))>1e-2);
+axis square;
+subplot(2,3,6);
+imagesc(Ac(J,J));
+axis square;
+
+
 
 %%
 % [~, K] = sort(erdata);

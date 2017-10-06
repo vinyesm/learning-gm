@@ -18,6 +18,8 @@ addpath ../reorder/
 %run('../DREAM5/Dream/pp_net1');
 load('../DREAM5/Dream/pp_net1.mat')
 
+%Sigma = genDataGraph(Ac,50000);
+
 %%
 n=size(Sigma,1);
 invD = speye(n,n);
@@ -51,8 +53,11 @@ tpr = [];
 fpr = [];
 
 %% logdetOmegaL1 initialised with true support
-lambda = .1;
-mus = 2.^linspace(-16,1,30);
+% lambda = 10;
+% mus = .02;
+lambda = .2;
+mus = .01;
+%mus = 2.^linspace(-16,1,30);
 for mu=mus
     %%
     blk{2,1} = 's'; blk{2,2} = n;
@@ -82,7 +87,62 @@ for mu=mus
 end
 
 
-figure(1);clf
-plot(fpr,tpr,'.');hold on;
-plot([0 1],[0,1],'r-'); 
-axis([0 1 0 1])
+%%
+figure(1);clf;
+subplot(1,2,1);
+imagesc(abs(Ssl)>1e-2);
+axis square;
+subplot(1,2,2);
+imagesc(abs(Lsl)>1e-2);colormap gray; 
+axis square;
+
+%%
+% Z = linkage(Lsl,'ward');
+% % [H,T,OUTPERM] = dendrogram(Z) ;
+% %[Cres,I]=order_of_tree(Z);
+% I = optimalleaforder(Z,pdist(Lsl));
+
+Acc = Ac + eye(size(Ac,1));
+Z = linkage(full(Acc),'ward');
+% [H,T,OUTPERM] = dendrogram(Z) ;
+%[Cres,I]=order_of_tree(Z);
+I = optimalleaforder(Z,pdist(full(Acc)));
+figure(31);
+imagesc(Ac(I,I));colormap gray; 
+
+
+
+figure(2);clf;
+subplot(1,2,1);
+imagesc(min(abs(Ssl(I,I)),0.5));colormap jet; 
+axis square;
+subplot(1,2,2);
+imagesc(min(abs(Lsl(I,I)),0.5));
+axis square;
+
+figure(30);
+subplot(1,2,1);
+imagesc(abs(Ssl(I,I))>1e-2);colormap gray; 
+axis square;
+subplot(1,2,2);
+imagesc(Ac(I,I));
+axis square;
+
+
+
+%%
+
+
+figure(3);clf;
+subplot(1,2,1);
+imagesc(min(abs(Ssl),10));
+axis square;
+subplot(1,2,2);
+imagesc(min(abs(Lsl),10));colormap jet; 
+axis square;
+
+figure(4)
+imagesc(Ac);colormap gray; 
+axis square;
+
+

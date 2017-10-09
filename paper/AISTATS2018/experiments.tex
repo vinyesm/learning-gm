@@ -1,4 +1,4 @@
-\section{Experiments}
+\section{EXPERIMENTS}
 \label{experiments}
 
 \subsection{Synthetic data}
@@ -85,15 +85,16 @@ We generate $50\times p$ samples for each model. Figure \ref{fig:synth} shows th
 \begin{figure}
 \label{fig:synth}
 \center
-\begin{tabular}{ccc}
-  \includegraphics[width=4cm]{fig/disjoint_om} 
-  &   \includegraphics[width=4cm]{fig/overlap_om}
-  &   \includegraphics[width=4cm]{fig/diff_om}
-   \\    (a) \textit{model 1}, ours & (b)  \textit{model 2}, ours  & (c)  \textit{model 3}, ours  \\[6pt]
- \includegraphics[width=4cm]{fig/disjoint_tr} 
+\begin{tabular}{cc}
+    \includegraphics[width=4cm]{fig/disjoint_om} 
+  & \includegraphics[width=4cm]{fig/disjoint_tr} 
+   \\    (a) \textit{model 1}, ours & (d)  \textit{model 1}, $\ell_1+\tr$ \\[6pt]
+      \includegraphics[width=4cm]{fig/overlap_om}
   &   \includegraphics[width=4cm]{fig/overlap_tr}
+   \\    (b)  \textit{model 2}, ours   & (e)  \textit{model 2}, $\ell_1+\tr$    \\[6pt]
+      \includegraphics[width=4cm]{fig/diff_om}
   &   \includegraphics[width=4cm]{fig/diff_tr}
-   \\    (d)  \textit{model 1}, $\ell_1+\tr$ & (e)  \textit{model 2}, $\ell_1+\tr$  & (f)  \textit{model 3}, $\ell_1+\tr$  \\[6pt]
+   \\    (c)  \textit{model 3}, ours & (f)  \textit{model 3}, $\ell_1+\tr$  \\[6pt]
 \end{tabular}
 \caption{Estimated $|K_{ij}|$, for $K$ the complete concentration matrices where the three (resp. four) first rows and columns correspond to the latent variables of \textit{model 1} and \textit{model 3} (resp. \textit{model 2}) : for \textit{model 1} in (a) ours and (d) $\ell_1+\tr$ regularization; for \textit{model 2} in (b) ours and (e) $\ell_1+\tr$ regularization; for \textit{model 3} in (c) ours and (f) $\ell_1+\tr$ regularization }
 \end{figure}

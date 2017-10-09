@@ -1,11 +1,12 @@
-load('../DREAM5/Dream/pp_net1.mat')
+clc; clear all; close all;
+%load('../DREAM5/Dream/pp_net1.mat')
 load('../sandp500/sandp500.mat')
 
 param.k=150;
 param.epsObj=1e-16;
 % param.lambda=.03;
 % param.mu=.02;
-param.lambda=2;
+param.lambda=.5;
 param.mu=.01;
 param.maxIter=500;
 param.maxNbAtoms=1000;
@@ -17,22 +18,26 @@ inputData.X = (Sigma+eye(p)*1e-5)^0.5;
 inputData.X = 0.5*(inputData.X+inputData.X');
 inputData.Y = eye(p);
 
-keyboard;
+% keyboard;
 
 [ output, hist ] = regOmegaL1( inputData, param, inf );
 
 %%
+
 figure(1);clf
+imagesc(abs(Sigma));
+
+figure(10);clf
 semilogy(hist.reldgl1,'r');hold on
 semilogy(hist.reldgom,'b');
 legend('rel dg l1','rel dg om');
 title('relative duality gaps of the subproblems');
 
-figure(2);clf
+figure(11);clf
 semilogy(hist.reldg,'k');
 title('relative global duality gap');
 
-figure(3);clf
+figure(12);clf
 semilogy(hist.objective,'k');
 title('objective');
 

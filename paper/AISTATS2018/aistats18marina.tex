@@ -102,7 +102,7 @@
 \newtheorem{lemm}{Lemma}
 \newtheorem{coro}{Corollary}
 \newtheorem{mydef}{Definition}
-
+\newtheorem{rem}{Remark}
 
 
 
@@ -131,8 +131,9 @@
 
 \aistatsaddress{ Institution 1 \And  Institution 2 \And Institution 3 } ]
 
+
 \begin{abstract}
-Gaussian graphical models (GGM) have been widely used in many high-dimensional applications. Some effects can affect the data, that is, some of the relevant variables may be latent. In this paper, we focus on a family of Latent Variable Gaussian graphical models (LVGGM), where the model is conditionally sparse given latent variables, but marginally non-sparse. In order to identify the effect of each latent variable and recover the structure of the complete model, we introduce a convex formulation with a new regularization imposing more structure on latent factors.  We propose a tractable convex algorithm and study identifiability conditions. We show promising results on synthetic and real datasets.\\
+Gaussian graphical models (GGM) have been widely used in many high-dimensional applications. Problems in which all relevant variables have been identified is extremely rare. The unobserved variables (or latent variables) can induce misleading dependence structure between observed variables. In this paper, we focus on a family of Latent Variable Gaussian graphical models (LVGGM), where the model is conditionally sparse given latent variables, but marginally non-sparse. In order to reveal latent variables and recover the structure of the complete model, we introduce a convex formulation with a new regularization imposing sparsity on latent factors.  We propose a tractable convex algorithm and study identifiability conditions. We show promising results on synthetic and real datasets.\\
 \end{abstract}
 
 
@@ -149,7 +150,6 @@ Gaussian graphical models (GGM) have been widely used in many high-dimensional a
 
 \subsection*{Conclusion}
 We consider a family of latent variable Gaussian graphical model whose concentration matrix has a sparse plus low-rank structure. We introduce a regularization to impose more structure on the low rank component, as a sum of multiple low-rank and $k$-sparse factors, and derive a convex formulation. We propose an efficient algorithm to optimize this problem and show promising results for recovering the structure of the complete GGM in the experiments. We provide a first result for identifiability condition. Futurework includes extending the framework to multiple levels of sparsity and generalizing identifiability conditions for recovery guarantees on our optimisation problem .
-
 %
 %\subsubsection*{Acknowledgements}
 %

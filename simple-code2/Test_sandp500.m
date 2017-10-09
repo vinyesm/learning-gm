@@ -6,8 +6,8 @@ param.k=150;
 param.epsObj=1e-16;
 % param.lambda=.03;
 % param.mu=.02;
-param.lambda=.1;
-param.mu=.05;
+param.lambda=.005;
+param.mu=.001;
 param.maxIter=500;
 param.maxNbAtoms=1000;
 param.verbose=1;
@@ -49,16 +49,21 @@ imagesc(output.M);
 figure(19)
 imagesc(-full(output.S));
 
-tt = 0.05;
+tt = 1;
 figure(20)
-subplot(2,2,1)
-imagesc(min(abs(output.S),tt));
-subplot(2,2,2)
-imagesc(min(abs(output.M),tt));
-subplot(2,2,3)
-imagesc(min(abs(output.S(I,I)),tt));
-subplot(2,2,4)
-imagesc(min(abs(output.M(I,I)),tt));
+subplot(3,2,1)
+imagesc(min(abs(output.S),tt));axis square
+subplot(3,2,2)
+imagesc(min(abs(output.M),tt));axis square
+subplot(3,2,3)
+imagesc(min(abs(output.S(I,I)),tt));axis square
+subplot(3,2,4)
+imagesc(min(abs(output.M(I,I)),tt));axis square
+subplot(3,2,5)
+imagesc(min(abs(output.S(K,K)),tt));axis square
+subplot(3,2,6)
+imagesc(min(abs(output.M(K,K)),tt));axis square
+
 
 %%
 ua = unique(abs(output.atoms_u')>1e-10, 'rows');

@@ -7,161 +7,12 @@
 % \usepackage[final]{nips_2017}
 \title{Appendix}
 \date{}
-
-\usepackage[utf8]{inputenc} % allow utf-8 input
-\usepackage[T1]{fontenc}    % use 8-bit T1 fonts
-\usepackage{hyperref}       % hyperlinks
-\usepackage{url}            % simple URL typesetting
-\usepackage{booktabs}       % professional-quality tables
-\usepackage{amsfonts}       % blackboard math symbols
-\usepackage{nicefrac}       % compact symbols for 1/2, etc.
-\usepackage{microtype}      % microtypography
-\usepackage[utf8]{inputenc} % allow utf-8 input
-\usepackage[T1]{fontenc}    % use 8-bit T1 fonts
-\usepackage{hyperref}       % hyperlinks
-\usepackage{url}            % simple URL typesetting
-\usepackage{booktabs}       % professional-quality tables
-\usepackage{amsfonts,amsthm}       % blackboard math symbols
-\usepackage{nicefrac}       % compact symbols for 1/2, etc.
-\usepackage{microtype}      % microtypography
-\usepackage{MnSymbol}
-\usepackage{color}
-\usepackage{graphicx} % more modern
-\usepackage{subfigure} 
-\usepackage{natbib}
-\usepackage{algorithm}
-\usepackage{algpseudocode}
-\usepackage{lineno}
-\usepackage{thmtools,thm-restate}
-\usepackage{xr}
-
-%\linenumbers
-\def\BIT{\begin{itemize}}
-\def\EIT{\end{itemize}}
-\def\BET{\begin{enumerate}}
-\def\EET{\end{enumerate}}
-\def\ra{$\:\rightarrow\:$}
-\def\y{\mathbf{y}}
-\def\x{\mathbf{x}}
-\def\v{\mathbf{v}}
-\def\u{\mathbf{u}}
-\def\w{\mathbf{w}}
-\def\s{\mathbf{s}}
-\def\g{\mathbf{g}}
-\def\h{\mathbf{h}}
-\def\X{\mathbf{X}}
-\def\RR{\mathbb{R}}
-\def\ei{\varepsilon_i}
-\def\ej{\varepsilon_j}
-\def\T{\mathcal{T}}
-\def\I{\mathcal{I}}
-
-\def\op{{\rm op}}
-\def\supp{{\rm Supp}}
-\def\st{\text{s.t.}}
-\newcommand\normop[1]{|||#1|||_{\infty}}
-\newcommand\normbop[1]{|\!|\!|#1|\!|\!|_{\infty,2}}
-\newcommand\normopop[1]{|\!|\!|#1|\!|\!|_{\rm op,\rm op}}
-\newcommand\ve[1]{\varepsilon^{{\scriptscriptstyle#1}}}
-\newcommand\sss[1]{{\scriptscriptstyle#1}}
-\def\uI{U^{\sss{I}}}
-\def\xxi{\zeta}
-
-
-
-
-
-
-\def\A{\mathcal{A}}
-\def\ga{\gamma_\mathcal{A}}
-\def\Co{C^{\circ}}
-\def\Coa{C^{\circ}_{\!\!\mathcal{A}}}
-\def\Ca{C_{\!\mathcal{A}}}
-\def\go{\gamma^{\circ}}
-\def\goa{\gamma^{\circ}_{\A}}
-\newcommand{\dt}[2]{\langle#1,#2\rangle}
-\def\Olasso{\Omega_{\rm Lasso}} % Lasso norm
-\def\Ogl{\Omega_{\rm GL}} % group Lasso norm
-\def\Olgl{\Omega_{\rm LGL}} % latent group Lasso norm
-\def\tr{\rm tr}
-\newcommand\itgset[1]{[\!\![#1]\!\!]}
-\def\RR{\mathbb{R}}
-\def\EE{\mathbb{E}}
-\newcommand{\tblue}[1]{\textcolor{blue}{#1}}
-\newcommand{\tred}[1]{\textcolor{red}{#1}}
-\newcommand\TODO[1]{\tblue{TODO: \texttt{#1}}}
-%\newcommand\TODO[1]{}
-\newcommand\OLD[1]{\tblue{#1}}
-\newcommand\NEW[1]{\tred{#1}}
-\def\st{\text{s.t.}}
-\def\supp{\text{supp}}
-
-\newtheorem{lemma}{Lemma}
-\newtheorem{cor}{Corollary}
-\newtheorem{prop}{Proposition}
-\newtheorem{theorem}{Theorem}
+\input{commands}
 
 \begin{document}
 \maketitle
 \appendix
 
-\section{Proofs of section 3}
-
-\begin{lemma} The polar gauge of $\Omega_{k,\succeq}$ of a symmetric $Y\RR^{p\times p}$ is
-\begin{align}
-\Omega_{k,\succeq}^{\circ}(Y):= \max_{I\in\mathcal{G}^p_k}\lambda^{+}_{max}(Y_{II})
-\end{align}
-\end{lemma}
-
-\begin{proof}
-\begin{align}
-\Omega_{k,\succeq}^{\circ}(Y) 
-&=\max_{\Omega_{k,\succeq}(X)\leq 1} \tr{Y^{\top}X}\\
-&=\max_{c_i\geq 0, u_{i}, \|u_{i}\|_0=k, \|u_{i}\|_ 2=1 } \sum c_i u_{i}^{\top}Yu_{i} \quad s.t.  \sum c_i\leq 1\\
-&=\max_{\|u\|_0=k, \|u\|_ 2=1 } u^{\top}Yu \\
-&=\max_{I\in\mathcal{G}^p_k}\lambda^{+}_{max}(Y_{II})
-\end{align}
-\end{proof}
-
-\begin{lemma} $\bar{\Omega}(M):=\inf\{\gamma\|A\|_{1}+\Omega_k(B)|M=A+B\}$ is an atomic norm and its dual is 
-\begin{align*}
-\gamma^{\circ}(Y)=\max\left(\frac{\|Y\|_{\infty}}{\gamma},\Omega_{k,\succeq}^{\circ}(Y)\right)
-\end{align*}
-\end{lemma}
-
-\begin{proof}
-$\ell_1$ is an atomic norm with atomic set $\mathcal{A}_{\ell_{1}}=\{\pm e_i e_j^{\top}\}$ where $e_i$ is the canonical basis of $\RR^p$. $\Omega_{k,\succeq}$  is an atomic norm with atomic set $\mathcal{A}_{k,\succeq}=\{uu^{\top}  :  u\in\RR^{p} \quad \|u\|_0 \leq k, \|u\|_2 = 1\}$. We can write,
-$$
-\bar{\Omega}(M)= \inf \big\{\|a\|_1+\|b\|_1 \quad s.t. \quad M=\sum_{j} b_j B_{j} + \sum_{i} a_i A_{i}, \quad c_i\in \RR^{+}\quad B_j\in\frac{1}{\gamma}\mathcal{A}_{\ell_{1}} \quad A_i\mathcal{A}_{k,\succeq} \big\}
-$$
-so $\bar{\Omega}$ is an atomic norm with atomic set $\frac{1}{\gamma}\mathcal{A}_{\ell_{1}}\cup\mathcal{A}_{k,\succeq}$. The dual norm writes
-\begin{align}
-\gamma^{\circ}(Y)
-& = \max_{X\in\frac{1}{\gamma}\mathcal{A}_{\ell_{1}}\cup\mathcal{A}_{k,\succeq}} \tr{Y^{\top}X}\\
-& =\max\left(\max_{B\in\frac{1}{\gamma}\mathcal{A}_{\ell_{1}}}\tr{Y^{\top}B}, \max_{A\in\mathcal{A}_{k,\succeq}}\tr{Y^{\top}A}\right)\\
-& =\max\left(\frac{1}{\gamma}\max_{\tilde{B}\in\mathcal{A}_{\ell_{1}}}\tr{Y^{\top}\tilde{B}}, \max_{\tilde{A}\in\mathcal{A}_{k,\succeq}}\tr{Y^{\top}\tilde{A}}\right)\\
-& =\max\left(\frac{\|Y\|_{\infty}}{\gamma},\Omega_{k,\succeq}^{\circ}(Y)\right)
-\end{align}
-%
-%
-%& =\max\left(\frac{\|Y\|_{\infty}}{\gamma},\Omega_{k,\succeq}^{\circ}(Y)\right)
-\end{proof}
-
-%---------------------------------------------------------------------------------------
-%---------------------------------------------------------------------------------------
-%---------------------------------------------------------------------------------------
-%---------------------------------------------------------------------------------------
-%---------------------------------------------------------------------------------------
-%---------------------------------------------------------------------------------------
-%---------------------------------------------------------------------------------------
-%---------------------------------------------------------------------------------------
-%---------------------------------------------------------------------------------------
-%---------------------------------------------------------------------------------------
-%---------------------------------------------------------------------------------------
-%---------------------------------------------------------------------------------------
-%---------------------------------------------------------------------------------------
-%---------------------------------------------------------------------------------------
-%---------------------------------------------------------------------------------------
 
 %\subsection*{Notations}
 %In this appendix, we will use two different several norms on matrices, the $\ell_\infty$ norm of the vectorized matrix, also known as the max-norm in the matrix case that we will denote with $\|\cdot\|_{\infty}$.
@@ -216,7 +67,7 @@ $$
 Similarly as in the previous proof, letting $\alpha':=1-\xxi_{12} \xxi_{21}$, and using that $\omega_1(BB^\top x_1) \leq \xxi_{12} \omega_2(B^\top x_1) \leq  \xxi_{12} \xxi_{21} \omega_2(x_1),$ 
 we have
 $$\alpha' \omega_1(x_1) \leq \omega_1(x_1)- \xxi_{12} \xxi_{21} \omega_1(x_1) \leq \omega_1(x_1)- \omega_1(BB^\top x_1) \leq \omega_1 \big ( (I-BB^\top) x_1 \big ).$$
-so that if $\alpha'>0$ then $I-BB^\top$ is invertible and so are  $I-B^\top B$,$D$ and $A$. Moreover, we have $|||D|||{\omega,\omega} \leq \frac{1}{\alpha'}$. Finally, $\omega_1(x_1-Bx_2)\leq \omega_1(x_1)-\omega_1(Bx_2) \leq (1+\xxi_{12}) \omega_1(x_1)$ and symmetrically, $\omega_2(x_2-B^\top x_1) \leq (1+\xxi_{21}) \omega_2(x_2)$, so that $|||A|||_{\omega,\omega} \leq 1+\max(\xxi_{12},\xxi_{21})$ and the result follows using that $|||A^{-1}|||_{\omega,\omega} \leq |||A|||_{\omega,\omega} \, |||D|||_{\omega,\omega}$.
+so that if $\alpha'>0$ then $I-BB^\top$ is invertible and so are  $I-B^\top B$,$D$ and $A$. Moreover, we have $|||D|||_{\omega,\omega} \leq \frac{1}{\alpha'}$. Finally, $\omega_1(x_1-Bx_2)\leq \omega_1(x_1)-\omega_1(Bx_2) \leq (1+\xxi_{12}) \omega_1(x_1)$ and symmetrically, $\omega_2(x_2-B^\top x_1) \leq (1+\xxi_{21}) \omega_2(x_2)$, so that $|||A|||_{\omega,\omega} \leq 1+\max(\xxi_{12},\xxi_{21})$ and the result follows using that $|||A^{-1}|||_{\omega,\omega} \leq |||A|||_{\omega,\omega} \, |||D|||_{\omega,\omega}$.
 \end{proof}
 
 
@@ -337,17 +188,16 @@ Let
 
 \begin{theorem}
 \label{theo:two}
-If $M^*=S^*-L^*$ with $$L^*=\sum_{I \in \mathcal{I}} L^{\sss{I}},  \quad \supp(L^{\sss{I}}) \subset I \times I$$ for $\I \subset \mathcal{G}^p_k$ %(where $\mathcal{G}^p_k$ is the collection of all subsets of size $k$ of $[\![p]\!]$)
+If $M^*=S^*-L^*$ with $L^*=\sum_{I \in \mathcal{I}} L^{\sss{I}}$, $\supp(L^{\sss{I}}) \subset I \times I$ for $\I \subset \mathcal{G}^p_k$ %(where $\mathcal{G}^p_k$ is the collection of all subsets of size $k$ of $[\![p]\!]$) 
 and $L^{\sss{I}}=U^{\sss{I}} D^{\sss{I}} {U^{\sss{I}}}^\top$ the eigenvalue decomposition of $L^{\sss{I}}$.
-
-Let $$\mu'_I=\xxi(\T_I(U),\T_s(S)), \quad  \xi'_I :=\xxi(\T_s(S),\T_I(U)), \quad \mu_I:=\mu_I(\T_s(S)) , \quad \xi_I:=\xi(\T_I(U)),$$
-and 
+Let $\mu'_I=\xxi(\T_I(U),\T_s(S))$, $\xi'_I :=\xxi(\T_s(S),\T_I(U))$, $\mu_I:=\mu_I(\T_s(S))$, $\xi_I:=\xi(\T_I(U))$, 
 $$\alpha_I:=\frac{1-\mu'_I\xi'_I}{1+\max(\gamma \mu'_I,\frac{1}{\gamma} \xi'_I)} \qquad \text{and} \qquad \epsilon_I :=\max \big (\|\mathcal{P}_{\T_I(\uI)}(\gamma \text{sign}(S^*))\|_{\op}, \gamma^{-1}\|\uI {\uI}^\top\|_{\infty} \big ).$$
 
-Assume that for all $(I,I') \in \I \times \I, I \cap I'=\varnothing$. If $$\displaystyle\max_{I \in \I} \max(\mu_I,\xi_I) (1+\frac{\epsilon_I}{\alpha_I})<1, \quad \displaystyle \max_{J \in \mathcal{G}^p_k} \lambda_{\max}^+\big (S^*_{\bar{I}^c \cap (J \times J)} \big ) <1$$ %\quad 
-%\text{and}  \quad \max_{J \in \mathcal{G}^p_k, J \neq I}\lambda_{\max}^+(\uI_J{\uI_J}^\top)<1,$$
+Assume that for all $(I,I') \in \I \times \I, I \cap I'=\varnothing$. If $$\displaystyle\max_{I \in \I} \max(\mu_I,\xi_I) (1+\frac{\epsilon_I}{\alpha_I})<1, \quad \displaystyle \max_{J \in \mathcal{G}^p_k} \lambda_{\max}^+\big (S^*_{\bar{I}^c \cap (J \times J)} \big ) <1$$ %\quad  
+%\text{and}  \quad \max_{J \in \mathcal{G}^p_k, J \neq I}\lambda_{\max}^+(\uI_J{\uI_J}^\top)<1,$$ 
 with $\displaystyle \bar{I}=\bigcup_{I \in \I} I \times I$,
-then the  decomposition given by $\big (S^*,(D^{\sss{I}} \big)_{I \in \I},(\uI)_{I \in \I} \big )$ is solution to the optimization problem $$\displaystyle \min \gamma \|S\|_1+\Omega_{k,\succeq}(L) \quad \text{\st} \quad M=S+L.$$
+then the solution of the optimization problem $$\displaystyle \min \gamma \|S\|_1+\Omega_{k,\succeq}(L) \quad \text{\st} \quad M=S+L$$
+ the decomposition given by $\big (S^*,(D^{\sss{I}} \big)_{I \in \I},(\uI)_{I \in \I} \big )$ as a solution.
 \end{theorem}
 \begin{proof}
 We follow the general proof scheme of \citet{chandrasekaran2011rank}. The optimization problem admits the unique announced solution if it satisfies first order gradient condition in the sense that there exists a subgradient $Q \in \RR^{p \times p}$ that satisfies the following conditions
@@ -359,7 +209,7 @@ We follow the general proof scheme of \citet{chandrasekaran2011rank}. The optimi
 \item[(v)] $\|Q_{S^c}\|_{\infty}<\gamma$
 \item[(vi)] for all $J \in \mathcal{G}^p_k \backslash \I, \: \lambda_{\max}^+(Q_{JJ})\leq 1$
 \EET
-We now prove the different statements. As a consequence of the assumption that $I \cap I'=\varnothing, (I,I') \in \I \times \I,$ the space of symmetric squared matrices can be written as the direct sum of the spaces $(\bar{\T}_I)_{I \in \I}$ and of the space $\T^c:=\{M \in \RR^{p \times p} \mid  M=M^\top, \: M_{\bar{I}}=0\}$. Which entails that part of the properties to prove can be shown independently on the elements of the direct sum, namely the four first properties.
+We now prove the different statements. As a consequence of the assumption that $I \cap I'=\varnothing, (I,I') \in \I \times \I,$ the space of symmetric squared matrices can be written as the direct sum of the spaces $(\bar{\T}_I)_{I \in \I}$ and of the space $\T^c:=\{M \in \RR^{p \times p} \mid  M=M^\top, \: M_{\bar{I}}=0\}$. Which entails that part of the properties to prove can be shown independently on the elements of the direct sum, namely the four first properties. 
 \BET
 \item[(i)] Since $I \cap I'=\varnothing,\: I\neq I'$, we can have $M^\sss{s}+\sum_{I \in \I} M^{\sss{I}}=0$ if and only if $M^\sss{s}_{II}+ M^{\sss{I}}_{II}=0$ for all $I$ and $M^\sss{s}_{\bar{I}}=0$. But if $M^\sss{s}_{II}+ M^{\sss{I}}_{II}=0$ using the argument of \citet{chandrasekaran2011rank} or Lemma~\ref{lem:zero_inter} for two subspaces, we have that $M^\sss{s}_{II}= M^{\sss{I}}_{II}=0$ which shows the result.
 \item[(ii)], (iii), (iv) and (v) The existence and the uniqueness of a $Q$ follow from the application of Theorem~\ref{theo:two} to each of the subspaces $(\T_I)_{I \in\I}$ and $\T^c$ separately. The theorem also proves directly that (iii),(iv) and (v) hold.
@@ -367,12 +217,87 @@ We now prove the different statements. As a consequence of the assumption that $
 If $(J \times J) \cap \bar{I} \neq \varnothing$ then let $\mathcal{I}_{J}$ be the collection of sets in $\I$ such that $J$ and $I$ intersect. Note that since these elements $I$ are disjoint $\bar{\T}_J$ is the direct sum of the $(\bar{\T}_{J\cap I})_{I \in \I_{J}}$ and of their orthogonal complement in $\bar{\T}_J$.
 As a consequence
 $$\lambda_{\max}^+(Q_{JJ}) \leq \Big ( \lambda_{\max}^+(Q_{(J \times J) \cap \bar{I}^c}) \Big ) \vee \max_{I \in \I_{J}} \lambda_{\max}^+(Q_{(J\cap I) \times (J \cap I)}).$$
-But $\lambda_{\max}^+(Q_{(J \times J) \cap \bar{I}^c}) <1$ as before and
+But $\lambda_{\max}^+(Q_{(J \times J) \cap \bar{I}^c}) <1$ as before and 
 we need to show that $\lambda_{\max}^+(Q_{(J\cap I) \times (J \cap I)}) \leq 1.$
 %Since $Q_{(J\cap I) \times (J \cap I)=\uI_J\uI_J$
 \EET
 \end{proof}
 
+Consider a set of indices $J$, which will be fixed throughout this section\footnote{Although most of the variables defined in this section depend on $J$, we do not make this dependence explicit to lighten notations.}.
+
+Denote $u_i:=u_{I_i}$, $\check{u}_i=u^{I_i}_J$ and $v_i:=\frac{\check{u}_i}{\|\check{u}_i\|}$. Let $\kappa:=|\{i \mid I_i \cap J \neq \varnothing\}|.$ Let $k_i:=|I_i \cap J|$. Since, we assume that all the entries of $u_i$ are in the interval $[\underline{\tau}, \overline{\tau}]$, note that we have $k_i \underline{\tau} k_i \leq (\check{u}_i^\top v_i)^2 \leq k_i \overline{\tau}$.
+
+Let $V_i^c \in \RR^{p \times k-1}$ be such that $[v_i, V_i^c]$ forms an orthonormal basis of $\text{span}(e_j)_{j \in J \cap I_i}$. 
+
+Let $V:=[v_1,\ldots,v_\kappa] \in \RR^{k \times \kappa}$ and $V^c:=[V_1^c,\ldots, V^c_\kappa] \in \RR^{k \times   (k-1) \kappa}$. 
+
+By construction, $[V,V^c]$ is an orthonormal basis of $\text{span}(e_j)_{j \in J}$.
+Then we have $Q_{JJ}=[V,V^c] \check{Q}_{JJ} [V,V^c]^\top$ with
+
+$$\check{Q}_{JJ}=
+\begin{bmatrix}
+V^\top Q V & V^\top Q V^c\\
+{V^c}^\top Q V & {V^c}^\top Q V^c\\
+\end{bmatrix}
+$$
+
+We have $[V^\top Q V]_{ii}=v_i^\top Q v_i=v_i^\top [u_i u_i^\top+R_i] v_i$
+with $R_i=\mathcal{P}_{\mathcal{T}^{\bot}_{I_i}(u_i)}=(I-u_i u_i^\top)\, Q_{I_iI_i}\,  (I-u_i u_i^\top).$
+
+We have on the one hand, $v_i^\top u_i u_i^\top v_i=(\check{u}_i^\top v_i)^2 \leq k_i \overline{\tau}^2$. On the other, if $\check{v}_i:=(I-u_iu_i^\top) v_i$ then 
+$$v_i^\top R_i v_i=(u_i u_i^\top v_i +\check{v}_i)^\top R_i (u_i u_i^\top v_i +\check{v}_i)=\check{v}_i^\top R_i \, \check{v}_i \leq \|R_i\|_{\op} \, \|\check{v}_i\|^2_2 \leq (1-k_i\underline{\tau}^2) \|R_i\|_{\op}$$
+
+So finally, since $\|R_i\|_{\op} \leq \|\gamma sign(S_{I_iI_i})+\varepsilon^{s_i}\|_{\op} \leq \xi_i (1+\frac{\epsilon}{\alpha}),$ we have 
+$$v_i^\top Q v_i \leq k_i \overline{\tau}^2+(1-k_i\underline{\tau}^2) \xi_i (1+\epsilon/\alpha).$$
+ 
+ 
+Then for $[V Q V^c]$, the fact that $v_i$ is proportional to the projection of $u_i$ on ${\rm span}(e_j)_{j \in J}$, we have $u_i^\top V^c=0$ so that
+
+$$\|v_i^\top Q V_i^c\|_{\op}=\|v_i^\top R_i V_i^c\|_{\op} \leq \|v_i^\top R_i\|_{2}.$$
+ 
+\begin{lemma}
+If $u$ is a vector such that $\|u\|_2=1$, then we have
+ $\|u^\top Z\|_{2} \leq \|\mathcal{P}_{\mathcal{T}(u)}\|_{\op}  \leq 2\, \|u^\top Z\|_{2}.$
+\end{lemma}
+\begin{proof}
+We use the following key identity
+ 
+ $$\mathcal{P}_{\mathcal{T}(u)} u=(uu^\top Z + Z uu^\top - u u^\top Z u u^\top) u =Zu$$
+
+$$\|\mathcal{P}_{\mathcal{T}(u)}\|_{\op} \geq \|u^\top \mathcal{P}_{\mathcal{T}(u)}\|_{2} \geq \|u^\top (uu^\top Z + Z uu^\top - u u^\top Z u u^\top) \|_{2}=\|u^\top Z\|_{2}
+$$
+\begin{eqnarray*}
+\|\mathcal{P}_{\mathcal{T}(u)}\|_{\op}:=\|uu^\top Z + Z uu^\top - u u^\top Z u u^\top\|_{\op}  
+& \leq & \, \|uu^\top Z\|_{\op} + \|Z uu^\top - u u^\top Z u u^\top\|_{\op}\\
+& \leq &  \, \|u^\top Z\|_{2} + \|Z uu^\top - u^\top Z u u^\top\|_{2}\\
+& \leq &  \,\|u^\top Z\|_{2} + \sqrt{u^\top Z^2 u - u^\top Z u }\\
+& \leq & 2 \, \|u^\top Z\|_{2}
+\end{eqnarray*}
+\end{proof}
+
+To summarize
+
+$$\check{v}_i^\top Q \check{v}_j=v_i^\top u_i u_i^\top [Q_{S}]_{I_i I_j} u_j u_j^\top v_j$$
+
+%$u_i^\top Z u_j$
+
+$$|u_i^\top Z u_j| = |u_i \mathcal{P}_{\mathcal{T}(u_j)}(Z) u_j^\top|=|u_i \mathcal{P}_{\mathcal{T}(u_i)} \circ \mathcal{P}_{\mathcal{T}(u_j)}(Z) u_j^\top| \leq \|\mathcal{P}_{\mathcal{T}(u_i)} \circ \mathcal{P}_{\mathcal{T}(u_j)}(Z)\|_{\op} \leq \xi_{ij} \|\mathcal{P}_{\mathcal{T}(u_j)}(Z)\|_{\op} \leq \zeta_{ij} \zeta_{js}.$$
+
+We can use similar ideas to bound:
+\begin{itemize}
+\item $\check{v}_i^\top Q \check{v}_j$ 
+\item $v_i^\top Q v_j$
+\item $\|v_i^\top Q V_j^c\|_2$
+\end{itemize}
+
+%$$
+%\begin{bmatrix}
+%v_1^\top u_1 u_1 ^\top v_1 & v_1^\top Q_S^\top v_2 & \ldots & v_1^\top Q_S^\top v_\kappa v_1^\top Q_S^\top V_1 & \ldots & v_1^\top Q_S^\top V_\kappa\\
+%v_2^\top Q_S^\top v_1 & v_2^\top u_2 u_2 ^\top v_2 & \ldots & v_2^\top Q_S^\top v_\kappa v_2^\top Q_S^\top V_1 & \ldots &  v_2^\top Q_S^\top V_\kappa\\
+%\vdots & \ddots & \ldots & & \\
+%v_\kappa^\top u_1 u_1 ^\top v_1 & \ldots v_\kappa^\top Q_S^\top v_2 & \ldots v_{\kappa}^\top u_\kappa u_\kappa ^\top v_\kappa& v_\kappa^\top Q_S^\top V_1 & \ldots & v_\kappa^\top Q_S^\top V_\kappa\\
+%\end{bmatrix}
+%$$
 
 
 %Assume that for all $(I,J) \in \I \times \I$
@@ -429,20 +354,128 @@ we need to show that $\lambda_{\max}^+(Q_{(J\cap I) \times (J \cap I)}) \leq 1.$
 
 %$$\sigma-\|\ve{S}_I\|_{\op}-\!\!\!\sum_{J \in \I, \, J \neq I} \|\ve{J}_I\|_{\op} \geq \sigma - (\mu \gamma^{-1}+(m^*-1)) \frac{\epsilon}{\alpha}>0,$$
 
+\section{General case with decomposable norms}
+
+In this section we study the decomposability problem. The following concepts and theorems are a generalization of the sparse + low rank matrix decomposition problem studied in \citet{chandrasekaran2011rank}. Let $\D$ stand for $\RR^{p}$ or $\RR^{p_{1} \times p_{2}}$ and let $x_{1}^*,x_{2}^*,..,x_{m}^*\in \D$. Assume each $x_{i}^*$ encodes some specific structure.\TODO{ tell in better way} Given $y=\sum_{i=1}^{m}x_{i}^*$ , can we uniquely recover the decomposition $(x_{1}^*,x_{2}^*,..,x_{m}^*)$ ? \\
+
+In general solving the decomposition problem is intractable \TODO{explain}. Hence, we consider a tractable approach employing convex relaxations. We formulate a convex optimization problem for decomposition using a combination of \emph{decomposable} norms $\omega_{i}:\D\mapsto \RR^{+}$ as surrogates inducing the desired structure on the $i$-th component. The concept of decomposable norms was introduced by \citet{negahban2009unified} and is a key property to ensure recovering the exact decomposition :
+
+\begin{mydef}
+Given a pair of subspaces $\mathcal{M}$ and $\mathcal{M}^{\perp}$ a norm $\omega$ is
+\emph{decomposable} with respect to $\mathcal{M}$ and $\mathcal{M}^{\perp}$ if
+$$
+\omega(x+y)=\omega(x)+\omega(y) \quad \forall (x,y)\in\mathcal{M}\times\mathcal{M}^{\perp}.
+$$
+\end{mydef}
+
+Natural examples of are the trace norm for inducing low rank structure and $\ell_1$ norm for inducing spasity \TODO{detail spaces $\mathcal{M}$ and $\mathcal{M}^{\perp}$ ?}.\\
+
+Concretely, we focus on studying the exact recovery of $(x_{1}^*,x_{2}^*,..,x_{m}^*)$ from the optimization problem 
+\begin{align}
+\label{eq:gen_opt}
+\min_{x_{1},...,x_{m}\in\D} &\quad \sum_{i=1}^{m} \gamma_{i}\omega_{i}(x_{i})\\
+&\text{s.t.} \quad y=\sum_{i=1}^{m}x_{i}, \nonumber
+\end{align}
+where $\gamma_{i}>0$ are  user-defined regularization paramateters. With no further assumptions, the decomposability problem (\ref{eq:gen_opt}) is ill posed. However, under some incoherence conditions on tangent spaces we prove that the decomposition is exactly recovered. Theorem \ref{theo:two} states simple conditions that guarantee exact decomposition for problem  (\ref{eq:gen_opt}).
+%However, under some incoherence conditions on tangent spaces we prove that the decomposition is exactly recovered. In order to characterize incoherence conditions, we will remind the concepts of incoherence and tangent spaces.  We will extend the notion of incoherence to collections of subspaces.
+
+\begin{theorem}
+\label{theo:two}
+%If 
+Let $y=\sum_{i=1}^{m}x_{i}^*$ and  $(\omega_{i})_{i=1..m}$ be a collection of norms. Define $\alpha$ and $\tilde{\alpha}$ to be the quantities $\alpha=1-\max_{i} \sum_{j\neq i} \xxi_{ij}(\T_i,\T_j)$ and $\tilde{\alpha}=1-\max_{i} \sum_{j\neq i} \tilde{\xxi}_{ij}(\T_i,\T_j)$. If  
+\BET
+\item[(i)] for all $i=1..m$, $\omega_{i}$ is decomposable with respect to $\big(\T_i,\T_i^{\perp}\big)$
+\item[(ii)]  $\alpha>0$ %\TODO{better condition = lemma 5 :  $\T_i(x_{i}^*)\cap span\big((\T_j(x_{j}^*)_{j\neq i})\big)=\left\lbrace{0}\right\rbrace$}
+\item[(iii)] $\frac{m(1-\alpha)}{\alpha}+ (1-\tilde{\alpha})<1$, %\TODO{better condition $\frac{m}{\alpha}\sum_{j\neq i}\xxi_{ij} + \sum_{j\neq i}\tilde{\xxi}_{ij}<1$}
+\EET
+Then, the  decomposition given by $\big(x_{i}^*\big)_{i=1..m}$ is solution to the optimization problem \begin{align*}
+\min_{x_{1},...,x_{m}} &\quad \sum_{i=1}^{m} \gamma_{i}\omega_{i}(x_{i})\quad \text{s.t.} \quad y=\sum_{i=1}^{m}x_{i}.
+\end{align*}
+\end{theorem}
+
+\begin{proof}
+The optimization problem \ref{eq:gen_opt} admits $\big(x_{i}^*\big)_{i=1..m}$ as a solution if and only if it satisfies first order gradient condition in the sense that it exists a $q\in\D$ such that
+$$
+\forall{i}=1..m, \quad q\in\gamma_{i}\partial\omega_{i}(x_i^*)=\left\lbrace g\in\D  \enspace|\enspace \left\langle g,x_i^* \right\rangle = \gamma_i\omega_{i}(x_i^*) \quad \text{and} \quad \omega_{i}^{\circ}(g)\leq \gamma_i  \right\rbrace.
+$$
+Assume decomposability of $\omega_i$ with respect to $(\T_i,\T_i^{\perp})$. We decompose $q$ on  $\T_i$ and it orthogonal $\T_i^{\perp}$, i.e. $q=P_i q+P_i^{\perp} q$. 
+Let $q_i^*$ be the unique solution of $\left\lbrace g \in \T_i \enspace|\enspace \left\langle g,x_i^* \right\rangle = \gamma_i\omega_{i}(x_i^*) \enspace\text{s.t.}\enspace  \omega_{i}^{\circ}(g)\leq \gamma_i\right\rbrace$ \TODO{explain}. 
+\begin{lemma}
+\label{lem:dual_dec}
+If $\omega$ is a \emph{decomposable} norm with respect to $\mathcal{M}$ and $\mathcal{M}^{\perp}$, then
+$$
+\omega^{\circ}(x+y)=\max(\omega^{\circ}(x),\omega^{\circ}(y))  \quad \forall (x,y)\in\mathcal{M}\times\mathcal{M}^{\perp}.
+$$
+\end{lemma}
+
+By applying Lemma \ref{lem:dual_dec}, the first order gradient condion is characterized as 
+$$
+\forall{i}=1..m, \quad P_i q=q_i^* \quad \text{and} \quad \omega_i^\circ(P_i^{\perp} q)\leq \gamma_i.
+$$
+
+ The optimization problem admits the unique announced solution if it satisfies first order gradient condition in the sense that there exists a subgradient $q \in \D$ that satisfies the following conditions
+\BET
+\item[(i)] for all any $x_{1},x_{2},..,x_{m}\in \D$, $\sum_{i=1}^{m} x_{i}=0 \: \Rightarrow \: (x_{i}=0)$. 
+\item[(ii)] $\forall i$, $P_i q = q_i^*$
+\item[(iii)]$\forall i$, $\omega_{i}^{\circ}(P_i^{\perp} q)<1$
+\EET
+We now prove the different statements. 
+\BET
+\item[(i)]  Lemma~\ref{lem:zero_inter} shows the result. 
+\item[(ii)]  The existence of a unique solution of the set of equations $\left\lbrace P_i q = q_i^* \right\rbrace$ follows from applying Corollary \ref{cor:main} on subspaces $\left(\T_1,..,\T_m\right)$ equipped respectively with norms $\omega_1,.., \omega_m$. The solution writes $q=\sum_{i=1}^m(q_i^*+\epsilon_i)$, where $\epsilon_i$ belongs to $\T_i$.
+\item[(iii)]  
+\begin{align*}
+\omega_{i}^{\circ}(P_i^{\perp} q) = \omega_{i}^{\circ}(q-q_i^*) = \omega_{i}^{\circ}\big(\sum_{j=1}^m\epsilon_i + \sum_{j\neq i}^m q_j^*\big) 
+&\leq m \max_j \omega_{i}^{\circ}(\epsilon_j) + m  \max_{j\neq i} \omega_{i}^{\circ}(q_j^*) \\
+&\leq m \max_j \omega_{i}^{\circ}(\epsilon_j) + m  \max_{j\neq i} \omega_{i}^{\circ}(q_j^*)
+& < 1 
+\end{align*}
+where the last inequality uses the third conditionof the theorem.
+\EET
+\end{proof}
 
 
+\section{Proofs of section 3}
 
+\begin{lemma} The polar gauge of $\Omega_{k,\succeq}$ of a symmetric $Y\RR^{p\times p}$ is
+\begin{align}
+\Omega_{k,\succeq}^{\circ}(Y):= \max_{I\in\mathcal{G}^p_k}\lambda^{+}_{max}(Y_{II})
+\end{align}
+\end{lemma}
+
+\begin{proof}
+\begin{align}
+\Omega_{k,\succeq}^{\circ}(Y) 
+&=\max_{\Omega_{k,\succeq}(X)\leq 1} \tr{Y^{\top}X}\\
+&=\max_{c_i\geq 0, u_{i}, \|u_{i}\|_0=k, \|u_{i}\|_ 2=1 } \sum c_i u_{i}^{\top}Yu_{i} \quad s.t.  \sum c_i\leq 1\\
+&=\max_{\|u\|_0=k, \|u\|_ 2=1 } u^{\top}Yu \\
+&=\max_{I\in\mathcal{G}^p_k}\lambda^{+}_{max}(Y_{II})
+\end{align}
+\end{proof}
+
+\begin{lemma} $\bar{\Omega}(M):=\inf\{\gamma\|A\|_{1}+\Omega_k(B)|M=A+B\}$ is an atomic norm and its dual is 
+\begin{align*}
+\gamma^{\circ}(Y)=\max\left(\frac{\|Y\|_{\infty}}{\gamma},\Omega_{k,\succeq}^{\circ}(Y)\right)
+\end{align*}
+\end{lemma}
+
+\begin{proof}
+$\ell_1$ is an atomic norm with atomic set $\mathcal{A}_{\ell_{1}}=\{\pm e_i e_j^{\top}\}$ where $e_i$ is the canonical basis of $\RR^p$. $\Omega_{k,\succeq}$  is an atomic norm with atomic set $\mathcal{A}_{k,\succeq}=\{uu^{\top}  :  u\in\RR^{p} \quad \|u\|_0 \leq k, \|u\|_2 = 1\}$. We can write,
+$$
+\bar{\Omega}(M)= \inf \big\{\|a\|_1+\|b\|_1 \quad s.t. \quad M=\sum_{j} b_j B_{j} + \sum_{i} a_i A_{i}, \quad c_i\in \RR^{+}\quad B_j\in\frac{1}{\gamma}\mathcal{A}_{\ell_{1}} \quad A_i\mathcal{A}_{k,\succeq} \big\}
+$$
+so $\bar{\Omega}$ is an atomic norm with atomic set $\frac{1}{\gamma}\mathcal{A}_{\ell_{1}}\cup\mathcal{A}_{k,\succeq}$. The dual norm writes
+\begin{align}
+\gamma^{\circ}(Y)
+& = \max_{X\in\frac{1}{\gamma}\mathcal{A}_{\ell_{1}}\cup\mathcal{A}_{k,\succeq}} \tr{Y^{\top}X}\\
+& =\max\left(\max_{B\in\frac{1}{\gamma}\mathcal{A}_{\ell_{1}}}\tr{Y^{\top}B}, \max_{A\in\mathcal{A}_{k,\succeq}}\tr{Y^{\top}A}\right)\\
+& =\max\left(\frac{1}{\gamma}\max_{\tilde{B}\in\mathcal{A}_{\ell_{1}}}\tr{Y^{\top}\tilde{B}}, \max_{\tilde{A}\in\mathcal{A}_{k,\succeq}}\tr{Y^{\top}\tilde{A}}\right)\\
+& =\max\left(\frac{\|Y\|_{\infty}}{\gamma},\Omega_{k,\succeq}^{\circ}(Y)\right)
+\end{align}
 %
 %
-%---------------------------------------------------------------------------------------
-%---------------------------------------------------------------------------------------
-%---------------------------------------------------------------------------------------
-%---------------------------------------------------------------------------------------
-%---------------------------------------------------------------------------------------
-%---------------------------------------------------------------------------------------
-%
-%---------------------------------------------------------------------------------------
-%
+%& =\max\left(\frac{\|Y\|_{\infty}}{\gamma},\Omega_{k,\succeq}^{\circ}(Y)\right)
+\end{proof}
 
 \section{Experiments}
 

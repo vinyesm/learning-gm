@@ -1,6 +1,7 @@
 close all;clear all; clc;
 addpath individual_stocks_5yr
 
+
 listing = dir('individual_stocks_5yr');
 
 X = [];
@@ -59,8 +60,6 @@ imagesc(Sigma); colormap jet;
 % Z = linkage(Sigma,'ward');
 % [Cres,I]=order_of_tree(Z);
 Z = linkage(Sigma,'ward');
-% [H,T,OUTPERM] = dendrogram(Z) ;
-%[Cres,I]=order_of_tree(Z);
 I = optimalleaforder(Z,pdist(Sigma));
 
 figure(2);clf;
@@ -85,7 +84,14 @@ indvalues = zeros(1,length(industry));
 for i=1:length(industry)
     indvalues(i)=mapObj(industry{i});
 end
-[~, K]=sort(indvalues);
+% [~, K]=sort(indvalues);
+K=[];
+for j=1:length(keySet)
+    I3 = find(indvalues==j);
+    Z3 = linkage(Sigma2(I3,I3),'ward');
+    I4 = optimalleaforder(Z3,pdist(Sigma2(I3,I3)));
+    K = [K I3(I4)];
+end
 
 figure(4);clf;
 subplot(1,2,1)
@@ -109,7 +115,7 @@ imagesc(indvalues(I2)'); colormap jet;
 
 figure(7); clf;
 subplot(1,2,1)
-imagesc(abs(Sigma(I,I))); colormap jet;
+imagesc(abs(Sigma(I,I))); colormap jet; 
 subplot(1,2,2)
 imagesc(indvalues(I)'); colormap jet;
 
@@ -118,7 +124,7 @@ imagesc(indvalues(I)'); colormap jet;
 % Sigma=0.5*(Sigma2+Sigma2');
 % I=I2;
 % 
-save('sandp500','Sigma','names','industry', 'indvalues', 'I','K');
+% save('sandp500','Sigma','names','industry', 'indvalues', 'I','K');
 
 
 

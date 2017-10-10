@@ -1,8 +1,13 @@
 clc; clear all; close all;
 %load('../DREAM5/Dream/pp_net1.mat')
 load('../sandp500/sandp500.mat')
+addpath ../ours/TPower_1.0/misc/
+addpath ../ours/TPower_1.0/algorithms/TPower/
+addpath ../ours/TPower_1.0/algorithms/PathSPCA/PathSPCA/
+addpath ../spams-matlab-v2.6/build/
+addpath ../reorder
 
-param.k=150;
+param.k=50;
 param.epsObj=1e-16;
 % param.lambda=.03;
 % param.mu=.02;
@@ -70,21 +75,27 @@ ua = unique(abs(output.atoms_u')>1e-10, 'rows');
 set = ua';
 figure(40); imagesc(set); colormap gray
 
-% %%
-% [J]=grayorder(full(set~=0));
-% figure(3);clf;
-% subplot(2,2,1);
-% imagesc(min(abs(output.S),10));
-% axis square;
-% subplot(2,2,2);
-% imagesc(min(abs(output.M),10));
-% axis square;
-% subplot(2,2,3);
-% imagesc(min(abs(output.S(J,J)),10));
-% axis square;
-% subplot(2,2,4);
-% imagesc(min(abs(output.M(J,J)),10));
-% axis square;
+%%
+[J]=grayorder(full(set~=0));
+figure(3);clf;
+subplot(2,2,1);
+imagesc(min(abs(output.S),10));
+axis square;
+subplot(2,2,2);
+imagesc(min(abs(output.M),10));
+axis square;
+subplot(2,2,3);
+imagesc(min(abs(output.S(J,J)),10));
+axis square;
+subplot(2,2,4);
+imagesc(min(abs(output.M(J,J)),10));
+axis square;
+
+figure(41); imagesc(set(J,:)); colormap gray
+
+figure(42)
+imagesc(indvalues(J)'); colormap jet;
+pbaspect([50 length(industry) 1])
 % 
 % figure(4);clf;
 % subplot(2,3,1);

@@ -12,11 +12,11 @@ param.epsObj=1e-16;
 % param.lambda=.03;
 % param.mu=.02;
 param.lambda=1;
-param.mu=.05;
+param.mu=.01;
 param.maxIter=5000;
 param.maxNbAtoms=1000;
 param.verbose=1;
-param.epsStop=1e-5;
+param.epsStop=1e-3;
 
 p = size(Sigma,1);
 inputData.X = (Sigma+eye(p)*1e-5)^0.5;

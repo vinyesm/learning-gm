@@ -39,7 +39,7 @@ for id=1:500%length(listing)
 end
 
 %%
-%Xn = quantilenorm(X);
+% Xn = quantilenorm(X);
 %Xn = log10(X);
 Xn = log10(X);
 Sigma = corr(Xn');
@@ -121,9 +121,9 @@ imagesc(indvalues(I)'); colormap jet;
 
 
 %%
-% Sigma=0.5*(Sigma2+Sigma2');
-% I=I2;
-% 
+Sigma=0.5*(Sigma2+Sigma2');
+I=I2;
+
 save('sandp500','Sigma','names','industry', 'indvalues', 'I','K');
 
 

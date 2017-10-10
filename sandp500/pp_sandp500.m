@@ -124,7 +124,7 @@ imagesc(indvalues(I)'); colormap jet;
 % Sigma=0.5*(Sigma2+Sigma2');
 % I=I2;
 % 
-% save('sandp500','Sigma','names','industry', 'indvalues', 'I','K');
+save('sandp500','Sigma','names','industry', 'indvalues', 'I','K');
 
 
 

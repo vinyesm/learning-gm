@@ -7,16 +7,16 @@ addpath ../ours/TPower_1.0/algorithms/PathSPCA/PathSPCA/
 addpath ../spams-matlab-v2.6/build/
 addpath ../reorder
 
-param.k=50;
+param.k=150;
 param.epsObj=1e-16;
 % param.lambda=.03;
 % param.mu=.02;
-param.lambda=.1;
-param.mu=.01;
+param.lambda=1;
+param.mu=.05;
 param.maxIter=5000;
 param.maxNbAtoms=1000;
 param.verbose=1;
-param.epsStop=1e-4;
+param.epsStop=1e-5;
 
 p = size(Sigma,1);
 inputData.X = (Sigma+eye(p)*1e-5)^0.5;
@@ -55,9 +55,12 @@ figure(19)
 imagesc(-full(output1.S));
 
 tt = 1;
+
+
+
 figure(20)
 subplot(3,2,1)
-imagesc(min(abs(output1.S),tt));axis square
+imagesc(min(abs(output1.S),tt));axis square; colormap jet
 subplot(3,2,2)
 imagesc(min(abs(output1.M),tt));axis square
 subplot(3,2,3)
@@ -77,7 +80,7 @@ figure(40); imagesc(set); colormap gray
 
 %%
 [J]=grayorder(full(set~=0));
-figure(3);clf;
+figure(21);clf;
 subplot(2,2,1);
 imagesc(min(abs(output1.S(K,K)),10));
 axis square;
@@ -90,6 +93,24 @@ axis square;
 subplot(2,2,4);
 imagesc(min(abs(output1.M(J,J)),10));
 axis square;
+
+figure(22)
+subplot(3,2,1)
+imagesc(min(abs(output1.S),tt)>0);axis square; colormap gray
+subplot(3,2,2)
+imagesc(min(abs(output1.M),tt)>0);axis square
+subplot(3,2,3)
+imagesc(min(abs(output1.S(I,I)),tt)>0);axis square
+subplot(3,2,4)
+imagesc(min(abs(output1.M(I,I)),tt)>0);axis square
+subplot(3,2,5)
+imagesc(min(abs(output1.S(K,K)),tt)>0);axis square
+subplot(3,2,6)
+imagesc(min(abs(output1.M(K,K)),tt)>0);axis square
+subplot(3,2,5)
+imagesc(min(abs(output1.S(J,J)),tt)>0);axis square
+subplot(3,2,6)
+imagesc(min(abs(output1.M(J,J)),tt)>0);axis square
 
 figure(41); imagesc(set(J,:)); colormap gray
 

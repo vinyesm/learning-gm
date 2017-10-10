@@ -11,8 +11,8 @@ param.k=50;
 param.epsObj=1e-16;
 % param.lambda=.03;
 % param.mu=.02;
-param.lambda=.5;
-param.mu=.05;
+param.lambda=.1;
+param.mu=.01;
 param.maxIter=5000;
 param.maxNbAtoms=1000;
 param.verbose=1;
@@ -25,7 +25,7 @@ inputData.Y = eye(p);
 
 % keyboard;
 
-[ output, hist ] = regOmegaL1( inputData, param, inf );
+[ output1, hist1 ] = regOmegaL1( inputData, param, inf );
 
 %%
 
@@ -33,45 +33,45 @@ figure(1);clf
 imagesc(abs(Sigma));
 
 figure(10);clf
-semilogy(hist.reldgl1,'r');hold on
-semilogy(hist.reldgom,'b');
+semilogy(hist1.reldgl1,'r');hold on
+semilogy(hist1.reldgom,'b');
 legend('rel dg l1','rel dg om');
 title('relative duality gaps of the subproblems');
 
 figure(11);clf
-semilogy(hist.reldg,'k');
+semilogy(hist1.reldg,'k');
 title('relative global duality gap');
 
 figure(12);clf
-semilogy(hist.objective,'k');
+semilogy(hist1.objective,'k');
 title('objective');
 
 figure(17)
-imagesc(output.M);
+imagesc(output1.M);
 % figure(18)
 % imagesc(M);
 
 figure(19)
-imagesc(-full(output.S));
+imagesc(-full(output1.S));
 
 tt = 1;
 figure(20)
 subplot(3,2,1)
-imagesc(min(abs(output.S),tt));axis square
+imagesc(min(abs(output1.S),tt));axis square
 subplot(3,2,2)
-imagesc(min(abs(output.M),tt));axis square
+imagesc(min(abs(output1.M),tt));axis square
 subplot(3,2,3)
-imagesc(min(abs(output.S(I,I)),tt));axis square
+imagesc(min(abs(output1.S(I,I)),tt));axis square
 subplot(3,2,4)
-imagesc(min(abs(output.M(I,I)),tt));axis square
+imagesc(min(abs(output1.M(I,I)),tt));axis square
 subplot(3,2,5)
-imagesc(min(abs(output.S(K,K)),tt));axis square
+imagesc(min(abs(output1.S(K,K)),tt));axis square
 subplot(3,2,6)
-imagesc(min(abs(output.M(K,K)),tt));axis square
+imagesc(min(abs(output1.M(K,K)),tt));axis square
 
 
 %%
-ua = unique(abs(output.atoms_u')>1e-10, 'rows');
+ua = unique(abs(output1.atoms_u')>1e-10, 'rows');
 set = ua';
 figure(40); imagesc(set); colormap gray
 
@@ -79,16 +79,16 @@ figure(40); imagesc(set); colormap gray
 [J]=grayorder(full(set~=0));
 figure(3);clf;
 subplot(2,2,1);
-imagesc(min(abs(output.S),10));
+imagesc(min(abs(output1.S(K,K)),10));
 axis square;
 subplot(2,2,2);
-imagesc(min(abs(output.M),10));
+imagesc(min(abs(output1.M(K,K)),10));
 axis square;
 subplot(2,2,3);
-imagesc(min(abs(output.S(J,J)),10));
+imagesc(min(abs(output1.S(J,J)),10));
 axis square;
 subplot(2,2,4);
-imagesc(min(abs(output.M(J,J)),10));
+imagesc(min(abs(output1.M(J,J)),10));
 axis square;
 
 figure(41); imagesc(set(J,:)); colormap gray
@@ -96,6 +96,13 @@ figure(41); imagesc(set(J,:)); colormap gray
 figure(42)
 imagesc(indvalues(J)'); colormap jet;
 pbaspect([50 length(industry) 1])
+
+figure(50);
+for i=1:size(output1.atoms_u,2)
+    clf
+    hist(indvalues(output1.atoms_u(:,i)~=0));
+    pause
+end
 % 
 % figure(4);clf;
 % subplot(2,3,1);

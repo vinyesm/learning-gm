@@ -94,7 +94,7 @@ value of the optimization problem:
 Note that not all p.s.d. matrices can have such a decomposition, so the positive-rank($k$) can be infinite. This is in particular the case for low-rank non sparse matrices like $11^{\top}$. 
 
 We can derive a convex relaxation of the positive-rank($k$), the convex function $\Omega_{pos,k}$, defined as follows :
-%the atomic norm%\footnote{$\Omega_{k,\succeq}$ is not a norm but only a gauge because the set $\{u u^\top \in\RR^p  :   \|u\|_0 \leq k, \|u\|_2 = 1\}$  is not centrally symmetric} $\Omega_{k,\succeq}$. The next lemma provides an explicit formulation of the dual norm
+%the atomic norm%\footnote{$\Omega_{pos,k}$ is not a norm but only a gauge because the set $\{u u^\top \in\RR^p  :   \|u\|_0 \leq k, \|u\|_2 = 1\}$  is not centrally symmetric} $\Omega_{pos,k}$. The next lemma provides an explicit formulation of the dual norm
 \begin{mydef}
 ($\Omega_{pos,k}$) For a p.s.d  matrix $Z\in\RR^{p\times p}$ 
 \begin{align}
@@ -123,7 +123,7 @@ It is important to note that polar norm $\Omega_{pos,k}^{\circ}$ is NP-hard to c
 \end{align*}
 which is known to be an NP-hard problem \citep{moghaddam2008sparse}.
 
-%In fact $\Omega_{k,\succeq}$ is an atomic gauge\footnote{$\Omega_{k,\succeq}$ is not a norm but only a gauge because the set $\{u u^\top \in\RR^p  :   \|u\|_0 \leq k, \|u\|_2 = 1\}$  is not centrally symmetric} associated to the atomic set $\{uu^{\top}  : \|u_{i}\|_0 \leq k, \|u_{i}\|_2 = 1\}$ and the LMO in lemma \ref{lem:LMO} is the polar gauge $\Omega^{\circ}_{k,\succeq}$.
+%In fact $\Omega_{pos,k}$ is an atomic gauge\footnote{$\Omega_{pos,k}$ is not a norm but only a gauge because the set $\{u u^\top \in\RR^p  :   \|u\|_0 \leq k, \|u\|_2 = 1\}$  is not centrally symmetric} associated to the atomic set $\{uu^{\top}  : \|u_{i}\|_0 \leq k, \|u_{i}\|_2 = 1\}$ and the LMO in lemma \ref{lem:LMO} is the polar gauge $\Omega^{\circ}_{pos,k}$.
 
 %\TODO{explain a lot more}
 %
@@ -166,14 +166,14 @@ where $w_{k}$ is an increasing cardinality function that penalizes each sparsity
 We use $\Omega_{pos,k}$ to impose structure on the low rank component and consider the following convex optimization problem,
 \begin{align}
 \label{opt}
-\min_{S,L} f(S-L)+\lambda\big(\gamma\|S\|_{1}+\Omega_{k,\succeq}(L)\big) \quad s.t. \quad S-L \succeq 0 \quad L \succeq 0.
+\min_{S,L} f(S-L)+\lambda\big(\gamma\|S\|_{1}+\Omega_{pos,k}(L)\big) \quad s.t. \quad S-L \succeq 0 \quad L \succeq 0.
 \end{align}
-Since the norm $\Omega_k$ only provides symmetric p.s.d matrices, as a sum of p.s.d rank-one matrices, the nonnegativity constraint on $L$ can be dropped. 
+Since the norm $\Omega_k$ only provides symmetric p.s.d matrices, as a sum of p.s.d rank-one matrices, the nonnegativity constraint on $L$ is no longer necessary and can be dropped. 
 
 \begin{rem} 
 The regularization $\gamma\|S\|_{1}+\Omega_k(L)$ defines an atomic norm on matrices. $\bar{\Omega}(M):=\inf\{\gamma\|A\|_{1}+\Omega_k(B)\mid M=A+B\}$ is an atomic norm and its polar norm is given by 
 \begin{align*}
-{\bar{\Omega}^{\circ}}(Y)=\max\left(\frac{\|Y\|_{\infty}}{\gamma},\Omega_{k,\succeq}^{\circ}(Y)\right).
+{\bar{\Omega}^{\circ}}(Y)=\max\left(\frac{\|Y\|_{\infty}}{\gamma},\Omega_{pos,k}^{\circ}(Y)\right).
 \end{align*}
 \end{rem}
 
@@ -207,7 +207,7 @@ of problems of the form
 \label{opt_ps}
 \min_{K} f(K)+ \bar{\Omega}_{\mathcal{A}^{t}}(K) \quad s.t. \quad K \succeq 0,
 \end{align}
-where $\bar{\Omega}_{\mathcal{A}^{t}}$ is the atomic norm on a growing sequence of atomic sets $\mathcal{A}^{1}\subset \mathcal{A}^{2} \subset ... \subset \mathcal{A}^{t}$. We start with the atomic set of $\ell_1$-norm, $\mathcal{A}^{1}=\mathcal{A}_{\ell_{1}}$\footnote{$\mathcal{A}_{\ell_{1}}=\{\pm e_i e_j^{\top}\}$ where $e_i$ is the canonical basis of $\RR^p$}, and conider the sequence $\mathcal{A}^{t}=\mathcal{A}_{\ell_{1}}\cup \big\{uu^{\top} \quad \text{s.t.} \quad \supp(u)\subset \mathcal{S}, \|u\|_{2}=1 \big\}$ for a growing sequence of working sets $\mathcal{S}$. We use algorithm of \texttt{FCG} to solve each problem (\ref{opt_ps}). The method allows us to recover all the active atoms and its weights. in particular we recover the sparse component $S$ and the low-rank sparse component $UU^{\top}$.  In order to build the  sequence of working sets $\mathcal{S}$ we use TPI for p.s.d matrices.  The procedure is explained in algorithm \ref{alg:colgen_ggm} and consists on three loops: first we augment the atomic set $\mathcal{A}^{t}$ for atoms of  $\Omega_{k,\succeq}$, then we solve the subproblem (\ref{opt_ps}) with \texttt{FCG} that internally uses an active-set procedure.
+where $\bar{\Omega}_{\mathcal{A}^{t}}$ is the atomic norm on a growing sequence of atomic sets $\mathcal{A}^{1}\subset \mathcal{A}^{2} \subset ... \subset \mathcal{A}^{t}$. We start with the atomic set of $\ell_1$-norm, $\mathcal{A}^{1}=\mathcal{A}_{\ell_{1}}$\footnote{$\mathcal{A}_{\ell_{1}}=\{\pm e_i e_j^{\top}\}$ where $e_i$ is the canonical basis of $\RR^p$}, and conider the sequence $\mathcal{A}^{t}=\mathcal{A}_{\ell_{1}}\cup \big\{uu^{\top} \quad \text{s.t.} \quad \supp(u)\subset \mathcal{S}, \|u\|_{2}=1 \big\}$ for a growing sequence of working sets $\mathcal{S}$. We use algorithm of \texttt{FCG} to solve each problem (\ref{opt_ps}). The method allows us to recover all the active atoms and its weights. in particular we recover the sparse component $S$ and the low-rank sparse component $UU^{\top}$.  In order to build the  sequence of working sets $\mathcal{S}$ we use TPI for p.s.d matrices.  The procedure is explained in algorithm \ref{alg:colgen_ggm} and consists on three loops: first we augment the atomic set $\mathcal{A}^{t}$ for atoms of  $\Omega_{pos,k}$, then we solve the subproblem (\ref{opt_ps}) with \texttt{FCG} that internally uses an active-set procedure.
 
 %explain three loops, first we add support, then atoms on support, then as 
 

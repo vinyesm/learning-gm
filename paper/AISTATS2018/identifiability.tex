@@ -4,11 +4,11 @@
 
 In this section, we prove a first result towards showing that the optimisation problem (\ref{opt_at}) recovers the support of $S^*$ and the correct rank for each block under technical assumptions. We however do not show exactly that result, which would be beyond the scope of this work. 
 
-Following the work of~\citet{chandrasekaran2011rank}, we show that if  $M^{\ast}$ is a matrix that writes as  $M^{\ast}= S^{\ast}-L^{\ast}$, with $S^{\ast}$ an unknown sparse matrix and an unknown  low $k,\succeq$-rank matrix, which is itself a sum $L^{\ast}=\sum_{I\in\mathcal{I}L^{I}}$ of matrices $L^{I}$ each supported on $I \times I$ and with decomposition . We want to know, given $M^{\ast}$, ther exist a unique decomposition $\left(S,(L^{I})_{I\in\mathcal{I}}\right)$ satisfying this conditions. We consider the case where the sets $I\in\mathcal{I}$ do not overlap.  \\
+Following the work of~\citet{chandrasekaran2011rank}, we show that if  $M^{\ast}$ is a matrix that writes as  $M^{\ast}= S^{\ast}-L^{\ast}$, with $S^{\ast}$ an unknown sparse matrix and an unknown  low $pos,k$-rank matrix, which is itself a sum $L^{\ast}=\sum_{I\in\mathcal{I}L^{I}}$ of matrices $L^{I}$ each supported on $I \times I$ and with decomposition . We want to know, given $M^{\ast}$, ther exist a unique decomposition $\left(S,(L^{I})_{I\in\mathcal{I}}\right)$ satisfying this conditions. We consider the case where the sets $I\in\mathcal{I}$ do not overlap.  \\
 
 More formally we want to know under which conditions the following optimization problem 
 \begin{align}
-\min \gamma\|S\|_1+\Omega_{k,\succeq}(L) \quad s.t. \quad M=S+L
+\min \gamma\|S\|_1+\Omega_{pos,k}(L) \quad s.t. \quad M=S+L
 \end{align}
 has a unique solution.\\
 
@@ -55,7 +55,7 @@ $$\alpha_I:=\frac{1-\mu'_I\xi'_I}{1+\max(\gamma \mu'_I,\frac{1}{\gamma} \xi'_I)}
 Assume that for all $(I,I') \in \I \times \I, I \cap I'=\varnothing$. If $$\displaystyle\max_{I \in \I} \max(\mu_I,\xi_I) (1+\frac{\epsilon_I}{\alpha_I})<1, \quad \displaystyle \max_{J \in \mathcal{G}^p_k} \lambda_{\max}^+\big (S^*_{\bar{I}^c \cap (J \times J)} \big ) <1$$ %\quad 
 %\text{and}  \quad \max_{J \in \mathcal{G}^p_k, J \neq I}\lambda_{\max}^+(\uI_J{\uI_J}^\top)<1,$$
 with $\displaystyle \bar{I}=\bigcup_{I \in \I} I \times I$,
-then the  decomposition given by $\big (S^*,(D^{\sss{I}} \big)_{I \in \I},(\uI)_{I \in \I} \big )$ is solution to the optimization problem $$\displaystyle \min \gamma \|S\|_1+\Omega_{k,\succeq}(L) \quad \text{\st} \quad M=S+L.$$
+then the  decomposition given by $\big (S^*,(D^{\sss{I}} \big)_{I \in \I},(\uI)_{I \in \I} \big )$ is solution to the optimization problem $$\displaystyle \min \gamma \|S\|_1+\Omega_{pos,k}(L) \quad \text{\st} \quad M=S+L.$$
 \end{thm}
 
 The proof can be found in the appendix. We follow the general proof scheme of \citet{chandrasekaran2011rank}. The optimization problem admits the unique announced solution if it satisfies first order gradient condition.

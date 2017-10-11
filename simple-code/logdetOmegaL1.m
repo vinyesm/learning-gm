@@ -1,4 +1,4 @@
-function [S,M,L,U,hist,setout] = logdetOmegaL1(Sigma,param,set)
+function [S,M,L,U,hist,setout] = logdetOmegaL1(Sigma,param,set, Sigma_test)
 
 % This code uses logdetPPA solver implemented by Professor Kim-Chuan Toh
 % Chengjing Wang, Defeng Sun and Kim-Chuan Toh,
@@ -45,6 +45,8 @@ function [S,M,L,U,hist,setout] = logdetOmegaL1(Sigma,param,set)
 %% init
 hist.objective = [];
 hist.time = [];
+hist.loglikTest = [];
+hist.loglikTrain = [];
 
 if set == inf
     set = [];
@@ -94,7 +96,7 @@ IJi= (Ialli-1)*k+Jalli;
 OPTIONS.smoothing  = 1;
 OPTIONS.scale_data = 0; %% or 2;
 OPTIONS.plotyes    = 0;
-OPTIONS.tol        = 1e-10; %% 1e-12
+OPTIONS.tol        = 1e-4; %% 1e-12
 OPTIONS.printlevel = 0;
 
 blk0=blk;
@@ -172,6 +174,12 @@ for q=1;
         
         grad = inv(X{1})-Sigma;
         [newAtom, val]= dualOmega(grad,inf,param.k);
+        
+        logltrain = log(det(X{1}))-trace(X{1}*Sigma);
+        logltest = log(det(X{1}))-trace(X{1}*Sigma_test);
+        fprintf('loglikelihood train = %f       loglikelihood test = % f\n', logltrain, logltest )
+        hist.loglikTest = [ hist.loglikTest logltest];
+        hist.loglikTrain = [hist.loglikTrain logltrain];
         
         %adding new block
         if val > param.lambda

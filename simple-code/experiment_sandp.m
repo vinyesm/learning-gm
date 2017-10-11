@@ -19,11 +19,12 @@ load('../sandp500/sandp500.mat')
 
 
 %ks =  [size(Sigma_train,1) 150];
-ks =150;
-las = 5;
-mus = .1;
-%las = [.1 .1  .01  .01  .01];
-%mus = [.1 .01 .01  .005 .001];
+ks = [size(Sigma_train,1) 150 50 100];
+las = 2;
+mus = .5;
+%las = [5   2   2  1  1 .1];
+%mus = [.5 .5 .1 .5  .1 .05];
+
 
 parfor i=1:length(las)
     %chandra

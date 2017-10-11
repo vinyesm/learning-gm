@@ -384,7 +384,7 @@
          const = 0.2;  
       end      
       tolsub   = min(1,const*normRd);  
-      printsub = 1; 
+      printsub = 0; 
       breakyes = 0; 
       %%-----------------------------------
       %% new X, compute W
@@ -433,7 +433,7 @@
             itersub,Ly,priminf_sub,dualinf_sub,const);
          end
          %%-----------------------------------------
-	 if (norm(GradLy) < tolsub) & (itersub > 1) 
+	 if (printsub) & (norm(GradLy) < tolsub) & (itersub > 1) 
 	    msg = 'good termination:'; 
 	    fprintf('\n       %s  ',msg); 
 	    fprintf(' normRp=%3.2e, gradLy=%3.2e, tolsub=%3.2e',...

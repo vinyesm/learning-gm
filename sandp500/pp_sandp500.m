@@ -125,7 +125,7 @@ imagesc(indvalues(I)'); colormap jet;
 
 %%
 [p,n]=size(Xn);
-nt = ceil(2/3*n);
+nt = ceil(3/4*n);
 Xtrain = Xn(:,1:nt);
 Xtest = Xn(:,nt+1:end);
 Sigma_train = corr(Xtrain');

@@ -15,7 +15,7 @@
 % las = [.1 .1  .01  .01  .01];
 % mus = [.1 .01 .01  .005 .001];
 
-function [] = launch_exp(lambda, mu, k, Sigma, savename)
+function [] = launch_exp(lambda, mu, k, Sigma_train, Sigma_test, savename)
     param.k=k;
     param.epsObj=1e-10;
     param.lambda=lambda;
@@ -24,8 +24,12 @@ function [] = launch_exp(lambda, mu, k, Sigma, savename)
     param.maxNbBlocks=100;
     param.verbose=2;
     %% logdetOmegaL1 initialised with true support
-    [S1,M1,L1,U1,hist_ch1,set1] = logdetOmegaL1(Sigma,param,inf);
-    save(['exp_' savename], 'S1','M1','L1','U1','hist_ch1','set1', 'param')
+    [S1,M1,L1,U1,hist_ch1,set1] = logdetOmegaL1(Sigma_train,param,inf);
+    %loglikelihood = @(K,Sig) log(det(K))-trace(K*Sig);
+    K = S1-M1;
+    %nb param of t
+    logl = log(det(K))-trace(K*Sigma_test);
+    save(['exp_' savename], 'S1','M1','L1','U1','hist_ch1','set1', 'param','logl')
 end
 
 

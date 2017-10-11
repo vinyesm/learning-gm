@@ -121,10 +121,25 @@ imagesc(indvalues(I)'); colormap jet;
 
 
 %%
-Sigma=0.5*(Sigma2+Sigma2');
-I=I2;
 
-save('sandp500','Sigma','names','industry', 'indvalues', 'I','K');
+
+%%
+[p,n]=size(Xn);
+nt = ceil(2/3*n);
+Xtrain = Xn(:,1:nt);
+Xtest = Xn(:,nt+1:end);
+Sigma_train = corr(Xtrain');
+Sigma_test = corr(Xtest');
+figure(50)
+subplot(1,2,1);
+imagesc(abs(Sigma_train(I,I)));
+subplot(1,2,2);
+imagesc(abs(Sigma_test(I,I)));
+
+%%
+Sigma=0.5*(Sigma2+Sigma2');
+% I=I2;
+save('sandp500','Sigma','Sigma_train', 'Sigma_test','names','industry', 'indvalues', 'I','K');
 
 
 

@@ -1,5 +1,5 @@
 clear all;close all;clc
-load('../sandp500/sandp500.mat')
+
 % diviser les donnees
 
 addpath ../ours/TPower_1.0/misc/
@@ -13,11 +13,16 @@ HOME = '../code-from-Kim-Chuan/LogdetPPA-0';
 addpath(strcat(HOME,'/solver/'))
 addpath(strcat(HOME,'/solver/mexfun'))
 addpath(strcat(HOME,'/util/'))
-load('../genedata/BC.mat')
 
-ks =  [150 100 50];
-las = [.1 .1  .01  .01  .01];
-mus = [.1 .01 .01  .005 .001];
+load('../sandp500/sandp500.mat')
+
+
+
+ks =  [size(Sigma_train,1) 150];
+las = 1;
+mus = .5;
+%las = [.1 .1  .01  .01  .01];
+%mus = [.1 .01 .01  .005 .001];
 
 parfor i=1:length(las)
     %chandra
@@ -28,6 +33,7 @@ parfor i=1:length(las)
         savename = [num2str(k0) '_' num2str(la0*1000) '_' num2str(mu0*1000)];
         % nombre de parametres, flag si finished et logvraissemblace sur
         % les autres donnees
-        launch_exp(la0, mu0, k0, Sigma, savename)
+        
+        launch_exp(la0, mu0, k0, Sigma_train, Sigma_test, savename)
     end
 end

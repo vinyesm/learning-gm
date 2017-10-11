@@ -3,9 +3,6 @@ clear all
 close all
 clc
 
-addpath ../ours/TPower_1.0/misc/
-addpath ../ours/TPower_1.0/algorithms/TPower/
-addpath ../ours/TPower_1.0/algorithms/PathSPCA/PathSPCA/
 addpath ../spams-matlab-v2.6/build/
 
 
@@ -39,7 +36,7 @@ addpath ../spams-matlab-v2.6/build/
 
 %example 2
 p = 160;
-n= 2000;
+n= 20000;
 k = 35;
 tau=0.01;
 invsigma=1;
@@ -76,7 +73,7 @@ X=((1./n)*(X'*X))^.5;
 Y=eye(p);
 % param.lambda=.02;
 % param.mu=.002;
-param.lambda=.1;
+param.lambda=.2;
 param.mu=.02;
 param.epsStop=1e-5;
 

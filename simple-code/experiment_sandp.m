@@ -18,9 +18,10 @@ load('../sandp500/sandp500.mat')
 
 
 
-ks =  [size(Sigma_train,1) 150];
-las = 1;
-mus = .5;
+%ks =  [size(Sigma_train,1) 150];
+ks =150;
+las = 5;
+mus = .1;
 %las = [.1 .1  .01  .01  .01];
 %mus = [.1 .01 .01  .005 .001];
 

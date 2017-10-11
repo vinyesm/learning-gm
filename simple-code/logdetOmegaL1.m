@@ -141,7 +141,11 @@ for q=1;
         hist.time=[hist.time toc];
         
         if length(hist.objective)>1
-            relobj = (hist.objective(calls-1)-hist.objective(calls))/abs(hist.objective(calls));
+            prev = calls-1;
+            if length(hist.objective)>5
+                prev = calls-5;
+            end
+            relobj = (hist.objective(prev)-hist.objective(calls))/abs(hist.objective(calls));
         end
         
         if  relobj < param.epsObj

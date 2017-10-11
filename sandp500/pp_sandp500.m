@@ -35,111 +35,121 @@ for id=1:500%length(listing)
          industry = [industry TI.Industry(ind)];
          end
     end
-%     X(id,:)=T.Close;
 end
-
-%%
-% Xn = quantilenorm(X);
-%Xn = log10(X);
-Xn = log10(X);
-Sigma = corr(Xn');
-d= diag(Sigma);
-% 
-% figure(5);
-% plot(d);
-% Ismall = d<5000;
-
-% Sigma=Sigma(Ismall,Ismall);
-% names= names(Ismall);
-
-figure(1);clf;
-imagesc(Sigma); colormap jet;
-
-%%
-
-% Z = linkage(Sigma,'ward');
-% [Cres,I]=order_of_tree(Z);
-Z = linkage(Sigma,'ward');
-I = optimalleaforder(Z,pdist(Sigma));
-
-figure(2);clf;
-imagesc(Sigma(I,I)); colormap jet;
-
-save('sandp500','Sigma','names', 'I');
-
-%% remove principal component
-[V,D]= eig(Sigma);
-vi=V(I,1);
-Sigma2 = Sigma(I,I)-D(1,1)*(vi*vi');
-
-Z = linkage(Sigma2,'ward');
-I2 = optimalleaforder(Z,pdist(Sigma2));
-
-figure(3);clf;
-imagesc(abs(Sigma2(I2,I2))); colormap jet;
-
-%% Per industry ordering
-
 indvalues = zeros(1,length(industry));
 for i=1:length(industry)
     indvalues(i)=mapObj(industry{i});
 end
-% [~, K]=sort(indvalues);
-K=[];
-for j=1:length(keySet)
-    I3 = find(indvalues==j);
-    Z3 = linkage(Sigma2(I3,I3),'ward');
-    I4 = optimalleaforder(Z3,pdist(Sigma2(I3,I3)));
-    K = [K I3(I4)];
-end
-
-figure(4);clf;
-subplot(1,2,1)
-imagesc(abs(Sigma(K,K))); colormap jet;
-subplot(1,2,2)
-imagesc(indvalues(K)'); colormap jet;
-pbaspect([50 length(industry) 1])
-
-figure(5);clf;
-subplot(1,2,1)
-imagesc(abs(Sigma2(K,K))); colormap jet;
-subplot(1,2,2)
-imagesc(indvalues(K)'); colormap jet;
-pbaspect([50 length(industry) 1])
-
-figure(6); clf;
-subplot(1,2,1)
-imagesc(abs(Sigma2(I2,I2))); colormap jet;
-subplot(1,2,2)
-imagesc(indvalues(I2)'); colormap jet;
-
-figure(7); clf;
-subplot(1,2,1)
-imagesc(abs(Sigma(I,I))); colormap jet; 
-subplot(1,2,2)
-imagesc(indvalues(I)'); colormap jet;
-
 
 %%
+% Xn = quantilenorm(X);
+Xn0 = log10(X);
+
+Sigma0 = corr(Xn0');
+Z0 = linkage(Sigma0,'ward');
+I0 = optimalleaforder(Z0,pdist(Sigma0));
+figure(1);clf;
+imagesc(Sigma0(I0,I0)); colormap jet;
 
 
-%%
+%% remove principal component
+% [V,D]= eig(Sigma);
+% vi=V(I,1);
+% Sigma2 = Sigma(I,I)-D(1,1)*(vi*vi');
+% 
+% Z = linkage(Sigma2,'ward');
+% I2 = optimalleaforder(Z,pdist(Sigma2));
+% 
+% figure(3);clf;
+% imagesc(abs(Sigma2(I2,I2))); colormap jet;
+%% Per industry ordering
+% 
+% K=[];
+% for j=1:length(keySet)
+%     I3 = find(indvalues==j);
+%     Z3 = linkage(Sigma2(I3,I3),'ward');
+%     I4 = optimalleaforder(Z3,pdist(Sigma2(I3,I3)));
+%     K = [K I3(I4)];
+% end
+
+%% extracting block
+
+Xn1 = Xn0(I0(320:end),:);
+
+Sigma1 = corr(Xn1');
+Z1 = linkage(Sigma1,'ward');
+I1 = optimalleaforder(Z1,pdist(Sigma1));
+figure(1);clf;
+imagesc(Sigma1(I1,I1)); colormap jet; axis square
+
+Xn = Xn1;
+Sigma = Sigma1;
+I = I1;
+
+%% splitting train/test
+
 [p,n]=size(Xn);
-nt = ceil(3/4*n);
-Xtrain = Xn(:,1:nt);
-Xtest = Xn(:,nt+1:end);
+% nt0 = ceil(2/4*n);
+% nt1 = ceil(3/4*n);
+% nt2 = ceil(4/4*n);
+
+nb = 20;
+J = 1:n;
+J = ceil(J/n*nb);
+J = (mod(J,2)==1);
+
+
+Xtrain = Xn(:,J);
+Xtest = Xn(:,~J);
 Sigma_train = corr(Xtrain');
 Sigma_test = corr(Xtest');
 figure(50)
 subplot(1,2,1);
-imagesc(abs(Sigma_train(I,I)));
+imagesc(abs(Sigma_train(I,I)));axis square
 subplot(1,2,2);
-imagesc(abs(Sigma_test(I,I)));
+imagesc(abs(Sigma_test(I,I)));axis square
 
 %%
-Sigma=0.5*(Sigma2+Sigma2');
-% I=I2;
-save('sandp500','Sigma','Sigma_train', 'Sigma_test','names','industry', 'indvalues', 'I','K');
+[V,D]=eigs(Sigma_train);
+d=diag(D);
+[V2,D2]=eigs(Sigma_test);
+d2=diag(D2);
+
+figure(30);clf;
+plot(abs(V(I,1)*sqrt(d(1)))); hold on
+plot(sqrt(V(I,2:3).^2*d(2:3)),'r'); 
+hold off
+
+figure(31);clf;
+plot(abs(V2(I,1)*sqrt(d2(1)))); hold on
+plot(sqrt(V2(I,2:3).^2*d2(2:3)),'r');
+hold off
+
+% figure(51)
+% subplot(1,2,1);
+% imagesc(abs(Sigma_train(I,I)));axis square
+% subplot(1,2,2);
+% imagesc(abs(Sigma_test(I,I)));axis square
+
+% [p,n]=size(Xn);
+% % nt0 = ceil(2/4*n);
+% % nt1 = ceil(3/4*n);
+% % nt2 = ceil(4/4*n);
+% 
+% 
+% Xtrain = Xn(:,nt0:nt1);
+% Xtest = Xn(:,nt1+1:nt2);
+% Sigma_train = corr(Xtrain');
+% Sigma_test = corr(Xtest');
+% figure(50)
+% subplot(1,2,1);
+% imagesc(abs(Sigma_train(I,I)));axis square
+% subplot(1,2,2);
+% imagesc(abs(Sigma_test(I,I)));axis square
+
+%%
+Sigma=0.5*(Sigma+Sigma');
+save('sandp500','Sigma','Sigma_train', 'Sigma_test','names','industry', 'indvalues', 'I');
 
 
 

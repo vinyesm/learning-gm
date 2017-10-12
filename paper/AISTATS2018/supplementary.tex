@@ -407,6 +407,17 @@ $$
 \omega^{\circ}(x+y)=\max(\omega^{\circ}(x),\omega^{\circ}(y))  \quad \forall (x,y)\in\mathcal{M}\times\mathcal{M}^{\perp}.
 $$
 \end{lemma}
+\begin{proof}
+Let $(x,y)\in\mathcal{M}\times\mathcal{M}^{\perp}$. 
+\begin{align*}
+\omega^{\circ}(x+y) 
+&= \max_{\omega(p)+\omega(q)\leq 1} \left\langle x,p\right\rangle + \left\langle x,q\right\rangle  \\
+&= \max_{\omega(p)\leq \eta, \omega(q)\leq \nu, \eta+ \nu \leq 1} \left\langle x,p\right\rangle + \left\langle x,q\right\rangle  \\
+&= \max_{\eta+ \nu \leq 1} \eta\omega^{\circ}(x)+\nu\omega^{\circ}(y)\\
+&= \max(\omega^{\circ}(x),\omega^{\circ}(y))
+\end{align*}
+where in the first equality we use the decomposability of the norm  with respect to $\mathcal{M}$ and $\mathcal{M}^{\perp}$.
+\end{proof}
 
 By applying Lemma \ref{lem:dual_dec}, the first order gradient condion is characterized as 
 $$

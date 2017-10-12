@@ -370,6 +370,11 @@ $$
 
 Natural examples of are the trace norm for inducing low rank structure and $\ell_1$ norm for inducing spasity \TODO{detail spaces $\mathcal{M}$ and $\mathcal{M}^{\perp}$ ?}.\\
 
+\paragraph{$\|.\|_1$ norm for marices in $\RR^{p\times p}$: } Let $S$ be any particular subset of indices, then $\|.\|_1$ is decomposable with respect to $\mathcal{A}(S):=\left\lbrace M\in\RR^{p\times p} \enskip | \enskip M_{ij}=0 if (i,j) \notin S\right\rbrace$ and $\mathcal{B}(S):=\left\lbrace M\in\RR^{p\times p} \enskip | \enskip M_{ij}=0 if (i,j) \in S\right\rbrace$.
+
+\paragraph{$\|.\|_{tr}$ norm for p.s.d. matrices in $\RR^{p\times p}$: } If $M$ is a p.s.d. matrix and $M=USU^{top}$ its eigenvalue decomposition, then $\|.\|_tr$ is decomposable with respect to $\mathcal{A}(U):=\left\lbrace USU^{top} \enskip | D \enskip \text{diagonal}\right\rbrace$ and $\mathcal{B}(U):=\left\lbrace N\in\RR^{p\times p} \enskip | U^{\top}N=0 \enskip \text{and} \enskip N \succeq 0\right\rbrace$.\\
+
+
 Concretely, we focus on studying the exact recovery of $(x_{1}^*,x_{2}^*,..,x_{m}^*)$ from the optimization problem 
 \begin{align}
 \label{eq:gen_opt}
@@ -378,13 +383,13 @@ Concretely, we focus on studying the exact recovery of $(x_{1}^*,x_{2}^*,..,x_{m
 \end{align}
 where $\gamma_{i}>0$ are  user-defined regularization paramateters. With no further assumptions, the decomposability problem (\ref{eq:gen_opt}) is ill posed. However, under some incoherence conditions on tangent spaces we prove that the decomposition is exactly recovered. Theorem \ref{theo:two} states simple conditions that guarantee exact decomposition for problem  (\ref{eq:gen_opt}).
 %However, under some incoherence conditions on tangent spaces we prove that the decomposition is exactly recovered. In order to characterize incoherence conditions, we will remind the concepts of incoherence and tangent spaces.  We will extend the notion of incoherence to collections of subspaces.
-
+\TODO{say that we can generalize to gauges}
 \begin{theorem}
 \label{theo:two}
 %If 
 Let $y=\sum_{i=1}^{m}x_{i}^*$ and  $(\omega_{i})_{i=1..m}$ be a collection of norms. Define $\alpha$ and $\tilde{\alpha}$ to be the quantities $\alpha=1-\max_{i} \sum_{j\neq i} \xxi_{ij}(\T_i,\T_j)$ and $\tilde{\alpha}=1-\max_{i} \sum_{j\neq i} \tilde{\xxi}_{ij}(\T_i,\T_j)$. If  
 \BET
-\item[(i)] for all $i=1..m$, $\omega_{i}$ is decomposable with respect to $\big(\T_i,\T_i^{\perp}\big)$
+\item[(i)] for all $i=1..m$, $\omega_{i}$ is decomposable with respect to $\big(A_i,B_i\big)$, with $A_i\in\T_i$ \TODO{$B_i$ complementary of $A_i$ in $\T_i$}
 \item[(ii)]  $\alpha>0$ %\TODO{better condition = lemma 5 :  $\T_i(x_{i}^*)\cap span\big((\T_j(x_{j}^*)_{j\neq i})\big)=\left\lbrace{0}\right\rbrace$}
 \item[(iii)] $\frac{m(1-\alpha)}{\alpha}+ (1-\tilde{\alpha})<1$, %\TODO{better condition $\frac{m}{\alpha}\sum_{j\neq i}\xxi_{ij} + \sum_{j\neq i}\tilde{\xxi}_{ij}<1$}
 \EET
@@ -399,7 +404,7 @@ $$
 \forall{i}=1..m, \quad q\in\gamma_{i}\partial\omega_{i}(x_i^*)=\left\lbrace g\in\D  \enspace|\enspace \left\langle g,x_i^* \right\rangle = \gamma_i\omega_{i}(x_i^*) \quad \text{and} \quad \omega_{i}^{\circ}(g)\leq \gamma_i  \right\rbrace.
 $$
 Assume decomposability of $\omega_i$ with respect to $(\T_i,\T_i^{\perp})$. We decompose $q$ on  $\T_i$ and it orthogonal $\T_i^{\perp}$, i.e. $q=P_i q+P_i^{\perp} q$. 
-Let $q_i^*$ be the unique solution of $\left\lbrace g \in \T_i \enspace|\enspace \left\langle g,x_i^* \right\rangle = \gamma_i\omega_{i}(x_i^*) \enspace\text{s.t.}\enspace  \omega_{i}^{\circ}(g)\leq \gamma_i\right\rbrace$ \TODO{explain}. 
+Let $q_i^*$ be the unique solution of $\left\lbrace g \in \T_i \enspace|\enspace \left\langle g,x_i^* \right\rangle = \gamma_i\omega_{i}(x_i^*) \enspace\text{s.t.}\enspace  \omega_{i}^{\circ}(g)\leq \gamma_i\right\rbrace$ \TODO{explain existence and unicity of $q_i^*$ }. 
 \begin{lemma}
 \label{lem:dual_dec}
 If $\omega$ is a \emph{decomposable} norm with respect to $\mathcal{M}$ and $\mathcal{M}^{\perp}$, then

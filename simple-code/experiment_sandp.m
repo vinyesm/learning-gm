@@ -79,6 +79,8 @@ C=load('exp_123_700_200_train.mat');
 D=load('exp_123_700_200_test.mat');
 
 full(A.set1'*B.set1)
+esperance = (100/123)^2*123;
+
 UA = normc([A.U1{:}]);
 [UAA, ~, ~]= svd(UA);
 UB = normc([B.U1{:}]);

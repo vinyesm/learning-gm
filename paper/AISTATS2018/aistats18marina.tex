@@ -10,102 +10,7 @@
 % headings for the authors names, plus a copyright note at the end of
 % the first column of the first page.
 
-\usepackage[utf8]{inputenc} % allow utf-8 input
-\usepackage[T1]{fontenc}    % use 8-bit T1 fonts
-\usepackage{hyperref}       % hyperlinks
-\usepackage{url}            % simple URL typesetting
-\usepackage{booktabs}       % professional-quality tables
-\usepackage{amsfonts}       % blackboard math symbols
-\usepackage{nicefrac}       % compact symbols for 1/2, etc.
-\usepackage{microtype}      % microtypography
-\usepackage[utf8]{inputenc} % allow utf-8 input
-\usepackage[T1]{fontenc}    % use 8-bit T1 fonts
-\usepackage{hyperref}       % hyperlinks
-\usepackage{url}            % simple URL typesetting
-\usepackage{booktabs}       % professional-quality tables
-\usepackage{amsfonts,amsthm}       % blackboard math symbols
-\usepackage{nicefrac}       % compact symbols for 1/2, etc.
-\usepackage{microtype}      % microtypography
-\usepackage{MnSymbol}
-\usepackage{color}
-\usepackage{graphicx} % more modern
-\usepackage{subfigure} 
-\usepackage{natbib}
-\usepackage{algorithm}
-\usepackage{algpseudocode}
-\usepackage{lineno}
-\usepackage{thmtools,thm-restate}
-\usepackage{xr}
-
-%\linenumbers
-
-
-
-\def\A{\mathcal{A}}
-\def\ga{\gamma_\mathcal{A}}
-\def\Co{C^{\circ}}
-\def\Coa{C^{\circ}_{\!\!\mathcal{A}}}
-\def\Ca{C_{\!\mathcal{A}}}
-\def\go{\gamma^{\circ}}
-\def\goa{\gamma^{\circ}_{\A}}
-\newcommand{\dt}[2]{\langle#1,#2\rangle}
-\def\Olasso{\Omega_{\rm Lasso}} % Lasso norm
-\def\Ogl{\Omega_{\rm GL}} % group Lasso norm
-\def\Olgl{\Omega_{\rm LGL}} % latent group Lasso norm
-\def\tr{{\rm tr}}
-\newcommand\itgset[1]{[\!\![#1]\!\!]}
-\def\RR{\mathbb{R}}
-\def\EE{\mathbb{E}}
-\newcommand{\tblue}[1]{\textcolor{blue}{#1}}
-\newcommand{\tred}[1]{\textcolor{red}{#1}}
-\newcommand\TODO[1]{\tblue{TODO: \texttt{#1}}}
-%\newcommand\TODO[1]{}
-\newcommand\OLD[1]{\tblue{#1}}
-\newcommand\NEW[1]{\tred{#1}}
-\def\st{\text{s.t.}}
-\def\supp{\text{supp}}
-
-\def\BIT{\begin{itemize}}
-\def\EIT{\end{itemize}}
-\def\BET{\begin{enumerate}}
-\def\EET{\end{enumerate}}
-\def\ra{$\:\rightarrow\:$}
-\def\y{\mathbf{y}}
-\def\x{\mathbf{x}}
-\def\v{\mathbf{v}}
-\def\u{\mathbf{u}}
-\def\w{\mathbf{w}}
-\def\s{\mathbf{s}}
-\def\g{\mathbf{g}}
-\def\h{\mathbf{h}}
-\def\X{\mathbf{X}}
-\def\RR{\mathbb{R}}
-\def\ei{\varepsilon_i}
-\def\ej{\varepsilon_j}
-\def\T{\mathcal{T}}
-\def\I{\mathcal{I}}
-
-\def\op{{\rm op}}
-\def\supp{{\rm Supp}}
-\def\st{\text{s.t.}}
-\newcommand\normop[1]{|||#1|||_{\infty}}
-\newcommand\normbop[1]{|\!|\!|#1|\!|\!|_{\infty,2}}
-\newcommand\normopop[1]{|\!|\!|#1|\!|\!|_{\rm op,\rm op}}
-\newcommand\ve[1]{\varepsilon^{{\scriptscriptstyle#1}}}
-\newcommand\sss[1]{{\scriptscriptstyle#1}}
-\def\uI{U^{\sss{I}}}
-\def\xxi{\zeta}
-
-\newtheorem{thm}{Theorem}
-\newtheorem{prop}{Proposition}
-\newtheorem{fact}{Fact}
-\newtheorem{lemm}{Lemma}
-\newtheorem{coro}{Corollary}
-\newtheorem{mydef}{Definition}
-\newtheorem{rem}{Remark}
-
-
-
+\input{commands}
 
 \begin{document}
 
@@ -133,7 +38,7 @@
 
 
 \begin{abstract}
-Gaussian graphical models (GGM) have been widely used in many high-dimensional applications. Problems in which all relevant variables have been identified is extremely rare. The unobserved variables (or latent variables) can induce misleading dependence structure between observed variables. In this paper, we focus on a family of Latent Variable Gaussian graphical models (LVGGM), where the model is conditionally sparse given latent variables, but marginally non-sparse. In order to reveal latent variables and recover the structure of the complete model, we introduce a convex formulation with a new regularization imposing sparsity on latent factors.  We propose a tractable convex algorithm and study identifiability conditions. We show promising results on synthetic and real datasets.\\
+Gaussian graphical models (GGM) have been widely used in many high-dimensional applications. Problems in which all relevant variables have been identified is extremely rare. The unobserved variables (or latent variables) can induce misleading dependence structure between observed variables. In this paper, we focus on a family of Latent Variable Gaussian graphical models (LVGGM), where the model is conditionally sparse given latent variables, but marginally non-sparse. In order to reveal latent variables and recover the structure of the complete model, we introduce a convex formulation with a new regularization imposing sparsity on latent factors.  We propose a tractable convex algorithm and study identifiability conditions. We show promising results on synthetic \TODO{and real datasets (remove)}.\\
 \end{abstract}
 
 

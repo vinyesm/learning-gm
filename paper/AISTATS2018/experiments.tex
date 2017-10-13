@@ -102,9 +102,19 @@ We generate $50\times p$ samples for each model. Figure \ref{fig:synth} shows th
 \paragraph{Sparse Wishart matrix}
 We describe a protocol to generate a random concentration matrix from a desired graph structure $\mathcal{G}=(V,E)$, where $V$ and $E$ are the set of vertices and edges respectively. We build the incidence matrix of the $B\in\RR^{n\times m}$, where $n$ and $m$ are the numbers of vertices and edges respectively, such that $B_{i,j} = 1$ if the vertex $v_i$ and edge $e_j$ are incident and $0$ otherwise. $\tilde{B}$ is a sparse random matrix with sparsity pattern of $B$ where the nonzeros of $\tilde{B}$ are i.i.d. Gaussian variables. We obtain a random concentration matrix with the imposed structure sparse $K=\tilde{B}\tilde{B}^{\top}$. Note that this procedure is an extension of Wishart matrices to sparse matrices. The obtained matrix $A$ is automatically p.s.d.
 
-In our experiments we choose the latent structure of the graph and we build the sparse structure from an Erd\"os–R\'enyi model, where each edge has a fixed probability $p_{s}=0.01$ of being present or absent, independently of the other edges. We obtain the covariance on observed variables from the Schur complement of the concentration matrix with respect to latent variables as in equation (\ref{schur}).\\
+In our experiments we choose the latent structure of the graph and we build the sparse structure from an Erd\"os–R\'enyi model, where each edge has a fixed probability $p_{s}=0.01$ of being present or absent, independently of the other edges. We obtain the covariance on observed variables from the Schur complement of the concentration matrix with respect to latent variables as in equation (\ref{schur}). The settings for the experiment are the following : wet set the number of observed variables to $160$. We add $4$ latent variables connected to non overlapping groups of $35$ observed variables and we generate $2000$ samples. Figure \ref{fig:synthlarge} shows the low rank component of the ground truth covariance and the low rank component obtained by our method. We clearly recover the latent structure of the graph, i.e. the four groups of $35$ variables. \\
 
-\TODO{Experiment on bigger model showing blocks}
+
+\begin{figure}
+\label{fig:synthlarge}
+\center
+\begin{tabular}{cc}
+    \includegraphics[width=3.5cm]{fig/M} 
+  & \includegraphics[width=3.5cm]{fig/outputM} 
+   \\    (a) & (b) \\[6pt]
+\end{tabular}
+\caption{\TODO{Experiment on bigger model showing blocks $p = 160$,$n= 2000$,$k = 35$}}
+\end{figure}
 
 \subsection{Microarray dataset}
 

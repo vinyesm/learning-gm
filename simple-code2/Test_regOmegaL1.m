@@ -77,7 +77,7 @@ param.lambda=.1;
 param.mu=.05;
 param.epsStop=1e-5;
 
-pause()
+%pause()
 %keyboard
 
 inputData.X = X;
@@ -90,7 +90,7 @@ param.maxNbAtoms=1000;
 param.verbose=2;
 
 
-[ output, hist ] = regOmegaL1( inputData, param, inf );
+[ output, hist ] = regOmegaL1( inputData, param, set );
 
 
 figure(1);clf
@@ -108,16 +108,28 @@ semilogy(hist.objective,'k');
 title('objective');
 
 figure(17)
-imagesc(output.M);
+imagesc(output.M); colormap gray; axis square
 figure(18)
-imagesc(M);
+imagesc(M);axis square
 
 figure(19)
-imagesc(-full(output.S));
+imagesc(-full(output.S)); colormap gray; axis square
 figure(20)
-imagesc(S);
+imagesc(S);axis square
 
+figure(10);clf
+imagesc(-abs(((X'*X)))); colormap gray; axis square
 
+mkdir('fig');
+figure(21)
+imagesc(abs(output.M)); colormap(flipud(gray)); axis square
+%set(gca,'FontSize',40)
+colorbar('southoutside')
+print('fig/outputM','-depsc')
 
-%dif=sign(output.S)+sign(S);
-%full(output.atoms_u)
+figure(22)
+%set(gca,'FontSize',18)
+imagesc(abs(M)); colormap(flipud(gray)); axis square
+colorbar('southoutside')
+print('fig/M','-depsc')
+

@@ -120,16 +120,25 @@ imagesc(S);axis square
 figure(10);clf
 imagesc(-abs(((X'*X)))); colormap gray; axis square
 
+%%
+greenColorMap = [ones(1, 132), linspace(1, 0, 124)];
+redColorMap = ones(1,256);%[linspace(0, 1, 124), ones(1, 132)];
+blueColorMap = [linspace(0, 1, 62), ones(1,132), linspace(1, 0, 62)];
+colorMap = [redColorMap; greenColorMap; blueColorMap]';
+% Apply the colormap.
+colormap(colorMap);
+%colormap(flipud(gray))
+
 mkdir('fig');
 figure(21)
-imagesc(abs(output.M)); colormap(flipud(gray)); axis square
+imagesc(output.M); colormap(colorMap); axis square
 %set(gca,'FontSize',40)
 colorbar('southoutside')
 print('fig/outputM','-depsc')
 
 figure(22)
 %set(gca,'FontSize',18)
-imagesc(abs(M)); colormap(flipud(gray)); axis square
+imagesc(M); colormap(colorMap); axis square
 colorbar('southoutside')
 print('fig/M','-depsc')
 

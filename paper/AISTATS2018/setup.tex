@@ -6,6 +6,7 @@
 We consider a multivariate Gaussian variable $(X_{O},X_{H})\in\RR^{p+h}$ where $O$ and $H$ are the set of indices of observed variables, $p=|O|$, and latent variables, $h=|H|$ respectively. We denote $\Sigma\in\RR^{(p+h)\times(p+h)}$ the complete covariance matrix and $K=\Sigma^{-1}$ the complete concentration matrix. Let $\hat{\Sigma}\in\RR^{(p+h)\times(p+h)}$ denote the empirical covariance matrix. We only have access to the empirical marginal covariance matrix $\hat{\Sigma}_{OO}$. It is well known that the marginal concentration matrix on the observed variables can be computed from the full concentration matrix as
 
 \begin{align}
+\label{schur}
 \Sigma_{OO}^{-1} = K_{OO}-K_{OH}K_{HH}^{-1}K_{HO}.
 \end{align}
 

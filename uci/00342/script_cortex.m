@@ -12,7 +12,7 @@ addpath ../../simple-code2
 
 load('cortex');
 
-param.lambda=.3;
+param.lambda=.4;
 param.mu=.1;
 param.epsStop=1e-5;
 
@@ -46,10 +46,10 @@ semilogy(hist.objective,'k');
 title('objective');
 
 figure(17)
-imagesc(output.M(I1,I1));
+imagesc(abs(output.M(I1,I1)));
 
 figure(19)
-imagesc(-full(output.S(I1,I1)));
+imagesc(abs(output.S(I1,I1)));
 
 
 

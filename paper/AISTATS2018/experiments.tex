@@ -1,9 +1,7 @@
 \section{EXPERIMENTS}
 \label{experiments}
 
-\subsection{Synthetic data}
-
-\TODO{explain how we build models}
+\subsection{Toy examples}
 
 We consider three differents LVGGM with $p=45$ observed variables, with a tree structure on observed variables and the following structure on latent variables :
 \begin{itemize}
@@ -82,8 +80,6 @@ We generate $50\times p$ samples for each model. Figure \ref{fig:synth} shows th
 %\caption{Estimated complete concentration matrices: for \textit{model 1} in (a) ours and (b) $\ell_1+\tr$ regularization; for \textit{model 2} in (c) ours and (d) $\ell_1+\tr$ regularization; for \textit{model 3} in (e) ours and (f) $\ell_1+\tr$ regularization }
 %\end{figure}
 
-\TODO{Experiment on bigger model showing blocks}
-
 \begin{figure}
 \label{fig:synth}
 \center
@@ -101,6 +97,14 @@ We generate $50\times p$ samples for each model. Figure \ref{fig:synth} shows th
 \caption{Estimated $|K_{ij}|$, for $K$ the complete concentration matrices where the three (resp. four) first rows and columns correspond to the latent variables of \textit{model 1} and \textit{model 3} (resp. \textit{model 2}) : for \textit{model 1} in (a) ours and (d) $\ell_1+\tr$ regularization; for \textit{model 2} in (b) ours and (e) $\ell_1+\tr$ regularization; for \textit{model 3} in (c) ours and (f) $\ell_1+\tr$ regularization }
 \end{figure}
 
+\section{Synthetic experiments \TODO{on large models}}
+
+\paragraph{Sparse Wishart matrix}
+We describe a protocol to generate a random concentration matrix from a desired graph structure $\mathcal{G}=(V,E)$, where $V$ and $E$ are the set of vertices and edges respectively. We build the incidence matrix of the $B\in\RR^{n\times m}$, where $n$ and $m$ are the numbers of vertices and edges respectively, such that $B_{i,j} = 1$ if the vertex $v_i$ and edge $e_j$ are incident and $0$ otherwise. $\tilde{B}$ is a sparse random matrix with sparsity pattern of $B$ where the nonzeros of $\tilde{B}$ are i.i.d. Gaussian variables. We obtain a random concentration matrix with the imposed structure sparse $K=\tilde{B}\tilde{B}^{\top}$. Note that this procedure is an extension of Wishart matrices to sparse matrices. The obtained matrix $A$ is automatically p.s.d.
+
+In our experiments we choose the latent structure of the graph and we build the sparse structure from an Erd\"os–R\'enyi model, where each edge has a fixed probability $p_{s}=0.01$ of being present or absent, independently of the other edges. We obtain the covariance on observed variables from the Schur complement of the concentration matrix with respect to latent variables as in equation (\ref{schur}).\\
+
+\TODO{Experiment on bigger model showing blocks}
 
 \subsection{Microarray dataset}
 

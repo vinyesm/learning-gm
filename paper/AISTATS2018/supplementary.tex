@@ -409,7 +409,30 @@ Then $\big(x_{i}^*\big)_{i=1..m}$ is the unique optimizer of problem (\ref{eq:ge
 \begin{proof}
 We start by showing that $\big(x_{i}^*\big)_{i=1..m}$ is an optimum before prooving unicity. \TODO{$\big(x_{i}^*\big)_{i=1..m}$ is an optimum.}
 
-Suppose there is another solution $\big(\hat{x}_{i}\big)_{i=1..m}=\big({x}_{i}^*+n_i\big)_{i=1..m}$. Then  $\big({x}_{i}^*+n_i\big)_{i=1..m}$ is also a minimizer . From equality constraints we must have $\sum_{i=1}^{m}n_i=0$ since $\sum_{i=1}^{m}{x}_{i}^*=y=\sum_{i=1}^{m}{x}_{i}^*+n_i$.
+Suppose there is another solution $\big(\hat{x}_{i}\big)_{i=1..m}=\big({x}_{i}^*+n_i\big)_{i=1..m}$. Then  $\big({x}_{i}^*+n_i\big)_{i=1..m}$ is also a minimizer . From equality constraints we must have $\sum_{i=1}^{m}n_i=0$ since $\sum_{i=1}^{m}{x}_{i}^*=y=\sum_{i=1}^{m}{x}_{i}^*+n_i$. Applying subgradient property at $\big(\hat{x}_{i}\big)_{i=1..m}$, we have that for any subgradient $(q_1,...,q_m)$,
+\begin{align*}
+\sum_{i=1}^{m} \gamma_i \omega_i(x_i^*+n_i) \geq \sum_{i=1}^{m}\big(\gamma_i \omega_i(x_i^*) + \left\langle q_i,n_i\right\rangle\big)
+\end{align*}
+Decomposing the subradients on $\T_i$ and $\T_i^{\perp}$, gives $q_i=q_i^* + P_i^{\perp}(q_i)$ and  $q=q_i^* + P_i^{\perp}(q)$. Using this decompositions we have,
+\begin{align*}
+\left\langle q_i,n_i\right\rangle &= \left\langle q_i^* + P_i^{\perp}(q_i),n_i\right\rangle\\
+&= \left\langle q - P_i^{\perp}(q)+ P_i^{\perp}(q_i),n_i\right\rangle\\
+&= \left\langle P_i^{\perp}(q)+ P_i^{\perp}(q_i),n_i\right\rangle + \left\langle q,n_i\right\rangle
+\end{align*}
+Thus,
+\begin{align*}
+\sum_{i=1}^{m}\left\langle q_i,n_i\right\rangle &=\sum_{i=1}^{m}\left\langle P_i^{\perp}q+ P_i^{\perp}q_i,n_i\right\rangle \\
+&=\sum_{i=1}^{m}\left\langle P_i^{\perp}q+ P_i^{\perp}q_i,P_i^{\perp}n_i\right\rangle \\
+\end{align*}
+where in the first equality we use the fact that $\sum_{i=1}^{m} n_i=0$. We can select any subgradient $(q_1,...,q_m)$. \TODO{Suppose we can choose $q_i$ such that $\omega_i^{\circ}(P_i^{\perp}q_i)= \gamma_i$ and  $\left\langle P_i^{\perp}q_i,n_i\right\rangle = \gamma_i\omega_i(P_i^{\perp}n_i)$ }
+Then,
+\begin{align}
+\label{unineq}
+\sum_{i=1}^{m}\left\langle q_i,n_i\right\rangle \leq\sum_{i=1}^{m}\big(\gamma_i-\omega_i^{\circ}(P_i^{\perp}q)\big)\omega_i(P_i^{\perp}n_i)
+\end{align}
+where we used the inequality $\left\langle P_i^{\perp}q,P_i^{\perp}n_i\right\rangle\leq \omega_i^{\circ}(P_i^{\perp}q)\omega_i(P_i^{\perp}n_i)$. By assumption $\gamma_i-\omega_i^{\circ}>0$ for all $i=1..m$, so $\sum_{i=1}^{m}\left\langle q_i,n_i\right\rangle$ is strictly positive unless $\omega_i(P_i^{\perp}n_i)=0$. 
+\TODO{unfinished proof}
+
 \end{proof}
 
 

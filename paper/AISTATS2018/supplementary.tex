@@ -355,28 +355,47 @@ We can use similar ideas to bound:
 
 %$$\sigma-\|\ve{S}_I\|_{\op}-\!\!\!\sum_{J \in \I, \, J \neq I} \|\ve{J}_I\|_{\op} \geq \sigma - (\mu \gamma^{-1}+(m^*-1)) \frac{\epsilon}{\alpha}>0,$$
 
-\section{General case with decomposable norms}
+\section{A theory of unmixing by gauge minimization}
 
-In this section we study the decomposability problem. The following concepts and theorems are a generalization of the sparse + low rank matrix decomposition problem studied in \citet{chandrasekaran2011rank}. Let $\D$ stand for $\RR^{p}$ or $\RR^{p_{1} \times p_{2}}$ and let $x_{1}^*,x_{2}^*,..,x_{m}^*\in \D$. Assume each $x_{i}^*$ encodes some specific structure.\TODO{ tell in better way} Given $y=\sum_{i=1}^{m}x_{i}^*$ , can we uniquely recover the decomposition $(x_{1}^*,x_{2}^*,..,x_{m}^*)$ ? \\
+A common problem in the signal processing literature which is also highly relevant in the machine learning and statistics communities is the decomposition or unmixing problem: given $y=\sum_{i=1}^{m}x_{i}^*$ with all $x_{i}^*$ belonging to a vector space $\mathcal{D}$ and some prior information on the characteristics or structure of the $x_{i}^*$, under what conditions are they identifiable unambiguously? 
 
-\GO{Maybe we should use the expression \emph{demixing} used in signal processing, rather than decomposition, or at least warn the reader that the fact that we are considering decomposable norms is because the main norms inducing parcimony are decomposable but that this is unrelated to the decomposability of the problem}.
+In particular, we are interested by the case where each $x_{i}^*$ is ``simple'' for a given measure of complexity which is a norm or gauge $\omega_i$, and which encourages properties such as sparsity, low rankness and, more generally, the fact that $x_{i}^*$ belongs to a union of subspaces or submanifolds associated with the gauge. The most emblematic example of this type of decomposition in the recent literature is probably the sparse + low rank matrix decomposition problem studied in \citet{chandrasekaran2011rank}. \GO{TODO: We need to say that in fact there are other of instances of decomposition problem of this form in the literature like robust PCA (papers of Cand\`{e}s + papers of Caramanis), union of subspace models (see Rene Vidals's papers with Elhamifar). We should also say that latent group Lasso formulation are naturally of this form (including the ``dirty statistical models'' of Ali Jalali) and that there are tensor decomposition formulations like with the latent trace norm of Tomioka and Kishan Wimalawarne (see ref in the tex file).
+%Wimalawarne, K., Sugiyama, M., & Tomioka, R.  Multitask learning meets tensor factorization: Task imputation via convex optimization.  In Z. Ghahramani, M. Welling, C. Cortes, N. D. Lawrence, and K. Q. Weinberger (Eds.), Advances in Neural Information Processing Systems 27, pp.2825-2833, 2014. (Presented at Neural Information Processing Systems (NIPS2014), Montreal, Quebec, Canada, Dec. 8-11, 2014).
+To the best of our knowledge, recovery guarantees have only been studied in the case for the case of unmixing two components and not three or more. 
+}
 
-In general solving the decomposition problem is intractable \TODO{explain}. Hence, we consider a tractable approach employing convex relaxations. We formulate a convex optimization problem for decomposition using a combination of \emph{decomposable} norms $\omega_{i}:\D\mapsto \RR^{+}$ as surrogates inducing the desired structure on the $i$-th component. 
+The motivation for considering gauges is that is to common to consider underlying structures that are combinatorial, like sparsity and would lead to untractable formulations for the characterization of $x_i^*$. More precisely, in a number of settings, is it natural to assume that $x_i^*$ is a combination of a small number of elements of the ambient vector space, called \emph{atoms}, and picked in a collection $\mathcal{A}_i$, and a gauge naturally associated with this type of structure
+is the atomic gauge \GO{cite paper of Chandrasekaran on atomic gauges} associated with $\mathcal{A}_i$.
+
+We formulate the problem of recovering the components $x_i^*$ as a that of finding a minimal complexity decomposition, as follows
+\begin{equation}
+\label{eq:gen_opt}
+\min_{x_{1}, \ldots, x_{m} \in \,\D} \quad \sum_{i=1}^{m} \gamma_{i}\, \omega_{i}(x_{i})
+\qquad \text{s.t.} \quad y=\sum_{i=1}^{m}x_{i},
+\end{equation}
+where $\gamma_{i}>0$ are  user-defined regularization parameters. \GO{Is it actually useful to have $\gamma_i$ here? Can't they be implicitly encoded in $\omega_i$?}
 
 
-\NEW{A first definition of a concept of \emph{decomposable norms} was introduced in \citet{negahban2012unified}. Related concepts with stronger ground in convex analysis were then proposed in \citet{candes2013simple} and extended to gauges in \citet{vaiter2015model} \citep[see also][]{fadili2013stable,vaiter2015low}.}
+The question that we investigate in the next section is under what conditions on $x_i^*$ and $\omega_i$ are the components $x_i^*$ the unique solution of problem~\eqref{eq:gen_opt}.
 
-Following some of the ideas of~\citet{vaiter2015model}, we introduce a new definition.
+\subsection{Subspace associated with a gauge at a point}
+
+If the gauges $\omega_i$ were simply indicators of linear subspaces $\T_i$ of $\RR^p$, it would be sufficient for problem \eqref{eq:gen_opt} to have a unique solution that the collection of subspaces $\T_i$ are linearly independent in the sense that for any $i$, $\T_i \cap \text{span}(\T_j)_{j \neq i}=\{0\}$. 
+
+As will show, under some appropriate hypotheses, a gauge $\omega$ naturally associates to an element $x \in \D$ a subspace $\T_x$ containing $x$ and which, as we will discuss in Section ~\ref{} play essentially the same role as the spaces $\T_i$ in the previous discussion. In particular cases, this subspace seem to coincide with the notion of tangent space used in \citet{chandrasekaran2011rank} and as a way to formalize the concept of \emph{decomposable norms} introduced in \citet{negahban2012unified}. Concepts related to \emph{decomposable norms} with stronger ground in convex analysis that were then proposed in \citet{candes2013simple} and extended to gauges in \citet{vaiter2015model} \citep[see also][]{fadili2013stable,vaiter2015low}.
+
+Following closely some of the ideas of~\citet{vaiter2015model}, we introduce a simple definition leading to a construction of the space $\T_x$. 
 
 \begin{mydef}
-We say that the gauge $\omega$ has an \emph{orthogonally decomposable subgradient} at $x \in \RR^p$ if the projection of the origin $0$ on the affine span of $\partial \omega(x)$ is in the relative interior of $\partial \omega(x)$.
+We say that the gauge $\omega$ has an \emph{orthogonally decomposable subgradient} at $x \in \RR^p$ if the projection of the origin $0$ on the affine span of $\partial \omega(x)$ is in $\partial \omega(x)$.
 \end{mydef}
-\GO{We probably do not need the relative interior condition. TODO: double check why \citet{vaiter2015model} impose that condition. This would be a problem when working with gauges defined on cones that are direct sums of a points and a cone because then $q_x$ is not in the relative interior of the cone...}
+\GO{I removed he relative interior condition. TODO for G: double check why \citet{vaiter2015model} impose that condition. This would be a problem when working with gauges defined on cones that are direct sums of a points and a cone because then $q_x$ is not in the relative interior of the cone...}
 
 
 This terminology is motivated by the following characterization by~\citet{vaiter2015model}:
 
 \begin{prop}
+\label{prop:ods}
 If $\omega$ has an o.d.s.\ at $x$ then, denoting the projection of the origin $0$ on the affine span of $\partial \omega(x)$ by $q_x$, letting 
 $Q_x:=\partial \omega(x)-q_x$, and
 $\T_x:=\text{span}\big (Q_x\big)^{\bot}$ the subspace orthogonal\,\footnote{If the gauge $\omega$ has a domain (i.e. $\{x \mid \omega(x)< \infty \}$) which is included in a strict subspace $\mathcal{E}$ of $\RR^p$ then $\T_x$ can also be defined as the orthogonal complement of $\text{span}(Q_x)$ in $\mathcal{E}$ and not in $\RR^p$.} to $Q_x$
@@ -388,7 +407,9 @@ $\T_x:=\text{span}\big (Q_x\big)^{\bot}$ the subspace orthogonal\,\footnote{If t
 In other words, if $\omega_x^{\bot,\circ}$ denotes the gauge of $Q_x$ then we have $\partial \omega(x)=\big \{q \mid P_{\T_x}q=q_x, \:\: \omega_x^{\bot,\circ}\! (q-q_x) \leq 1\big\}.$ 
 \end{prop}
 
-Natural examples of gauge with o.d.s.\ are provided by \emph{separable} norms~\citep[called \emph{decomposable} in][]{negahban2012unified}.
+Note that $\omega_x^{\bot,\circ}(q')=\omega^{\circ}(q_x+q')+\iota_{\T_x^{\bot}}(q')$.\vspace{2mm}
+
+Natural examples of gauges with o.d.s.\ are provided by \emph{separable}/\emph{decomposable} norms~\citep{negahban2012unified}.
 
 \begin{mydef}
 Given a pair of subspaces $\mathcal{M}$ and $\mathcal{T}^{\perp}$ a norm $\omega$ is
@@ -399,16 +420,20 @@ $$
 \end{mydef}
 
 In particular if $\omega$ is separable on $(\mathcal{M},\mathcal{M}^{\perp})$ and $x \in \mathcal{M}$ is a point at which the restriction of $\omega$ to $\mathcal{M}$ is differentiable, then $\omega$ has an o.d.s.\ at $x$ with $q_x=\nabla (\omega|_{\mathcal{M}})(x)$ and $Q_x=\partial (\omega|_{\mathcal{M}^{\perp}})(0).$ Note that we must have $\mathcal{M} \subseteq \T_x$. There are many examples of norms separable on a pair $(\mathcal{M},\mathcal{M}^{\perp})$, including the Lasso and the group-Lasso.
-The trace norm is also separable but for a pair of spaces $(\mathcal{M},\mathcal{T}^{\perp})$ that are not the orthogonal complement of each other. However, given the form of the subgradient of the trace norm, it is easy to see that it satisfies the o.d.s. property as well.
+The trace norm is also separable but for a pair of spaces $(\mathcal{M},\mathcal{T}^{\perp})$ that are not the orthogonal complement of each other; however, given the form of the subgradient of the trace norm, it is easy to see that it satisfies the o.d.s. property as well.
 
-Note that separability at $x$ alone is not sufficient to obtain an o.d.s.\ property, and vice-versa, the o.d.s.\ property does not imply separability. In particular, it is easy to see that a number of norms that are not separable have the o.d.s. property: we can cite among others some OWL norms like SLOPE and more generally the locally decomposable norm considered in \citet{obozinski2016unified}. This mismatch of concepts has led different authors to make assumptions that are hybrid between the o.d.s.\ property above and separability~\citep{candes2013simple,fadili2013stable,vaiter2015model}.
+Note that separability at $x$ alone is not sufficient to obtain an o.d.s.\ property, and vice-versa, the o.d.s.\ property does not imply separability. In particular, it is easy to see that a number of norms that are not separable have the o.d.s.\ property: we can cite among others some OWL norms like SLOPE and more generally the locally decomposable norm considered in \citet{obozinski2016unified}. This mismatch of concepts has led different authors to make assumptions that are hybrid between the o.d.s.\ property above and separability~\citep{candes2013simple,fadili2013stable,vaiter2015model}.
 
-Note that the o.d.s.\ could possibly be generalized by replacing the orthogonal projection in the definition by oblique projection. 
+The o.d.s.\ property that we defined, while convenient, is in fact not necessary for the rest of our analysis and could be relaxed, to generalize our results to any (coercive) gauge. What is actually key is the fact that for any $q_x \in \partial \omega(x)$, the subspace $T_x:=\text{span}(q-q_x)^{\bot}$ is the same and that we have $x \in \T_x$, which is true for any gauge. 
+The o.d.s.\ assumption could therefore be generalized by replacing the orthogonal projection in the definition by an oblique projection. We do not consider this extension for simplicity, because in general the oblique projection is not defined in a unique way, and because we do not have concrete interesting examples of regularizers where the general case would be needed. 
 
 
 
-\GO{Need to revisit the examples below based on the new definition.}
+\GO{Interesting question: can $\T_x$ be interpreted as a tangent space to a manifold associated with the gauge? If so what is this manifold?}
 
+\subsection{Examples of gaugea with an orthogonally decomposable subgradient}
+
+\GO{This section needs to be rewritten: we need to revisit the examples below based on the new definition.} 
 Natural examples of are the trace norm for inducing low rank structure and $\ell_1$ norm for inducing sparsity \TODO{detail spaces $\mathcal{M}$ and $\mathcal{M}^{\perp}$ ?}.\\
 
 \paragraph{$\|.\|_1$ norm for matrices in $\RR^{p\times p}$: } Let $S$ be any particular subset of indices, then $\|.\|_1$ is decomposable with respect to $\mathcal{A}(S):=\left\lbrace M\in\RR^{p\times p} \enskip | \enskip M_{ij}=0\:\: \text{if} \:\: (i,j) \notin S\right\rbrace$ and $\mathcal{B}(S):=\left\lbrace M\in\RR^{p\times p} \enskip | \enskip M_{ij}=0 \:\: \text{if} \:\: (i,j) \in S\right\rbrace$.
@@ -416,40 +441,49 @@ Natural examples of are the trace norm for inducing low rank structure and $\ell
 \paragraph{$\|.\|_{tr}$ norm for p.s.d.\ matrices in $\RR^{p\times p}$: } If $M$ is a p.s.d.\ matrix and $M=USU^{\top}$ its eigenvalue decomposition, then $\|.\|_{tr}$ is decomposable with respect to $\mathcal{A}(U):=\left\lbrace USU^{\top} \enskip | D \enskip \text{diagonal}\right\rbrace$ and $\mathcal{B}(U):=\left\lbrace N\in\RR^{p\times p} \enskip | U^{\top}N=0 \enskip \text{and} \enskip N \succeq 0\right\rbrace$.\\
 
 
-Concretely, we focus on studying the exact recovery of $(x_{1}^*,x_{2}^*,..,x_{m}^*)$ from the optimization problem 
-\begin{align}
-\label{eq:gen_opt}
-\min_{x_{1}, \ldots, x_{m} \in \,\D} &\quad \sum_{i=1}^{m} \gamma_{i}\, \omega_{i}(x_{i})\\
-&\text{s.t.} \quad y=\sum_{i=1}^{m}x_{i}, \nonumber
-\end{align}
-where $\gamma_{i}>0$ are  user-defined regularization parameters. With no further assumptions, the decomposability problem (\ref{eq:gen_opt}) is ill posed. However, under some incoherence conditions on tangent spaces we prove that the decomposition is exactly recovered. Proposition \ref{prop:genunicity} states existence and unicity \GO{uniqueness is better} of the solution of (\ref{eq:gen_opt}) and theorem \ref{theo:gentwo} states simple conditions that guarantee exact decomposition for problem  (\ref{eq:gen_opt}). \TODO{say that we can generalize to gauges}
-%However, under some incoherence conditions on tangent spaces we prove that the decomposition is exactly recovered. In order to characterize incoherence conditions, we will remind the concepts of incoherence and tangent spaces.  We will extend the notion of incoherence to collections of subspaces.
+\GO{It could be nice to discuss what happens in general for an atomic norm: while it might be difficult to say exactly when it has the o.d.s.\ property, I have the impression that we have something like $Q_x \subset \{q \mid \langle q, a_i \rangle =0 \}$ so that $\T_x =\text{span} \big (\{a \in \mathcal{A} \mid \langle a, a_i \rangle =0\} \big )^\bot$ in that case. Or is just $\subset$? To think about...}
+
+\subsection{Identifiability conditions for unmixing by gauge minimization}
+
+%Concretely, we focus on studying the exact recovery of $(x_{1}^*,x_{2}^*,..,x_{m}^*)$ from the optimization problem 
+%\begin{align}
+%\label{eq:gen_opt}
+%\min_{x_{1}, \ldots, x_{m} \in \,\D} &\quad \sum_{i=1}^{m} \gamma_{i}\, \omega_{i}(x_{i})\\
+%&\text{s.t.} \quad y=\sum_{i=1}^{m}x_{i}, \nonumber
+%\end{align}
+%where $\gamma_{i}>0$ are  user-defined regularization parameters. 
 
 
-\begin{lemma}
-\label{lem:dual}
-\TODO{definition of $q_i^*$, useful for proposition \ref{prop:genunicity} and proof of theorem \ref{theo:gentwo}}
-$q_i^*$ be the unique solution of $\left\lbrace g \in \T_i \enspace|\enspace \left\langle g,x_i^* \right\rangle = \gamma_i\omega_{i}(x_i^*) \enspace\text{s.t.}\enspace  \omega_{i}^{\circ}(g)\leq \gamma_i\right\rbrace$ \TODO{explain existence and unicity of $q_i^*$, si norme restreinte à l'espace tangent, gradient unique car gradient d'une norme differentiable}
-\end{lemma}
-\begin{proof}
-\end{proof}
+Without any appropriate assumptions, problem (\ref{eq:gen_opt}) is in general not well posed and even if the solution is unique there is no guarantee that the obtained decomposition yields the $x_i^*$.
 
+However, under some incoherence conditions on tangent spaces we prove that the decomposition is exactly recovered. Proposition \ref{prop:genunicity} states existence and uniqueness \GO{[uniqueness is better English that unicity]} of the solution of (\ref{eq:gen_opt}) and theorem \ref{theo:gentwo} states simple conditions that guarantee exact decomposition for problem  (\ref{eq:gen_opt}). %However, under some incoherence conditions on tangent spaces we prove that the decomposition is exactly recovered. In order to characterize incoherence conditions, we will remind the concepts of incoherence and tangent spaces.  We will extend the notion of incoherence to collections of subspaces.
 
+\NEW{For all $i$, we consider the subgradient of the gauge $\omega_i$ evaluated at $x_i^*$. We introduce again a number of the notations introduced in Proposition~\ref{prop:ods} but for each $(\omega_i, x_i^*)$ pair. In particular, assuming that $\omega_i$ has an o.d.s. at $x_i^*$, we will note $q_i$ the projection of the origin on $\partial \omega_i(x_i^*)$, $Q_i=\partial \omega_i(x_i^*)-q_i$, $\T_i:=\text{span}(Q_i)^{\bot}$. Note that, as before, we have by construction $x_i^*,q_i \in \T_i$, $\langle x_i^*,q_i \rangle=\omega_i(x_i^*)$. For short we all also denote $\widetilde{\omega}_i^{\circ}$ the gauge of $Q_i$ and $P_i$ the projector on $\T_i$.}
+
+%\begin{lemma}
+%\label{lem:dual}
+%\TODO{definition of $q_i^*$, useful for proposition \ref{prop:genunicity} and proof of theorem \ref{theo:gentwo}}
+%$q_i^*$ be the unique solution of $\left\lbrace g \in \T_i \enspace|\enspace \left\langle g,x_i^* \right\rangle = \gamma_i\omega_{i}(x_i^*) \enspace\text{s.t.}\enspace  \omega_{i}^{\circ}(g)\leq \gamma_i\right\rbrace$ \TODO{explain existence and unicity of $q_i^*$, si norme restreinte à l'espace tangent, gradient unique car gradient d'une norme differentiable}
+%\end{lemma}
+%\begin{proof}
+%\end{proof}
+
+\GO{In the introduction of the thesis it might be relevant to introduce the definition of a finite gauge, of a coercive gauge, and remind the reader under what conditions a gauge is actually a norm. It might be good to motivate the use of gauge as opposed to only norms by (a) the fact that a subspace constraint combined with a norm regularization can be formulated concisely as a gauge whose domain is the corresponding subspace, (b) the fact that when working on cones (like cones of matrices) is natural to define a regularizer only on the cone and which is therefore not necessarily symmetric.t}
 
 \begin{prop}
 \label{prop:genunicity}
-Suppose that $y=\sum_{i=1}^m x_{i}^*$. \TODO{Introduce tangent spaces $\T_i $}.If
+Let $y:=\sum_{i=1}^m x_{i}^*$. If, for all $i$, $\omega_i$ is coercive\footnote{We say that a gauge $\omega$ is \emph{coercive} if $ ( \omega(x)=0 ) \: \Rightarrow\: (x=0)$.} and has an o.d.s.\ at $x_i^*$, and if with the above notations, 
 \BET
-\item[(i)] $\forall i, \: \T_i \cap \text{span}\big ( (\T_j)_{j\neq i}\big) =\{0\}$
-\item[(ii)] for all $i=1..m$, $\omega_{i}$ is decomposable with respect to $\big(A_i,B_i\big)$, with $A_i\in\T_i$ \TODO{$B_i$ complementary of $A_i$ in $\T_i$}
-\item[(iii)] there exists a dual $q$ such that : $\forall i\in 1..m$, $P_i q=q_i^*$ and $P_i^{\perp} q < \gamma_i$
+\item[(i)] the subspaces $(\T_i)_i$ are linearly independent\footnote{For a pair of subspaces, this is equivalent to what \citet{chandrasekaran2011rank} call \emph{transverse} subspaces}, i.e., $\forall i, \: \T_i \cap \text{span}\big ( (\T_j)_{j\neq i}\big) =\{0\}$,
+%\item[(ii)] for all $i=1..m$, $\omega_{i}$ is decomposable with respect to $\big(A_i,B_i\big)$, with $A_i\in\T_i$ \TODO{$B_i$ complementary of $A_i$ in $\T_i$}
+\item[(ii)] there exists a dual $q$ such that $\forall i\in 1..m$, $P_i q=q_i^*$ and $\widetilde{\omega}^{\circ}_i(P_i^{\perp} q) < \gamma_i$,
 \EET
-Then $\big(x_{i}^*\big)_{i=1..m}$ is the unique optimizer of problem (\ref{eq:gen_opt}).
+then $\big(x_{i}^*\big)_{i=1..m}$ is the unique optimum of problem (\ref{eq:gen_opt}).
 \end{prop}
 \begin{proof}
-We start by showing that $\big(x_{i}^*\big)_{i=1..m}$ is an optimum before proving uniqueness. \TODO{$\big(x_{i}^*\big)_{i=1..m}$ is an optimum.}
+We start by showing that $\big(x_{i}^*\big)_{i=1..m}$ is an optimum before proving uniqueness.\GO{TODO: In order to prove optimality, write the subgradient condition for the optimality and recover condition $(ii)$ except with $\leq$ instead of $<$.}
 
-Suppose there is another solution $\big(\hat{x}_{i}\big)_{i=1..m}=\big({x}_{i}^*+n_i\big)_{i=1..m}$. Then  $\big({x}_{i}^*+n_i\big)_{i=1..m}$ is also a minimizer . From equality constraints we must have $\sum_{i=1}^{m}n_i=0$ since $\sum_{i=1}^{m}{x}_{i}^*=y=\sum_{i=1}^{m}{x}_{i}^*+n_i$. Applying subgradient property at $\big(\hat{x}_{i}\big)_{i=1..m}$, we have that for any subgradient $(q_1,...,q_m)$,
+We now prove uniqueness. Suppose there is another solution $\big(\hat{x}_{i}\big)_{i=1..m}=\big({x}_{i}^*+n_i\big)_{i=1..m}$. Then  $\big({x}_{i}^*+n_i\big)_{i=1..m}$ is also a minimizer . Given the equality constraints we must have $\sum_{i=1}^{m}n_i=0$ since $\sum_{i=1}^{m}{x}_{i}^*=y=\sum_{i=1}^{m}{x}_{i}^*+n_i$. Applying the subgradient definition at $\big(\hat{x}_{i}\big)_{i=1..m}$, we have that for any $(q_1,...,q_m)$  with $q_i \in \partial \omega_i(x_i^*)$, 
 \begin{align*}
 \sum_{i=1}^{m} \gamma_i \omega_i(x_i^*+n_i) \geq \sum_{i=1}^{m}\big(\gamma_i \omega_i(x_i^*) + \left\langle q_i,n_i\right\rangle\big)
 \end{align*}
@@ -464,39 +498,70 @@ Thus,
 \sum_{i=1}^{m}\left\langle q_i,n_i\right\rangle &=\sum_{i=1}^{m}\left\langle P_i^{\perp}(q_i-q),n_i\right\rangle \\
 &=\sum_{i=1}^{m}\left\langle P_i^{\perp}(q_i)-P_i^{\perp}(q),P_i^{\perp}n_i\right\rangle \\
 \end{align*}
-where in the first equality we use the fact that $\sum_{i=1}^{m} n_i=0$. We can select any subgradient $(q_1,...,q_m)$. \TODO{Suppose we can choose $q_i$ such that $\omega_i^{\circ}(P_i^{\perp}q_i)= \gamma_i$ and  $\left\langle P_i^{\perp}q_i,n_i\right\rangle = \gamma_i\omega_i(P_i^{\perp}n_i)$ }
+where in the first equality we use the fact that $\sum_{i=1}^{m} n_i=0$. We can select any subgradient $(q_1,...,q_m)$. \TODO{Suppose we can choose $q_i$ such that $\widetilde{\omega}_i^{\circ}(P_i^{\perp}q_i)= \gamma_i$ and  $\left\langle P_i^{\perp}q_i,n_i\right\rangle = \gamma_i\widetilde{\omega}_i(P_i^{\perp}n_i)$ } \GO{TODO:Explain why we can do this based on the new o.d.s.\ stuff}
 Then,
 \begin{align}
 \label{unineq}
-\sum_{i=1}^{m}\left\langle q_i,n_i\right\rangle \geq\sum_{i=1}^{m}\big(\gamma_i-\omega_i^{\circ}(P_i^{\perp}q)\big)\, \omega_i(P_i^{\perp}n_i),
+\sum_{i=1}^{m}\left\langle q_i,n_i\right\rangle \geq\sum_{i=1}^{m}\big(\gamma_i-\widetilde{\omega}_i^{\circ}(P_i^{\perp}q)\big)\, \widetilde{\omega}_i(P_i^{\perp}n_i),
 \end{align}
-where we used the inequality $\left\langle P_i^{\perp}q,P_i^{\perp}n_i\right\rangle\leq \omega_i^{\circ}(P_i^{\perp}q)\omega_i(P_i^{\perp}n_i)$. By assumption $\gamma_i-\omega_i^{\circ}(P_i^{\perp}q)>0$ for all $i=1..m$, so $\sum_{i=1}^{m}\left\langle q_i,n_i\right\rangle$ is strictly positive unless $\omega_i(P_i^{\perp}n_i)=0$ for all $i=1..m$. 
-\TODO{unfinished proof}
-\NEW{But $\omega_i(P_i^{\perp}n_i)=0$ implies that $P_i^{\perp} n_i=0$, which entails that $n_i \in \T_i$ for all $i$. Finally since $\sum_{i=1}^m n_i=0$, we have that $n_i=-\sum_{j \neq i} n_j$ so that $n_i \in \T_i \cap \text{span}\big ( (\T_j)_{j\neq i}\big)=\{0\}$ by assumption $(i)$. So $n_i=0$ for all $i$ and this proves the uniqueness of the decomposition.}
+where we used the inequality $\left\langle P_i^{\perp}q,P_i^{\perp}n_i\right\rangle\leq \widetilde{\omega}_i^{\circ}(P_i^{\perp}q)\, \widetilde{\omega}_i(P_i^{\perp}n_i)$. By assumption $\gamma_i-\widetilde{\omega}_i^{\circ}(P_i^{\perp}q)>0$ for all $i=1..m$, so $\sum_{i=1}^{m}\left\langle q_i,n_i\right\rangle$ is strictly positive unless $\widetilde{\omega}_i(P_i^{\perp}n_i)=0$ for all $i=1..m$. \NEW{But since we assumed that $\omega_i$ is coercive, so is $\widetilde{\omega}_i$ and thus $( \widetilde{\omega}_i(P_i^{\perp}n_i)=0 ) \; \Rightarrow P_i^{\perp} n_i=0$, which entails that $n_i \in \T_i$ for all $i$. Finally since $\sum_{i=1}^m n_i=0$, we have that $n_i=-\sum_{j \neq i} n_j$ so that $n_i \in \T_i \cap \text{span}\big ( (\T_j)_{j\neq i}\big)=\{0\}$ by assumption $(i)$. So $n_i=0$ for all $i$ and this proves the uniqueness of the decomposition.}
 \end{proof}
 
 
 \begin{theorem}
 \label{theo:gentwo}
 %If 
-Let $y=\sum_{i=1}^{m}x_{i}^*$ and  $(\omega_{i})_{i=1..m}$ be a collection of norms. Define $\alpha$ and $\tilde{\alpha}$ to be the quantities $\alpha=1-\max_{i} \sum_{j\neq i} \xxi_{ij}(\T_i,\T_j)$ and $\tilde{\alpha}=1-\max_{i} \sum_{j\neq i} \tilde{\xxi}_{ij}(\T_i,\T_j)$. If  
-\BET
-\item[(i)] for all $i=1..m$, $\omega_{i}$ is decomposable with respect to $\big(A_i,B_i\big)$, with $A_i\in\T_i$ \TODO{$B_i$ complementary of $A_i$ in $\T_i$}
-\item[(ii)]  $\alpha>0$ %\TODO{better condition = lemma 5 :  $\T_i(x_{i}^*)\cap span\big((\T_j(x_{j}^*)_{j\neq i})\big)=\left\lbrace{0}\right\rbrace$}
-\item[(iii)] $\frac{m(1-\alpha)}{\alpha}+ (1-\tilde{\alpha})<1$, %\TODO{better condition $\frac{m}{\alpha}\sum_{j\neq i}\xxi_{ij} + \sum_{j\neq i}\tilde{\xxi}_{ij}<1$}
-\EET
-Then, the  decomposition given by $\big(x_{i}^*\big)_{i=1..m}$ is solution to the optimization problem \begin{align*}
-\min_{x_{1},...,x_{m}} &\quad \sum_{i=1}^{m} \gamma_{i}\omega_{i}(x_{i})\quad \text{s.t.} \quad y=\sum_{i=1}^{m}x_{i}.
-\end{align*}
+Let $y=\sum_{i=1}^{m}x_{i}^*$ and  $(\omega_{i})_{i=1..m}$ be a collection of gauges such that $\omega_i$ is coercivce and has an o.d.s.\ at $x_i^*$. Let $\T_i$ be defined as before. Define $\alpha$ and $\tilde{\alpha}$ to be the quantities $\alpha=1-\max_{i} \sum_{j\neq i} \xxi_{ij}(\T_i,\T_j)$ and $\tilde{\alpha}=1-\max_{i} \sum_{j\neq i} \tilde{\xxi}_{ij}(\T_i,\T_j)$ \GO{TODO:With $\zeta$s defined by? One of the issues here is that the gauge involved at the end of the proof is $\widetilde{\omega}_i$ and not  ${\omega}_i$ which means that the $\zeta_{ij}$ and $\tilde{\zeta}_{ij}$ considered should be the ones for $\widetilde{\omega}_i$... Also in the definition of $\zeta_{ij}$ and $\tilde{\zeta}_{ij}$ in the lemmas we had $\omega_i$ and not $\omega_i^{\circ}$. Maybe we should have other notations for the preliminary lemmas like $\nu_i$. Suggestions welcome...}. If  
+%\BET
+%\item[(i)] for all $i=1..m$, $\omega_{i}$ is decomposable with respect to $\big(A_i,B_i\big)$, with $A_i\in\T_i$ \TODO{$B_i$ complementary of $A_i$ in $\T_i$}
+ $\alpha>0 \:$ %\TODO{better condition = lemma 5 :  $\T_i(x_{i}^*)\cap span\big((\T_j(x_{j}^*)_{j\neq i})\big)=\left\lbrace{0}\right\rbrace$}
+ and  $\: \frac{m(1-\alpha)}{\alpha}+ (1-\tilde{\alpha})<1$, %\TODO{better condition $\frac{m}{\alpha}\sum_{j\neq i}\xxi_{ij} + \sum_{j\neq i}\tilde{\xxi}_{ij}<1$}
+%\EET
+hen, the  decomposition given by $\big(x_{i}^*\big)_{i=1..m}$ is \NEW{the unique} solution to problem~(\ref{eq:gen_opt}).
 \end{theorem}
 
 \begin{proof}
-The optimization problem \ref{eq:gen_opt} admits $\big(x_{i}^*\big)_{i=1..m}$ as a solution if and only if it satisfies first order gradient condition in the sense that there exists $q\in\D$ such that
+\GO{TODO: this proof needs to be revised based on the new o.d.s property and on the new version of Proposition 2}
+
+Problem \eqref{eq:gen_opt} admits $\big(x_{i}^*\big)_{i=1..m}$ as a solution if and only if it satisfies first order gradient condition in the sense that there exists $q\in\D$ such that
 $$
 \forall{i}=1..m, \quad q\in\gamma_{i}\partial\omega_{i}(x_i^*)=\left\lbrace g\in\D  \enspace|\enspace \left\langle g,x_i^* \right\rangle = \gamma_i\omega_{i}(x_i^*) \quad \text{and} \quad \omega_{i}^{\circ}(g)\leq \gamma_i  \right\rbrace.
 $$
 Assume decomposability of $\omega_i$ with respect to $(\T_i,\T_i^{\perp})$. We decompose $q$ on  $\T_i$ and its orthogonal $\T_i^{\perp}$, i.e. $q=P_i q+P_i^{\perp} q$. 
 Let $q_i^*$ be the unique solution of $\left\lbrace g \in \T_i \enspace|\enspace \left\langle g,x_i^* \right\rangle = \gamma_i\omega_{i}(x_i^*) \enspace\text{s.t.}\enspace  \omega_{i}^{\circ}(g)\leq \gamma_i\right\rbrace$ \TODO{explain existence and unicity of $q_i^*$ }. 
+
+By applying Lemma \ref{lem:dual_dec}, the first order gradient condition is characterized as 
+$$
+\forall{i}=1..m, \quad P_i q=q_i^* \quad \text{and} \quad \omega_i^\circ(P_i^{\perp} q)\leq \gamma_i.
+$$
+
+ The optimization problem admits the unique announced solution if it satisfies first order gradient condition in the sense that there exists a subgradient $q \in \D$ that satisfies the following conditions
+\BET
+\item[(i)] for all any $x_{1},x_{2},..,x_{m}\in \D$, $\sum_{i=1}^{m} x_{i}=0 \: \Rightarrow \: (x_{i}=0)$. \GO{Strangely written: this is the condition on linear independence of the subspaces.} 
+\item[(ii)] $\forall i$, $P_i q = q_i^*$
+\item[(iii)]$\forall i$, $\widetilde{\omega}_{i}^{\circ}(P_i^{\perp} q)<1$
+\EET
+We now prove the different statements. 
+\BET
+\item[(i)]  Lemma~\ref{lem:zero_inter} shows the result. 
+\item[(ii)]  The existence of a unique solution of the set of equations $\left\lbrace P_i q = q_i^* \right\rbrace$ follows from applying Corollary \ref{cor:main} on subspaces $\left(\T_1,..,\T_m\right)$ equipped respectively with norms $\omega_1,.., \omega_m$. The solution writes $q=\sum_{i=1}^m(q_i^*+\epsilon_i)$, where $\epsilon_i$ belongs to $\T_i$.
+\item[(iii)]  
+\begin{align*}
+\widetilde{\omega}_{i}^{\circ}(P_i^{\perp} q) = \widetilde{\omega}_{i}^{\circ}(q-q_i^*) = \widetilde{\omega}_{i}^{\circ}\big(\sum_{j=1}^m\epsilon_j + \sum_{j\neq i}^m q_j^*\big) 
+&\leq m \max_j \widetilde{\omega}_{i}^{\circ}(\epsilon_j) + m  \max_{j\neq i} \widetilde{\omega}_{i}^{\circ}(q_j^*) \\
+&\leq m \max_j \widetilde{\omega}_{i}^{\circ}(\epsilon_j) + m  \max_{j\neq i} \widetilde{\omega}_{i}^{\circ}(q_j^*)
+& < 1 
+\end{align*}
+where the last inequality uses the third condition of the theorem.
+\EET
+\end{proof}
+
+
+
+
+\subsection{Results that are no longer needed in the current proofs scheme}
+\GO{Or are they still useful?}
+\GO{See the proof in \citet{vaiter2015model} to make this rigorous. The proof could be in the thesis or in the appendix of a paper if needed.}
 \begin{lemma}
 \label{lem:dual_dec}
 If $\omega$ is a \emph{decomposable} norm with respect to $\mathcal{M}$ and $\mathcal{M}^{\perp}$, then
@@ -516,31 +581,6 @@ Let $(x,y)\in\mathcal{M}\times\mathcal{M}^{\perp}$.
 where in the first equality we use the decomposability of the norm  with respect to $\mathcal{M}$ and $\mathcal{M}^{\perp}$.
 \end{proof}
 
-By applying Lemma \ref{lem:dual_dec}, the first order gradient condition is characterized as 
-$$
-\forall{i}=1..m, \quad P_i q=q_i^* \quad \text{and} \quad \omega_i^\circ(P_i^{\perp} q)\leq \gamma_i.
-$$
-
- The optimization problem admits the unique announced solution if it satisfies first order gradient condition in the sense that there exists a subgradient $q \in \D$ that satisfies the following conditions
-\BET
-\item[(i)] for all any $x_{1},x_{2},..,x_{m}\in \D$, $\sum_{i=1}^{m} x_{i}=0 \: \Rightarrow \: (x_{i}=0)$. 
-\item[(ii)] $\forall i$, $P_i q = q_i^*$
-\item[(iii)]$\forall i$, $\omega_{i}^{\circ}(P_i^{\perp} q)<1$
-\EET
-We now prove the different statements. 
-\BET
-\item[(i)]  Lemma~\ref{lem:zero_inter} shows the result. 
-\item[(ii)]  The existence of a unique solution of the set of equations $\left\lbrace P_i q = q_i^* \right\rbrace$ follows from applying Corollary \ref{cor:main} on subspaces $\left(\T_1,..,\T_m\right)$ equipped respectively with norms $\omega_1,.., \omega_m$. The solution writes $q=\sum_{i=1}^m(q_i^*+\epsilon_i)$, where $\epsilon_i$ belongs to $\T_i$.
-\item[(iii)]  
-\begin{align*}
-\omega_{i}^{\circ}(P_i^{\perp} q) = \omega_{i}^{\circ}(q-q_i^*) = \omega_{i}^{\circ}\big(\sum_{j=1}^m\epsilon_j + \sum_{j\neq i}^m q_j^*\big) 
-&\leq m \max_j \omega_{i}^{\circ}(\epsilon_j) + m  \max_{j\neq i} \omega_{i}^{\circ}(q_j^*) \\
-&\leq m \max_j \omega_{i}^{\circ}(\epsilon_j) + m  \max_{j\neq i} \omega_{i}^{\circ}(q_j^*)
-& < 1 
-\end{align*}
-where the last inequality uses the third condition of the theorem.
-\EET
-\end{proof}
 
 \newpage
 \section{Proofs of section 3}

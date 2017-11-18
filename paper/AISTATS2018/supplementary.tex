@@ -357,7 +357,7 @@ We can use similar ideas to bound:
 
 \section{A theory of unmixing by gauge minimization}
 
-A common problem in the signal processing literature which is also highly relevant in the machine learning and statistics communities is the decomposition or unmixing problem: given $y=\sum_{i=1}^{m}x_{i}^*$ with all $x_{i}^*$ belonging to a vector space $\mathcal{D}$ and some prior information on the characteristics or structure of the $x_{i}^*$, under what conditions are they identifiable unambiguously? 
+A common problem in the signal processing literature which is also highly relevant in the machine learning and statistics communities is the decomposition or unmixing problem: given $y=\sum_{i=1}^{m}x_{i}^*$ with all $x_{i}^*$ belonging to a vector space $\mathcal{D}$ and some prior information on the characteristics or structure of the $x_{i}^*$, under what conditions are they identifiable unambiguously? \GO{Need to see if there are some references that are appropriate here.}
 
 In particular, we are interested by the case where each $x_{i}^*$ is ``simple'' for a given measure of complexity which is a norm or gauge $\omega_i$, and which encourages properties such as sparsity, low rankness and, more generally, the fact that $x_{i}^*$ belongs to a union of subspaces or submanifolds associated with the gauge. The most emblematic example of this type of decomposition in the recent literature is probably the sparse + low rank matrix decomposition problem studied in \citet{chandrasekaran2011rank}. \GO{TODO: We need to say that in fact there are other of instances of decomposition problem of this form in the literature like robust PCA (papers of Cand\`{e}s + papers of Caramanis), union of subspace models (see Rene Vidals's papers with Elhamifar). We should also say that latent group Lasso formulation are naturally of this form (including the ``dirty statistical models'' of Ali Jalali) and that there are tensor decomposition formulations like with the latent trace norm of Tomioka and Kishan Wimalawarne (see ref in the tex file).
 %Wimalawarne, K., Sugiyama, M., & Tomioka, R.  Multitask learning meets tensor factorization: Task imputation via convex optimization.  In Z. Ghahramani, M. Welling, C. Cortes, N. D. Lawrence, and K. Q. Weinberger (Eds.), Advances in Neural Information Processing Systems 27, pp.2825-2833, 2014. (Presented at Neural Information Processing Systems (NIPS2014), Montreal, Quebec, Canada, Dec. 8-11, 2014).
@@ -431,7 +431,7 @@ The o.d.s.\ assumption could therefore be generalized by replacing the orthogona
 
 \GO{Interesting question: can $\T_x$ be interpreted as a tangent space to a manifold associated with the gauge? If so what is this manifold?}
 
-\subsection{Examples of gaugea with an orthogonally decomposable subgradient}
+\subsection{Examples of gauge with an orthogonally decomposable subgradient}
 
 \GO{This section needs to be rewritten: we need to revisit the examples below based on the new definition.} 
 Natural examples of are the trace norm for inducing low rank structure and $\ell_1$ norm for inducing sparsity \TODO{detail spaces $\mathcal{M}$ and $\mathcal{M}^{\perp}$ ?}.\\
@@ -556,6 +556,7 @@ where the last inequality uses the third condition of the theorem.
 \EET
 \end{proof}
 
+\GO{As a nice simple example of our theory we could try and see what we recover if we consider a collection of gauges that are each associated with an atom and its opposite. We should recover a special case of the theory for support recovery for the L1 norm...}
 
 
 

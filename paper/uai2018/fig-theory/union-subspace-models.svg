@@ -1,0 +1,309 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="210mm"
+   height="297mm"
+   viewBox="0 0 744.09448819 1052.3622047"
+   id="svg2"
+   version="1.1"
+   inkscape:version="0.91 r13725"
+   sodipodi:docname="union-subspace-models.svg">
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="1.7550639"
+     inkscape:cx="252.19696"
+     inkscape:cy="656.48507"
+     inkscape:document-units="px"
+     inkscape:current-layer="layer1"
+     showgrid="true"
+     inkscape:snap-grids="true"
+     inkscape:window-width="1440"
+     inkscape:window-height="855"
+     inkscape:window-x="0"
+     inkscape:window-y="1"
+     inkscape:window-maximized="1"
+     inkscape:snap-bbox="true"
+     inkscape:bbox-nodes="false">
+    <inkscape:grid
+       id="grid4152"
+       type="xygrid"
+       spacingx="2"
+       spacingy="2" />
+  </sodipodi:namedview>
+  <defs
+     id="defs4" />
+  <metadata
+     id="metadata7">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     id="layer1"
+     inkscape:groupmode="layer"
+     inkscape:label="Layer 1">
+    <rect
+       y="292.36984"
+       x="80.007645"
+       height="150.25227"
+       width="119.41493"
+       id="rect4178"
+       style="fill:#b3b3b3;fill-opacity:1;stroke:none"
+       inkscape:export-filename="/Users/marina/Documents/phd-thesis/robust-pca.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90" />
+    <rect
+       y="292.36984"
+       x="80.007645"
+       height="150.25227"
+       width="119.41493"
+       id="rect4326"
+       style="fill:none;fill-opacity:1;stroke:#000000;stroke-width:0.8202675;stroke-miterlimit:0.40000001;stroke-dasharray:none;stroke-opacity:1"
+       inkscape:export-filename="/Users/marina/Documents/phd-thesis/robust-pca.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90" />
+    <g
+       transform="matrix(0.37608747,0,0,0.37608747,93.189013,233.47013)"
+       id="g3795"
+       inkscape:export-filename="/Users/marina/Documents/phd-thesis/robust-pca.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90">
+      <g
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;letter-spacing:normal;word-spacing:normal;text-anchor:start;fill:none;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:10.43299961;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+         word-spacing="normal"
+         letter-spacing="normal"
+         font-size-adjust="none"
+         font-stretch="normal"
+         font-weight="normal"
+         font-variant="normal"
+         font-style="normal"
+         stroke-miterlimit="10.433"
+         xml:space="preserve"
+         transform="matrix(1.0629921,0,0,-1.0629921,-186.02362,789.27165)"
+         id="content"><path
+           style="fill:#000000;stroke-width:0"
+           inkscape:connector-curvature="0"
+           id="path3798"
+           d="m 491.49,428.71 0,0.1 -0.01,0.09 0,0.09 -0.01,0.09 -0.01,0.08 -0.01,0.08 -0.01,0.08 -0.01,0.07 -0.02,0.07 -0.01,0.07 -0.02,0.06 -0.02,0.06 -0.02,0.06 -0.02,0.05 -0.02,0.05 -0.03,0.05 -0.02,0.04 -0.03,0.04 -0.02,0.04 -0.03,0.04 -0.03,0.03 -0.03,0.03 -0.03,0.02 -0.03,0.03 -0.03,0.02 -0.03,0.02 -0.03,0.01 -0.03,0.01 -0.03,0.01 -0.03,0.01 -0.04,0 -0.03,0 c -0.2,0 -0.66,-0.2 -0.7,-1.34 -0.21,-3.44 -3.69,-5.48 -6.92,-5.48 -2.89,0 -5.39,1.54 -7.99,3.29 -2.69,1.78 -5.37,3.58 -8.61,3.58 -4.64,0 -8.33,-3.53 -8.33,-8.12 0,-1.1 0.41,-1.49 0.71,-1.49 0.5,0 0.7,0.94 0.7,1.14 0.25,4.19 4.33,5.69 6.92,5.69 2.89,0 5.38,-1.55 7.97,-3.3 2.69,-1.79 5.38,-3.59 8.63,-3.59 4.62,0 8.31,3.55 8.31,8.12 z" /><path
+           style="fill:#000000;stroke-width:0"
+           inkscape:connector-curvature="0"
+           id="path3800"
+           d="m 491.49,417.06 0,0.07 0,0.06 -0.01,0.06 0,0.07 0,0.06 -0.01,0.05 0,0.06 -0.01,0.05 0,0.05 -0.01,0.06 -0.01,0.04 -0.01,0.05 -0.01,0.05 -0.01,0.04 -0.01,0.04 -0.01,0.04 -0.01,0.04 -0.01,0.04 -0.01,0.04 -0.01,0.03 -0.01,0.03 -0.02,0.04 -0.01,0.03 -0.01,0.03 -0.02,0.02 -0.01,0.03 -0.03,0.05 -0.03,0.05 -0.03,0.04 -0.03,0.03 -0.03,0.04 -0.03,0.02 -0.03,0.03 -0.03,0.02 -0.03,0.02 -0.03,0.01 -0.02,0.02 -0.03,0.01 -0.02,0.01 -0.02,0 -0.02,0.01 -0.02,0 -0.02,0 -0.01,0 -0.01,0.01 c -0.2,0 -0.66,-0.25 -0.7,-1.35 -0.21,-3.44 -3.69,-5.48 -6.92,-5.48 -2.89,0 -5.39,1.54 -7.99,3.29 -2.69,1.79 -5.37,3.58 -8.61,3.58 -4.64,0 -8.33,-3.53 -8.33,-8.12 0,-1.1 0.41,-1.49 0.71,-1.49 0.5,0 0.7,0.94 0.7,1.14 0.25,4.19 4.33,5.69 6.92,5.69 2.89,0 5.38,-1.55 7.97,-3.3 2.69,-1.79 5.38,-3.57 8.63,-3.57 4.73,0 8.31,3.68 8.31,8.06 z" /></g>    </g>
+    <g
+       id="g3908"
+       transform="matrix(0.41860387,0,0,-0.41860387,256.03022,506.69756)"
+       inkscape:export-filename="/Users/marina/Documents/phd-thesis/robust-pca.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90">
+      <g
+         word-spacing="normal"
+         letter-spacing="normal"
+         font-size-adjust="none"
+         font-stretch="normal"
+         font-weight="normal"
+         font-variant="normal"
+         font-style="normal"
+         stroke-miterlimit="10.433"
+         xml:space="preserve"
+         transform="matrix(1.0629921,0,0,-1.0629921,-186.02362,789.27165)"
+         id="g3910"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;letter-spacing:normal;word-spacing:normal;text-anchor:start;fill:none;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:10.43299961;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"><path
+           id="path3912"
+           d="m 475.89,417.65 13.91,0 c 0.69,0 1.64,0 1.64,1 0,1 -0.95,1 -1.64,1 l -13.91,0 0,13.96 c 0,0.68 0,1.64 -1,1.64 -0.98,0 -0.98,-0.96 -0.98,-1.64 l 0,-13.96 -13.95,0 c -0.71,0 -1.64,0 -1.64,-1 0,-1 0.93,-1 1.64,-1 l 13.95,0 0,-13.94 c 0,-0.7 0,-1.65 0.98,-1.65 1,0 1,0.95 1,1.65 z"
+           inkscape:connector-curvature="0"
+           style="fill:#000000;stroke-width:0" /></g>    </g>
+    <g
+       id="g4824">
+      <image
+         inkscape:export-ydpi="90"
+         inkscape:export-xdpi="90"
+         inkscape:export-filename="/Users/marina/Documents/phd-thesis/robust-pca.png"
+         y="263.00613"
+         x="259.54391"
+         id="image4217"
+         xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAHgAAABQCAIAAABd+SbeAAAAA3NCSVQICAjb4U/gAAAAyklEQVR4 nO3QQREAIRDAsOP8u1mDqKA8SBR0umbm47z/dsArjI4YHTE6YnTE6IjREaMjRkeMjhgdMTpidMTo iNERoyNGR4yOGB0xOmJ0xOiI0RGjI0ZHjI4YHTE6YnTE6IjREaMjRkeMjhgdMTpidMToiNERoyNG R4yOGB0xOmJ0xOiI0RGjI0ZHjI4YHTE6YnTE6IjREaMjRkeMjhgdMTpidMToiNERoyNGR4yOGB0x OmJ0xOiI0RGjI0ZHjI4YHTE6YnTE6IjRkQ1h3gK5KqWATAAAAABJRU5ErkJggg== "
+         style="image-rendering:optimizeSpeed"
+         preserveAspectRatio="none"
+         height="19.812124"
+         width="120.11217" />
+      <rect
+         inkscape:export-ydpi="90"
+         inkscape:export-xdpi="90"
+         inkscape:export-filename="/Users/marina/Documents/phd-thesis/robust-pca.png"
+         style="fill:none;fill-opacity:1;stroke:#000000;stroke-width:0.80000001;stroke-miterlimit:0.40000001;stroke-dasharray:none;stroke-opacity:1"
+         id="rect4352"
+         width="120.11217"
+         height="19.812128"
+         x="259.54391"
+         y="263.0061" />
+      <rect
+         y="292.76221"
+         x="229.59999"
+         height="150"
+         width="20"
+         id="rect3988"
+         style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.80000001;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
+    </g>
+    <image
+       inkscape:export-ydpi="90"
+       inkscape:export-xdpi="90"
+       inkscape:export-filename="/Users/marina/Documents/phd-thesis/robust-pca.png"
+       y="263.00613"
+       x="259.54391"
+       id="image4831"
+       xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAHgAAABQCAIAAABd+SbeAAAAA3NCSVQICAjb4U/gAAAAyklEQVR4 nO3QQREAIRDAsOP8u1mDqKA8SBR0umbm47z/dsArjI4YHTE6YnTE6IjREaMjRkeMjhgdMTpidMTo iNERoyNGR4yOGB0xOmJ0xOiI0RGjI0ZHjI4YHTE6YnTE6IjREaMjRkeMjhgdMTpidMToiNERoyNG R4yOGB0xOmJ0xOiI0RGjI0ZHjI4YHTE6YnTE6IjREaMjRkeMjhgdMTpidMToiNERoyNGR4yOGB0x OmJ0xOiI0RGjI0ZHjI4YHTE6YnTE6IjRkQ1h3gK5KqWATAAAAABJRU5ErkJggg== "
+       style="image-rendering:optimizeSpeed"
+       preserveAspectRatio="none"
+       height="19.812124"
+       width="120.11217" />
+    <rect
+       inkscape:export-ydpi="90"
+       inkscape:export-xdpi="90"
+       inkscape:export-filename="/Users/marina/Documents/phd-thesis/robust-pca.png"
+       style="fill:none;fill-opacity:1;stroke:#000000;stroke-width:0.80000001;stroke-miterlimit:0.40000001;stroke-dasharray:none;stroke-opacity:1"
+       id="rect4833"
+       width="120.11217"
+       height="19.812128"
+       x="259.54391"
+       y="263.0061" />
+    <image
+       width="120.11217"
+       height="19.812124"
+       preserveAspectRatio="none"
+       style="image-rendering:optimizeSpeed"
+       xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAHgAAABQCAIAAABd+SbeAAAAA3NCSVQICAjb4U/gAAAAyklEQVR4 nO3QQREAIRDAsOP8u1mDqKA8SBR0umbm47z/dsArjI4YHTE6YnTE6IjREaMjRkeMjhgdMTpidMTo iNERoyNGR4yOGB0xOmJ0xOiI0RGjI0ZHjI4YHTE6YnTE6IjREaMjRkeMjhgdMTpidMToiNERoyNG R4yOGB0xOmJ0xOiI0RGjI0ZHjI4YHTE6YnTE6IjREaMjRkeMjhgdMTpidMToiNERoyNGR4yOGB0x OmJ0xOiI0RGjI0ZHjI4YHTE6YnTE6IjRkQ1h3gK5KqWATAAAAABJRU5ErkJggg== "
+       id="image4839"
+       x="440"
+       y="262.36221"
+       inkscape:export-filename="/Users/marina/Documents/phd-thesis/robust-pca.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90" />
+    <rect
+       y="262.36218"
+       x="440"
+       height="19.812128"
+       width="120.11217"
+       id="rect4841"
+       style="fill:none;fill-opacity:1;stroke:#000000;stroke-width:0.80000001;stroke-miterlimit:0.40000001;stroke-dasharray:none;stroke-opacity:1"
+       inkscape:export-filename="/Users/marina/Documents/phd-thesis/robust-pca.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90" />
+    <g
+       inkscape:export-ydpi="90"
+       inkscape:export-xdpi="90"
+       inkscape:export-filename="/Users/marina/Documents/phd-thesis/robust-pca.png"
+       transform="matrix(0.41860387,0,0,-0.41860387,437.2202,507.26734)"
+       id="g4845">
+      <g
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;letter-spacing:normal;word-spacing:normal;text-anchor:start;fill:none;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:10.43299961;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+         id="g4847"
+         transform="matrix(1.0629921,0,0,-1.0629921,-186.02362,789.27165)"
+         xml:space="preserve"
+         stroke-miterlimit="10.433"
+         font-style="normal"
+         font-variant="normal"
+         font-weight="normal"
+         font-stretch="normal"
+         font-size-adjust="none"
+         letter-spacing="normal"
+         word-spacing="normal"><path
+           style="fill:#000000;stroke-width:0"
+           inkscape:connector-curvature="0"
+           d="m 475.89,417.65 13.91,0 c 0.69,0 1.64,0 1.64,1 0,1 -0.95,1 -1.64,1 l -13.91,0 0,13.96 c 0,0.68 0,1.64 -1,1.64 -0.98,0 -0.98,-0.96 -0.98,-1.64 l 0,-13.96 -13.95,0 c -0.71,0 -1.64,0 -1.64,-1 0,-1 0.93,-1 1.64,-1 l 13.95,0 0,-13.94 c 0,-0.7 0,-1.65 0.98,-1.65 1,0 1,0.95 1,1.65 z"
+           id="path4849" /></g>    </g>
+    <image
+       inkscape:export-ydpi="90"
+       inkscape:export-xdpi="90"
+       inkscape:export-filename="/Users/marina/Documents/phd-thesis/robust-pca.png"
+       y="262.55008"
+       x="620"
+       id="image4853"
+       xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAHgAAABQCAIAAABd+SbeAAAAA3NCSVQICAjb4U/gAAAAyklEQVR4 nO3QQREAIRDAsOP8u1mDqKA8SBR0umbm47z/dsArjI4YHTE6YnTE6IjREaMjRkeMjhgdMTpidMTo iNERoyNGR4yOGB0xOmJ0xOiI0RGjI0ZHjI4YHTE6YnTE6IjREaMjRkeMjhgdMTpidMToiNERoyNG R4yOGB0xOmJ0xOiI0RGjI0ZHjI4YHTE6YnTE6IjREaMjRkeMjhgdMTpidMToiNERoyNGR4yOGB0x OmJ0xOiI0RGjI0ZHjI4YHTE6YnTE6IjRkQ1h3gK5KqWATAAAAABJRU5ErkJggg== "
+       style="image-rendering:optimizeSpeed"
+       preserveAspectRatio="none"
+       height="19.812124"
+       width="120.11217" />
+    <rect
+       inkscape:export-ydpi="90"
+       inkscape:export-xdpi="90"
+       inkscape:export-filename="/Users/marina/Documents/phd-thesis/robust-pca.png"
+       style="fill:none;fill-opacity:1;stroke:#000000;stroke-width:0.80000001;stroke-miterlimit:0.40000001;stroke-dasharray:none;stroke-opacity:1"
+       id="rect4855"
+       width="120.11217"
+       height="19.812128"
+       x="620"
+       y="262.55005" />
+    <rect
+       style="fill:#b3b3b3;stroke-width:0.80000001;stroke-miterlimit:0.40000001;stroke-dasharray:none"
+       id="rect4859"
+       width="20"
+       height="50"
+       x="230"
+       y="292.36221" />
+    <rect
+       y="342.50284"
+       x="410.05042"
+       height="50"
+       width="20"
+       id="rect4861"
+       style="fill:#b3b3b3;stroke-width:0.80000001;stroke-miterlimit:0.40000001;stroke-dasharray:none" />
+    <rect
+       style="fill:#b3b3b3;stroke-width:0.80000001;stroke-miterlimit:0.40000001;stroke-dasharray:none"
+       id="rect4863"
+       width="20"
+       height="50"
+       x="590.10083"
+       y="391.50391" />
+    <rect
+       style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.80000001;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       id="rect4843"
+       width="20"
+       height="150"
+       x="410.05606"
+       y="292.11829" />
+    <rect
+       y="292.76221"
+       x="229.59999"
+       height="150"
+       width="20"
+       id="rect4835"
+       style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.80000001;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
+    <rect
+       y="292.30615"
+       x="590.05609"
+       height="150"
+       width="20"
+       id="rect4857"
+       style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.80000001;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
+    <path
+       style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="M 79.999999,342.3622 200,342.3622"
+       id="path4874"
+       inkscape:connector-curvature="0" />
+    <path
+       style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="m 200,392.3622 -120.000001,0"
+       id="path4876"
+       inkscape:connector-curvature="0" />
+  </g>
+</svg>

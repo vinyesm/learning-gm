@@ -1,0 +1,326 @@
+\documentclass{article}
+\usepackage{fullpage}
+\usepackage{amssymb,amsmath,amsthm}
+\usepackage{color}
+%\usepackage{bibentry}
+\usepackage{natbib}
+
+\title{End of main proof in the paper}
+
+\date{}
+\def\BIT{\begin{itemize}}
+\def\EIT{\end{itemize}}
+\def\BET{\begin{enumerate}}
+\def\EET{\end{enumerate}}
+\def\ra{$\:\rightarrow\:$}
+\def\y{\mathbf{y}}
+\def\x{\mathbf{x}}
+\def\v{\mathbf{v}}
+\def\u{\mathbf{u}}
+\def\w{\mathbf{w}}
+\def\s{\mathbf{s}}
+\def\g{\mathbf{g}}
+\def\h{\mathbf{h}}
+\def\X{\mathbf{X}}
+\def\RR{\mathbb{R}}
+\def\ei{\varepsilon_i}
+\def\ej{\varepsilon_j}
+\def\T{\mathcal{T}}
+\def\I{\mathcal{I}}
+\def\Od{\Omega^\circ}
+\def\Po{\bar{P}}
+\def\Dbot{\Delta_{L}^{\scriptscriptstyle \bot}}
+\def\Dpar{\Delta_{L}^{\scriptscriptstyle \parallel}}
+\def\DL{\Delta_L}
+\def\DLi{\Delta_{L_i}}
+\def\DS{\Delta_S}
+\def\DSi{\Delta_{S_i}}
+\def\L{\mathcal{L}}
+\def\Dboti{\Delta_{L_i}^{\scriptscriptstyle \bot}}
+\def\Dpari{\Delta_{L_i}^{\scriptscriptstyle \parallel}}
+\def\Tbar{\bar{\mathcal{T}}}
+
+\def\op{{\rm op}}
+\def\tr{{\rm tr}}
+\def\kmax{{k_1}}
+\def\ksmax{{k_2}}
+
+%\def\kmax{{k_{\scriptscriptstyle (1)}}}
+%\def\ksmax{{k_{\scriptscriptstyle (2)}}}
+
+\def\supp{{\rm Supp}}
+\def\st{\text{s.t.}}
+\newcommand\normop[1]{|||#1|||_{\infty}}
+\newcommand\normbop[1]{|\!|\!|#1|\!|\!|_{\infty,2}}
+\newcommand\normopop[1]{|\!|\!|#1|\!|\!|_{\rm op,\rm op}}
+\newcommand\ve[1]{\varepsilon^{{\scriptscriptstyle#1}}}
+\newcommand\sss[1]{{\scriptscriptstyle#1}}
+\def\UI{U^{\sss{I}}}
+\def\uI{u^{\sss{I}}}
+\def\xxi{\zeta}
+\def\tauu{{\overline{\tau}}}
+\def\taul{{\underline{\tau}}}
+%\def\tauu{{{\tau_u}}}
+%\def\taul{{{\tau_{\ell}}}}
+\newcommand{\tred}[1]{\textcolor{red}{#1}}
+\newtheorem{lemma}{Lemma}
+\newtheorem{cor}{Corollary}
+\newtheorem{prop}{Proposition}
+\newtheorem{theorem}{Theorem}
+
+
+
+%\newcommand{\zit}[1]{\begin{itemize} \item \bibentry{#1} \end{itemize}}
+\begin{document}
+\maketitle
+\appendix
+%\subsection*{Notations}
+%In this appendix, we will use two different several norms on matrices, the $\ell_\infty$ norm of the vectorized matrix, also known as the max-norm in the matrix case that we will denote with $\|\cdot\|_{\infty}$.
+
+\textbf{Sparse part with bounded degree}. We make the assumption that the degree of the sparse part of the graph is bounded by $k_0$, in other words, that for all $i$ $\|S_{i.}\| \leq k_0$. As a consequence, for any set $J'$ and $J''$ with $|J'|=k'$ and $|J''|=k''$, we have $\|S_{J'\! J''}\|_0 \leq \min(k',k_0) \min(k'',k_0)$ and thus $$\forall Z \in \T(S), \quad  \|Z_{J'\! J''}\|_{\op} \leq \sqrt{\min(k',k_0) \min(k'',k_0)}  \: \|Z\|_{\infty}.$$
+In particular, we have 
+$$\|Z_{J'\! J'}\|_{\op} \leq \mu_{J'}  \: \|Z\|_{\infty} \qquad \text{with} \qquad \mu_{J'}:=\min(|J'|,k_0).$$
+
+
+Denote $u^i:=u^{I_i}$. %, $\check{u}_i=u^{I_i}_J$ and $v_i:=\frac{\check{u}_i}{\|\check{u}_i\|}$.
+Let $\kappa:=|\{i \mid I_i \cap J \neq \varnothing\}|$ denote the number of blocks of the support that are intersecting with $J$. Let $k_i:=|I_i \cap J|$. We assume that all the entries of $u^{I_i}$ are such that $|u^{I_i}_j|^2 \in \frac{1}{k}[\taul, \tauu]$ for some  $\taul, \tauu$ such that $\taul+\tauu=2$. We additionally impose that $4 \frac{k_0}{k} < \taul \leq 1 \leq \tauu < 2-4 \frac{k_0}{k}$. 
+
+As a consequence, we have $\frac{k_i}{k} \taul \leq \|u^{I_i}_J\|_2^2 \leq \frac{k_i}{k} \tauu$,
+and using the same formula for $u^{I_i}_{J \backslash I_i}$, we have
+$\|u^i_J\|^2 \leq \min (\frac{k_i}{k} \tauu, 1-\taul+\frac{k_i}{k} \taul)$. Note that we have $\frac{k_i}{k} \tauu < 1-\taul+\frac{k_i}{k} \taul$ if and only if $2k_i<k$. 
+
+We assume that $\|Q_{S}\|_{\infty} \leq \gamma$ with 
+
+$$\gamma \leq \frac{1}{k} \frac{1}{1+\epsilon/\alpha }.$$
+
+\begin{eqnarray*}
+\lambda_{\max}^+(Q_{JJ})&=&\lambda_{\max}^+ \Big (\sum_{i=1}^{\kappa} Q_{J \cap I_i, J \cap I_i} + Q_{(J \times J) \cap \bar{I}^c} \Big )\\
+& \leq & \max_{1\leq i \leq \kappa} \lambda_{\max}^+(Q_{J \cap I_i, J \cap I_i}) + \|Q_{(J \times J) \cap \bar{I}^c}\|_{\op}\\
+ & \leq & \max_{1\leq i \leq \kappa} \max(\|u^i_J\|^2,\|R_i\|_{\op})+\mu_J \|Q_{(J \times J) \cap \bar{I}^c}\|_{\infty}\\
+ & \leq &  \max \Big (\min (\frac{\kmax}{k} \tauu, 1-\taul+\frac{\kmax}{k} \taul),\gamma \min(k_1,k_0) (1+\frac{\epsilon}{\alpha}) \Big )+\gamma k_0,\\
+& \leq &  \min \big (\frac{\kmax}{k} \tauu, 1-\taul+\frac{\kmax}{k} \taul \big )+\gamma k_0,\\    
+\end{eqnarray*}
+where without loss of generality we assume that $k_1\geq k_2 \geq \ldots k_{\kappa}$ so that $\kmax=\max_{1\leq i \leq \kappa} k_i$, where the last inequality follows from the fact that, if $2\kmax < k$, then $\gamma \min(\kmax,k_0) (1+\frac{\epsilon}{\alpha}) < \frac{\kmax}{k} \tauu$ and if  $2\kmax \geq k$, then 
+
+$$\gamma \min(\kmax,k_0) (1+\frac{\epsilon}{\alpha}) = \gamma k_0 (1+\frac{\epsilon}{\alpha}) <  \frac{k_0}{k} \tauu < \frac{1}{2}\tauu =1-\frac{\taul}{2}  \leq 1-\taul+\frac{\kmax}{k} \taul.$$
+
+Note that the previous inequality is also valid for $\lambda_{\max}^+(Q_{J'\!J'})$ for any $J'\subset J$.
+
+We distinguish between the following cases,
+
+\BIT
+
+\item If $\kmax < k_0,$ then $\lambda_{\max}^+(Q_{JJ}) \leq \frac{\kmax}{k} \tauu+\gamma k_0 < 2\frac{k_0}{k} \tauu < \frac{\tauu}{2} < 1$.
+
+\item If $k_0\leq \kmax<\frac{1}{2}$, we partition $Q_{JJ}$ as follows
+$$
+\begin{bmatrix}
+Q_{J \cap I_1,J \cap I_1} & Q_{J \cap I_1,J \cap I_1^c}\\
+Q_{J \cap I_1^c,J \cap I_1} & Q_{J \cap I_1^c,J \cap I_1^c}\\
+\end{bmatrix}
+$$
+
+Given that 
+\begin{eqnarray*}
+\lambda_{\max}(Q_{J \cap I_1,J \cap I_1}) & \leq & \frac{\kmax}{k} \tauu\\
+\|Q_{J \cap I_1,J \cap I_1}\|_{\op} & \leq & \gamma k_0\\
+\lambda_{\max}(Q_{J \cap I_1^c,J \cap I_1^c})  & \leq & \frac{\ksmax}{k}\tauu+\gamma k_0, 
+\end{eqnarray*}
+
+by lemma~\ref{lem:lmax_twobywto} the largest eigenvalue of $Q_{JJ}$ is bounded by the largest eigenvalue of the matrix
+$\begin{bmatrix}
+a & b\\
+c & d \\
+\end{bmatrix},
+$
+
+with $a=\frac{\kmax}{k} \tauu$, $d=\frac{\ksmax}{k}\tauu+\gamma k_0$ and $b=c=\gamma k_0$.
+
+So to show that $\lambda_{\max}^+(Q_{JJ})<1$, by lemma~\ref{lem:cns_lmaxleqone} it is enough to show that 
+$ad-bc<1$ and $a+d -ad+bc < 1$.
+  
+Letting $x=\frac{\kmax}{k} \tauu$, $y=\frac{\ksmax}{k}\tauu$, $\beta=k\gamma$ and $x_0=\frac{k_0}{k}<\frac{1}{2}$, the previous inequality is satisfied if and only if 
+$x+y(1-x)+\beta x_0(1-x) +\beta^2 x_0^2 <1,$ for all $0<y\leq x <\frac{1}{2}\tauu$. Since the left hand side is maximized if $y=x$, then this is equivalent to require that the polynomial
+$x+x(1-x)+\beta x_0(1-x) +\beta^2 x_0^2 -1$ is negative for all $x \in [0,\frac{1}{2}\tauu]$; the polynomial is maximal for $x=\frac{1}{2}\tauu$ and since the bounds on $\gamma, \tauu$ and $k_0$ entail that $x_0<2-\tauu$, the inequality is satisfied.
+
+\item If $\frac{1}{2} \leq \kmax < k-k_0$, we have
+\begin{eqnarray*}
+\lambda_{\max}(Q_{J \cap I_1,J \cap I_1}) & \leq & 1-\taul +\frac{\kmax}{k} \taul\\
+\|Q_{J \cap I_1,J \cap I_1}\|_{\op} & \leq & \gamma k_0 \\
+\lambda_{\max}(Q_{J \cap I_1^c,J \cap I_1^c})  & \leq & \frac{\ksmax}{k}\tauu+\gamma k_0, 
+\end{eqnarray*}
+
+We reason as before and letting $z=1-\frac{\kmax}{k}$, $y=\frac{\ksmax}{k}$, $\beta=k\gamma$ and $x_0=\frac{k_0}{k}<\frac{1}{2}$.
+We get the condition
+
+$$1-z \taul+\tauu z+\beta x_0-(1-z \taul) (z\tauu+\beta x_0)+(\beta x_0)^2<1$$ which upon simplification is equivalent to $$f(z):=(\beta x_0-1)z \tauu + z^2 \taul\tauu+(\beta x_0)^2<0.$$ 
+
+The maximum is necessarily attained at the boundary of the interval: for $z=\frac{1}{2}$, 
+we have $f(\frac{1}{2})=(\beta x_0)^2+\beta x_0 \frac{\taul}{2}-\frac{\taul^2}{4}<0$ since 
+$\beta x_0<\frac{k_0}{k}<\frac{\taul}{4}$; for  $z=\beta x_0$, we have $f(\beta x_0)=(\beta x_0)^2 (1-\taul\tauu-\taul)-\beta x_0 \taul$ and since $1-\taul\tauu-\taul=1-\taul(\tauu-1)=1-\taul(1-\taul)$, 
+we can check that $f(\beta x_0)<0$ using $\beta x_0< \frac{k_0}{k} \leq \frac{\taul}{4}$.
+
+\item  If $\frac{1}{2} \leq \kmax < k-k_0$, we have
+\begin{eqnarray*}
+\lambda_{\max}(Q_{J \cap I_1,J \cap I_1}) & \leq & 1-\taul +\frac{\kmax}{k} \taul\\
+\|Q_{J \cap I_1,J \cap I_1}\|_{\op} & \leq & \gamma \sqrt{k_0 (k-\kmax)}\\
+\lambda_{\max}(Q_{J \cap I_1^c,J \cap I_1^c})  & \leq & \frac{\ksmax}{k}\tauu+\gamma (k-k_1), 
+\end{eqnarray*}
+
+Again, we let $z=1-\frac{\kmax}{k}$, $y=\frac{\ksmax}{k}$, $\beta=k{\gamma}$ and $x_0=\frac{k_0}{k}<\frac{1}{2}$.
+
+We need to show that for all $z \in (0,x_0]$,
+$$1-z \taul+\tauu z+\beta z-(1-z \taul) (z\tauu+\beta z)+\beta^2 x_0 z<1$$
+
+This is equivalent to showing $f(z)<0$ with
+
+$$f(z):=z \taul(z\tauu+\beta z)+(\beta^2 x_0 -\taul).$$ 
+We have $f(0)=0$ and 
+Since $x_0-\taul<-\frac{3}{4}\taul,$ and $\beta<1$,
+%Then 
+we have 
+$$
+f(z) \leq  (z\tauu+ z) \taul z-\frac{3}{4}\taul z
+<  (3\taul x_0-\frac{3}{4}\taul) z
+<  (3\taul \frac{\taul}{4}-\frac{3}{4}\taul) z<0,
+$$
+which proves the inequality for the last case.
+\EIT
+
+
+\begin{lemma}
+\label{lem:cns_lmaxleqone}
+For a two-by-two matrix $M$ of the form
+$\begin{bmatrix}
+a & b\\
+c & d \\
+\end{bmatrix},
+$
+and such that $(a-d)^2+4bc>0$, $M$ has real eigenvalues and 
+then $\lambda_{\max}<1$ if and only $a+d < 1+ad-bc$.
+\end{lemma}
+\begin{proof}
+This is immediate using the quadratic formula:
+\begin{eqnarray*}
+\lambda_{\max}<1 &\Leftrightarrow& a+d+\sqrt{(a-d)^2+4bc}<2\\
+&\Leftrightarrow& (a-d)^2+4bc<(2-(a+d))^2\\
+&\Leftrightarrow& -2ad+4bc<4-4(a+d)+2ad\\
+&\Leftrightarrow&  bc<1-(a+d)+ad
+\end{eqnarray*}
+\end{proof}
+
+\section{Lemmas to control eigenvalues}
+\begin{lemma}
+For a two by two matrix of the form
+$\begin{bmatrix}
+a & b\\
+c & d \\
+\end{bmatrix},
+$
+if $(a-d)^2+4bc$ then the eigenvalues are real, and if $a>d$ we have  $\displaystyle \lambda_{\max}\leq a+\frac{bc}{a-d}.$
+\end{lemma}
+\begin{proof}
+ Indeed, since $\lambda_{\max}+\lambda_{\min}=a+d$ and $\lambda_{\max}\lambda_{\min}=ad-bc$, the eigenvalues are the roots of $x^2-(a+d)x+ad-bc$, and by the quadratic formula, we have
+\begin{eqnarray*}
+2 \lambda_{\max} = a+d+\sqrt{(a-d)^2+4bc}  & \leq & a+d+(a-d) \sqrt{1+\frac{4bc}{(a-d)^2}}\\
+& \leq & a+d+(a-d) \Big (1+\frac{2bc}{(a-d)^2} \Big )
+\leq 2a +\frac{2bc}{a-d}.
+\end{eqnarray*}
+\end{proof}
+
+\begin{lemma}
+\label{lem:lmax_twobywto}
+$$
+\lambda_{\max} \left (
+\begin{bmatrix}
+A & B \\
+C & D
+\end{bmatrix}
+\right)
+ \leq 
+\lambda_{\max} \left (
+\begin{bmatrix}
+\lambda_{\max}(A) & \|B\|_{\op} \\
+\|C\|_{\op} & \lambda_{\max}(D)
+\end{bmatrix}
+\right ) 
+$$
+\end{lemma}
+\begin{proof}
+Since, for $y_1=\|x_1\|$ and $y_2=\|x_2\|$, we have
+$$x_1^\top A x_1 + x_1^\top B x_2 + x_2^\top C x_1 + x_2^\top D x_2 \leq  \lambda_{\max}(A) \, y_1^2 +  (\|B\|_{\op}+  \|C\|_{\op}) \, y_1 y_2+ \lambda_{\max}(D) \, y_2^2,$$
+ maximizing on both sizes of the inequality under the constraint $y_1^2+y_2^2=1$ yields the result. 
+\end{proof}
+
+
+%$$
+%\begin{bmatrix}
+%v_1^\top u_1 u_1 ^\top v_1 & v_1^\top Q_S^\top v_2 & \ldots & v_1^\top Q_S^\top v_\kappa v_1^\top Q_S^\top V_1 & \ldots & v_1^\top Q_S^\top V_\kappa\\
+%v_2^\top Q_S^\top v_1 & v_2^\top u_2 u_2 ^\top v_2 & \ldots & v_2^\top Q_S^\top v_\kappa v_2^\top Q_S^\top V_1 & \ldots &  v_2^\top Q_S^\top V_\kappa\\
+%\vdots & \ddots & \ldots & & \\
+%v_\kappa^\top u_1 u_1 ^\top v_1 & \ldots v_\kappa^\top Q_S^\top v_2 & \ldots v_{\kappa}^\top u_\kappa u_\kappa ^\top v_\kappa& v_\kappa^\top Q_S^\top V_1 & \ldots & v_\kappa^\top Q_S^\top V_\kappa\\
+%\end{bmatrix}
+%$$
+
+
+%Assume that for all $(I,J) \in \I \times \I$
+%
+%
+%
+%If $M^*=S^*-L^*$ with $L^*=\sum_{I \in \mathcal{I}} L^{\sss{I}}$, $\supp(L^{\sss{I}}) \subset I \times I$ and $L^{\sss{I}}=U^{\sss{I}} D^{\sss{I}} {U^{\sss{I}}}^\top$ the eigenvalue decomposition of $L^{\sss{I}}$.
+%
+%Assumptions:
+%
+%Let $\tilde{Q}:=\sum_{I \in \mathcal{I}} U^{\sss{I}} {U^{\sss{I}}}^\top$, $m_{ij}=|\{I \in \mathcal{I} \mid I \ni (i,j) \}|$ and 
+%$m^*=\max_{(i,j) \in [\![p]\!]^2} m_{ij}$, $\xi=\max_{I \in \mathcal{I}} \xi(\T_I(U^{\sss{I}}))$, $\mu=\max_{I \in \I} \mu_I(\T_s(S))$.
+%
+%Let 
+%$$\sigma:=\min_{I \in \I}\lambda_{\min} \big (\mathcal{P}_{\T(\uI)^\bot} (\tilde{Q}+\gamma sign(S^*)) \big ) \quad {and} \quad \lambda=\max_{I \in \I}\lambda_{\max}^+ \big (\mathcal{P}_{\T(\uI)^\bot} (\tilde{Q}+\gamma sign(S^*)) \big ) $$
+%\BIT
+%\item[($*$)] $\|\tilde{Q}_{S^c}\|_{\infty} < \gamma(1-\xi m^*  \frac{\beta}{\epsilon})$
+%\item[($**$)] $\sigma> (\mu \gamma^{-1}+(m^*-1)) \frac{\epsilon}{\beta}$.
+%\item[($***$)] $\lambda< 1-\mu \gamma^{-1}\frac{\epsilon}{\beta}$.
+%\item[($****$)] $\gamma \max_{J \in \mathcal{G}^p_k} \lambda^+_{\max}(sign(S_{JJ})) < 1$.
+%
+% 
+% \begin{eqnarray*}
+% \max_{I \in \I}\lambda_{\max}^+\Big (\mathcal{P}_{\T(\uI)^\bot} \big (\tilde{Q}_{II}-\uI {\uI}^{\top}\!\!+\gamma sign(S^*_{II})\big )  \Big )&<&1-(m^*-1+\mu \gamma) \frac{\epsilon}{\beta}\\ 
+%\max_{J \in \mathcal{G}^p_k}\lambda_{\max}^+\Big (\tilde{Q}_{JJ}+\gamma sign(S^*_{JJ}))\Big )&<&1-(m^*-1+\mu \gamma) \frac{\epsilon}{\beta}
+%\end{eqnarray*}
+%\EIT
+%
+%
+%We have $\|Q_{S^c}\|_{\infty} < \gamma$ since
+%
+%$$\gamma^{-1} \|Q_{S^c}\|_{\infty}=\gamma^{-1} \|\tilde{Q}_{S^c}+\sum_{I \in \I} \ve{I}_{S^c}\|_{\infty} \leq \|\tilde{Q}_{S^c}\|_{\infty} + \sum_{I \in \I} \|\ve{I}_{S^c}\|_{\infty} \leq \|\tilde{Q}_{S^c}\|_{\infty}+m^* \gamma  \, \xi \frac{\epsilon}{\beta}.$$
+%
+%To show that $\lambda_{\max}^+(Q_{JJ})\leq 1$ for all $J$, we first show that under ($**$) we necessarily have $\ve{I}\prec 0$ for all $I \in \I$. 
+%
+%Indeed,
+%$$-\ve{I}=\mathcal{P}_{\T_I(\uI)} \big ( \tilde{Q}-\uI {\uI}^\top + \gamma sign(S^I)+ \ve{S}+\sum_{J \in \I, \, J \neq I} \ve{J}\big ).$$
+%So that 
+%$$\lambda_{\min}(-\ve{I}) \geq \sigma-\|\ve{S}_I\|_{\op}-\!\!\!\sum_{J \in \I, \, J \neq I} \|\ve{J}_I\|_{\op} \geq \sigma - (\mu \gamma^{-1}+(m^*-1)) \frac{\epsilon}{\beta}>0,$$
+%by Assumption ($**$).
+%
+%On the subspace $\T_I(\uI)^{\bot}$, we have
+%\begin{eqnarray*}
+%\lambda^+_{\max}\Big ( \mathcal{P}_{\T_I(\uI)^{\bot}} \big (\tilde{Q}+ \gamma sign(S_{II})+ \ve{S}_{II}+\sum_{J \in \I, \, J \neq I} \ve{J} \big ) \Big) &\leq & \lambda^+_{\max}( \tilde{Q}+\gamma sign(S_{II})+ \ve{S}_{II})\\
+% &\leq& \lambda^+_{\max}( \tilde{Q}+\gamma sign(S_{II})) + \mu \gamma \frac{\epsilon}{\beta} \\
+% &<& 1
+%\end{eqnarray*}
+%where the first inequality follows from the fact that $\ve{I}\prec 0$ and the last one from Assumption ($***$).
+%
+%We now consider bounding $\lambda_{\max}^+(Q_{JJ})$ for $J \notin \I$.
+%First assume the case where $J \cap I=\varnothing$ for all $I \in \I$.
+%In that case we have $Q_{JJ}=\gamma sign(S_{JJ})$ and the result follows directly from Assumption ($****$).
+
+
+%$$\sigma-\|\ve{S}_I\|_{\op}-\!\!\!\sum_{J \in \I, \, J \neq I} \|\ve{J}_I\|_{\op} \geq \sigma - (\mu \gamma^{-1}+(m^*-1)) \frac{\epsilon}{\beta}>0,$$
+
+
+
+
+\bibliography{biblio}
+\bibliographystyle{apalike}
+
+\end{document}

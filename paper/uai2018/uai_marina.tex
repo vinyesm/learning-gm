@@ -392,6 +392,52 @@ We propose to use a Truncated Power Iteration (TPI) heuristic introduced by \cit
 
 
 \section{IDENTIFIABILITY CONDITIONS}
+
+\TODO{We proove identifiability on a restricted setting. Proof of sufficient conditions for exact recovery of the components by solving optimization problem \ref{opt_nc} is out of scope of this paper.}\\
+We aim to introduce sufficient conditions such that $(S^*, L^*)$ is an optimum of the problem
+$$
+\displaystyle \min \gamma \|S\|_1+\Omega_{k,\succeq}(L) \quad \text{\st} \quad M=S+L
+$$
+
+Setting for $S^*$ and $L^*:=\sum_{I_i \in \mathcal{I}} L^{I_i}$. $I$ are disjoint and $L^{I_i}:=s_i u^i {u^i}^{\top}$ where $supp(u^i)\subset I_i$.
+
+Define tangent spaces $\T_s$ and $\T_I$. We consider several type of subspaces
+$$\bar{\T}_I:=\{M \in \RR^{p \times p}\mid  M=M^\top, \: \supp(M)\subset I \times I\},$$
+$$\T_I(U):=\{M \in \bar{\T}_I\mid \: M=UX^\top+XU^\top,\: X \in \RR^{\text{rank}(U) \times p} \},$$
+Let $\T^c_I(U)$ denote the orthogonal complement\footnote{Note in particular that it is not the orthogonal complement in the entire space.} of $\T_I(U)$ in $\bar{\T}_I$. 
+$$\T(U):=\T_{[\![p]\!]}(U)$$
+$$\T_s(A)=\{M \in \RR^{p \times p}\mid  \: M=M^\top, \: \supp(M)\subset \supp(A)\}.$$
+The projections on the corresponding subspaces are $\mathcal{P}_{\T_s(A)}(M)=M_S$ and $\mathcal{P}_{\T_I(U)}(M)=\mathcal{P}_{U}(M_{II})$ with $$\mathcal{P}_U(M):=M-(I-UU^\top)M(I-UU^\top).$$
+
+
+For the unicity of the decomposition tangent spaces must intersect transversally, that is that the collection of subspaces $\T_i$ are linearly independent in the sense that for any $i$, $\T_i \cap \text{span}(\T_j)_{j \neq i}=\{0\}$.
+
+
+\begin{assumption}The degree of the sparse part of the graph is bounded by $k_0$, i.e. $\forall i\in\itgset{p}$,  $\|S^*_i.\|\leq k_0$ .
+\end{assumption}
+
+\begin{assumption}The entries of $u^i$ are bounded, i.e. $\forall j\in I_i$,  $\underline{\tau} / k \leq (u_j^i)^2 \leq \bar{\tau} / k$.
+\end{assumption}
+
+$(S^*, L^*)$ is an optimum if an only if there exists a dual $Q$ satisfying first order optimality conditions
+
+\begin{align*}
+Q\in \gamma \partial \|.\|_1(S^*) \quad \text{and} \quad Q\in \partial \Omega_{pos,k}(.)(L^*)
+\end{align*}
+
+Characterization of subgradients $\ell_1$ and $\Omega_{pos,k}$, introduce the projections on the tangent subspaces.
+
+\begin{lemma}(characterization of $\ell_1$ subgradient) $Q\in \gamma \partial \|.\|_1(S^*)$ if and only if
+\item[(i)] $\mathcal{P}_{\T_s(S^*)}(Q)=\gamma sign(S^*)$
+\item[(ii)] $\|Q_{S^c}\|_{\infty}<\gamma$
+\end{lemma}
+
+\begin{lemma}(characterization of $\Omega_{pos,k}$ subgradient) $Q\in \partial \Omega_{pos,k}(.)(L^*)$ if and only if
+\item[(i)] for all $I \in \I,\:\mathcal{P}_{\T_I(\uI)}(Q)=\uI{\uI}^\top$
+\item[(ii)] for all $I \in \I,\:\lambda_{\max}^+\big (\mathcal(P)_{\T_I^c(\uI)}(Q) \big )<1$
+\item[(iii)] for all $J \in \mathcal{G}^p_k \backslash \I, \: \lambda_{\max}^+(Q_{JJ})\leq 1$
+\end{lemma}
+
 \TODO{From identifiability theory chapter Low rank with sparse factors + sparse decomposition.. Check notations and reformulate if necessary. }\\
 
 Let 

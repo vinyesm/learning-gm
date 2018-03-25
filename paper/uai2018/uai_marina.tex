@@ -431,12 +431,31 @@ Characterization of subgradients $\ell_1$ and $\Omega_{pos,k}$, introduce the pr
 \item[(i)] $\mathcal{P}_{\T_s(S^*)}(Q)=\gamma sign(S^*)$
 \item[(ii)] $\|Q_{S^c}\|_{\infty}<\gamma$
 \end{lemma}
-
+\begin{proof}
+By the characterization of the subgradient of a norm we have $Q\in \gamma \partial \|.\|_1(S^*)$ if and only if
+\begin{align}
+\|Q\|_{\infty}\leq \gamma \quad \text{and} \quad \left\langle Q,S^*\right\rangle=\gamma\|S^*\|_1. \label{eq:subgl1}
+\end{align}
+Let us decompose $Q$ on $\T_s(S^*)$ and the corresponding orthogonal space $\T_s(S^*)^{\perp}$, $Q= Q_S+Q_{S^c}$. Since $S^*\in\T_s(S^*)$, we have $\left\langle Q_S,S^*\right\rangle=\gamma\|S^*\|_1$, that rewrites as  $\left\langle Q_S-\gamma sign(S^*),S^*\right\rangle=0$ and gives $Q_S=\gamma sign(S^*)$.\\
+On the other hand 
+$$\|Q_S+Q_{S^c}\|_{\infty}=\max\left(\|Q_S\|_{\infty},\|Q_S\|_{\infty}\right)=\max\left(\gamma,\|Q_S^c\|_{\infty}\right).$$
+\end{proof}
 \begin{lemma}(characterization of $\Omega_{pos,k}$ subgradient) $Q\in \partial \Omega_{pos,k}(.)(L^*)$ if and only if
 \item[(i)] for all $I \in \I,\:\mathcal{P}_{\T_I(\uI)}(Q)=\uI{\uI}^\top$
 \item[(ii)] for all $I \in \I,\:\lambda_{\max}^+\big (\mathcal(P)_{\T_I^c(\uI)}(Q) \big )<1$
 \item[(iii)] for all $J \in \mathcal{G}^p_k \backslash \I, \: \lambda_{\max}^+(Q_{JJ})\leq 1$
 \end{lemma}
+\begin{proof}
+By the characterization of the subgradient of a gauge we have  $Q\in \partial \Omega_{pos,k}(.)(L^*)$ if and only if
+\begin{align}
+\lambda_{\max}^+(Q)\leq 1\quad \text{and} \quad \left\langle Q,L^*\right\rangle=\Omega_{pos,k}(L^*). \label{eq:subgom}
+\end{align}
+Note that the inequality implies that $u^{\top}Qv\leq1$ for any unit vectors $u,v$. By definition of $L^*$, the equality becomes $\sum_{I_i\in\mathcal{I}}s_i \left({u^i}^{\top}Qu^i-1\right)=0$. Since all terms of the sum are non negative we must have ${u^i}^{\top}Qu^i=1$ for each $I_i\in\mathcal{I}$. Since $I_i$ are disjoint we can work separately on each subsbace $I_i\times I_i$. We can uniquely decompose $Q_{I_iI_i}$ on $\T_{I_i}\bigoplus \T_{I_i^c}$. Hence, 
+\begin{align}
+&\lambda_{\max}^+\big (\mathcal{P}_{\T_I(\uI)}(Q) + \mathcal(P)_{\T_I^c(\uI)}(Q) \big )<1\\
+&{\uI}^\top\mathcal{P}_{\T_I(\uI)}(Q)\uI=1
+\end{align}
+\end{proof}
 
 \TODO{From identifiability theory chapter Low rank with sparse factors + sparse decomposition.. Check notations and reformulate if necessary. }\\
 

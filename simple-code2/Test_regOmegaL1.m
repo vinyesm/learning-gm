@@ -3,6 +3,9 @@ clear all
 close all
 clc
 
+addpath ../ours/TPower_1.0/misc/
+addpath ../ours/TPower_1.0/algorithms/TPower/
+addpath ../ours/TPower_1.0/algorithms/PathSPCA/PathSPCA/
 addpath ../spams-matlab-v2.6/build/
 
 

@@ -200,10 +200,11 @@ for epoch=1:8
         end
         
         %security break
-        %         if abs(hist.obj(end-1)-hist.obj(end))<param.epsStop
-        %             break
-        %         end
-        
+        if iter>1
+                 if abs(hist.objective(end-1)-hist.objective(end))<param.epsStop/10
+                     break
+                 end
+        end
     end
     
 end

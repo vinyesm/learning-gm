@@ -73,9 +73,9 @@ X=((1./n)*(X'*X))^.5;
 Y=eye(p);
 % param.lambda=.02;
 % param.mu=.002;
-param.lambda=.1;
-param.mu=.05;
-param.epsStop=1e-5;
+param.lambda=.02;
+param.mu=.019;
+param.epsStop=1e-4;
 
 %pause()
 %keyboard
@@ -85,7 +85,7 @@ inputData.Y = Y;
 param.k=k;
 set = supp;
 %param.epsStop=1e-3;
-param.maxIter=1000;
+param.maxIter=100;
 param.maxNbAtoms=1000;
 param.verbose=2;
 
@@ -113,13 +113,14 @@ figure(18)
 imagesc(M);axis square
 
 figure(19)
-imagesc(-full(output.S)); colormap gray; axis square
+imagesc(abs(-full(output.S))>1e-6); colormap gray; axis square
 figure(20)
-imagesc(S);axis square
+imagesc(S~=0);axis square
 
+if 0,
 figure(10);clf
 imagesc(-abs(((X'*X)))); colormap gray; axis square
-
+end
 %%
 greenColorMap = [ones(1, 132), linspace(1, 0, 124)];
 redColorMap = ones(1,256);%[linspace(0, 1, 124), ones(1, 132)];
@@ -128,7 +129,7 @@ colorMap = [redColorMap; greenColorMap; blueColorMap]';
 % Apply the colormap.
 colormap(colorMap);
 %colormap(flipud(gray))
-
+if 0
 mkdir('fig');
 figure(21)
 imagesc(output.M); colormap(colorMap); axis square
@@ -141,4 +142,4 @@ figure(22)
 imagesc(M); colormap(colorMap); axis square
 colorbar('southoutside')
 print('fig/M','-depsc')
-
+end

@@ -1,0 +1,311 @@
+\documentclass{article}
+\usepackage{fullpage}
+\usepackage{amssymb,amsmath,amsthm}
+\usepackage{color}
+%\usepackage{bibentry}
+\usepackage{natbib}
+
+\title{Proof ideas for incoherence between several tangent spaces}
+
+\date{}
+\def\BIT{\begin{itemize}}
+\def\EIT{\end{itemize}}
+\def\BET{\begin{enumerate}}
+\def\EET{\end{enumerate}}
+\def\ra{$\:\rightarrow\:$}
+\def\y{\mathbf{y}}
+\def\x{\mathbf{x}}
+\def\v{\mathbf{v}}
+\def\u{\mathbf{u}}
+\def\w{\mathbf{w}}
+\def\s{\mathbf{s}}
+\def\g{\mathbf{g}}
+\def\h{\mathbf{h}}
+\def\X{\mathbf{X}}
+\def\RR{\mathbb{R}}
+\def\ei{\varepsilon_i}
+\def\ej{\varepsilon_j}
+\def\T{\mathcal{T}}
+\def\I{\mathcal{I}}
+\def\Od{\Omega^\circ}
+\def\Po{\bar{P}}
+\def\Dbot{\Delta_{L}^{\scriptscriptstyle \bot}}
+\def\Dpar{\Delta_{L}^{\scriptscriptstyle \parallel}}
+\def\DL{\Delta_L}
+\def\DLi{\Delta_{L_i}}
+\def\DS{\Delta_S}
+\def\DSi{\Delta_{S_i}}
+\def\L{\mathcal{L}}
+\def\Dboti{\Delta_{L_i}^{\scriptscriptstyle \bot}}
+\def\Dpari{\Delta_{L_i}^{\scriptscriptstyle \parallel}}
+\def\Tbar{\bar{\mathcal{T}}}
+
+\def\op{{\rm op}}
+\def\tr{{\rm tr}}
+\def\kmax{{k_1}}
+\def\ksmax{{k_2}}
+
+%\def\kmax{{k_{\scriptscriptstyle (1)}}}
+%\def\ksmax{{k_{\scriptscriptstyle (2)}}}
+
+\def\supp{{\rm Supp}}
+\def\st{\text{s.t.}}
+\newcommand\normop[1]{|||#1|||_{\infty}}
+\newcommand\normbop[1]{|\!|\!|#1|\!|\!|_{\infty,2}}
+\newcommand\normopop[1]{|\!|\!|#1|\!|\!|_{\rm op,\rm op}}
+\newcommand\ve[1]{\varepsilon^{{\scriptscriptstyle#1}}}
+\newcommand\sss[1]{{\scriptscriptstyle#1}}
+\def\UI{U^{\sss{I}}}
+\def\uI{u^{\sss{I}}}
+\def\xxi{\zeta}
+\newcommand{\tred}[1]{\textcolor{red}{#1}}
+\newcommand{\tblue}[1]{\textcolor{blue}{#1}}
+
+\newtheorem{lemma}{Lemma}
+\newtheorem{cor}{Corollary}
+\newtheorem{prop}{Proposition}
+\newtheorem{theorem}{Theorem}
+\newcommand{\GO}[1]{\tred{GO:\textbf{\emph{#1}}}}
+
+
+%\newcommand{\zit}[1]{\begin{itemize} \item \bibentry{#1} \end{itemize}}
+\begin{document}
+\maketitle
+\appendix
+%\subsection*{Notations}
+%In this appendix, we will use two different several norms on matrices, the $\ell_\infty$ norm of the vectorized matrix, also known as the max-norm in the matrix case that we will denote with $\|\cdot\|_{\infty}$.
+\section{Abstract lemmas on collections of incoherent subspaces}
+The following lemma generalizes a classical upper bound on $|||A^{-1}|||_{\infty}$ discussed in \citet{varga1976diagonal} for diagonally dominant matrices, where $|||\cdot|||_{\infty}$ is the operator $\ell_\infty$ norm (equal to the maximal $\ell_1$-norm of all rows), not to be confused with the 
+$\ell_\infty$ norm of the vectorized matrix, also known as the max-norm that we denote with $\|\cdot\|_{\infty}$ throughout the paper.
+
+\begin{lemma}
+\label{lem:gbdd}
+Let $A=(A_{ij})$ a matrix defining a linear operator from $\RR^{r_1} \times \ldots \times \RR^{r_m}$ to itself, with $A_{ii}=Id_{r_i}$. Consider a collection of norms $\omega_i$ each defined on $\RR^{r_i}$
+and define $\omega(x)=\max_i \omega_i(x_i)$. Define the matrix operator norm $|||A|||_{\omega,\omega}=\max_{x:\omega(x)\leq 1} \omega(Ax)$ and consider the quantities:
+$\xxi_{ij}=\max_{x_j:\omega_j(x_j) \leq 1} \omega_i(A_{ij}x_j)$.
+Then if 
+$$\alpha:=1-\max_{i} \sum_{j \neq i} \xxi_{ij}$$ is such that $\alpha >0$, then $A$ is invertible and $|||A^{-1}|||_{\omega,\omega}< \frac{1}{\alpha}$.
+\end{lemma}
+\begin{proof}
+Consider a vector $x$ and assume that $i=\text{arg} \max_{k} \omega_k(x_k)$ then
+
+\begin{eqnarray*}
+\alpha \, \omega(x) =\alpha \, \omega_i(x_i) &\leq & \omega_i(x_i) -\sum_{j\neq i} \xxi_{ij}  \, \omega_i(x_i) \leq \omega_i(x_i) -\sum_{j\neq i} \xxi_{ij}  \, \omega_j(x_j)\\
+&\leq& \omega_i(Id_{r_i} x_i) -\sum_{j\neq i} \, \omega_i(A_{ij} x_j)
+\leq \omega_i(A_{ii} x_i) -\omega_i \big ( \sum_{j\neq i} A_{ij} x_j \big )\\
+&\leq&\omega_i \big ( \sum_{j=1}^p A_{ij} x_j \big )
+\leq\omega_i (A_{i\cdot}x)=\omega(A x)\\
+\end{eqnarray*}
+
+Since this inequality is true for all $x$, it proves that for all $x$, $Ax\neq0$ which entails that $A$ is invertible.
+Furthermore,
+$$\alpha\leq \inf_{x\neq 0} \frac{\omega(A x)}{\omega(x)}=\inf_{y\neq 0} \frac{\omega(y)}{\omega(A^{-1}y)},$$
+given that $y$ is invertible and so $\sup_{y \neq 0}\frac{\omega(A^{-1}y)}{\omega(y)}\leq \frac{1}{\alpha}$ which is the result we want
+\end{proof}
+
+\begin{lemma}
+\label{lem:two}
+In the particular case where there are only two blocks in the previous lemma if $\xxi_{12}\xxi_{21}<1$ then $A$ is invertible and we have $$|||A^{-1}|||_{\omega,\omega} \leq \frac{1+\max(\xxi_{12},\xxi_{21})}{1-\xxi_{12}\xxi_{21}}.$$
+\end{lemma}
+\begin{proof}
+Indeed letting $B:=A_{12}$ so that 
+$$A=
+\begin{bmatrix}
+I & B\\
+B^\top & I
+\end{bmatrix}
+$$
+we have that $A$ is invertible if $A^\top A \succ I$, and, in that case
+$$A^{-1}=A D \quad \text{with} \quad D:= 
+\begin{bmatrix}
+(I-BB^\top)^{-1} & 0\\
+0 & (I-B^\top B)^{-1}
+\end{bmatrix}
+$$
+Similarly as in the previous proof, letting $\alpha':=1-\xxi_{12} \xxi_{21}$, and using that $\omega_1(BB^\top x_1) \leq \xxi_{12} \omega_2(B^\top x_1) \leq  \xxi_{12} \xxi_{21} \omega_2(x_1),$ 
+we have
+$$\alpha' \omega_1(x_1) \leq \omega_1(x_1)- \xxi_{12} \xxi_{21} \omega_1(x_1) \leq \omega_1(x_1)- \omega_1(BB^\top x_1) \leq \omega_1 \big ( (I-BB^\top) x_1 \big ).$$
+so that if $\alpha'>0$ then $I-BB^\top$ is invertible and so are  $I-B^\top B$,$D$ and $A$. Moreover, we have $|||D|||_{\omega,\omega} \leq \frac{1}{\alpha'}$. Finally, $\omega_1(x_1-Bx_2)\leq \omega_1(x_1)-\omega_1(Bx_2) \leq (1+\xxi_{12}) \omega_1(x_1)$ and symmetrically, $\omega_2(x_2-B^\top x_1) \leq (1+\xxi_{21}) \omega_2(x_2)$, so that $|||A|||_{\omega,\omega} \leq 1+\max(\xxi_{12},\xxi_{21})$ and the result follows using that $|||A^{-1}|||_{\omega,\omega} \leq |||A|||_{\omega,\omega} \, |||D|||_{\omega,\omega}$.
+\end{proof}
+
+
+\begin{cor}
+\label{cor:small_x}
+Let $\T_i$ a collection of subspaces of $\RR^d$ equipped each with a norm $\Omega_i$. For all $i$, let $\eta_i,\varepsilon_i \in \T_i$ such that
+$\Omega_i(\eta_i) \leq \epsilon$. Let $T_i \in \RR^{d \times r_i}$ a matrix whose columns form an orthogonal basis of $\T_i$.  If $\xxi_{ij}(\T_i,\T_j):=\max_{u_j \in \T_j,\: \Omega_j(u_j) \leq 1} \Omega_i(P_i u_j)$, with $P_i:=T_iT_i^\top$ the projector on the subspace $\T_i$. Define $\alpha$ to be the quantity
+$$\alpha=1-\max_{i} \sum_{j\neq i} \xxi_{ij}(\T_i,\T_j).$$
+Then if, for all $i$, we have that 
+$\eta_i=\sum_{j=1}^m P_i\varepsilon_j,$
+ and if $\alpha>0$, then the $(\varepsilon_i)_{1 \leq i \leq m}$ are uniquely defined and for all $i,\: \Omega_i(\varepsilon_i) \leq \frac{\epsilon}{\alpha}$.
+\end{cor}
+\begin{proof}
+If $\eta_i, \varepsilon_i \in \T_i$ then there exist unique $b_i$ and $x_i$ in $\RR^{r_i}$ such that $\eta_i=T_i b_i$ and $\varepsilon_i=T_i x_i$.
+This entails that the equation $\eta_i=\sum_{j=1}^m P_i\varepsilon_j,$ is equivalent to $b_i=\sum_{j=1}^m T_i^\top T_j x_j$. As a consequence,
+if $T:=[T_1,\ldots,T_m]$, let $A:=T^\top T$, then the system of equations relating $\eta:=(\eta_1;\ldots;\eta_m)$ to $x:=(x_1,\ldots,x_m)$ is equivalent to $\eta=A x$.
+Moreover if $\omega_i(x_i):=\Omega_i(T_i x_i)$ then the quantities $\xxi_{ij}(\T_i,\T_j)$ and $\alpha$ defined in this corollary match respectively the quantities $\xxi_{ij}$ and $\alpha$ defined from $A$ in Lemma~\ref{lem:gbdd}. By applying the lemma, we thus get that $A$ is invertible and that
+$$\max_i\Omega_i(\varepsilon_i)=\max_i \Omega_i(T_i x_i)=\omega(x)=\omega(A^{-1}b)\leq \frac{1}{\alpha} \omega(b)= \frac{1}{\alpha} \max_{i} \Omega_i(T_i b_i)= \frac{1}{\alpha}\max_i\Omega_i(\eta_i) \leq  \frac{\epsilon}{\alpha}.$$
+\end{proof}
+
+\begin{cor}
+\label{cor:small_x_two}
+In the case of two blocks the conclusion of Corollary~\ref{cor:small_x} hold for $\alpha=\frac{1-\xxi_{12}\xxi_{21}}{1+\max(\xxi_{12},\xxi_{21})}$.
+\end{cor}
+\begin{proof}
+This follows from using the bound on $|||A^{-1}|||_{\omega,\omega}$ from Lemma~\ref{lem:two} in the proof of Corollary~\ref{cor:small_x}
+\end{proof}
+
+
+\begin{cor}
+\label{cor:main}
+Let $\T_i,T_i,P_i,\Omega_i, \xxi_{ij}(\T_i,\T_j)$ and $\alpha$ be defined as in Corollary~\ref{cor:small_x}. Let $(q_i)_{1\leq i \leq m}$ be a given collection of vectors in $\RR^d$ with $q_i \in \T_i$. 
+Let $\eta_i=P_i \sum_{j \neq i} q_j$.
+Assume that
+\BIT
+\item the $q_i$ are sufficiently close to orthogonal to the subspaces $\T_j$ for $j \neq i$, so that there exists $\epsilon>0$ with $\max_{i} \Omega_i(\eta_i) \leq \epsilon$.
+\item we have $\alpha>0$.
+\EIT
+Then,  in $\text{span}(\T_1,\ldots,\T_m)$, the set of equations \{$P_i q=q_i, \: \forall i$\} admits a unique solution of the form $q=\sum_{i=1}^m (q_i+\varepsilon_i)$ with $\varepsilon_i$ in $\T_i$ and $\max_i\Omega_i(\varepsilon_i) \leq  \frac{\epsilon}{\alpha}$.
+\end{cor}
+\begin{proof}
+If $q \in \text{span}(\T_1,\ldots,\T_m)$, then $q$ can be written under the form $q=\sum_{i=1}^m (q_i+\varepsilon_i)$ with $\varepsilon_i$ in $\T_i$ and $q$ solves the previous collection of equation if and only if for all $i$
+$$q_i=P_i q=q_i +P_i \sum_{j \neq i} q_j+ P_i \sum_{j} \ej.$$
+so that if $\eta_i:=-P_i \sum_{j \neq i} q_j$, then $\eta_i$ must satisfy $\eta_i= P_i \sum_{j} \ej$. Furthermore, $\eta$, $\varepsilon$ and the subspace $\T_i$ equipped with the norms $\Omega_i$ together satisfy the conditions of the previous corollary which proves the existence of a solution $q$ of the given form and the announced inequality.
+\end{proof}
+
+Note that requiring that $\alpha>0$ in the previous lemma corresponds to a way of quantifying that the subspaces $\T_i$ are \emph{sufficiently incoherent}.
+
+\begin{cor}
+\label{car:main_two}
+In the case of two blocks, the conclusion of Corollary~\ref{cor:main} holds for $\alpha=\frac{1-\xxi_{12}\xxi_{21}}{1+\max(\xxi_{12},\xxi_{21})}$.
+\end{cor}
+\begin{proof}
+This follows from the same proof as in Corollary~\ref{cor:main} but using Corollary~\ref{cor:small_x_two} instead of Corollary~\ref{cor:small_x}.
+\end{proof}
+
+\begin{lemma}
+\label{lem:zero_inter}
+In the case of two subspaces let $\alpha=\frac{1-\xxi_{12}\xxi_{21}}{1+\max(\xxi_{12},\xxi_{21})}$. Otherwise let $\alpha=1-\max_{i} \sum_{j\neq i} \xxi_{ij}(\T_i,\T_j).$
+
+If $\alpha>0$, then $\forall i, \: \T_i \cap \text{span}\big ( (\T_j)_{j\neq i}\big) =\{0\}$.
+\end{lemma}
+\begin{proof}
+Assume, by contradiction that there exist $(u_i)_{1\leq i\leq m}$, with $u_i \in \T_i$ and
+$\sum_{j=1}^m u_j=0$. Then, if $\Omega_i(u_i)=\Omega(u):=\max_j \Omega_j(u_j)$, we have 
+$$\Omega(u)=\Omega_i(u_i)=\Omega_i(-P_i u_i)=\Omega_i \big ( \sum_{j \neq i} P_i u_j \big ) \leq \sum_{j \neq _i} \Omega_i(P_i u_j) \leq \sum_{j \neq _i} \xxi_{ij} \Omega_j(u_j) \leq (1-\alpha) \Omega(u).$$ Since $\alpha>0$ this entails $\Omega(u)=0$ and so $u_i=0$ for all $i$. 
+\end{proof}
+
+\begin{lemma}
+\label{lem:new}
+In the case of two blocks,  with $B_1=P_1 P_2=B_2^\top$, we have,
+$\varepsilon_1=\tilde{\eta}_1+P_1 \tilde{\eta}_2$ and $\varepsilon_2=\tilde{\eta}_2+P_2 \tilde{\eta}_1$ with $\tilde{\eta}_i=(I-B_iB_i^\top)^{-1}{\eta}_i$. We have 
+$\Omega_i(\tilde{\eta}_i)\leq (1-\zeta_{12}\zeta_{21})^{-1}\Omega_i(\eta_i)$, and so we have
+$$\Omega_1(\varepsilon_1) \leq (1-\zeta_{12}\zeta_{21})^{-1}  \big [ \Omega_1(\eta_1)+\zeta_{12} \, \Omega_2(\eta_2) \big ],$$
+with a symmetric formula for $\Omega_2(\varepsilon_2).$
+\end{lemma}
+\begin{proof}
+\GO{Needs to be written reusing elements of previous proofs.}
+\end{proof}
+
+\GO{This Lemma is in fact better than Lemma~\ref{lem:two} and should replace it, because in practice $\Omega_1(\eta_1)$ and $\Omega_2(\eta_2)$ can be of very unequal sizes, and Lemma~\ref{lem:two} is bounding the terms as a function of $\max(\Omega_1(\eta_1),\Omega_2(\eta_2))$}
+
+\section{Application to low rank +sparse matrix decompositions}
+\subsection{General notations}
+We consider several type of subspaces
+$$\bar{\T}_I:=\{M \in \RR^{p \times p}\mid  M=M^\top, \: \supp(M)\subset I \times I\},$$
+$$\T_I(U):=\{M \in \bar{\T}_I\mid \: M=UX^\top+XU^\top,\: X \in \RR^{\text{rank}(U) \times p} \},$$
+Let $\T^c_I(U)$ denote the orthogonal complement\footnote{Note in particular that it is not the orthogonal complement in the entire space.} of $\T_I(U)$ in $\bar{\T}_I$. 
+$$\T(U):=\T_{[\![p]\!]}(U)\quad \text{and} \quad \T_s(A)=\{M \in \RR^{p \times p}\mid  \: M=M^\top, \: \supp(M)\subset \supp(A)\}.$$
+The projections on the corresponding subspaces are $\mathcal{P}_{\T_s(A)}(M)=M_S$ and $\mathcal{P}_{\T_I(U)}(M)=\mathcal{P}_{U}(M_{II})$ with $$\mathcal{P}_U(M):=M-(I-UU^\top)M(I-UU^\top).$$
+
+
+\subsection{Convex low rank+ sparse decomposition}
+We first show that our assumptions yields results that are different than the one obtained in \citet{chandrasekaran2011rank} and potentially sharper.
+\begin{cor}
+Consider a matrix $M=A^*+B^*$ as in \citet{chandrasekaran2011rank}. Let 
+\begin{eqnarray*}
+\mu:=\mu(A^*)&:=&\max \{ \|N\|_{\op} \mid N \in \T(A^*), \|N\|_{\infty} \leq 1\}\\
+ \xi:=\xi(B^*)&:=&\max \{ \|N\|_{\infty} \mid N \in \T(B^*), \|N\|_{\op} \leq 1 \}\\
+\mu':=\zeta(\T(B^*),\T(A^*))&:=&\max \{ \|\mathcal{P}_{\T(B^*)}(N)\|_{\op} \mid N \in \T(A^*), \|N\|_{\infty} \leq 1\} \\ 
+\xi':=\zeta(\T(A^*),\T(B^*))&:=&\max \{ \|\mathcal{P}_{\T(A^*)}(N)\|_{\infty} \mid N \in \T(B^*), \|N\|_{\op} \leq 1 \}\\
+\epsilon&:=&\max \big (\|\mathcal{P}_{\T(B^*)}(\gamma \text{sign}(A^*))\|_{\op}, \gamma^{-1}\|UV^\top\|_{\infty} \big ).
+\end{eqnarray*}
+
+Let $\alpha:=\frac{1-\mu'\xi'}{1+\max(\gamma \mu',\frac{1}{\gamma} \xi')}$. Then if $\max(\mu,\xi) (1+\frac{\epsilon}{\alpha})<1$, the solution of the optimization problem
+$$\min_{A+B=M} \gamma \|A\|_{1}+\|B\|_{\op}$$
+has a unique solution which is $(A^*,B^*)$. 
+\end{cor}
+\begin{proof}
+The proof follows the reasoning in \citet{chandrasekaran2011rank} and requires to prove that $\T_s(A^*)\cap \T(B^*)=\{0\}$ and that there exists a subgradient $Q$ of the form $Q=\gamma sign(A^*)+UV^\top+\ve{A}+\ve{B}$, where $B^*=USV^\top$
+is the singular value decomposition of $B^*$, and with $\ve{A} \in \T_s(A^*)$,  $\ve{B} \in \T(B^*)$,
+such that $\mathcal{P}_{\T_s(A^*)}(Q)=\gamma sign(A^*)$, $\mathcal{P}_{\T(B^*)}(Q)=UV^\top$, $\|\mathcal{P}_{\T_s(A^*)^\bot}(Q)\|_{\infty} <\gamma$ and  $\|\mathcal{P}_{\T(B^*)^\bot}(Q)\|_{\op} <1$. The fact that $\T_s(A^*)\cap \T(B^*)=\{0\}$ follows from applying Lemma~\ref{lem:zero_inter} to the spaces $\T_1=\T_s(A^*)$ and $\T_2=\T(B^*)$ equipped respectively with the norms $\Omega_1=\frac{1}{\gamma}\|\cdot\|_{\infty}$ and $\Omega_2=\|\cdot\|_{\op}$. The fact that and adequate $Q$ exists follows from applying Corollary~\ref{cor:main} with the same subspaces which yields that
+$\|\ve{A}\|_{\infty} \leq \gamma \frac{\epsilon}{\alpha}$ and $\|\ve{B}\|_{\op} \leq \frac{\epsilon}{\alpha}$ so that 
+\GO{Started to rewrite the proof of this lemma whose statement needs to be modified with the new Lemma~\ref{lem:new}. The following pieces of the proof are no longer in agreement with the stated result...\tblue{I put in blue what I started to change}}
+$$\|\mathcal{P}_{\T_s(A^*)^\bot}(Q)\|_{\infty}=\|\mathcal{P}_{\T_s(A^*)^\bot}(UV^\top+\ve{B})\|_{\infty}\leq \|UV^\top+\ve{B}\|_{\infty} \leq \tblue{\|UV^\top\|_{\infty}+\gamma \mu \|\ve{B}\|_{\op} \leq \|UV^\top\|_{\infty}+\frac{\gamma \mu}{\alpha}(\epsilon^B+\frac{\xi}{\gamma} \epsilon^A).}$$
+$$\|\mathcal{P}_{\T(B^*)^\bot}(Q)\|_{\op}=\|\mathcal{P}_{\T(B^*)^\bot}(\gamma S+\ve{A})\|_{\op}\leq \|\gamma S+\ve{A}\|_{\op} \leq \xi \|S+\gamma^{-1}\ve{A}\|_{\infty} \leq  \xi (1+\epsilon/\alpha),$$
+with $\epsilon^A=\|\mathcal{P}_{\T_s(A^*)}UV^\top\|_{\infty}$ and 
+$\epsilon^B=\|\mathcal{P}_{\T(B^*)}S\|_{\op},$
+
+\tblue{with $S=sign(A^*)$
+Since 
+\begin{eqnarray*}
+\|UU^\top S+S VV^\top-UU^\top S VV^\top\|_{\op} &\leq & \|U^\top  S\|_{\op}+\|S VV^\top-UU^\top S VV^\top\|_{\op}\\
+&\leq & \|U^\top S\|_{\op}+\|(I-UU^\top)S VV^\top\|_{\op} \leq \|U^\top S\|_{\op}+\| SV\|_{\op}
+\end{eqnarray*}}
+\end{proof}
+
+Note that $\mu'\leq \mu$ and $\xi'\leq \xi$ but that $\mu'$ and $\xi'$ are potentially smaller. Also $\epsilon \leq \max(\gamma \mu, \gamma^{-1}\xi)$ but since $\epsilon$ is a bound that holds for the very specific elements $sign(A^*)$ and $UV^\top$ of the tangent spaces $\T(A^*)$ and $\T(B^*)$ and not uniformly over all the tangent space like $\mu', \xi',\mu$ and $\xi'$ it is reasonable to assume that it can be much smaller. 
+
+\subsection*{Low rank with sparse factors + sparse decomposition.}
+Let 
+\begin{eqnarray*}
+\xxi(\T_s(S),\T_J(V))&=&\max \{ {\|M_S\|_\infty} \mid M \in \T_J(V), \: \|M\|_{\op}\leq 1\}\\
+\xxi(\T_I(U),\T_s(S))&=&\max \{ {\|\mathcal{P}_{U}(M_{II})\|_{\op}} \mid M \in \T_s(S), \: \|M\|_{\infty}\leq 1\}\\
+\xxi(\T_I(U),\T_J(V))&=&\max \{ {\|\mathcal{P}_{U}(M_{II})\|_{\op}} \mid  M \in \T_J(V), \: \|M\|_{\op}\leq 1\}\\
+\xi(\T_J(V))&=&\max \{ {\|M\|_\infty} \mid M \in \T_J(V), \: \|M\|_{\op}\leq 1\}\\
+\mu_I(\T_s(S))&=&\max \{ {\|M_{II}\|_\op} \mid M \in \T_s(S), \: \|M\|_{\infty}\leq 1\}\\
+\end{eqnarray*}
+
+\begin{theorem}
+\label{theo:two}
+If $M^*=S^*-L^*$ with $L^*=\sum_{I \in \mathcal{I}} L^{\sss{I}}$, $\supp(L^{\sss{I}}) \subset I \times I$ for $\I \subset \mathcal{G}^p_k$ %(where $\mathcal{G}^p_k$ is the collection of all subsets of size $k$ of $[\![p]\!]$) 
+and $L^{\sss{I}}=U^{\sss{I}} D^{\sss{I}} {U^{\sss{I}}}^\top$ the eigenvalue decomposition of $L^{\sss{I}}$.
+Let $\mu'_I=\xxi(\T_I(U),\T_s(S))$, $\xi'_I :=\xxi(\T_s(S),\T_I(U))$, $\mu_I:=\mu_I(\T_s(S))$, $\xi_I:=\xi(\T_I(U))$, 
+$$\alpha_I:=\frac{1-\mu'_I\xi'_I}{1+\max(\gamma \mu'_I,\frac{1}{\gamma} \xi'_I)} \qquad \text{and} \qquad \epsilon_I :=\max \big (\|\mathcal{P}_{\T_I(\uI)}(\gamma \text{sign}(S^*))\|_{\op}, \gamma^{-1}\|\uI {\uI}^\top\|_{\infty} \big ).$$
+
+Assume that for all $(I,I') \in \I \times \I, I \cap I'=\varnothing$. If $$\displaystyle\max_{I \in \I} \max(\mu_I,\xi_I) (1+\frac{\epsilon_I}{\alpha_I})<1, \quad \displaystyle \max_{J \in \mathcal{G}^p_k} \lambda_{\max}^+\big (S^*_{\bar{I}^c \cap (J \times J)} \big ) <1$$ %\quad  
+%\text{and}  \quad \max_{J \in \mathcal{G}^p_k, J \neq I}\lambda_{\max}^+(\uI_J{\uI_J}^\top)<1,$$ 
+with $\displaystyle \bar{I}=\bigcup_{I \in \I} I \times I$,
+then the solution of the optimization problem $$\displaystyle \min \gamma \|S\|_1+\Omega_{k,\succeq}(L) \quad \text{\st} \quad M=S+L$$
+ the decomposition given by $\big (S^*,(D^{\sss{I}} \big)_{I \in \I},(\uI)_{I \in \I} \big )$ as a solution.
+\end{theorem}
+\begin{proof}
+We follow the general proof scheme of \citet{chandrasekaran2011rank}. The optimization problem admits the unique announced solution if it satisfies first order gradient condition in the sense that there exists a subgradient $Q \in \RR^{p \times p}$ that satisfies the following conditions
+\BET
+\item[(i)] for all any $M^\sss{s} \in \T_s(S^*)$ and $(M^{\sss{I}})_{I \in \I}$ with $M^{\sss{I}} \in \T_I(\uI)$, $M^\sss{s}+\sum_{I \in \I} M^{\sss{I}}=0 \: \Rightarrow \: (M^{\sss{I}}=0, \:I \in \I)$.
+\item[(ii)] for all $I \in \I,\:\mathcal{P}_{\T_I(\uI)}(Q)=\uI{\uI}^\top$
+\item[(iii)] $\mathcal{P}_{\T_s(S^*)}(Q)=\gamma sign(S^*)$
+\item[(iv)] for all $I \in \I,\:\lambda_{\max}^+\big (\mathcal(P)_{\T_I^c(\uI)}(Q) \big )<1$
+\item[(v)] $\|Q_{S^c}\|_{\infty}<\gamma$
+\item[(vi)] for all $J \in \mathcal{G}^p_k \backslash \I, \: \lambda_{\max}^+(Q_{JJ})\leq 1$
+\EET
+We now prove the different statements. As a consequence of the assumption that $I \cap I'=\varnothing, (I,I') \in \I \times \I,$ the space of symmetric squared matrices can be written as the direct sum of the spaces $(\bar{\T}_I)_{I \in \I}$ and of the space $\T^c:=\{M \in \RR^{p \times p} \mid  M=M^\top, \: M_{\bar{I}}=0\}$. Which entails that part of the properties to prove can be shown independently on the elements of the direct sum, namely the four first properties. 
+\BET
+\item[(i)] Since $I \cap I'=\varnothing,\: I\neq I'$, we can have $M^\sss{s}+\sum_{I \in \I} M^{\sss{I}}=0$ if and only if $M^\sss{s}_{II}+ M^{\sss{I}}_{II}=0$ for all $I$ and $M^\sss{s}_{\bar{I}}=0$. But if $M^\sss{s}_{II}+ M^{\sss{I}}_{II}=0$ using the argument of \citet{chandrasekaran2011rank} or Lemma~\ref{lem:zero_inter} for two subspaces, we have that $M^\sss{s}_{II}= M^{\sss{I}}_{II}=0$ which shows the result.
+\item[(ii)], (iii), (iv) and (v) The existence and the uniqueness of a $Q$ follow from the application of Theorem~\ref{theo:two} to each of the subspaces $(\T_I)_{I \in\I}$ and $\T^c$ separately. The theorem also proves directly that (iii),(iv) and (v) hold.
+\item[(iv)] For any $J$ such that $(J \times J) \cap \bar{I}=\varnothing,$ the fact that $\lambda_{\max}^+(Q_{JJ})<1$ follows directly from the fact that then $Q_{JJ}=S^*_{JJ}$ and that $\lambda_{\max}^+(S^*_{(J \times J) \cap \bar{I}^c})<1$.
+If $(J \times J) \cap \bar{I} \neq \varnothing$ then let $\mathcal{I}_{J}$ be the collection of sets in $\I$ such that $J$ and $I$ intersect. Note that since these elements $I$ are disjoint $\bar{\T}_J$ is the direct sum of the $(\bar{\T}_{J\cap I})_{I \in \I_{J}}$ and of their orthogonal complement in $\bar{\T}_J$.
+As a consequence
+$$\lambda_{\max}^+(Q_{JJ}) \leq \Big ( \lambda_{\max}^+(Q_{(J \times J) \cap \bar{I}^c}) \Big ) \vee \max_{I \in \I_{J}} \lambda_{\max}^+(Q_{(J\cap I) \times (J \cap I)}).$$
+But $\lambda_{\max}^+(Q_{(J \times J) \cap \bar{I}^c}) <1$ as before and 
+we need to show that $\lambda_{\max}^+(Q_{(J\cap I) \times (J \cap I)}) \leq 1.$
+%Since $Q_{(J\cap I) \times (J \cap I)=\uI_J\uI_J$
+\EET
+\end{proof}
+\GO{See the "end proof papier" document for the end of the proof}
+
+
+
+\bibliography{biblio}
+\bibliographystyle{apalike}
+
+\end{document}
